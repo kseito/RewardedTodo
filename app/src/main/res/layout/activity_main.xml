@@ -10,23 +10,55 @@
     tools:context="kztproject.jp.splacounter.MainActivity">
 
     <TextView
+        android:id="@+id/main_text_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/main_text1"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp" />
+
+    <TextView
         android:id="@+id/text_counter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/main_text_1"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/counter_bg"
+        android:gravity="center"
         android:text="0"
-        />
+        android:textColor="@android:color/white"
+        android:textSize="72sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/text_counter"
+        android:layout_marginTop="8dp"
+        android:text="@string/main_text2"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="18sp" />
 
     <Button
         android:id="@+id/count_up_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true" />
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/selector_button"
+        android:padding="8dp"
+        android:text="@string/game_add"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
 
     <Button
         android:id="@+id/count_down_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true" />
+        android:layout_alignParentRight="true"
+        android:background="@drawable/selector_button"
+        android:padding="8dp"
+        android:text="@string/game_consume"
+        android:textSize="20sp" />
 
 </RelativeLayout>
