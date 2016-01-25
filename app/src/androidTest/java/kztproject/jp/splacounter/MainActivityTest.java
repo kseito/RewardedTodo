@@ -55,13 +55,11 @@ public class MainActivityTest {
                 .build();
         application.setmPrefsComponent(component);
         component.inject(this);
-//        initPreferences();
 
     }
 
     @Test
     public void checkDefaultText() {
-//        initPreferences();
 
         mActivityRule.launchActivity(new Intent());
 
@@ -71,7 +69,6 @@ public class MainActivityTest {
     @Test
     public void clickCountUp() {
 
-//        initPreferences();
         mActivityRule.launchActivity(new Intent());
 
         onView(withId(R.id.count_up_button)).perform(click());
@@ -92,7 +89,6 @@ public class MainActivityTest {
         onView(withId(R.id.count_down_button)).perform(click());
         onView(withId(R.id.text_counter)).check(matches(withText("0")));
 
-//        initPreferences();
     }
 
     @Test
@@ -100,31 +96,11 @@ public class MainActivityTest {
 
         mActivityRule.launchActivity(new Intent());
 
-//        mActivityRule.getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//
-//                MainActivity activity = mActivityRule.getActivity();
-//
-//                Button countUpButton = (Button) activity.findViewById(R.id.count_up_button);
-//                countUpButton.performClick();
-//                countUpButton.performClick();
-//                countUpButton.performClick();
-//
-//                int count = mPrefs.getInt(MainActivity.COUNT, 0);
-//                assertEquals(3, count);
-//
-//            }
-//        });
-
         onView(withId(R.id.count_up_button)).perform(click());
         onView(withId(R.id.count_up_button)).perform(click());
         onView(withId(R.id.count_up_button)).perform(click());
 
         int count = mPrefs.getInt(MainActivity.COUNT, 0);
         Assert.assertEquals(3, count);
-
-
     }
 }
