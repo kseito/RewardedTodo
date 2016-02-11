@@ -1,16 +1,25 @@
 package kztproject.jp.splacounter;
 
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import kztproject.jp.splacounter.api.MyServiceClient;
+import kztproject.jp.splacounter.model.Counter;
+import rx.Observable;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -21,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.text_counter)
     TextView mTextCounter;
+
+    @Bind(R.id.count_down_button)
+    Button mCountDownButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,28 +46,58 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initCounter() {
-        int count = mSharedPreferences.getInt(COUNT, 0);
-        mTextCounter.setText(String.valueOf(count));
-    }
 
-    @OnClick(R.id.count_up_button)
-    public void clickCountUp(View view) {
-        int count = Integer.parseInt(mTextCounter.getText().toString()) + 1;
-        mTextCounter.setText(String.valueOf(count));
-        saveCount(count);
+        MyServiceClient serviceClient = new MyServiceClient();
+        Observable<Counter> observable = serviceClient.getCounter();
+        showCount(observable);
     }
 
     @OnClick(R.id.count_down_button)
     public void clickCountDown(View view) {
-        int count = Integer.parseInt(mTextCounter.getText().toString()) - 1;
-        if (count < 0) {
-            return;
-        }
-        mTextCounter.setText(String.valueOf(count));
-        saveCount(count);
+
+        MyServiceClient serviceClient = new MyServiceClient();
+        Observable<Counter> observable = serviceClient.consumeCounter();
+        showCount(observable);
     }
 
-    private void saveCount(int count) {
-        mSharedPreferences.edit().putInt(COUNT, count).commit();
+    private void showCount(Observable<Counter> observable) {
+
+        final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage("Now Loading...");
+        progressDialog.show();
+
+        observable
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Counter>() {
+                    @Override
+                    public void onCompleted() {
+                        System.out.println("Completed!");
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        System.out.println("Error:" + e.getMessage());
+                        Toast.makeText(getApplicationContext(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
+                        if (progressDialog != null) {
+                            progressDialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onNext(Counter counter) {
+                        int count = GameCountUtils.convertGameCountFromCounter(counter);
+                        mTextCounter.setText(String.valueOf(count));
+                        if (count <= 0) {
+                            mCountDownButton.setEnabled(false);
+                        } else {
+                            mCountDownButton.setEnabled(true);
+                        }
+                        System.out.println("カウント：" + counter.getCount());
+                    }
+                });
     }
 }

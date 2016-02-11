@@ -4,24 +4,40 @@
         <layer-list>
             <item android:top="2dp">
                 <shape>
-                    <solid android:color="@color/colorAccent"/>
-                    <corners android:radius="16dp"/>
+                    <solid android:color="@color/colorAccent" />
+                    <corners android:radius="16dp" />
                 </shape>
             </item>
         </layer-list>
     </item>
-    <item android:state_pressed="false">
+    <item android:state_enabled="true" android:state_pressed="false">
         <layer-list>
             <item>
                 <shape>
-                    <solid android:color="#ddd"/>
-                    <corners android:radius="16dp"/>
+                    <solid android:color="#ddd" />
+                    <corners android:radius="16dp" />
                 </shape>
             </item>
-            <item android:bottom="2dp" >
+            <item android:bottom="2dp">
                 <shape>
-                    <solid android:color="@color/colorAccent"/>
-                    <corners android:radius="16dp"/>
+                    <solid android:color="@color/colorAccent" />
+                    <corners android:radius="16dp" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+    <item android:state_enabled="false" android:state_pressed="false">
+        <layer-list>
+            <item>
+                <shape>
+                    <solid android:color="#ddd" />
+                    <corners android:radius="16dp" />
+                </shape>
+            </item>
+            <item android:bottom="2dp">
+                <shape>
+                    <solid android:color="#a9a9a9" />
+                    <corners android:radius="16dp" />
                 </shape>
             </item>
         </layer-list>
