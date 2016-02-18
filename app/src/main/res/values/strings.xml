@@ -2,6 +2,6 @@
     <string name="app_name">スプラカウンター</string>
     <string name="main_text1">後</string>
     <string name="main_text2">試合できます！</string>
-    <string name="game_add">Add</string>
+    <string name="game_reload">Reload</string>
     <string name="game_consume">Played</string>
 </resources>

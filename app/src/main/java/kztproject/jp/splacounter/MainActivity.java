@@ -60,6 +60,11 @@ public class MainActivity extends AppCompatActivity {
         showCount(observable);
     }
 
+    @OnClick(R.id.reload_button)
+    public void clickReload(View view) {
+        initCounter();
+    }
+
     private void showCount(Observable<Counter> observable) {
 
         final ProgressDialog progressDialog = new ProgressDialog(this);

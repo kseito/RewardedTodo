@@ -8,8 +8,6 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 import android.test.suitebuilder.annotation.LargeTest;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,7 +21,6 @@ import kztproject.jp.splacounter.component.PrefsComponent;
 import kztproject.jp.splacounter.module.MockPreferencesModule;
 
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
@@ -64,43 +61,5 @@ public class MainActivityTest {
         mActivityRule.launchActivity(new Intent());
 
         onView(withId(R.id.text_counter)).check(matches(withText("0")));
-    }
-
-    @Test
-    public void clickCountUp() {
-
-        mActivityRule.launchActivity(new Intent());
-
-        onView(withId(R.id.count_up_button)).perform(click());
-        onView(withId(R.id.text_counter)).check(matches(withText("1")));
-    }
-
-    @Test
-    public void clickCountDown() {
-
-        mActivityRule.launchActivity(new Intent());
-
-        onView(withId(R.id.count_up_button)).perform(click());
-        onView(withId(R.id.text_counter)).check(matches(withText("1")));
-
-        onView(withId(R.id.count_down_button)).perform(click());
-        onView(withId(R.id.text_counter)).check(matches(withText("0")));
-
-        onView(withId(R.id.count_down_button)).perform(click());
-        onView(withId(R.id.text_counter)).check(matches(withText("0")));
-
-    }
-
-    @Test
-    public void checkSaveCount() {
-
-        mActivityRule.launchActivity(new Intent());
-
-        onView(withId(R.id.count_up_button)).perform(click());
-        onView(withId(R.id.count_up_button)).perform(click());
-        onView(withId(R.id.count_up_button)).perform(click());
-
-        int count = mPrefs.getInt(MainActivity.COUNT, 0);
-        Assert.assertEquals(3, count);
     }
 }

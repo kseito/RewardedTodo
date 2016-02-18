@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:fbutton="http://schemas.android.com/apk/res-auto"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
@@ -39,13 +40,25 @@
         android:textColor="@color/colorPrimaryDark"
         android:textSize="18sp" />
 
-    <Button
+    <info.hoang8f.widget.FButton
+        android:id="@+id/reload_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="12dp"
+        android:paddingRight="12dp"
+        android:text="@string/game_reload"
+        android:layout_below="@id/text_counter"
+        android:layout_margin="8dp"
+        fbutton:buttonColor="@color/colorAccent"
+        />
+
+    <info.hoang8f.widget.FButton
         android:id="@+id/count_down_button"
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:background="@drawable/selector_button"
+        fbutton:buttonColor	="@color/colorAccent"
         android:padding="8dp"
         android:text="@string/game_consume"
         android:textSize="20sp" />
