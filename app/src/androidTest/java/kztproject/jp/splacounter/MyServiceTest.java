@@ -11,7 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
-import kztproject.jp.splacounter.mock.MockMyService;
+import kztproject.jp.splacounter.mock.MockMyServiceClient;
 import kztproject.jp.splacounter.model.Counter;
 import rx.Observable;
 import rx.Subscriber;
@@ -27,19 +27,18 @@ import static org.mockito.Mockito.spy;
 @LargeTest
 public class MyServiceTest {
 
-    private static final int DUMMY_ID = 123;
-    private static final String DYMMY_DATE = "2016/01/01 00:00:00";
-
     @Rule
     public ActivityTestRule<MainActivity> activityTestRule =
             new ActivityTestRule<>(MainActivity.class, true, false);
-    private MockMyService myService;
+    private MockMyServiceClient myService;
 
     @Before
     public void setUp() {
-        myService = spy(new MockMyService());
-        Mockito.when(myService.getCounter()).thenReturn(Observable.just(generateCounter(10)));
-        Mockito.when(myService.cosumeCounter()).thenReturn(Observable.just(generateCounter(5)));
+        myService = spy(new MockMyServiceClient());
+        Mockito.when(myService.getCounter()).thenReturn(
+                Observable.just(MockMyServiceClient.generateCounter(10)));
+        Mockito.when(myService.consumeCounter()).thenReturn(
+                Observable.just(MockMyServiceClient.generateCounter(5)));
 
     }
 
@@ -70,7 +69,7 @@ public class MyServiceTest {
 
     @Test
     public void consumeGameCount() {
-        Observable<Counter> observable = myService.cosumeCounter();
+        Observable<Counter> observable = myService.consumeCounter();
         observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -91,15 +90,6 @@ public class MyServiceTest {
                         System.out.println("カウント：" + counter.getCount());
                     }
                 });
-    }
-
-    private Counter generateCounter(int count) {
-        Counter counter = new Counter();
-        counter.setId(DUMMY_ID);
-        counter.setCount(count);
-        counter.setCreatedAt(DYMMY_DATE);
-        counter.setUpdatedAt(DYMMY_DATE);
-        return counter;
     }
 
 }

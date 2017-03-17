@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String COUNT = "count";
 
     @Inject
-    SharedPreferences mSharedPreferences;
+    MyServiceClient serviceClient;
 
     @Bind(R.id.text_counter)
     TextView mTextCounter;
@@ -47,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
     public void initCounter() {
 
-        MyServiceClient serviceClient = new MyServiceClient();
         Observable<Counter> observable = serviceClient.getCounter();
         showCount(observable);
     }
@@ -55,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.count_down_button)
     public void clickCountDown(View view) {
 
-        MyServiceClient serviceClient = new MyServiceClient();
         Observable<Counter> observable = serviceClient.consumeCounter();
         showCount(observable);
     }

@@ -5,8 +5,8 @@ import android.app.Application;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import kztproject.jp.splacounter.component.PrefsComponent;
-import kztproject.jp.splacounter.module.PreferencesModule;
+import kztproject.jp.splacounter.di.AppComponent;
+import kztproject.jp.splacounter.di.AppModule;
 
 /**
  * Created by k-seito on 2016/01/23.
@@ -16,28 +16,28 @@ public class MyApplication extends Application {
     public static final String PREF = "pref";
 
     @Singleton
-    @Component(modules = PreferencesModule.class)
-    public interface AppPrefsComponent extends PrefsComponent {
+    @Component(modules = AppModule.class)
+    public interface AppAppComponent extends AppComponent {
     }
 
-    private PrefsComponent mPrefsComponent;
+    private AppComponent mAppComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
 
-        if (mPrefsComponent == null) {
-            mPrefsComponent = DaggerMyApplication_AppPrefsComponent.builder()
-                    .preferencesModule(new PreferencesModule(this))
+        if (mAppComponent == null) {
+            mAppComponent = DaggerMyApplication_AppAppComponent.builder()
+                    .appModule(new AppModule(this))
                     .build();
         }
      }
 
-    public PrefsComponent component() {
-        return mPrefsComponent;
+    public AppComponent component() {
+        return mAppComponent;
     }
 
-    public void setmPrefsComponent(PrefsComponent component) {
-        mPrefsComponent = component;
+    public void setmAppComponent(AppComponent component) {
+        mAppComponent = component;
     }
 }

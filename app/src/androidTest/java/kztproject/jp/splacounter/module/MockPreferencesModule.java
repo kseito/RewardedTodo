@@ -1,13 +1,16 @@
 package kztproject.jp.splacounter.module;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import kztproject.jp.splacounter.MyApplication;
+import kztproject.jp.splacounter.api.MyServiceClient;
+import kztproject.jp.splacounter.mock.MockMyServiceClient;
+import retrofit2.GsonConverterFactory;
+import retrofit2.Retrofit;
+import retrofit2.RxJavaCallAdapterFactory;
 
 /**
  * Created by k-seito on 2016/01/24.
@@ -24,7 +27,7 @@ public class MockPreferencesModule {
 
     @Singleton
     @Provides
-    SharedPreferences provideSharedPreferences() {
-        return context.getSharedPreferences(MyApplication.PREF + POSTFIX, Context.MODE_PRIVATE);
+    MyServiceClient provideMyServiceClient() {
+        return new MockMyServiceClient();
     }
 }

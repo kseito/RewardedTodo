@@ -17,7 +17,7 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
-import kztproject.jp.splacounter.component.PrefsComponent;
+import kztproject.jp.splacounter.di.AppComponent;
 import kztproject.jp.splacounter.module.MockPreferencesModule;
 
 import static android.support.test.espresso.Espresso.onView;
@@ -29,12 +29,9 @@ import static android.support.test.espresso.matcher.ViewMatchers.withText;
 @LargeTest
 public class MainActivityTest {
 
-    @Inject
-    SharedPreferences mPrefs;
-
     @Singleton
     @Component(modules = MockPreferencesModule.class)
-    public interface TestComponent extends PrefsComponent {
+    public interface TestComponent extends AppComponent {
         void inject(MainActivityTest mainActivityTest);
     }
 
@@ -50,7 +47,7 @@ public class MainActivityTest {
         TestComponent component = DaggerMainActivityTest_TestComponent.builder()
                 .mockPreferencesModule(new MockPreferencesModule(instrumentation.getContext()))
                 .build();
-        application.setmPrefsComponent(component);
+        application.setmAppComponent(component);
         component.inject(this);
 
     }
@@ -59,6 +56,12 @@ public class MainActivityTest {
     public void checkDefaultText() {
 
         mActivityRule.launchActivity(new Intent());
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         onView(withId(R.id.text_counter)).check(matches(withText("0")));
     }
