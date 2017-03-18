@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fbutton="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/space_normal"
+        android:layout_marginRight="@dimen/space_normal"
+        android:layout_marginTop="64dp">
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/token_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="APIトークン" />
+    </android.support.design.widget.TextInputLayout>
+
+    <info.hoang8f.widget.FButton
+        android:id="@+id/login_button"
+        android:layout_marginTop="@dimen/space_large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        fbutton:buttonColor	="@color/colorAccent"
+        android:layout_gravity="center"
+        android:text="ログイン" />
+
+</LinearLayout>

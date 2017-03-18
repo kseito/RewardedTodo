@@ -2,6 +2,8 @@ package kztproject.jp.splacounter;
 
 import android.app.Application;
 
+import com.facebook.stetho.Stetho;
+
 import javax.inject.Singleton;
 
 import dagger.Component;
@@ -30,6 +32,10 @@ public class MyApplication extends Application {
             mAppComponent = DaggerMyApplication_AppAppComponent.builder()
                     .appModule(new AppModule(this))
                     .build();
+        }
+
+        if (BuildConfig.DEBUG) {
+            Stetho.initializeWithDefaults(this);
         }
      }
 
