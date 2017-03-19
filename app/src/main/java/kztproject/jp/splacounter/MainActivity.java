@@ -1,7 +1,6 @@
 package kztproject.jp.splacounter;
 
 import android.app.ProgressDialog;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -16,6 +15,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import kztproject.jp.splacounter.api.MyServiceClient;
 import kztproject.jp.splacounter.model.Counter;
+import kztproject.jp.splacounter.preference.AppPrefsProvider;
 import rx.Observable;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Inject
     MyServiceClient serviceClient;
+
+    @Inject
+    AppPrefsProvider prefs;
 
     @Bind(R.id.text_counter)
     TextView mTextCounter;
@@ -47,14 +50,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void initCounter() {
 
-        Observable<Counter> observable = serviceClient.getCounter();
+        Observable<Counter> observable = serviceClient.getCounter(prefs.get().getUserId());
         showCount(observable);
     }
 
     @OnClick(R.id.count_down_button)
     public void clickCountDown(View view) {
 
-        Observable<Counter> observable = serviceClient.consumeCounter();
+        Observable<Counter> observable = serviceClient.consumeCounter(prefs.get().getUserId());
         showCount(observable);
     }
 

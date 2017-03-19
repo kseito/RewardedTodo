@@ -1,17 +1,13 @@
 package kztproject.jp.splacounter.di;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import kztproject.jp.splacounter.MyApplication;
 import kztproject.jp.splacounter.api.MyServiceClient;
-import retrofit2.GsonConverterFactory;
-import retrofit2.Retrofit;
-import retrofit2.RxJavaCallAdapterFactory;
+import kztproject.jp.splacounter.preference.AppPrefsProvider;
 
 /**
  * Created by k-seito on 2016/01/24.
@@ -29,5 +25,10 @@ public class AppModule {
     @Provides
     MyServiceClient provideMyServiceClient() {
         return new MyServiceClient();
+    }
+
+    @Provides
+    AppPrefsProvider provideAppPrefs() {
+        return new AppPrefsProvider(context);
     }
 }

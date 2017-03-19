@@ -1,5 +1,6 @@
 package kztproject.jp.splacounter.api;
 
+import kztproject.jp.splacounter.GameCountUtils;
 import kztproject.jp.splacounter.model.Counter;
 import kztproject.jp.splacounter.model.UserResponse;
 import retrofit2.GsonConverterFactory;
@@ -7,6 +8,7 @@ import retrofit2.Retrofit;
 import retrofit2.RxJavaCallAdapterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.PUT;
+import retrofit2.http.Query;
 import rx.Observable;
 import rx.internal.operators.OperatorSerialize;
 
@@ -40,19 +42,19 @@ public class MyServiceClient {
         return todoistService.getUser(token, "*", "[\"user\"]");
     }
 
-    public Observable<Counter> getCounter() {
-        return myService.getCounter();
+    public Observable<Counter> getCounter(int userId) {
+        return myService.getCounter(userId);
     }
 
-    public Observable<Counter> consumeCounter() {
-        return myService.cosumeCounter();
+    public Observable<Counter> consumeCounter(int userId) {
+        return myService.cosumeCounter(userId, GameCountUtils.GAME_UNIT);
     }
 
     public interface MyService {
         @GET("/main_pages/get_game_count")
-        Observable<Counter> getCounter();
+        Observable<Counter> getCounter(@Query("user_id") int userId);
 
         @PUT("/main_pages/consume_game_count")
-        Observable<Counter> cosumeCounter();
+        Observable<Counter> cosumeCounter(@Query("user_id") int userId, @Query("point") int point);
     }
 }

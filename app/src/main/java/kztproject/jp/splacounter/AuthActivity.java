@@ -18,7 +18,7 @@ import kztproject.jp.splacounter.api.MyServiceClient;
 import kztproject.jp.splacounter.model.User;
 import kztproject.jp.splacounter.model.UserResponse;
 import kztproject.jp.splacounter.preference.AppPrefs;
-import kztproject.jp.splacounter.preference.AppPrefsSchema;
+import kztproject.jp.splacounter.preference.AppPrefsProvider;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
@@ -33,6 +33,9 @@ public class AuthActivity extends AppCompatActivity{
     @Inject
     MyServiceClient client;
 
+    @Inject
+    AppPrefsProvider prefs;
+
     @Bind(R.id.token_text)
     EditText tokenText;
 
@@ -44,8 +47,7 @@ public class AuthActivity extends AppCompatActivity{
         setContentView(R.layout.activity_auth);
         ButterKnife.bind(this);
         ((MyApplication) getApplication()).component().inject(this);
-        AppPrefs prefs = AppPrefs.get(this);
-        if (prefs.getUserId() != 0) {
+        if (prefs.get().getUserId() != 0) {
             finish();
             startActivity(new Intent(getApplicationContext(), MainActivity.class));
         }

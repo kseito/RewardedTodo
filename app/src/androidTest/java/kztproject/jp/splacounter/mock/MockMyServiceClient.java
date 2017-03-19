@@ -15,12 +15,12 @@ public class MockMyServiceClient extends MyServiceClient {
     private static final String DYMMY_DATE = "2016/01/01 00:00:00";
 
     @Override
-    public Observable<Counter> getCounter() {
+    public Observable<Counter> getCounter(int userId) {
         return Observable.just(generateCounter(0));
     }
 
     @Override
-    public Observable<Counter> consumeCounter() {
+    public Observable<Counter> consumeCounter(int userId) {
         return Observable.just(generateCounter(0));
     }
 

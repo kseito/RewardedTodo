@@ -35,16 +35,16 @@ public class MyServiceTest {
     @Before
     public void setUp() {
         myService = spy(new MockMyServiceClient());
-        Mockito.when(myService.getCounter()).thenReturn(
+        Mockito.when(myService.getCounter(1)).thenReturn(
                 Observable.just(MockMyServiceClient.generateCounter(10)));
-        Mockito.when(myService.consumeCounter()).thenReturn(
+        Mockito.when(myService.consumeCounter(1)).thenReturn(
                 Observable.just(MockMyServiceClient.generateCounter(5)));
 
     }
 
     @Test
     public void getGameCount() {
-        Observable<Counter> observable = myService.getCounter();
+        Observable<Counter> observable = myService.getCounter(1);
         observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -69,7 +69,7 @@ public class MyServiceTest {
 
     @Test
     public void consumeGameCount() {
-        Observable<Counter> observable = myService.consumeCounter();
+        Observable<Counter> observable = myService.consumeCounter(1);
         observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
