@@ -2,7 +2,6 @@ package kztproject.jp.splacounter;
 
 import android.app.Instrumentation;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -13,10 +12,10 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Component;
+import kztproject.jp.splacounter.activity.MainActivity;
 import kztproject.jp.splacounter.di.AppComponent;
 import kztproject.jp.splacounter.module.MockPreferencesModule;
 

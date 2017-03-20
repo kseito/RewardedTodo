@@ -1,6 +1,6 @@
 package kztproject.jp.splacounter.api;
 
-import kztproject.jp.splacounter.GameCountUtils;
+import kztproject.jp.splacounter.domain.GameCountUtils;
 import kztproject.jp.splacounter.model.Counter;
 import kztproject.jp.splacounter.model.UserResponse;
 import retrofit2.GsonConverterFactory;
@@ -10,7 +10,6 @@ import retrofit2.http.GET;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
 import rx.Observable;
-import rx.internal.operators.OperatorSerialize;
 
 /**
  * Created by k-seito on 2016/02/07.

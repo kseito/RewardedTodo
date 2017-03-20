@@ -11,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
+import kztproject.jp.splacounter.activity.MainActivity;
 import kztproject.jp.splacounter.mock.MockMyServiceClient;
 import kztproject.jp.splacounter.model.Counter;
 import rx.Observable;

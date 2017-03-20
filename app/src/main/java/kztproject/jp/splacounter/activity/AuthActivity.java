@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter;
+package kztproject.jp.splacounter.activity;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -14,6 +14,8 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import kztproject.jp.splacounter.MyApplication;
+import kztproject.jp.splacounter.R;
 import kztproject.jp.splacounter.api.MyServiceClient;
 import kztproject.jp.splacounter.model.User;
 import kztproject.jp.splacounter.model.UserResponse;

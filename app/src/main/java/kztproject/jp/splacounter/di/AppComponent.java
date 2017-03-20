@@ -1,7 +1,7 @@
 package kztproject.jp.splacounter.di;
 
-import kztproject.jp.splacounter.AuthActivity;
-import kztproject.jp.splacounter.MainActivity;
+import kztproject.jp.splacounter.activity.AuthActivity;
+import kztproject.jp.splacounter.activity.MainActivity;
 
 /**
  * Created by k-seito on 2016/01/24.
