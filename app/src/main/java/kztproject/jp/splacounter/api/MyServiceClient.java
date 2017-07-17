@@ -1,15 +1,15 @@
 package kztproject.jp.splacounter.api;
 
+import io.reactivex.Observable;
 import kztproject.jp.splacounter.domain.GameCountUtils;
 import kztproject.jp.splacounter.model.Counter;
 import kztproject.jp.splacounter.model.UserResponse;
-import retrofit2.GsonConverterFactory;
 import retrofit2.Retrofit;
-import retrofit2.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.PUT;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Created by k-seito on 2016/02/07.
@@ -24,14 +24,14 @@ public class MyServiceClient {
     public MyServiceClient() {
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(URL)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         myService = retrofit.create(MyService.class);
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(TodoistService.URL)
-                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         todoistService = retrofit.create(TodoistService.class);

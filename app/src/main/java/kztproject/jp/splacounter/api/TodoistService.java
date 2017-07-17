@@ -1,9 +1,9 @@
 package kztproject.jp.splacounter.api;
 
+import io.reactivex.Observable;
 import kztproject.jp.splacounter.model.UserResponse;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
-import rx.Observable;
 
 /**
  * Created by k-seito on 2017/03/18.

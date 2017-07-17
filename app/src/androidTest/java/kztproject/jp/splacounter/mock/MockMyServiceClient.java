@@ -1,10 +1,8 @@
 package kztproject.jp.splacounter.mock;
 
-import javax.inject.Inject;
-
+import io.reactivex.Observable;
 import kztproject.jp.splacounter.api.MyServiceClient;
 import kztproject.jp.splacounter.model.Counter;
-import rx.Observable;
 
 /**
  * Created by k-seito on 2016/02/10.

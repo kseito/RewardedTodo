@@ -13,16 +13,15 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import kztproject.jp.splacounter.domain.GameCountUtils;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import kztproject.jp.splacounter.MyApplication;
 import kztproject.jp.splacounter.R;
 import kztproject.jp.splacounter.api.MyServiceClient;
+import kztproject.jp.splacounter.domain.GameCountUtils;
 import kztproject.jp.splacounter.model.Counter;
 import kztproject.jp.splacounter.preference.AppPrefsProvider;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -78,35 +77,30 @@ public class MainActivity extends AppCompatActivity {
         observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Counter>() {
-                    @Override
-                    public void onCompleted() {
-                        System.out.println("Completed!");
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
+                .subscribe(
+                        counter -> {
+                            int count = GameCountUtils.convertGameCountFromCounter(counter);
+                            mTextCounter.setText(String.valueOf(count));
+                            if (count <= 0) {
+                                mCountDownButton.setEnabled(false);
+                            } else {
+                                mCountDownButton.setEnabled(true);
+                            }
+                            System.out.println("カウント：" + counter.getCount());
+                        },
+                        e -> {
+                            System.out.println("Error:" + e.getMessage());
+                            Toast.makeText(getApplicationContext(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
+                            if (progressDialog != null) {
+                                progressDialog.dismiss();
+                            }
+                        },
+                        () -> {
+                            System.out.println("Completed!");
+                            if (progressDialog != null) {
+                                progressDialog.dismiss();
+                            }
                         }
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        System.out.println("Error:" + e.getMessage());
-                        Toast.makeText(getApplicationContext(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
-                        if (progressDialog != null) {
-                            progressDialog.dismiss();
-                        }
-                    }
-
-                    @Override
-                    public void onNext(Counter counter) {
-                        int count = GameCountUtils.convertGameCountFromCounter(counter);
-                        mTextCounter.setText(String.valueOf(count));
-                        if (count <= 0) {
-                            mCountDownButton.setEnabled(false);
-                        } else {
-                            mCountDownButton.setEnabled(true);
-                        }
-                        System.out.println("カウント：" + counter.getCount());
-                    }
-                });
+                );
     }
 }

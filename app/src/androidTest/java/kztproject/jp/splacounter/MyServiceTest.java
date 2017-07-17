@@ -11,13 +11,12 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import kztproject.jp.splacounter.activity.MainActivity;
 import kztproject.jp.splacounter.mock.MockMyServiceClient;
 import kztproject.jp.splacounter.model.Counter;
-import rx.Observable;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 import static org.mockito.Mockito.spy;
 
@@ -49,23 +48,14 @@ public class MyServiceTest {
         observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Counter>() {
-                    @Override
-                    public void onCompleted() {
-                        System.out.println("Completed!");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        System.out.println("エラー:" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(Counter counter) {
-                        Assert.assertEquals(10, counter.getCount());
-                        System.out.println("カウント：" + counter.getCount());
-                    }
-                });
+                .subscribe(
+                        counter -> {
+                            Assert.assertEquals(10, counter.getCount());
+                            System.out.println("カウント：" + counter.getCount());
+                        },
+                        e -> System.out.println("エラー:" + e.getMessage()),
+                        () -> System.out.println("Completed!")
+                );
     }
 
     @Test
@@ -74,23 +64,14 @@ public class MyServiceTest {
         observable
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Subscriber<Counter>() {
-                    @Override
-                    public void onCompleted() {
-                        System.out.println("Completed!");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        System.out.println("エラー:" + e.getMessage());
-                    }
-
-                    @Override
-                    public void onNext(Counter counter) {
-                        Assert.assertEquals(5, counter.getCount());
-                        System.out.println("カウント：" + counter.getCount());
-                    }
-                });
+                .subscribe(
+                        counter -> {
+                            Assert.assertEquals(5, counter.getCount());
+                            System.out.println("カウント：" + counter.getCount());
+                        },
+                        e -> System.out.println("エラー:" + e.getMessage()),
+                        () -> System.out.println("Completed!")
+                );
     }
 
 }

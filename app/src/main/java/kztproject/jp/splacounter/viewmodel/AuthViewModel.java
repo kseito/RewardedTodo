@@ -2,14 +2,12 @@ package kztproject.jp.splacounter.viewmodel;
 
 import javax.inject.Inject;
 
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 import kztproject.jp.splacounter.api.MyServiceClient;
 import kztproject.jp.splacounter.model.User;
-import kztproject.jp.splacounter.model.UserResponse;
 import kztproject.jp.splacounter.preference.AppPrefs;
 import kztproject.jp.splacounter.preference.AppPrefsProvider;
-import rx.Subscriber;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 
 public class AuthViewModel {
 
@@ -32,33 +30,26 @@ public class AuthViewModel {
         client.getUser(inputString)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(() -> callback.showProgressDialog())
-                .doOnCompleted(() -> callback.dismissProgressDialog())
-                .subscribe(new Subscriber<UserResponse>() {
-                    @Override
-                    public void onCompleted() {
-                        callback.loginSuccessed();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        callback.loginFailed(e);
-                    }
-
-                    @Override
-                    public void onNext(UserResponse userResponse) {
-                        User user = userResponse.user;
-                        AppPrefs schema = prefs.get();
-                        schema.putUserId(user.id);
-                        schema.putUserName(user.fullName);
-                    }
-                });
+                .doOnSubscribe(disposable -> callback.showProgressDialog())
+                .doOnComplete(() -> callback.dismissProgressDialog())
+                .subscribe(
+                        userResponse -> {
+                            User user = userResponse.user;
+                            AppPrefs schema = prefs.get();
+                            schema.putUserId(user.id);
+                            schema.putUserName(user.fullName);
+                        },
+                        e -> callback.loginFailed(e),
+                        () -> callback.loginSuccessed());
     }
 
     public interface Callback {
         void showProgressDialog();
+
         void dismissProgressDialog();
+
         void loginSuccessed();
+
         void loginFailed(Throwable e);
     }
 }
