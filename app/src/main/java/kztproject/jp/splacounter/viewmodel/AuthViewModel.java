@@ -9,7 +9,6 @@ import kztproject.jp.splacounter.preference.AppPrefs;
 import kztproject.jp.splacounter.preference.AppPrefsProvider;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 
 public class AuthViewModel {
@@ -33,18 +32,8 @@ public class AuthViewModel {
         client.getUser(inputString)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(new Action0() {
-                    @Override
-                    public void call() {
-                        callback.showProgressDialog();
-                    }
-                })
-                .doOnCompleted(new Action0() {
-                    @Override
-                    public void call() {
-                        callback.dismissProgressDialog();
-                    }
-                })
+                .doOnSubscribe(() -> callback.showProgressDialog())
+                .doOnCompleted(() -> callback.dismissProgressDialog())
                 .subscribe(new Subscriber<UserResponse>() {
                     @Override
                     public void onCompleted() {
