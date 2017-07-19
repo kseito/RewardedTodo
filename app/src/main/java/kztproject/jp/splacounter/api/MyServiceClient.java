@@ -1,6 +1,7 @@
 package kztproject.jp.splacounter.api;
 
 import io.reactivex.Observable;
+import io.reactivex.Single;
 import kztproject.jp.splacounter.domain.GameCountUtils;
 import kztproject.jp.splacounter.model.Counter;
 import kztproject.jp.splacounter.model.UserResponse;
@@ -37,7 +38,7 @@ public class MyServiceClient {
         todoistService = retrofit.create(TodoistService.class);
     }
 
-    public Observable<UserResponse> getUser(String token) {
+    public Single<UserResponse> getUser(String token) {
         return todoistService.getUser(token, "*", "[\"user\"]");
     }
 
