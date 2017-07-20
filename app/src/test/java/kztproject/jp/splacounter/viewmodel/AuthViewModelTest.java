@@ -12,13 +12,13 @@ import io.reactivex.Completable;
 import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
-import kztproject.jp.splacounter.UserRepository;
+import kztproject.jp.splacounter.AuthRepository;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AuthViewModelTest {
 
     @Mock
-    UserRepository userRepository;
+    AuthRepository authRepository;
 
     @Mock
     AuthViewModel.Callback callbackMock;
@@ -27,7 +27,7 @@ public class AuthViewModelTest {
 
     @Before
     public void setup() {
-        viewModel = new AuthViewModel(userRepository);
+        viewModel = new AuthViewModel(authRepository);
         viewModel.setCallback(callbackMock);
 
         RxJavaPlugins.setIoSchedulerHandler(scheduler -> Schedulers.trampoline());
@@ -42,7 +42,7 @@ public class AuthViewModelTest {
 
     @Test
     public void loginSuccess() {
-        Mockito.when(userRepository.get(Mockito.anyString())).thenReturn(Completable.complete());
+        Mockito.when(authRepository.login(Mockito.anyString())).thenReturn(Completable.complete());
 
         viewModel.login("test");
 
@@ -54,7 +54,7 @@ public class AuthViewModelTest {
     @Test
     public void loginFailed() {
         NullPointerException exception = new NullPointerException();
-        Mockito.when(userRepository.get(Mockito.anyString())).thenReturn(Completable.error(exception));
+        Mockito.when(authRepository.login(Mockito.anyString())).thenReturn(Completable.error(exception));
 
         viewModel.login("test");
 

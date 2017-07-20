@@ -4,16 +4,16 @@ import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import kztproject.jp.splacounter.UserRepository;
+import kztproject.jp.splacounter.AuthRepository;
 
 public class AuthViewModel {
 
-    private final UserRepository userRepository;
+    private final AuthRepository authRepository;
     Callback callback;
 
     @Inject
-    public AuthViewModel(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public AuthViewModel(AuthRepository authRepository) {
+        this.authRepository = authRepository;
     }
 
     public void setCallback(Callback callback) {
@@ -21,7 +21,7 @@ public class AuthViewModel {
     }
 
     public void login(String inputString) {
-        userRepository.get(inputString)
+        authRepository.login(inputString)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe(disposable -> callback.showProgressDialog())

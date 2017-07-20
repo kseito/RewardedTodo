@@ -9,22 +9,18 @@ import kztproject.jp.splacounter.model.UserResponse;
 import kztproject.jp.splacounter.preference.AppPrefs;
 import kztproject.jp.splacounter.preference.AppPrefsProvider;
 
-/**
- * Created by k-seito on 2017/07/19.
- */
-
-public class UserRepository {
+public class AuthRepository {
 
     private final MyServiceClient client;
     private final AppPrefsProvider prefs;
 
     @Inject
-    public UserRepository(MyServiceClient client, AppPrefsProvider prefs) {
+    public AuthRepository(MyServiceClient client, AppPrefsProvider prefs) {
         this.client = client;
         this.prefs = prefs;
     }
 
-    public Completable get(String inputString) {
+    public Completable login(String inputString) {
         return client.getUser(inputString)
                 .flatMapCompletable(this::save);
     }
