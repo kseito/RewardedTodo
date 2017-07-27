@@ -3,4 +3,6 @@
     <string name="main_text1">Remaining</string>
     <string name="game_reload">Reload</string>
     <string name="game_consume">Played</string>
+
+    <string name="error_login_text_empty">Please input your Todoist API token</string>
 </resources>

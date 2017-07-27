@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,12 +57,7 @@ public class AuthFragment extends Fragment implements AuthViewModel.Callback {
 
     @OnClick(R.id.login_button)
     public void clickLogin(View view) {
-        if (tokenText.length() == 0) {
-            Toast.makeText(getContext(), "APIトークンを入力してください", Toast.LENGTH_SHORT).show();
-        } else {
-            viewModel.login(tokenText.getText().toString());
-        }
-
+        viewModel.login(tokenText.getText().toString());
     }
 
     @Override
@@ -89,5 +85,10 @@ public class AuthFragment extends Fragment implements AuthViewModel.Callback {
     @Override
     public void loginFailed(Throwable e) {
         Toast.makeText(getActivity(), "ログインに失敗しました", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void showError(@StringRes int stringId) {
+        Toast.makeText(getContext(), getString(stringId), Toast.LENGTH_SHORT).show();
     }
 }

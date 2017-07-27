@@ -13,6 +13,7 @@ import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 import kztproject.jp.splacounter.AuthRepository;
+import kztproject.jp.splacounter.R;
 
 @RunWith(MockitoJUnitRunner.class)
 public class AuthViewModelTest {
@@ -61,6 +62,16 @@ public class AuthViewModelTest {
         Mockito.verify(callbackMock, Mockito.times(1)).showProgressDialog();
         Mockito.verify(callbackMock, Mockito.times(1)).dismissProgressDialog();
         Mockito.verify(callbackMock, Mockito.times(1)).loginFailed(exception);
+    }
+
+    @Test
+    public void loginWithEmptyText() {
+        NullPointerException exception = new NullPointerException();
+        Mockito.when(authRepository.login(Mockito.anyString())).thenReturn(Completable.error(exception));
+
+        viewModel.login("");
+
+        Mockito.verify(callbackMock, Mockito.times(1)).showError(R.string.error_login_text_empty);
     }
 
 }

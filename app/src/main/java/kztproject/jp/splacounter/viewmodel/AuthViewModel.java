@@ -1,10 +1,13 @@
 package kztproject.jp.splacounter.viewmodel;
 
+import android.support.annotation.StringRes;
+
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import kztproject.jp.splacounter.AuthRepository;
+import kztproject.jp.splacounter.R;
 
 public class AuthViewModel {
 
@@ -21,15 +24,19 @@ public class AuthViewModel {
     }
 
     public void login(String inputString) {
-        authRepository.login(inputString)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe(disposable -> callback.showProgressDialog())
-                .doOnError(throwable -> callback.dismissProgressDialog())
-                .doOnComplete(() -> callback.dismissProgressDialog())
-                .subscribe(
-                        () -> callback.loginSuccessed(),
-                        e -> callback.loginFailed(e));
+        if (inputString.length() == 0 ) {
+            callback.showError(R.string.error_login_text_empty);
+        } else {
+            authRepository.login(inputString)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe(disposable -> callback.showProgressDialog())
+                    .doOnError(throwable -> callback.dismissProgressDialog())
+                    .doOnComplete(() -> callback.dismissProgressDialog())
+                    .subscribe(
+                            () -> callback.loginSuccessed(),
+                            e -> callback.loginFailed(e));
+        }
     }
 
     public interface Callback {
@@ -40,5 +47,7 @@ public class AuthViewModel {
         void loginSuccessed();
 
         void loginFailed(Throwable e);
+
+        void showError(@StringRes int stringId);
     }
 }
