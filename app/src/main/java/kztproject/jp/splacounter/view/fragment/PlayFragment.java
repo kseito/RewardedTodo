@@ -23,13 +23,7 @@ import kztproject.jp.splacounter.api.MyServiceClient;
 import kztproject.jp.splacounter.preference.AppPrefsProvider;
 import kztproject.jp.splacounter.viewmodel.PlayViewModel;
 
-/**
- * Created by k-seito on 2017/07/29.
- */
-
 public class PlayFragment extends Fragment implements PlayViewModel.Callback{
-
-    public static final String COUNT = "count";
 
     @Inject
     MyServiceClient serviceClient;
@@ -105,7 +99,7 @@ public class PlayFragment extends Fragment implements PlayViewModel.Callback{
     }
 
     @Override
-    public void countDownGameCount(int gameCount) {
+    public void showGameCount(int gameCount) {
         mTextCounter.setText(String.valueOf(gameCount));
         if (gameCount <= 0) {
             mCountDownButton.setEnabled(false);

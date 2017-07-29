@@ -1,5 +1,6 @@
 package kztproject.jp.splacounter;
 
+import kztproject.jp.splacounter.model.Counter;
 import kztproject.jp.splacounter.model.User;
 import kztproject.jp.splacounter.model.UserResponse;
 
@@ -18,4 +19,10 @@ public class DummyCreator {
         return response;
     }
 
+    public static Counter createDummyCounter() {
+        Counter counter = new Counter();
+        counter.setId(1);
+        counter.setCount(10);
+        return counter;
+    }
 }

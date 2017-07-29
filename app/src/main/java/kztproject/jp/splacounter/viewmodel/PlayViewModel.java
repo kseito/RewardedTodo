@@ -12,11 +12,11 @@ import kztproject.jp.splacounter.preference.AppPrefsProvider;
 
 public class PlayViewModel {
 
-    MyServiceClient serviceClient;
+    private MyServiceClient serviceClient;
 
-    AppPrefsProvider prefs;
+    private AppPrefsProvider prefs;
 
-    Callback callback;
+    private Callback callback;
 
     @Inject
     public PlayViewModel(MyServiceClient serviceClient, AppPrefsProvider prefs) {
@@ -48,7 +48,7 @@ public class PlayViewModel {
                 .subscribe(
                         counter -> {
                             int count = GameCountUtils.convertGameCountFromCounter(counter);
-                            callback.countDownGameCount(count);
+                            callback.showGameCount(count);
                         },
                         e -> callback.showError(e)
                 );
@@ -59,7 +59,7 @@ public class PlayViewModel {
 
         void dismissProgressDialog();
 
-        void countDownGameCount(int gameCount);
+        void showGameCount(int gameCount);
 
         void showError(Throwable e);
     }
