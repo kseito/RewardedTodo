@@ -1,7 +1,6 @@
 package kztproject.jp.splacounter.view.fragment;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
@@ -19,12 +18,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import kztproject.jp.splacounter.MyApplication;
 import kztproject.jp.splacounter.R;
-import kztproject.jp.splacounter.activity.MainActivity;
 import kztproject.jp.splacounter.viewmodel.AuthViewModel;
-
-/**
- * Created by k-seito on 2017/07/17.
- */
 
 public class AuthFragment extends Fragment implements AuthViewModel.Callback {
 
@@ -79,9 +73,10 @@ public class AuthFragment extends Fragment implements AuthViewModel.Callback {
     @Override
     public void loginSuccessed() {
         Toast.makeText(getActivity(), "ログインに成功しました", Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(getActivity(), MainActivity.class));
 
-        //TODO call replace fragment
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, PlayFragment.newInstance())
+                .commit();
     }
 
     @Override

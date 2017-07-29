@@ -1,6 +1,6 @@
 package kztproject.jp.splacounter.di;
 
-import kztproject.jp.splacounter.activity.AuthActivity;
+import kztproject.jp.splacounter.activity.BaseActivity;
 import kztproject.jp.splacounter.view.fragment.AuthFragment;
 import kztproject.jp.splacounter.view.fragment.PlayFragment;
 
@@ -9,7 +9,7 @@ import kztproject.jp.splacounter.view.fragment.PlayFragment;
  */
 public interface AppComponent {
 
-    void inject(AuthActivity activity);
+    void inject(BaseActivity activity);
 
     void inject(AuthFragment fragment);
 

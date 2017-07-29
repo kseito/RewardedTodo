@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import javax.inject.Inject;
 
 import kztproject.jp.splacounter.MyApplication;
+import kztproject.jp.splacounter.R;
 import kztproject.jp.splacounter.preference.AppPrefsProvider;
 import kztproject.jp.splacounter.view.fragment.AuthFragment;
 import kztproject.jp.splacounter.view.fragment.PlayFragment;
@@ -15,7 +16,7 @@ import kztproject.jp.splacounter.view.fragment.PlayFragment;
  * Created by k-seito on 2017/03/18.
  */
 
-public class AuthActivity extends AppCompatActivity {
+public class BaseActivity extends AppCompatActivity {
 
     @Inject
     AppPrefsProvider prefs;
@@ -23,14 +24,15 @@ public class AuthActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_base);
         ((MyApplication) getApplication()).component().inject(this);
         if (prefs.get().getUserId() != 0) {
             getSupportFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, PlayFragment.newInstance())
+                    .replace(R.id.container, PlayFragment.newInstance())
                     .commit();
         } else {
             getSupportFragmentManager().beginTransaction()
-                    .replace(android.R.id.content, AuthFragment.newInstance())
+                    .replace(R.id.container, AuthFragment.newInstance())
                     .commit();
         }
     }
