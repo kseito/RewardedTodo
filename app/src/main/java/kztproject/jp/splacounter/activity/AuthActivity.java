@@ -1,15 +1,15 @@
 package kztproject.jp.splacounter.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import javax.inject.Inject;
 
-import kztproject.jp.splacounter.AuthFragment;
 import kztproject.jp.splacounter.MyApplication;
 import kztproject.jp.splacounter.preference.AppPrefsProvider;
+import kztproject.jp.splacounter.view.fragment.AuthFragment;
+import kztproject.jp.splacounter.view.fragment.PlayFragment;
 
 /**
  * Created by k-seito on 2017/03/18.
@@ -25,8 +25,9 @@ public class AuthActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         ((MyApplication) getApplication()).component().inject(this);
         if (prefs.get().getUserId() != 0) {
-            finish();
-            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+            getSupportFragmentManager().beginTransaction()
+                    .replace(android.R.id.content, PlayFragment.newInstance())
+                    .commit();
         } else {
             getSupportFragmentManager().beginTransaction()
                     .replace(android.R.id.content, AuthFragment.newInstance())

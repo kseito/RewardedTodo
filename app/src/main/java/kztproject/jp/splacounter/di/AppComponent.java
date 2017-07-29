@@ -1,17 +1,17 @@
 package kztproject.jp.splacounter.di;
 
-import kztproject.jp.splacounter.AuthFragment;
 import kztproject.jp.splacounter.activity.AuthActivity;
-import kztproject.jp.splacounter.activity.MainActivity;
+import kztproject.jp.splacounter.view.fragment.AuthFragment;
+import kztproject.jp.splacounter.view.fragment.PlayFragment;
 
 /**
  * Created by k-seito on 2016/01/24.
  */
 public interface AppComponent {
 
-    void inject(MainActivity activity);
-
     void inject(AuthActivity activity);
 
     void inject(AuthFragment fragment);
+
+    void inject(PlayFragment fragment);
 }
