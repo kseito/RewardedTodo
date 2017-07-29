@@ -1,6 +1,7 @@
 package kztproject.jp.splacounter.view.fragment;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,21 +17,17 @@ import javax.inject.Inject;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
 import kztproject.jp.splacounter.MyApplication;
 import kztproject.jp.splacounter.R;
 import kztproject.jp.splacounter.api.MyServiceClient;
-import kztproject.jp.splacounter.domain.GameCountUtils;
-import kztproject.jp.splacounter.model.Counter;
 import kztproject.jp.splacounter.preference.AppPrefsProvider;
+import kztproject.jp.splacounter.viewmodel.PlayViewModel;
 
 /**
  * Created by k-seito on 2017/07/29.
  */
 
-public class PlayFragment extends Fragment {
+public class PlayFragment extends Fragment implements PlayViewModel.Callback{
 
     public static final String COUNT = "count";
 
@@ -46,13 +43,20 @@ public class PlayFragment extends Fragment {
     @Bind(R.id.count_down_button)
     Button mCountDownButton;
 
+    @Inject
+    PlayViewModel viewModel;
+
+    ProgressDialog progressDialog;
+
     public static PlayFragment newInstance() {
+        return new PlayFragment();
+    }
 
-        Bundle args = new Bundle();
-
-        PlayFragment fragment = new PlayFragment();
-        fragment.setArguments(args);
-        return fragment;
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        ((MyApplication) getActivity().getApplication()).component().inject(this);
+        viewModel.setCallback(this);
     }
 
     @Nullable
@@ -60,26 +64,25 @@ public class PlayFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_main, container, false);
         ButterKnife.bind(this, view);
+
+        progressDialog = new ProgressDialog(getActivity());
+        progressDialog.setMessage("Now Loading...");
+
         return view;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        ((MyApplication) getActivity().getApplication()).component().inject(this);
-
         initCounter();
     }
 
     public void initCounter() {
-
-        Observable<Counter> observable = serviceClient.getCounter(prefs.get().getUserId());
-        showCount(observable);
+        viewModel.getGameCount();
     }
 
     @OnClick(R.id.count_down_button)
     public void clickCountDown(View view) {
-        Observable<Counter> observable = serviceClient.consumeCounter(prefs.get().getUserId());
-        showCount(observable);
+        viewModel.consumeGameCount();
     }
 
     @OnClick(R.id.reload_button)
@@ -87,39 +90,32 @@ public class PlayFragment extends Fragment {
         initCounter();
     }
 
-    private void showCount(Observable<Counter> observable) {
-
-        final ProgressDialog progressDialog = new ProgressDialog(getActivity());
-        progressDialog.setMessage("Now Loading...");
-        progressDialog.show();
-
-        observable
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnTerminate(() -> {
-                    if (progressDialog != null) {
-                        progressDialog.dismiss();
-                    }
-                })
-                .subscribe(
-                        counter -> {
-                            int count = GameCountUtils.convertGameCountFromCounter(counter);
-                            mTextCounter.setText(String.valueOf(count));
-                            if (count <= 0) {
-                                mCountDownButton.setEnabled(false);
-                            } else {
-                                mCountDownButton.setEnabled(true);
-                            }
-                            System.out.println("カウント：" + counter.getCount());
-                        },
-                        e -> {
-                            System.out.println("Error:" + e.getMessage());
-                            Toast.makeText(getActivity(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
-                        },
-                        () -> {
-                            System.out.println("Completed!");
-                        }
-                );
+    @Override
+    public void showProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog.show();
+        }
     }
 
+    @Override
+    public void dismissProgressDialog() {
+        if (progressDialog != null) {
+            progressDialog.dismiss();
+        }
+    }
+
+    @Override
+    public void countDownGameCount(int gameCount) {
+        mTextCounter.setText(String.valueOf(gameCount));
+        if (gameCount <= 0) {
+            mCountDownButton.setEnabled(false);
+        } else {
+            mCountDownButton.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void showError(Throwable e) {
+        Toast.makeText(getActivity(), "Error:" + e.getMessage(), Toast.LENGTH_LONG).show();
+    }
 }
