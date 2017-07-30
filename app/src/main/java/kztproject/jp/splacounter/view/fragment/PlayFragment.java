@@ -19,14 +19,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import kztproject.jp.splacounter.MyApplication;
 import kztproject.jp.splacounter.R;
-import kztproject.jp.splacounter.api.MyServiceClient;
+import kztproject.jp.splacounter.api.MiniatureGardenClient;
 import kztproject.jp.splacounter.preference.AppPrefsProvider;
 import kztproject.jp.splacounter.viewmodel.PlayViewModel;
 
 public class PlayFragment extends Fragment implements PlayViewModel.Callback{
 
     @Inject
-    MyServiceClient serviceClient;
+    MiniatureGardenClient serviceClient;
 
     @Inject
     AppPrefsProvider prefs;

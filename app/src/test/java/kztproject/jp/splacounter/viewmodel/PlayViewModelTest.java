@@ -12,7 +12,7 @@ import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
 import kztproject.jp.splacounter.DummyCreator;
-import kztproject.jp.splacounter.api.MyServiceClient;
+import kztproject.jp.splacounter.api.MiniatureGardenClient;
 import kztproject.jp.splacounter.model.Counter;
 import kztproject.jp.splacounter.preference.AppPrefsProvider;
 
@@ -25,7 +25,7 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class PlayViewModelTest {
 
-    private MyServiceClient mockServiceClient;
+    private MiniatureGardenClient mockServiceClient;
 
     private AppPrefsProvider appPrefsProvider;
 
@@ -41,7 +41,7 @@ public class PlayViewModelTest {
         appPrefsProvider = new AppPrefsProvider(RuntimeEnvironment.application);
         appPrefsProvider.get().putUserId(dummyCounter.getId());
 
-        mockServiceClient = mock(MyServiceClient.class);
+        mockServiceClient = mock(MiniatureGardenClient.class);
         mockCallback = mock(PlayViewModel.Callback.class);
         viewModel = new PlayViewModel(mockServiceClient, appPrefsProvider);
         viewModel.setCallback(mockCallback);

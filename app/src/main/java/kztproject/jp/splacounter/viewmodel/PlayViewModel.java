@@ -5,21 +5,21 @@ import javax.inject.Inject;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import kztproject.jp.splacounter.api.MyServiceClient;
+import kztproject.jp.splacounter.api.MiniatureGardenClient;
 import kztproject.jp.splacounter.util.GameCountUtils;
 import kztproject.jp.splacounter.model.Counter;
 import kztproject.jp.splacounter.preference.AppPrefsProvider;
 
 public class PlayViewModel {
 
-    private MyServiceClient serviceClient;
+    private MiniatureGardenClient serviceClient;
 
     private AppPrefsProvider prefs;
 
     private Callback callback;
 
     @Inject
-    public PlayViewModel(MyServiceClient serviceClient, AppPrefsProvider prefs) {
+    public PlayViewModel(MiniatureGardenClient serviceClient, AppPrefsProvider prefs) {
         this.serviceClient = serviceClient;
         this.prefs = prefs;
     }

@@ -3,7 +3,7 @@ package kztproject.jp.splacounter.repository;
 import javax.inject.Inject;
 
 import io.reactivex.Completable;
-import kztproject.jp.splacounter.api.MyServiceClient;
+import kztproject.jp.splacounter.api.MiniatureGardenClient;
 import kztproject.jp.splacounter.model.User;
 import kztproject.jp.splacounter.model.UserResponse;
 import kztproject.jp.splacounter.preference.AppPrefs;
@@ -11,11 +11,11 @@ import kztproject.jp.splacounter.preference.AppPrefsProvider;
 
 public class AuthRepository {
 
-    private final MyServiceClient client;
+    private final MiniatureGardenClient client;
     private final AppPrefsProvider prefs;
 
     @Inject
-    public AuthRepository(MyServiceClient client, AppPrefsProvider prefs) {
+    public AuthRepository(MiniatureGardenClient client, AppPrefsProvider prefs) {
         this.client = client;
         this.prefs = prefs;
     }
