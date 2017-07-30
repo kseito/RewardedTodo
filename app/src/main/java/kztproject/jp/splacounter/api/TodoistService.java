@@ -7,8 +7,6 @@ import retrofit2.http.Query;
 
 public interface TodoistService {
 
-    String URL = "https://todoist.com";
-
     @GET("/API/v7/sync")
     Single<UserResponse> getUser(@Query("token") String token, @Query("sync_token") String syncToken,
                                  @Query("resource_types") String resourceTypes);

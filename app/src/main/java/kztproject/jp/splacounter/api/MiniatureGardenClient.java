@@ -8,8 +8,6 @@ import kztproject.jp.splacounter.util.GameCountUtils;
 
 public class MiniatureGardenClient {
 
-    public static final String URL = "https://miniature-garden.herokuapp.com";
-
     private final MiniatureGardenService service;
 
     @Inject

@@ -6,7 +6,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import kztproject.jp.splacounter.api.MiniatureGardenClient;
+import kztproject.jp.splacounter.BuildConfig;
 import kztproject.jp.splacounter.api.MiniatureGardenService;
 import kztproject.jp.splacounter.api.TodoistService;
 import kztproject.jp.splacounter.preference.AppPrefsProvider;
@@ -31,7 +31,7 @@ public class AppModule {
     @Provides
     MiniatureGardenService provideMiniatureGardenService() {
         return new Retrofit.Builder()
-                .baseUrl(MiniatureGardenClient.URL)
+                .baseUrl(BuildConfig.MINIATURE_GARDEN_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
@@ -42,7 +42,7 @@ public class AppModule {
     @Singleton
     TodoistService provideTodoistService() {
         return new Retrofit.Builder()
-                .baseUrl(TodoistService.URL)
+                .baseUrl(BuildConfig.TODOIST_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
