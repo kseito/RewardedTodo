@@ -2,9 +2,6 @@ package kztproject.jp.splacounter.util;
 
 import kztproject.jp.splacounter.model.Counter;
 
-/**
- * Created by k-seito on 2016/02/11.
- */
 public class GameCountUtils {
 
     public static final int GAME_UNIT = 2;

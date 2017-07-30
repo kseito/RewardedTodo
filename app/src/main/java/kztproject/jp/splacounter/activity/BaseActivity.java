@@ -12,10 +12,6 @@ import kztproject.jp.splacounter.preference.AppPrefsProvider;
 import kztproject.jp.splacounter.view.fragment.AuthFragment;
 import kztproject.jp.splacounter.view.fragment.PlayFragment;
 
-/**
- * Created by k-seito on 2017/03/18.
- */
-
 public class BaseActivity extends AppCompatActivity {
 
     @Inject

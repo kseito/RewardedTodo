@@ -10,9 +10,6 @@ import dagger.Component;
 import kztproject.jp.splacounter.di.AppComponent;
 import kztproject.jp.splacounter.di.AppModule;
 
-/**
- * Created by k-seito on 2016/01/23.
- */
 public class MyApplication extends Application {
 
     public static final String PREF = "pref";
