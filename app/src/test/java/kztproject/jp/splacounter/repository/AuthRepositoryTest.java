@@ -8,7 +8,7 @@ import org.robolectric.RuntimeEnvironment;
 
 import io.reactivex.Single;
 import kztproject.jp.splacounter.DummyCreator;
-import kztproject.jp.splacounter.api.MiniatureGardenClient;
+import kztproject.jp.splacounter.api.TodoistClient;
 import kztproject.jp.splacounter.model.UserResponse;
 import kztproject.jp.splacounter.preference.AppPrefs;
 import kztproject.jp.splacounter.preference.AppPrefsProvider;
@@ -22,7 +22,7 @@ import static org.mockito.Mockito.when;
 @RunWith(RobolectricTestRunner.class)
 public class AuthRepositoryTest {
 
-    private MiniatureGardenClient mockClient = mock(MiniatureGardenClient.class);
+    private TodoistClient mockClient = mock(TodoistClient.class);
 
     private AppPrefsProvider mockAppPrefsProvider = new AppPrefsProvider(RuntimeEnvironment.application);
 

@@ -2,10 +2,13 @@ package kztproject.jp.splacounter.di;
 
 import android.content.Context;
 
+import javax.inject.Singleton;
+
 import dagger.Module;
 import dagger.Provides;
 import kztproject.jp.splacounter.api.MiniatureGardenClient;
 import kztproject.jp.splacounter.api.MiniatureGardenService;
+import kztproject.jp.splacounter.api.TodoistService;
 import kztproject.jp.splacounter.preference.AppPrefsProvider;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
@@ -36,5 +39,16 @@ public class AppModule {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(MiniatureGardenService.class);
+    }
+
+    @Provides
+    @Singleton
+    TodoistService provideTodoistService() {
+        return new Retrofit.Builder()
+                .baseUrl(TodoistService.URL)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(TodoistService.class);
     }
 }
