@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter;
+package kztproject.jp.splacounter.repository;
 
 import javax.inject.Inject;
 

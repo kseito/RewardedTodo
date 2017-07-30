@@ -7,7 +7,6 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 
 import io.reactivex.Single;
-import kztproject.jp.splacounter.AuthRepository;
 import kztproject.jp.splacounter.DummyCreator;
 import kztproject.jp.splacounter.api.MyServiceClient;
 import kztproject.jp.splacounter.model.UserResponse;

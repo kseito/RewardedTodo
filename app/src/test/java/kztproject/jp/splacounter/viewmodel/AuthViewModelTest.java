@@ -12,7 +12,7 @@ import io.reactivex.Completable;
 import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
-import kztproject.jp.splacounter.AuthRepository;
+import kztproject.jp.splacounter.repository.AuthRepository;
 import kztproject.jp.splacounter.R;
 
 @RunWith(MockitoJUnitRunner.class)
