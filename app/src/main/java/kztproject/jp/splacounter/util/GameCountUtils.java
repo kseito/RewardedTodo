@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.domain;
+package kztproject.jp.splacounter.util;
 
 import kztproject.jp.splacounter.model.Counter;
 

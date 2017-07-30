@@ -6,7 +6,7 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import kztproject.jp.splacounter.api.MyServiceClient;
-import kztproject.jp.splacounter.domain.GameCountUtils;
+import kztproject.jp.splacounter.util.GameCountUtils;
 import kztproject.jp.splacounter.model.Counter;
 import kztproject.jp.splacounter.preference.AppPrefsProvider;
 

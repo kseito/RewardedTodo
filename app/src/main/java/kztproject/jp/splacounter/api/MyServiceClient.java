@@ -2,7 +2,7 @@ package kztproject.jp.splacounter.api;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
-import kztproject.jp.splacounter.domain.GameCountUtils;
+import kztproject.jp.splacounter.util.GameCountUtils;
 import kztproject.jp.splacounter.model.Counter;
 import kztproject.jp.splacounter.model.UserResponse;
 import retrofit2.Retrofit;
