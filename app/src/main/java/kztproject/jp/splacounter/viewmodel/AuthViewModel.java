@@ -31,8 +31,7 @@ public class AuthViewModel {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe(disposable -> callback.showProgressDialog())
-                    .doOnError(throwable -> callback.dismissProgressDialog())
-                    .doOnComplete(() -> callback.dismissProgressDialog())
+                    .doOnTerminate(() -> callback.dismissProgressDialog())
                     .subscribe(
                             () -> callback.loginSuccessed(),
                             e -> callback.loginFailed(e));
