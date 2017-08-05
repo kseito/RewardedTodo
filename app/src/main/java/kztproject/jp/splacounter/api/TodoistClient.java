@@ -10,7 +10,7 @@ public class TodoistClient {
     private final TodoistService service;
 
     @Inject
-    public TodoistClient(TodoistService service) {
+    TodoistClient(TodoistService service) {
         this.service = service;
     }
 

@@ -4,25 +4,22 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.robolectric.RobolectricTestRunner;
 
 import io.reactivex.Completable;
 import io.reactivex.android.plugins.RxAndroidPlugins;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.reactivex.schedulers.Schedulers;
-import kztproject.jp.splacounter.repository.AuthRepository;
 import kztproject.jp.splacounter.R;
+import kztproject.jp.splacounter.repository.AuthRepository;
 
-@RunWith(MockitoJUnitRunner.class)
+@RunWith(RobolectricTestRunner.class)
 public class AuthViewModelTest {
 
-    @Mock
-    AuthRepository authRepository;
+    AuthRepository authRepository = Mockito.mock(AuthRepository.class);
 
-    @Mock
-    AuthViewModel.Callback callbackMock;
+    AuthViewModel.Callback callbackMock = Mockito.mock(AuthViewModel.Callback.class);
 
     AuthViewModel viewModel;
 
