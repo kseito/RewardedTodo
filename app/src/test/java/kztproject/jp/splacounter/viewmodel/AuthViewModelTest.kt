@@ -7,6 +7,7 @@ import io.reactivex.Scheduler
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
+import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.repository.AuthRepository
 import org.junit.After
 import org.junit.Before
@@ -16,7 +17,7 @@ import org.mockito.Mockito.*
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
-class AuthViewModelTest2 {
+class AuthViewModelTest {
 
     private val mockAuthRepository = mock<AuthRepository>()
 
@@ -49,5 +50,27 @@ class AuthViewModelTest2 {
         verify(mockCallback, times(1)).showProgressDialog()
         verify(mockCallback, times(1)).dismissProgressDialog()
         verify(mockCallback, times(1)).loginSuccessed()
+    }
+
+    @Test
+    fun loginFailed() {
+        val exception = NullPointerException()
+        whenever(mockAuthRepository.login(anyString())).thenReturn(Completable.error(exception))
+
+        viewModel.login("test")
+
+        verify(mockCallback, times(1)).showProgressDialog()
+        verify(mockCallback, times(1)).dismissProgressDialog()
+        verify(mockCallback, times(1)).loginFailed(exception)
+    }
+
+    @Test
+    fun loginWithEmptyText() {
+        val exception = NullPointerException()
+        whenever(mockAuthRepository.login(anyString())).thenReturn(Completable.error(exception))
+
+        viewModel.login("")
+
+        verify(mockCallback, times(1)).showError(R.string.error_login_text_empty)
     }
 }
