@@ -49,7 +49,7 @@ class AuthViewModelTest {
 
         verify(mockCallback, times(1)).showProgressDialog()
         verify(mockCallback, times(1)).dismissProgressDialog()
-        verify(mockCallback, times(1)).loginSuccessed()
+        verify(mockCallback, times(2)).loginSuccessed()
     }
 
     @Test
