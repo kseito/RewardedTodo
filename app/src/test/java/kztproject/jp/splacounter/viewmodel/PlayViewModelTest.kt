@@ -17,9 +17,6 @@ import org.mockito.Mockito.*
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
-/**
- * Created by k-seito on 2017/08/14.
- */
 @RunWith(RobolectricTestRunner::class)
 class PlayViewModelTest {
 
