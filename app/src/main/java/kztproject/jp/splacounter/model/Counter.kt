@@ -10,7 +10,7 @@ class Counter {
 
     @SerializedName("id")
     @Expose
-    var id: Int? = null
+    var id: Int = 0
     @SerializedName("count")
     @Expose
     var count: Int = 0
