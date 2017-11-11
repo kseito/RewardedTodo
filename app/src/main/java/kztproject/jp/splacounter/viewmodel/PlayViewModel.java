@@ -47,7 +47,7 @@ public class PlayViewModel {
                 .doOnTerminate(() -> callback.dismissProgressDialog())
                 .subscribe(
                         counter -> {
-                            int count = GameCountUtils.convertGameCountFromCounter(counter);
+                            int count = GameCountUtils.Companion.convertGameCountFromCounter(counter);
                             callback.showGameCount(count);
                         },
                         e -> callback.showError(e)
