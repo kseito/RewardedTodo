@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import kztproject.jp.splacounter.MyApplication;
@@ -22,7 +22,7 @@ import kztproject.jp.splacounter.viewmodel.AuthViewModel;
 
 public class AuthFragment extends Fragment implements AuthViewModel.Callback {
 
-    @Bind(R.id.token_text)
+    @BindView(R.id.token_text)
     EditText tokenText;
 
     private ProgressDialog progressDialog;

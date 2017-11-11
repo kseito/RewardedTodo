@@ -13,9 +13,9 @@ public class DummyCreator {
     public static UserResponse createDummyUserResponse() {
         UserResponse response = new UserResponse();
         User user = new User();
-        user.id = 1;
-        user.fullName = "test_user";
-        response.user = user;
+        user.setId(1);
+        user.setFullName("test_user");
+        response.setUser(user);
         return response;
     }
 

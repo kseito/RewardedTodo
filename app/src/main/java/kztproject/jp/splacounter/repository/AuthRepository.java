@@ -26,10 +26,10 @@ public class AuthRepository {
     }
 
     private Completable save(UserResponse response) {
-        User user = response.user;
+        User user = response.getUser();
         AppPrefs schema = prefs.get();
-        schema.putUserId(user.id);
-        schema.putUserName(user.fullName);
+        schema.putUserId(user.getId());
+        schema.putUserName(user.getFullName());
         return Completable.complete();
     }
 }

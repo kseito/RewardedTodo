@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import javax.inject.Inject;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import kztproject.jp.splacounter.MyApplication;
@@ -31,10 +31,10 @@ public class PlayFragment extends Fragment implements PlayViewModel.Callback{
     @Inject
     AppPrefsProvider prefs;
 
-    @Bind(R.id.text_counter)
+    @BindView(R.id.text_counter)
     TextView mTextCounter;
 
-    @Bind(R.id.count_down_button)
+    @BindView(R.id.count_down_button)
     Button mCountDownButton;
 
     @Inject
