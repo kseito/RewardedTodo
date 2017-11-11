@@ -15,7 +15,7 @@ public class DummyCreator {
         User user = new User();
         user.setId(1);
         user.setFullName("test_user");
-        response.user = user;
+        response.setUser(user);
         return response;
     }
 
