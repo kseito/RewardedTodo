@@ -6,8 +6,7 @@ import io.reactivex.Single
 import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.api.TodoistClient
 import kztproject.jp.splacounter.model.UserResponse
-import kztproject.jp.splacounter.preference.AppPrefs
-import kztproject.jp.splacounter.preference.AppPrefsProvider
+import kztproject.jp.splacounter.preference.PrefsWrapper
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
@@ -21,13 +20,12 @@ class AuthRepositoryTest {
 
     var mockClient = mock<TodoistClient>()
 
-    val mockAppPrefsProvider: AppPrefsProvider = AppPrefsProvider(RuntimeEnvironment.application)
-
     lateinit var repository: AuthRepository
 
     @Before
     fun setup() {
-        repository = AuthRepository(mockClient, mockAppPrefsProvider)
+        PrefsWrapper.initialize(RuntimeEnvironment.application)
+        repository = AuthRepository(mockClient)
     }
 
     @Test
@@ -36,12 +34,11 @@ class AuthRepositoryTest {
         whenever(mockClient.getUser(anyString())).thenReturn(Single.just(dummyResponse))
 
         repository.login("test")
-                .test()
+                .   test()
                 .assertNoErrors()
                 .assertComplete()
 
-        val appPrefs = AppPrefs.get(RuntimeEnvironment.application)
-        assertEquals(appPrefs.userId, dummyResponse.user.id)
-        assertEquals(appPrefs.userName, dummyResponse.user.fullName)
+        assertEquals(PrefsWrapper.userId, dummyResponse.user.id)
+        assertEquals(PrefsWrapper.userName, dummyResponse.user.fullName)
     }
 }

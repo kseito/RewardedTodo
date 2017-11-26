@@ -8,7 +8,7 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.api.MiniatureGardenClient
-import kztproject.jp.splacounter.preference.AppPrefsProvider
+import kztproject.jp.splacounter.preference.PrefsWrapper
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -24,18 +24,14 @@ class PlayViewModelTest {
 
     val mockCallback = mock<PlayViewModel.Callback>()
 
-    lateinit var appPrefsProvider: AppPrefsProvider
-
     lateinit var viewModel: PlayViewModel
 
     var dummyCounter = DummyCreator.createDummyCounter()
 
     @Before
     fun setup() {
-        appPrefsProvider = AppPrefsProvider(RuntimeEnvironment.application)
-        appPrefsProvider.get().putUserId(dummyCounter.id)
-
-        viewModel = PlayViewModel(mockServiceClient, appPrefsProvider)
+        PrefsWrapper.initialize(RuntimeEnvironment.application)
+        viewModel = PlayViewModel(mockServiceClient)
         viewModel.setCallback(mockCallback)
         val scheduler = Schedulers.trampoline()
         RxJavaPlugins.setIoSchedulerHandler { scheduler }

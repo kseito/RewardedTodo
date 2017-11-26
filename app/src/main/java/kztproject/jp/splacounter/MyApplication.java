@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 import dagger.Component;
 import kztproject.jp.splacounter.di.AppComponent;
 import kztproject.jp.splacounter.di.AppModule;
+import kztproject.jp.splacounter.preference.PrefsWrapper;
 
 public class MyApplication extends Application {
 
@@ -34,6 +35,8 @@ public class MyApplication extends Application {
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this);
         }
+
+        PrefsWrapper.INSTANCE.initialize(getApplicationContext());
      }
 
     public AppComponent component() {

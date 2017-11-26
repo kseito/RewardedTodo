@@ -6,22 +6,19 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import kztproject.jp.splacounter.api.MiniatureGardenClient;
+import kztproject.jp.splacounter.preference.PrefsWrapper;
 import kztproject.jp.splacounter.util.GameCountUtils;
 import kztproject.jp.splacounter.model.Counter;
-import kztproject.jp.splacounter.preference.AppPrefsProvider;
 
 public class PlayViewModel {
 
     private MiniatureGardenClient serviceClient;
 
-    private AppPrefsProvider prefs;
-
     private Callback callback;
 
     @Inject
-    public PlayViewModel(MiniatureGardenClient serviceClient, AppPrefsProvider prefs) {
+    public PlayViewModel(MiniatureGardenClient serviceClient) {
         this.serviceClient = serviceClient;
-        this.prefs = prefs;
     }
 
     public void setCallback(Callback callback) {
@@ -29,12 +26,12 @@ public class PlayViewModel {
     }
 
     public void getGameCount() {
-        Observable<Counter> observable = serviceClient.getCounter(prefs.get().getUserId());
+        Observable<Counter> observable = serviceClient.getCounter(PrefsWrapper.INSTANCE.getUserId());
         showCount(observable);
     }
 
     public void consumeGameCount() {
-        Observable<Counter> observable = serviceClient.consumeCounter(prefs.get().getUserId());
+        Observable<Counter> observable = serviceClient.consumeCounter(PrefsWrapper.INSTANCE.getUserId());
         showCount(observable);
     }
 
