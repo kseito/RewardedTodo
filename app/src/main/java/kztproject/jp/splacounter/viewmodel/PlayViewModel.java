@@ -51,6 +51,10 @@ public class PlayViewModel {
                 );
     }
 
+    public void showReward() {
+        callback.showReward();
+    }
+
     public interface Callback {
         void showProgressDialog();
 

@@ -2,9 +2,10 @@
 <layout>
 
     <data>
+
         <variable
             name="viewModel"
-            type="kztproject.jp.splacounter.viewmodel.PlayViewModel"/>
+            type="kztproject.jp.splacounter.viewmodel.PlayViewModel" />
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -64,6 +65,7 @@
             android:layout_alignRight="@id/text_counter"
             android:layout_below="@id/text_counter"
             android:layout_margin="8dp"
+            android:onClick="@{() -> viewModel.showReward()}"
             android:paddingLeft="12dp"
             android:paddingRight="12dp"
             android:text="@string/reward_title"
