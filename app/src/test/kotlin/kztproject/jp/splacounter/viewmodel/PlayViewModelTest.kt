@@ -64,4 +64,9 @@ class PlayViewModelTest {
 
         verify(mockCallback, times(1)).showError(exception)
     }
+
+    @Test
+    fun showReward() {
+        verify(mockCallback, times(1)).showReward()
+    }
 }

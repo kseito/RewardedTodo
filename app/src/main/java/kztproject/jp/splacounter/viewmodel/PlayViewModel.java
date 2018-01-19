@@ -58,6 +58,8 @@ public class PlayViewModel {
 
         void showGameCount(int gameCount);
 
+        void showReward();
+
         void showError(Throwable e);
     }
 

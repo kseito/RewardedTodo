@@ -8,18 +8,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 import kztproject.jp.splacounter.MyApplication;
 import kztproject.jp.splacounter.R;
 import kztproject.jp.splacounter.api.MiniatureGardenClient;
+import kztproject.jp.splacounter.databinding.FragmentPlayBinding;
 import kztproject.jp.splacounter.viewmodel.PlayViewModel;
 
 public class PlayFragment extends Fragment implements PlayViewModel.Callback{
@@ -27,16 +24,12 @@ public class PlayFragment extends Fragment implements PlayViewModel.Callback{
     @Inject
     MiniatureGardenClient serviceClient;
 
-    @BindView(R.id.text_counter)
-    TextView mTextCounter;
-
-    @BindView(R.id.count_down_button)
-    Button mCountDownButton;
-
     @Inject
     PlayViewModel viewModel;
 
     ProgressDialog progressDialog;
+
+    FragmentPlayBinding binding;
 
     public static PlayFragment newInstance() {
         return new PlayFragment();
@@ -52,13 +45,13 @@ public class PlayFragment extends Fragment implements PlayViewModel.Callback{
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_play, container, false);
-        ButterKnife.bind(this, view);
+        binding = FragmentPlayBinding.inflate(inflater, container, false);
+        binding.setViewModel(viewModel);
 
         progressDialog = new ProgressDialog(getActivity());
         progressDialog.setMessage("Now Loading...");
 
-        return view;
+        return binding.getRoot();
     }
 
     @Override
@@ -96,12 +89,17 @@ public class PlayFragment extends Fragment implements PlayViewModel.Callback{
 
     @Override
     public void showGameCount(int gameCount) {
-        mTextCounter.setText(String.valueOf(gameCount));
+        binding.textCounter.setText(String.valueOf(gameCount));
         if (gameCount <= 0) {
-            mCountDownButton.setEnabled(false);
+            binding.countDownButton.setEnabled(false);
         } else {
-            mCountDownButton.setEnabled(true);
+            binding.countDownButton.setEnabled(true);
         }
+    }
+
+    @Override
+    public void showReward() {
+
     }
 
     @Override

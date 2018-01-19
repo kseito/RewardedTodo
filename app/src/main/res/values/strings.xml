@@ -6,4 +6,7 @@
 
     <string name="error_login_text_empty">Please input your Todoist API token</string>
 
+    <!-- Reward -->
+    <string name="reward_title">Reward</string>
+
 </resources>
