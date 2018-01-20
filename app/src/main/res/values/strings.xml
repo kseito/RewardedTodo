@@ -9,4 +9,9 @@
     <!-- Reward -->
     <string name="reward_title">Reward</string>
 
+    <!-- Reward Add -->
+    <string name="hint_title">Reward Title</string>
+    <string name="hint_description">Reward Description</string>
+    <string name="hint_link">http://www.example.com</string>
+
 </resources>
