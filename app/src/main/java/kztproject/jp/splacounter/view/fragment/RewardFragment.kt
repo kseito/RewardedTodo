@@ -43,8 +43,10 @@ class RewardFragment : Fragment(), RewardViewModel.Callback {
     }
 
     override fun showRewardAdd() {
+        val fragment = RewardAddFragment.newInstance()
         activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.container, RewardAddFragment.newInstance())
+                .replace(R.id.container, fragment)
+                .addToBackStack(fragment.javaClass.canonicalName)
                 .commit()
     }
 }
