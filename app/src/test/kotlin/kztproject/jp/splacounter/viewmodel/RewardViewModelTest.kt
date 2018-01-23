@@ -1,5 +1,6 @@
 package kztproject.jp.splacounter.viewmodel
 
+import com.nhaarman.mockito_kotlin.any
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
@@ -25,5 +26,12 @@ class RewardViewModelTest {
         viewModel.showRewardAdd()
 
         verify(callback, times(1)).showRewardAdd()
+    }
+
+    @Test
+    fun testGetRewards() {
+        viewModel.getRewards()
+
+        verify(callback, times(1)).showRewards(any())
     }
 }
