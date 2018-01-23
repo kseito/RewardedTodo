@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.android.databinding.library.baseAdapters.BR
 import kztproject.jp.splacounter.MyApplication
 import kztproject.jp.splacounter.R
@@ -17,16 +18,17 @@ import kztproject.jp.splacounter.model.Reward
 import kztproject.jp.splacounter.viewmodel.RewardViewModel
 import javax.inject.Inject
 
-class RewardFragment : Fragment(), RewardViewModel.Callback {
+class RewardFragment : Fragment(), RewardViewModel.Callback, ClickListener {
     @Inject
     lateinit var viewModel: RewardViewModel
 
-
     lateinit var binding: FragmentRewardBinding
+
 
     companion object {
 
         const val ARG_POINT = "point"
+
         fun newInstance(point: Int): RewardFragment {
             val args = Bundle()
             args.putInt(ARG_POINT, point)
@@ -41,7 +43,6 @@ class RewardFragment : Fragment(), RewardViewModel.Callback {
         (activity.application as MyApplication).component()!!.inject(this)
         viewModel.setCallback(this)
     }
-
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentRewardBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
@@ -53,6 +54,10 @@ class RewardFragment : Fragment(), RewardViewModel.Callback {
         viewModel.getRewards()
     }
 
+    override fun onItemClick(reward: Reward) {
+        Toast.makeText(context, reward.description, Toast.LENGTH_SHORT).show()
+    }
+
     override fun showRewardAdd() {
         val fragment = RewardAddFragment.newInstance()
         activity.supportFragmentManager.beginTransaction()
@@ -62,11 +67,12 @@ class RewardFragment : Fragment(), RewardViewModel.Callback {
     }
 
     override fun showRewards(rewardList: List<Reward>) {
-        binding.rewardListView.adapter = RewardListAdapter(rewardList)
+        binding.rewardListView.adapter = RewardListAdapter(rewardList, this)
     }
 }
 
-class RewardListAdapter(private val rewardList: List<Reward>) : RecyclerView.Adapter<ViewHolder>() {
+class RewardListAdapter(private val rewardList: List<Reward>, private val clickListener: ClickListener)
+    : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder? {
         val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_reward, parent, false)
@@ -79,6 +85,7 @@ class RewardListAdapter(private val rewardList: List<Reward>) : RecyclerView.Ada
         val reward = rewardList[position]
         holder.getBinding().setVariable(BR.reward, reward)
         holder.getBinding().executePendingBindings()
+        holder.itemView.setOnClickListener({ clickListener.onItemClick(reward) })
     }
 
 }
@@ -90,4 +97,8 @@ class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
     fun getBinding(): ItemRewardBinding {
         return binding
     }
+}
+
+interface ClickListener {
+    fun onItemClick(reward: Reward)
 }
