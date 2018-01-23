@@ -17,8 +17,8 @@ class RewardViewModel @Inject constructor() {
 
     fun getRewards() {
         val rewardList = arrayListOf<Reward>()
-        rewardList.add(Reward(1, "test1", "test1 description", "https://github.com"))
-        rewardList.add(Reward(2, "test2", "test2 description", "https://github.com"))
+        rewardList.add(Reward(1, "test1", 12, "test1 description", "https://github.com"))
+        rewardList.add(Reward(2, "test2", 8, "test2 description", "https://github.com"))
         callback.showRewards(rewardList)
     }
 

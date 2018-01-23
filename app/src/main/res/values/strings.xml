@@ -8,6 +8,7 @@
 
     <!-- Reward -->
     <string name="reward_title">Reward</string>
+    <string name="format_consume_point">%dP</string>
 
     <!-- Reward Add -->
     <string name="hint_title">Reward Title</string>
