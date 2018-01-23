@@ -72,9 +72,10 @@
             fbutton:buttonColor="@color/colorAccent" />
 
         <info.hoang8f.widget.FButton
-            android:id="@+id/count_down_button"
+            android:id="@+id/consume_button"
             android:layout_width="match_parent"
             android:layout_height="80dp"
+            android:onClick="@{() -> viewModel.consumeGameCount()}"
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:padding="8dp"

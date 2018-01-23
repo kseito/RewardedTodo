@@ -12,15 +12,13 @@ import android.widget.Toast;
 
 import javax.inject.Inject;
 
-import butterknife.OnClick;
 import kztproject.jp.splacounter.MyApplication;
-import kztproject.jp.splacounter.R;
 import kztproject.jp.splacounter.activity.RewardActivity;
 import kztproject.jp.splacounter.api.MiniatureGardenClient;
 import kztproject.jp.splacounter.databinding.FragmentPlayBinding;
 import kztproject.jp.splacounter.viewmodel.PlayViewModel;
 
-public class PlayFragment extends Fragment implements PlayViewModel.Callback{
+public class PlayFragment extends Fragment implements PlayViewModel.Callback {
 
     @Inject
     MiniatureGardenClient serviceClient;
@@ -64,16 +62,6 @@ public class PlayFragment extends Fragment implements PlayViewModel.Callback{
         viewModel.getGameCount();
     }
 
-    @OnClick(R.id.count_down_button)
-    public void clickCountDown(View view) {
-        viewModel.consumeGameCount();
-    }
-
-    @OnClick(R.id.reload_button)
-    public void clickReload(View view) {
-        initCounter();
-    }
-
     @Override
     public void showProgressDialog() {
         if (progressDialog != null) {
@@ -92,9 +80,9 @@ public class PlayFragment extends Fragment implements PlayViewModel.Callback{
     public void showGameCount(int gameCount) {
         binding.textCounter.setText(String.valueOf(gameCount));
         if (gameCount <= 0) {
-            binding.countDownButton.setEnabled(false);
+            binding.consumeButton.setEnabled(false);
         } else {
-            binding.countDownButton.setEnabled(true);
+            binding.consumeButton.setEnabled(true);
         }
     }
 
