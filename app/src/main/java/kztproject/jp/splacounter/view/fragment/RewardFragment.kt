@@ -24,10 +24,9 @@ class RewardFragment : Fragment(), RewardViewModel.Callback, ClickListener {
 
     lateinit var binding: FragmentRewardBinding
 
-
     companion object {
 
-        const val ARG_POINT = "point"
+        private const val ARG_POINT = "point"
 
         fun newInstance(point: Int): RewardFragment {
             val args = Bundle()
@@ -37,18 +36,19 @@ class RewardFragment : Fragment(), RewardViewModel.Callback, ClickListener {
             fragment.arguments = args
             return fragment
         }
+
     }
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         (activity.application as MyApplication).component()!!.inject(this)
         viewModel.setCallback(this)
+        viewModel.setPoint(arguments.getInt(ARG_POINT))
     }
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentRewardBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         return binding.root
     }
-
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getRewards()
@@ -68,6 +68,14 @@ class RewardFragment : Fragment(), RewardViewModel.Callback, ClickListener {
 
     override fun showRewards(rewardList: List<Reward>) {
         binding.rewardListView.adapter = RewardListAdapter(rewardList, this)
+    }
+
+    override fun showConfirmDialog(reward: Reward) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun showErrorDialog() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
 
