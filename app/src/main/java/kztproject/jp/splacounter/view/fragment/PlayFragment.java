@@ -87,8 +87,8 @@ public class PlayFragment extends Fragment implements PlayViewModel.Callback {
     }
 
     @Override
-    public void showReward() {
-        startActivity(RewardActivity.Companion.createIntent(getContext()));
+    public void showReward(int gameCount) {
+        startActivity(RewardActivity.Companion.createIntent(getContext(), gameCount));
     }
 
     @Override

@@ -14,16 +14,21 @@ class RewardActivity : AppCompatActivity() {
     lateinit var binding : ActivityRewardBinding
 
     companion object {
-        fun createIntent(context: Context): Intent {
-            return Intent(context, RewardActivity::class.java)
+        private const val ARG_POINT = "point"
+
+        fun createIntent(context: Context, point: Int): Intent {
+            val intent = Intent(context, RewardActivity::class.java)
+            intent.putExtra(ARG_POINT, point)
+            return intent
         }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_reward)
+        val point = intent.getIntExtra(ARG_POINT, 0);
         supportFragmentManager.beginTransaction()
-                .replace(R.id.container, RewardFragment.newInstance(0))
+                .replace(R.id.container, RewardFragment.newInstance(point))
                 .commit()
     }
 }

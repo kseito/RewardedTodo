@@ -4,6 +4,7 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -38,24 +39,27 @@ class RewardFragment : Fragment(), RewardViewModel.Callback, ClickListener {
         }
 
     }
+
     override fun onAttach(context: Context?) {
         super.onAttach(context)
         (activity.application as MyApplication).component()!!.inject(this)
         viewModel.setCallback(this)
         viewModel.setPoint(arguments.getInt(ARG_POINT))
     }
+
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentRewardBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         return binding.root
     }
+
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getRewards()
     }
 
     override fun onItemClick(reward: Reward) {
-        Toast.makeText(context, reward.description, Toast.LENGTH_SHORT).show()
+        viewModel.canAcquireReward(reward)
     }
 
     override fun showRewardAdd() {
@@ -71,11 +75,16 @@ class RewardFragment : Fragment(), RewardViewModel.Callback, ClickListener {
     }
 
     override fun showConfirmDialog(reward: Reward) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        AlertDialog.Builder(activity)
+                .setTitle(R.string.confirm_title)
+                .setMessage(String.format(getString(R.string.confirm_message), reward.name))
+                .setPositiveButton(android.R.string.ok, { _, _ -> viewModel.acquireReward() })
+                .setNegativeButton(android.R.string.cancel, { _, _ -> run {} })
+                .show()
     }
 
-    override fun showErrorDialog() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun showError() {
+        Toast.makeText(context, R.string.error_acquire_reward, Toast.LENGTH_SHORT).show()
     }
 }
 

@@ -1,5 +1,7 @@
 package kztproject.jp.splacounter.viewmodel;
 
+import android.databinding.ObservableField;
+
 import javax.inject.Inject;
 
 import io.reactivex.Observable;
@@ -13,8 +15,8 @@ import kztproject.jp.splacounter.model.Counter;
 public class PlayViewModel {
 
     private MiniatureGardenClient serviceClient;
-
     private Callback callback;
+    private ObservableField<Integer> gameCount = new ObservableField<>();
 
     @Inject
     public PlayViewModel(MiniatureGardenClient serviceClient) {
@@ -45,6 +47,9 @@ public class PlayViewModel {
                 .subscribe(
                         counter -> {
                             int count = GameCountUtils.Companion.convertGameCountFromCounter(counter);
+                            gameCount.set(count);
+
+                            //TODO remove because of useless
                             callback.showGameCount(count);
                         },
                         e -> callback.showError(e)
@@ -52,7 +57,7 @@ public class PlayViewModel {
     }
 
     public void showReward() {
-        callback.showReward();
+        callback.showReward(gameCount.get());
     }
 
     public interface Callback {
@@ -62,7 +67,7 @@ public class PlayViewModel {
 
         void showGameCount(int gameCount);
 
-        void showReward();
+        void showReward(int gameCount);
 
         void showError(Throwable e);
     }

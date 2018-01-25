@@ -32,14 +32,18 @@ class RewardViewModel @Inject constructor() {
         fun showRewardAdd()
         fun showRewards(rewardList: List<Reward>)
         fun showConfirmDialog(reward: Reward)
-        fun showErrorDialog()
+        fun showError()
     }
 
     fun canAcquireReward(reward: Reward) {
         if (point.get() >= reward.consumePoint) {
             callback.showConfirmDialog(reward)
         } else {
-            callback.showErrorDialog()
+            callback.showError()
         }
+    }
+
+    fun acquireReward() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }

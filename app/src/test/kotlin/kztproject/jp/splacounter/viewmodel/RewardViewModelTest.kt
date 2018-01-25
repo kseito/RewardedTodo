@@ -50,6 +50,6 @@ class RewardViewModelTest {
         viewModel.setPoint(0)
         viewModel.canAcquireReward(DummyCreator.createDummyReward())
         
-        verify(callback, times(1)).showErrorDialog()
+        verify(callback, times(1)).showError()
     }
 }
