@@ -73,7 +73,7 @@ class RewardViewModelTest {
     @Test
     fun testAcquireRewardSuccess() {
         whenever(mockMiniatureGardenClient.consumeCounter(anyInt())).thenReturn(Observable.just(DummyCreator.createDummyCounter()))
-        viewModel.acquireReward(reward)
+        viewModel.acquireReward(any())
 
         verify(mockCallback, times(1)).successAcquireReward(anyInt())
     }
