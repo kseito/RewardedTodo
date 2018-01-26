@@ -68,6 +68,6 @@ class PlayViewModelTest {
     @Test
     fun showReward() {
         viewModel.showReward()
-        verify(mockCallback, times(1)).showReward()
+        verify(mockCallback, times(1)).showReward(anyInt())
     }
 }

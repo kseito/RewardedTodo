@@ -22,4 +22,8 @@ public class MiniatureGardenClient {
     public Observable<Counter> consumeCounter(int userId) {
         return service.cosumeCounter(userId, GameCountUtils.GAME_UNIT);
     }
+
+    public Observable<Counter> consumeCounter(int userId, int point) {
+        return service.cosumeCounter(userId, GameCountUtils.GAME_UNIT * point);
+    }
 }

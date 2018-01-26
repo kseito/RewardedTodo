@@ -17,9 +17,11 @@ import kztproject.jp.splacounter.databinding.FragmentRewardBinding
 import kztproject.jp.splacounter.databinding.ItemRewardBinding
 import kztproject.jp.splacounter.model.Reward
 import kztproject.jp.splacounter.viewmodel.RewardViewModel
+import kztproject.jp.splacounter.viewmodel.RewardViewModelCallback
 import javax.inject.Inject
 
-class RewardFragment : Fragment(), RewardViewModel.Callback, ClickListener {
+class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
+
     @Inject
     lateinit var viewModel: RewardViewModel
 
@@ -78,13 +80,17 @@ class RewardFragment : Fragment(), RewardViewModel.Callback, ClickListener {
         AlertDialog.Builder(activity)
                 .setTitle(R.string.confirm_title)
                 .setMessage(String.format(getString(R.string.confirm_message), reward.name))
-                .setPositiveButton(android.R.string.ok, { _, _ -> viewModel.acquireReward() })
+                .setPositiveButton(android.R.string.ok, { _, _ -> viewModel.acquireReward(reward) })
                 .setNegativeButton(android.R.string.cancel, { _, _ -> run {} })
                 .show()
     }
 
     override fun showError() {
         Toast.makeText(context, R.string.error_acquire_reward, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun successAcquireReward(point: Int) {
+        Toast.makeText(context, "You consume $point points", Toast.LENGTH_SHORT).show()
     }
 }
 

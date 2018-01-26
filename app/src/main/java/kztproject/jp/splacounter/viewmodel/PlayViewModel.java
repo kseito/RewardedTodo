@@ -21,6 +21,7 @@ public class PlayViewModel {
     @Inject
     public PlayViewModel(MiniatureGardenClient serviceClient) {
         this.serviceClient = serviceClient;
+        gameCount.set(0);
     }
 
     public void setCallback(Callback callback) {

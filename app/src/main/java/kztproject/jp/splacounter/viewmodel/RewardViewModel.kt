@@ -1,15 +1,19 @@
 package kztproject.jp.splacounter.viewmodel
 
 import android.databinding.ObservableField
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
+import kztproject.jp.splacounter.api.MiniatureGardenClient
 import kztproject.jp.splacounter.model.Reward
+import kztproject.jp.splacounter.preference.PrefsWrapper
 import javax.inject.Inject
 
-class RewardViewModel @Inject constructor() {
+class RewardViewModel @Inject constructor(private val miniatureGardenClient: MiniatureGardenClient) {
 
-    private lateinit var callback: Callback
+    private lateinit var callback: RewardViewModelCallback
     private var point: ObservableField<Int> = ObservableField()
 
-    fun setCallback(callback: Callback) {
+    fun setCallback(callback: RewardViewModelCallback) {
         this.callback = callback
     }
 
@@ -28,13 +32,6 @@ class RewardViewModel @Inject constructor() {
         callback.showRewards(rewardList)
     }
 
-    interface Callback {
-        fun showRewardAdd()
-        fun showRewards(rewardList: List<Reward>)
-        fun showConfirmDialog(reward: Reward)
-        fun showError()
-    }
-
     fun canAcquireReward(reward: Reward) {
         if (point.get() >= reward.consumePoint) {
             callback.showConfirmDialog(reward)
@@ -43,7 +40,24 @@ class RewardViewModel @Inject constructor() {
         }
     }
 
-    fun acquireReward() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    fun acquireReward(reward: Reward) {
+        miniatureGardenClient.consumeCounter(PrefsWrapper.userId, reward.consumePoint)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ counter -> callback.successAcquireReward(counter.count)})
     }
+
+}
+
+interface RewardViewModelCallback {
+
+    fun showRewardAdd()
+
+    fun showRewards(rewardList: List<Reward>)
+
+    fun showConfirmDialog(reward: Reward)
+
+    fun showError()
+
+    fun successAcquireReward(point: Int)
 }
