@@ -7,12 +7,17 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.api.MiniatureGardenClient
+import kztproject.jp.splacounter.preference.PrefsWrapper
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Mock
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
 
+@RunWith(RobolectricTestRunner::class)
 class RewardViewModelTest {
 
     @Mock
@@ -27,6 +32,8 @@ class RewardViewModelTest {
     fun setup() {
         viewModel = RewardViewModel(mockMiniatureGardenClient)
         viewModel.setCallback(mockCallback)
+
+        PrefsWrapper.initialize(RuntimeEnvironment.application)
 
         val scheduler = Schedulers.trampoline()
         RxJavaPlugins.setIoSchedulerHandler { scheduler }
@@ -72,8 +79,8 @@ class RewardViewModelTest {
 
     @Test
     fun testAcquireRewardSuccess() {
-        whenever(mockMiniatureGardenClient.consumeCounter(anyInt())).thenReturn(Observable.just(DummyCreator.createDummyCounter()))
-        viewModel.acquireReward(any())
+        whenever(mockMiniatureGardenClient.consumeCounter(anyInt(), anyInt())).thenReturn(Observable.just(DummyCreator.createDummyCounter()))
+        viewModel.acquireReward(DummyCreator.createDummyReward())
 
         verify(mockCallback, times(1)).successAcquireReward(anyInt())
     }
