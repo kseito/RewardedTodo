@@ -49,7 +49,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         viewModel.setPoint(arguments.getInt(ARG_POINT))
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentRewardBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         return binding.root

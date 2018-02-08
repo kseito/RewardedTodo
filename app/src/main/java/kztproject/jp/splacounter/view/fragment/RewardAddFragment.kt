@@ -29,7 +29,7 @@ class RewardAddFragment : Fragment(), RewardAddViewModelCallback {
         viewModel.setCallback(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentRewardAddBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         return binding.root
