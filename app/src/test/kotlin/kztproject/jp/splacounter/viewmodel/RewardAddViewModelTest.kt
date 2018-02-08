@@ -16,11 +16,6 @@ class RewardAddViewModelTest{
     fun setup() {
         viewModel.setCallback(mockCallback)
     }
-    /**
-     * 保存を押した時に、保存完了のコールバックを返す
-     * 名前が空白の状態で保存を押した時に、エラーを表示するコールバックを返す
-     * ポイントが空白の状態で保存を押した時に、エラーを表示するコールバックを返す
-     */
 
     @Test
     fun testSaveReward() {
