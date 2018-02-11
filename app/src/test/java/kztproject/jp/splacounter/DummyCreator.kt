@@ -24,6 +24,6 @@ object DummyCreator {
     }
 
     fun createDummyReward(): Reward {
-        return Reward(1, "Test", 5, "Test description", "")
+        return Reward(1, "Test", 5, "Test description")
     }
 }

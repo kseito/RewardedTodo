@@ -7,5 +7,4 @@ import android.arch.persistence.room.PrimaryKey
 data class Reward(@PrimaryKey(autoGenerate = true) val id: Int,
                   val name: String,
                   val consumePoint: Int,
-                  val description: String?,
-                  val link: String?)
+                  val description: String?)

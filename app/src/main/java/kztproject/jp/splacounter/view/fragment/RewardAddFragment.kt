@@ -41,7 +41,6 @@ class RewardAddFragment : Fragment(), RewardAddViewModelCallback {
         setTextListener(binding.name, { s -> viewModel.setName(s) })
         setTextListener(binding.description, { s -> viewModel.setDescription(s) })
         setTextListener(binding.consumePoint, { s -> viewModel.setPoint(s) })
-        setTextListener(binding.link, { s -> viewModel.setLink(s) })
     }
 
     private fun setTextListener(editText: EditText?, code: (s: String) -> Unit) {

@@ -18,9 +18,6 @@ class RewardAddViewModel : BaseObservable() {
     @Bindable
     private var point: String = "0"
 
-    @Bindable
-    private var link: String = ""
-
     private lateinit var callback: RewardAddViewModelCallback
 
     fun setCallback(callback: RewardAddViewModelCallback) {
@@ -42,11 +39,6 @@ class RewardAddViewModel : BaseObservable() {
         notifyPropertyChanged(BR.point)
     }
 
-    fun setLink(link: String) {
-        this.link = link
-        notifyPropertyChanged(BR.link)
-    }
-
     fun saveReward() {
 
         if (name.isEmpty()) {
@@ -57,7 +49,7 @@ class RewardAddViewModel : BaseObservable() {
             return
         }
 
-        val reward = Reward(0, name, point.toInt(), description, link)
+        val reward = Reward(0, name, point.toInt(), description)
 
         //TODO save new reward to database
 

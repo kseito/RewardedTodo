@@ -18,9 +18,9 @@ class RewardDaoTest {
 
     private lateinit var database: AppDatabase
     private val testRewards = arrayListOf(
-            Reward(1, "nintendo switch", 100, "this is really I want", null),
-            Reward(2, "new keyboard", 50, null, null),
-            Reward(3, "joel robuchon", 125, null, null)
+            Reward(1, "nintendo switch", 100, "this is really I want"),
+            Reward(2, "new keyboard", 50, null),
+            Reward(3, "joel robuchon", 125, null)
     )
 
     @Before
