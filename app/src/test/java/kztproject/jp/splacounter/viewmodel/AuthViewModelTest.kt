@@ -7,6 +7,7 @@ import io.reactivex.Scheduler
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
+import kztproject.jp.splacounter.BuildConfig
 import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.repository.AuthRepository
 import org.junit.After
@@ -15,8 +16,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mockito.*
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
+@Config(constants = BuildConfig::class)
 class AuthViewModelTest {
 
     private val mockAuthRepository = mock<AuthRepository>()
