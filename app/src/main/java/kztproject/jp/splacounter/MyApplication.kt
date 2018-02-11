@@ -10,7 +10,7 @@ import javax.inject.Singleton
 
 class MyApplication : Application() {
 
-    private var appComponent: AppComponent? = null
+    private lateinit var appComponent: AppComponent
 
     @Singleton
     @Component(modules = arrayOf(AppModule::class))
@@ -19,12 +19,9 @@ class MyApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        if (appComponent == null) {
-
-            appComponent = DaggerMyApplication_AppAppComponent.builder()
-                    .appModule(AppModule(this))
-                    .build()
-        }
+        appComponent = DaggerMyApplication_AppAppComponent.builder()
+                .appModule(AppModule(this))
+                .build()
 
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
@@ -33,7 +30,7 @@ class MyApplication : Application() {
         PrefsWrapper.initialize(applicationContext)
     }
 
-    fun component(): AppComponent? {
+    fun component(): AppComponent {
         return appComponent
     }
 }

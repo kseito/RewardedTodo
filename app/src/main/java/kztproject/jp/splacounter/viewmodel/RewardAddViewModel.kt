@@ -3,11 +3,17 @@ package kztproject.jp.splacounter.viewmodel
 import android.databinding.BaseObservable
 import android.databinding.Bindable
 import android.support.annotation.StringRes
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.BR
 import kztproject.jp.splacounter.R
+import kztproject.jp.splacounter.database.RewardDao
 import kztproject.jp.splacounter.model.Reward
+import javax.inject.Inject
 
-class RewardAddViewModel : BaseObservable() {
+class RewardAddViewModel @Inject constructor(val rewardDao: RewardDao) : BaseObservable() {
 
     @Bindable
     private var name: String = ""
@@ -51,15 +57,19 @@ class RewardAddViewModel : BaseObservable() {
 
         val reward = Reward(0, name, point.toInt(), description)
 
-        //TODO save new reward to database
-
-        callback.onSaveCompleted()
+        Single.create<Reward> {
+            rewardDao.insertReward(reward)
+            it.onSuccess(reward)
+        }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(Consumer { callback.onSaveCompleted(it.name) })
     }
 }
 
 interface RewardAddViewModelCallback {
 
-    fun onSaveCompleted()
+    fun onSaveCompleted(rewardName: String)
 
     fun onError(@StringRes resourceId: Int)
 }

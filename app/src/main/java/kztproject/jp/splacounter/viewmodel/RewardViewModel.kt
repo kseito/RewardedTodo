@@ -1,14 +1,18 @@
 package kztproject.jp.splacounter.viewmodel
 
 import android.databinding.ObservableField
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.api.MiniatureGardenClient
+import kztproject.jp.splacounter.database.RewardDao
 import kztproject.jp.splacounter.model.Reward
 import kztproject.jp.splacounter.preference.PrefsWrapper
 import javax.inject.Inject
 
-class RewardViewModel @Inject constructor(private val miniatureGardenClient: MiniatureGardenClient) {
+class RewardViewModel @Inject constructor(private val miniatureGardenClient: MiniatureGardenClient,
+                                          private val rewardDao: RewardDao) {
 
     private lateinit var callback: RewardViewModelCallback
     private var point: ObservableField<Int> = ObservableField()
@@ -26,10 +30,14 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
     }
 
     fun getRewards() {
-        val rewardList = arrayListOf<Reward>()
-        rewardList.add(Reward(1, "test1", 12, "test1 description"))
-        rewardList.add(Reward(2, "test2", 8, "test2 description"))
-        callback.showRewards(rewardList)
+        Single.create<List<Reward>> {
+            val rewardList = arrayListOf<Reward>()
+            rewardList.addAll(rewardDao.findAll())
+            it.onSuccess(rewardList)
+        }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(Consumer { callback.showRewards(it) })
     }
 
     fun canAcquireReward(reward: Reward) {

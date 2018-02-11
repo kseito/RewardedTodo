@@ -2,6 +2,7 @@ package kztproject.jp.splacounter.viewmodel
 
 import com.nhaarman.mockito_kotlin.mock
 import kztproject.jp.splacounter.R
+import kztproject.jp.splacounter.database.RewardDao
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.verify
@@ -10,7 +11,9 @@ class RewardAddViewModelTest{
 
     private val mockCallback: RewardAddViewModelCallback = mock()
 
-    private val viewModel: RewardAddViewModel = RewardAddViewModel()
+    private val mockDao: RewardDao = mock()
+
+    private val viewModel: RewardAddViewModel = RewardAddViewModel(mockDao)
 
     @Before
     fun setup() {

@@ -8,14 +8,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
+import kztproject.jp.splacounter.MyApplication
 import kztproject.jp.splacounter.databinding.FragmentRewardAddBinding
 import kztproject.jp.splacounter.viewmodel.RewardAddViewModel
 import kztproject.jp.splacounter.viewmodel.RewardAddViewModelCallback
+import javax.inject.Inject
 
 class RewardAddFragment : Fragment(), RewardAddViewModelCallback {
     private lateinit var binding: FragmentRewardAddBinding
 
-    private val viewModel: RewardAddViewModel = RewardAddViewModel()
+    @Inject
+    lateinit var viewModel: RewardAddViewModel
 
     companion object {
 
@@ -26,6 +30,7 @@ class RewardAddFragment : Fragment(), RewardAddViewModelCallback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (activity.application as MyApplication).component().inject(this)
         viewModel.setCallback(this)
     }
 
@@ -60,11 +65,12 @@ class RewardAddFragment : Fragment(), RewardAddViewModelCallback {
         })
     }
 
-    override fun onSaveCompleted() {
-
+    override fun onSaveCompleted(rewardName: String) {
+        Toast.makeText(context, "Added $rewardName", Toast.LENGTH_SHORT).show()
+        fragmentManager.popBackStack()
     }
 
     override fun onError(resourceId: Int) {
-
+        Toast.makeText(context, resourceId, Toast.LENGTH_SHORT).show()
     }
 }
