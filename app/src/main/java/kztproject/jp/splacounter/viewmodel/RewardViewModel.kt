@@ -3,7 +3,6 @@ package kztproject.jp.splacounter.viewmodel
 import android.databinding.ObservableField
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.api.MiniatureGardenClient
 import kztproject.jp.splacounter.database.RewardDao
@@ -16,6 +15,7 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
 
     private lateinit var callback: RewardViewModelCallback
     private var point: ObservableField<Int> = ObservableField()
+    var isEmpty: ObservableField<Boolean> = ObservableField()
 
     fun setCallback(callback: RewardViewModelCallback) {
         this.callback = callback
@@ -33,11 +33,19 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
         Single.create<List<Reward>> {
             val rewardList = arrayListOf<Reward>()
             rewardList.addAll(rewardDao.findAll())
-            it.onSuccess(rewardList)
+            if (rewardList.size == 0) {
+                it.onError(IllegalStateException())
+            } else {
+                it.onSuccess(rewardList)
+            }
         }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(Consumer { callback.showRewards(it) })
+                .subscribe({
+                    callback.showRewards(it)
+                    isEmpty.set(false)
+                },
+                        { isEmpty.set(true) })
     }
 
     fun canAcquireReward(reward: Reward) {
