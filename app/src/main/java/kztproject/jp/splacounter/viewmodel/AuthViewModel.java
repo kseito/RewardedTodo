@@ -1,5 +1,6 @@
 package kztproject.jp.splacounter.viewmodel;
 
+import android.databinding.ObservableField;
 import android.support.annotation.StringRes;
 
 import javax.inject.Inject;
@@ -14,20 +15,23 @@ public class AuthViewModel {
     private final AuthRepository authRepository;
     Callback callback;
 
+    public ObservableField<String> inputString = new ObservableField<>();
+
     @Inject
     public AuthViewModel(AuthRepository authRepository) {
         this.authRepository = authRepository;
+        inputString.set("");
     }
 
     public void setCallback(Callback callback) {
         this.callback = callback;
     }
 
-    public void login(String inputString) {
-        if (inputString.length() == 0 ) {
+    public void login() {
+        if (inputString.get().length() == 0 ) {
             callback.showError(R.string.error_login_text_empty);
         } else {
-            authRepository.login(inputString)
+            authRepository.login(inputString.get())
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe(disposable -> callback.showProgressDialog())

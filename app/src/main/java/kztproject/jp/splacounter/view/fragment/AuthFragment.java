@@ -8,24 +8,19 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import javax.inject.Inject;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
 import kztproject.jp.splacounter.MyApplication;
 import kztproject.jp.splacounter.R;
+import kztproject.jp.splacounter.databinding.FragmentAuthBinding;
 import kztproject.jp.splacounter.viewmodel.AuthViewModel;
 
 public class AuthFragment extends Fragment implements AuthViewModel.Callback {
 
-    @BindView(R.id.token_text)
-    EditText tokenText;
-
     private ProgressDialog progressDialog;
+    private FragmentAuthBinding binding;
 
     @Inject
     AuthViewModel viewModel;
@@ -37,23 +32,19 @@ public class AuthFragment extends Fragment implements AuthViewModel.Callback {
         return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_auth, container, false);
-        ButterKnife.bind(this, view);
-        return view;
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         ((MyApplication) getActivity().getApplication()).component().inject(this);
         viewModel.setCallback(this);
     }
 
-    @OnClick(R.id.login_button)
-    public void clickLogin(View view) {
-        viewModel.login(tokenText.getText().toString());
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        binding = FragmentAuthBinding.inflate(inflater, container, false);
+        binding.setViewModel(viewModel);
+        return binding.getRoot();
     }
 
     @Override
