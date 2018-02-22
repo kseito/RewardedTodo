@@ -48,7 +48,8 @@ class AuthViewModelTest {
     fun loginSuccess() {
         whenever(mockAuthRepository.login(anyString())).thenReturn(Completable.complete())
 
-        viewModel.login("test")
+        viewModel.inputString.set("test")
+        viewModel.login()
 
         verify(mockCallback, times(1)).showProgressDialog()
         verify(mockCallback, times(1)).dismissProgressDialog()
@@ -60,7 +61,8 @@ class AuthViewModelTest {
         val exception = NullPointerException()
         whenever(mockAuthRepository.login(anyString())).thenReturn(Completable.error(exception))
 
-        viewModel.login("test")
+        viewModel.inputString.set("test")
+        viewModel.login()
 
         verify(mockCallback, times(1)).showProgressDialog()
         verify(mockCallback, times(1)).dismissProgressDialog()
@@ -72,7 +74,8 @@ class AuthViewModelTest {
         val exception = NullPointerException()
         whenever(mockAuthRepository.login(anyString())).thenReturn(Completable.error(exception))
 
-        viewModel.login("")
+        viewModel.inputString.set("")
+        viewModel.login()
 
         verify(mockCallback, times(1)).showError(R.string.error_login_text_empty)
     }
