@@ -13,9 +13,9 @@ import android.widget.Toast
 import com.android.databinding.library.baseAdapters.BR
 import kztproject.jp.splacounter.MyApplication
 import kztproject.jp.splacounter.R
+import kztproject.jp.splacounter.database.model.Reward
 import kztproject.jp.splacounter.databinding.FragmentRewardBinding
 import kztproject.jp.splacounter.databinding.ItemRewardBinding
-import kztproject.jp.splacounter.model.Reward
 import kztproject.jp.splacounter.viewmodel.RewardViewModel
 import kztproject.jp.splacounter.viewmodel.RewardViewModelCallback
 import javax.inject.Inject
@@ -72,7 +72,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
                 .commit()
     }
 
-    override fun showRewards(rewardList: List<Reward>) {
+    override fun showRewards(rewardList: MutableList<Reward>) {
         binding.rewardListView.adapter = RewardListAdapter(rewardList, this)
     }
 
@@ -89,12 +89,17 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         Toast.makeText(context, R.string.error_acquire_reward, Toast.LENGTH_SHORT).show()
     }
 
-    override fun successAcquireReward(point: Int) {
+    override fun successAcquireReward(reward: Reward, point: Int) {
         Toast.makeText(context, "You consume $point points", Toast.LENGTH_SHORT).show()
+
+        if (!reward.needRepeat) {
+            viewModel.removeRewardIfNeeded(reward)
+            (binding.rewardListView.adapter as RewardListAdapter).remove(reward)
+        }
     }
 }
 
-class RewardListAdapter(private val rewardList: List<Reward>, private val clickListener: ClickListener)
+class RewardListAdapter(private val rewardList: MutableList<Reward>, private val clickListener: ClickListener)
     : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder? {
@@ -111,6 +116,15 @@ class RewardListAdapter(private val rewardList: List<Reward>, private val clickL
         holder.itemView.setOnClickListener({ clickListener.onItemClick(reward) })
     }
 
+    fun remove(deleteReward: Reward) {
+        rewardList.forEachIndexed { index, reward ->
+            if (deleteReward == reward) {
+                rewardList.remove(reward)
+                notifyItemRemoved(index)
+                return
+            }
+        }
+    }
 }
 
 class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {

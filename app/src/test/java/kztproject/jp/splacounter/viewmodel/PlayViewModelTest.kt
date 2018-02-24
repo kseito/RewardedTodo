@@ -2,7 +2,7 @@ package kztproject.jp.splacounter.viewmodel
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
@@ -46,7 +46,7 @@ class PlayViewModelTest {
 
     @Test
     fun getGameCountSeccess() {
-        whenever(mockServiceClient.getCounter(anyInt())).thenReturn(Observable.just(dummyCounter))
+        whenever(mockServiceClient.getCounter(anyInt())).thenReturn(Single.just(dummyCounter))
 
         viewModel.getGameCount()
 
@@ -58,7 +58,7 @@ class PlayViewModelTest {
     @Test
     fun consumeGameCountFailed() {
         val exception = IllegalArgumentException()
-        whenever(mockServiceClient.consumeCounter(anyInt())).thenReturn(Observable.error(exception))
+        whenever(mockServiceClient.consumeCounter(anyInt())).thenReturn(Single.error(exception))
 
         viewModel.consumeGameCount()
 

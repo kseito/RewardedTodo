@@ -6,7 +6,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.api.MiniatureGardenClient
 import kztproject.jp.splacounter.database.RewardDao
-import kztproject.jp.splacounter.model.Reward
+import kztproject.jp.splacounter.database.model.Reward
 import kztproject.jp.splacounter.preference.PrefsWrapper
 import javax.inject.Inject
 
@@ -30,8 +30,8 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
     }
 
     fun getRewards() {
-        Single.create<List<Reward>> {
-            val rewardList = arrayListOf<Reward>()
+        Single.create<MutableList<Reward>> {
+            val rewardList = mutableListOf<Reward>()
             rewardList.addAll(rewardDao.findAll())
             if (rewardList.size == 0) {
                 it.onError(IllegalStateException())
@@ -60,20 +60,28 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
         miniatureGardenClient.consumeCounter(PrefsWrapper.userId, reward.consumePoint)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ counter -> callback.successAcquireReward(counter.count)})
+                .subscribe({ counter -> callback.successAcquireReward(reward, counter.count) })
     }
 
+    fun removeRewardIfNeeded(reward: Reward) {
+        if (!reward.needRepeat) {
+            Single.create<Unit> { rewardDao.deleteReward(reward) }
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe()
+        }
+    }
 }
 
 interface RewardViewModelCallback {
 
     fun showRewardAdd()
 
-    fun showRewards(rewardList: List<Reward>)
+    fun showRewards(rewardList: MutableList<Reward>)
 
     fun showConfirmDialog(reward: Reward)
 
     fun showError()
 
-    fun successAcquireReward(point: Int)
+    fun successAcquireReward(reward: Reward, point: Int)
 }

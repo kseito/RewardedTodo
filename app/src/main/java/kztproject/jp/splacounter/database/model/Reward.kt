@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.model
+package kztproject.jp.splacounter.database.model
 
 import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
@@ -7,4 +7,5 @@ import android.arch.persistence.room.PrimaryKey
 data class Reward(@PrimaryKey(autoGenerate = true) val id: Int,
                   val name: String,
                   val consumePoint: Int,
-                  val description: String?)
+                  val description: String?,
+                  val needRepeat: Boolean)

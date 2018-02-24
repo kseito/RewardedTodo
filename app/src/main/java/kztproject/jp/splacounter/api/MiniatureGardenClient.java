@@ -2,7 +2,7 @@ package kztproject.jp.splacounter.api;
 
 import javax.inject.Inject;
 
-import io.reactivex.Observable;
+import io.reactivex.Single;
 import kztproject.jp.splacounter.model.Counter;
 import kztproject.jp.splacounter.util.GameCountUtils;
 
@@ -15,15 +15,15 @@ public class MiniatureGardenClient {
         this.service = service;
     }
 
-    public Observable<Counter> getCounter(int userId) {
+    public Single<Counter> getCounter(int userId) {
         return service.getCounter(userId);
     }
 
-    public Observable<Counter> consumeCounter(int userId) {
+    public Single<Counter> consumeCounter(int userId) {
         return service.cosumeCounter(userId, GameCountUtils.GAME_UNIT);
     }
 
-    public Observable<Counter> consumeCounter(int userId, int point) {
+    public Single<Counter> consumeCounter(int userId, int point) {
         return service.cosumeCounter(userId, GameCountUtils.GAME_UNIT * point);
     }
 }

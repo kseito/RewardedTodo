@@ -1,7 +1,7 @@
 package kztproject.jp.splacounter.viewmodel
 
 import com.nhaarman.mockito_kotlin.*
-import io.reactivex.Observable
+import io.reactivex.Single
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
@@ -89,14 +89,28 @@ class RewardViewModelTest {
 
     @Test
     fun testAcquireRewardSuccess() {
-        whenever(mockMiniatureGardenClient.consumeCounter(anyInt(), anyInt())).thenReturn(Observable.just(DummyCreator.createDummyCounter()))
+        whenever(mockMiniatureGardenClient.consumeCounter(anyInt(), anyInt())).thenReturn(Single.just(DummyCreator.createDummyCounter()))
         viewModel.acquireReward(DummyCreator.createDummyReward())
 
-        verify(mockCallback, times(1)).successAcquireReward(anyInt())
+        verify(mockCallback, times(1)).successAcquireReward(any(), anyInt())
     }
 
 //    @Test
 //    fun testAcquireRewardFailure() {
 //        //TODO
 //    }
+
+    @Test
+    fun testRemoveReward() {
+        viewModel.removeRewardIfNeeded(DummyCreator.createDummyReward())
+
+        verify(mockDao, times(0)).deleteReward(any())
+    }
+
+    @Test
+    fun testNotRemoveReward() {
+        viewModel.removeRewardIfNeeded(DummyCreator.createDummyNoRepeatReward())
+
+        verify(mockDao, times(1)).deleteReward(any())
+    }
 }

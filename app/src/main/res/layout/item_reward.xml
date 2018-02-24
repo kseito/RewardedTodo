@@ -3,9 +3,11 @@
 
     <data>
 
+        <import type="android.view.View" />
+
         <variable
             name="reward"
-            type="kztproject.jp.splacounter.model.Reward" />
+            type="kztproject.jp.splacounter.database.model.Reward" />
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -24,10 +26,19 @@
             android:textColor="@android:color/black"
             android:textSize="24sp" />
 
+        <ImageView
+            android:id="@+id/repeat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/name"
+            android:src="@drawable/ic_repeat_black_24dp"
+            android:visibility="@{reward.needRepeat ? View.VISIBLE : View.INVISIBLE}" />
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/name"
+            android:layout_toRightOf="@id/repeat"
             android:paddingBottom="8dp"
             android:text="@{reward.description}"
             android:textColor="@color/colorGray" />
@@ -35,14 +46,14 @@
         <TextView
             android:id="@+id/consume_point"
             android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
             android:layout_margin="8dp"
             android:text="@{@string/format_consume_point(reward.consumePoint)}"
-            android:textSize="30sp"
             android:textColor="@color/colorPrimary"
-            android:textStyle="bold"
-            android:layout_centerVertical="true"
-            android:layout_height="wrap_content" />
+            android:textSize="30sp"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 </layout>

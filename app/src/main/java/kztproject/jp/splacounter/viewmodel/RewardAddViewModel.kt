@@ -10,10 +10,10 @@ import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.BR
 import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.database.RewardDao
-import kztproject.jp.splacounter.model.Reward
+import kztproject.jp.splacounter.database.model.Reward
 import javax.inject.Inject
 
-class RewardAddViewModel @Inject constructor(val rewardDao: RewardDao) : BaseObservable() {
+class RewardAddViewModel @Inject constructor(private val rewardDao: RewardDao) : BaseObservable() {
 
     @Bindable
     private var name: String = ""
@@ -23,6 +23,9 @@ class RewardAddViewModel @Inject constructor(val rewardDao: RewardDao) : BaseObs
 
     @Bindable
     private var point: String = "0"
+
+    @Bindable
+    var needRepeat: Boolean = false
 
     private lateinit var callback: RewardAddViewModelCallback
 
@@ -55,7 +58,7 @@ class RewardAddViewModel @Inject constructor(val rewardDao: RewardDao) : BaseObs
             return
         }
 
-        val reward = Reward(0, name, point.toInt(), description)
+        val reward = Reward(0, name, point.toInt(), description, needRepeat)
 
         Single.create<Reward> {
             rewardDao.insertReward(reward)

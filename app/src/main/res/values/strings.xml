@@ -18,7 +18,7 @@
     <string name="hint_title">Reward Title</string>
     <string name="hint_description">Reward Description</string>
     <string name="hint_point">Consume Point</string>
-    <string name="hint_link">Link</string>
+    <string name="check_repeat">Repeat</string>
     <string name="button_add">Add</string>
     <string name="error_empty_title">Input title</string>
     <string name="error_empty_point">Input point</string>

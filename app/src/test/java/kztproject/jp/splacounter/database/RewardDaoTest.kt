@@ -2,7 +2,7 @@ package kztproject.jp.splacounter.database
 
 import android.arch.persistence.room.Room
 import kztproject.jp.splacounter.BuildConfig
-import kztproject.jp.splacounter.model.Reward
+import kztproject.jp.splacounter.database.model.Reward
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
@@ -18,9 +18,9 @@ class RewardDaoTest {
 
     private lateinit var database: AppDatabase
     private val testRewards = arrayListOf(
-            Reward(1, "nintendo switch", 100, "this is really I want"),
-            Reward(2, "new keyboard", 50, null),
-            Reward(3, "joel robuchon", 125, null)
+            Reward(1, "nintendo switch", 100, "this is really I want", false),
+            Reward(2, "new keyboard", 50, null, false),
+            Reward(3, "joel robuchon", 125, null, true)
     )
 
     @Before

@@ -1,7 +1,7 @@
 package kztproject.jp.splacounter.api
 
 import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.Observable
+import io.reactivex.Single
 import kztproject.jp.splacounter.DummyCreator
 import org.junit.Before
 import org.junit.Test
@@ -22,7 +22,7 @@ class MiniatureGardenClientTest {
     @Test
     fun getCounterSuccess() {
         val counter = DummyCreator.createDummyCounter()
-        whenever(mockService.getCounter(ArgumentMatchers.anyInt())).thenReturn(Observable.just(counter))
+        whenever(mockService.getCounter(ArgumentMatchers.anyInt())).thenReturn(Single.just(counter))
 
         client.getCounter(1)
                 .test()
@@ -35,7 +35,7 @@ class MiniatureGardenClientTest {
     fun getCounterFailed() {
         val exception = IllegalArgumentException()
 
-        whenever(mockService.getCounter(ArgumentMatchers.anyInt())).thenReturn(Observable.error(exception))
+        whenever(mockService.getCounter(ArgumentMatchers.anyInt())).thenReturn(Single.error(exception))
 
         client.getCounter(1)
                 .test()
