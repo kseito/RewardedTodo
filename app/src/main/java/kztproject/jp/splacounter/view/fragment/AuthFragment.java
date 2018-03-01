@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import javax.inject.Inject;
 
-import kztproject.jp.splacounter.MyApplication;
+import dagger.android.support.AndroidSupportInjection;
 import kztproject.jp.splacounter.R;
 import kztproject.jp.splacounter.databinding.FragmentAuthBinding;
 import kztproject.jp.splacounter.viewmodel.AuthViewModel;
@@ -34,8 +34,8 @@ public class AuthFragment extends Fragment implements AuthViewModel.Callback {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidSupportInjection.inject(this);
         super.onCreate(savedInstanceState);
-        ((MyApplication) getActivity().getApplication()).component().inject(this);
         viewModel.setCallback(this);
     }
 

@@ -1,33 +1,40 @@
 package kztproject.jp.splacounter
 
+import android.app.Activity
 import android.app.Application
 import com.facebook.stetho.Stetho
-import dagger.Component
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasActivityInjector
 import kztproject.jp.splacounter.di.AppComponent
-import kztproject.jp.splacounter.di.AppModule
+import kztproject.jp.splacounter.di.DaggerAppComponent
 import kztproject.jp.splacounter.preference.PrefsWrapper
-import javax.inject.Singleton
+import javax.inject.Inject
 
-class MyApplication : Application() {
+class MyApplication : Application(), HasActivityInjector {
+
+    @Inject
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
 
     private lateinit var appComponent: AppComponent
-
-    @Singleton
-    @Component(modules = arrayOf(AppModule::class))
-    interface AppAppComponent : AppComponent
 
     override fun onCreate() {
         super.onCreate()
 
-        appComponent = DaggerMyApplication_AppAppComponent.builder()
-                .appModule(AppModule(this))
+        DaggerAppComponent.builder()
+                .application(this)
                 .build()
+                .inject(this)
 
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
         }
 
         PrefsWrapper.initialize(applicationContext)
+    }
+
+    override fun activityInjector(): AndroidInjector<Activity> {
+        return dispatchingAndroidInjector
     }
 
     fun component(): AppComponent {

@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import javax.inject.Inject;
 
-import kztproject.jp.splacounter.MyApplication;
+import dagger.android.support.AndroidSupportInjection;
 import kztproject.jp.splacounter.activity.RewardActivity;
 import kztproject.jp.splacounter.databinding.FragmentPlayBinding;
 import kztproject.jp.splacounter.viewmodel.PlayViewModel;
@@ -32,8 +32,8 @@ public class PlayFragment extends Fragment implements PlayViewModel.Callback {
 
     @Override
     public void onAttach(Context context) {
+        AndroidSupportInjection.inject(this);
         super.onAttach(context);
-        ((MyApplication) getActivity().getApplication()).component().inject(this);
         viewModel.setCallback(this);
     }
 

@@ -11,7 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.android.databinding.library.baseAdapters.BR
-import kztproject.jp.splacounter.MyApplication
+import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.database.model.Reward
 import kztproject.jp.splacounter.databinding.FragmentRewardBinding
@@ -42,9 +42,9 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
     }
 
-    override fun onAttach(context: Context?) {
+    override fun onAttach(context: Context) {
+        AndroidSupportInjection.inject(this)
         super.onAttach(context)
-        (activity.application as MyApplication).component()!!.inject(this)
         viewModel.setCallback(this)
         viewModel.setPoint(arguments.getInt(ARG_POINT))
     }

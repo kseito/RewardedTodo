@@ -1,7 +1,7 @@
 package kztproject.jp.splacounter.di;
 
+import android.app.Application;
 import android.arch.persistence.room.Room;
-import android.content.Context;
 
 import javax.inject.Singleton;
 
@@ -17,13 +17,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
-public class AppModule {
-
-    Context context;
-
-    public AppModule(Context context) {
-        this.context = context;
-    }
+class AppModule {
 
     @Provides
     MiniatureGardenService provideMiniatureGardenService() {
@@ -48,8 +42,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    AppDatabase providesAppDatabase() {
-        return Room.databaseBuilder(context, AppDatabase.class, "splacounter")
+    AppDatabase providesAppDatabase(Application application) {
+        return Room.databaseBuilder(application, AppDatabase.class, "splacounter")
                 .build();
     }
 
