@@ -14,14 +14,10 @@ import javax.inject.Inject;
 
 import kztproject.jp.splacounter.MyApplication;
 import kztproject.jp.splacounter.activity.RewardActivity;
-import kztproject.jp.splacounter.api.MiniatureGardenClient;
 import kztproject.jp.splacounter.databinding.FragmentPlayBinding;
 import kztproject.jp.splacounter.viewmodel.PlayViewModel;
 
 public class PlayFragment extends Fragment implements PlayViewModel.Callback {
-
-    @Inject
-    MiniatureGardenClient serviceClient;
 
     @Inject
     PlayViewModel viewModel;

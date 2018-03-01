@@ -16,7 +16,7 @@ public class PlayViewModel {
 
     private MiniatureGardenClient serviceClient;
     private Callback callback;
-    private ObservableField<Integer> gameCount = new ObservableField<>();
+    public ObservableField<Integer> gameCount = new ObservableField<>();
 
     @Inject
     public PlayViewModel(MiniatureGardenClient serviceClient) {
