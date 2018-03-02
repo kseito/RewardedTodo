@@ -9,7 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
-import kztproject.jp.splacounter.MyApplication
+import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.databinding.FragmentRewardAddBinding
 import kztproject.jp.splacounter.viewmodel.RewardAddViewModel
 import kztproject.jp.splacounter.viewmodel.RewardAddViewModelCallback
@@ -29,8 +29,8 @@ class RewardAddFragment : Fragment(), RewardAddViewModelCallback {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-        (activity.application as MyApplication).component().inject(this)
         viewModel.setCallback(this)
     }
 

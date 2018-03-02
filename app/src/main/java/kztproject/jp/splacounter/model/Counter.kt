@@ -3,9 +3,6 @@ package kztproject.jp.splacounter.model
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 
-import javax.annotation.Generated
-
-@Generated("org.jsonschema2pojo")
 class Counter {
 
     @SerializedName("id")
