@@ -14,6 +14,7 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
                                           private val rewardDao: RewardDao) {
 
     private lateinit var callback: RewardViewModelCallback
+    var rewardList: MutableList<Reward> = mutableListOf()
     private var point: ObservableField<Int> = ObservableField()
     var isEmpty: ObservableField<Boolean> = ObservableField()
 
@@ -42,7 +43,8 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe({
-                    callback.showRewards(it)
+                    rewardList = it
+                    callback.showRewards(rewardList)
                     isEmpty.set(false)
                 },
                         { isEmpty.set(true) })
@@ -71,6 +73,11 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
                     .subscribe()
         }
     }
+
+    fun selectReward(position: Int) {
+        rewardList[position].isSelected = true
+        callback.onRewardSelected()
+    }
 }
 
 interface RewardViewModelCallback {
@@ -84,4 +91,6 @@ interface RewardViewModelCallback {
     fun showError()
 
     fun successAcquireReward(reward: Reward, point: Int)
+
+    fun onRewardSelected()
 }

@@ -113,4 +113,12 @@ class RewardViewModelTest {
 
         verify(mockDao, times(1)).deleteReward(any())
     }
+
+    @Test
+    fun testSelectReward() {
+        viewModel.rewardList.add(DummyCreator.createDummyReward())
+        viewModel.selectReward(0)
+
+        verify(mockCallback).onRewardSelected()
+    }
 }

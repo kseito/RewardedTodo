@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.android.databinding.library.baseAdapters.BR
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.database.model.Reward
@@ -21,7 +22,6 @@ import kztproject.jp.splacounter.viewmodel.RewardViewModelCallback
 import javax.inject.Inject
 
 class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
-
     @Inject
     lateinit var viewModel: RewardViewModel
 
@@ -58,6 +58,10 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getRewards()
+
+        binding.bottomNavigation.addItem(AHBottomNavigationItem("Done", R.drawable.ic_repeat_black_24dp))
+        binding.bottomNavigation.addItem(AHBottomNavigationItem("Edit", R.drawable.ic_repeat_black_24dp))
+        binding.bottomNavigation.addItem(AHBottomNavigationItem("Delete", R.drawable.ic_repeat_black_24dp))
     }
 
     override fun onItemClick(reward: Reward) {
@@ -96,6 +100,10 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
             viewModel.removeRewardIfNeeded(reward)
             (binding.rewardListView.adapter as RewardListAdapter).remove(reward)
         }
+    }
+
+    override fun onRewardSelected() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 }
 
