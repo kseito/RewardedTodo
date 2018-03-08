@@ -4,3 +4,4 @@
 [![CircleCI](https://circleci.com/gh/kseito/Splacounter.svg?style=svg)](https://circleci.com/gh/kseito/Splacounter)
 
 This is a side project I use to experiment new libraries, framework features and so on.
+This app is to manage my rewards and points.
