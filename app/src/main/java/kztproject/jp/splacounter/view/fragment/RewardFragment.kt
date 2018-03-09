@@ -59,13 +59,19 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getRewards()
 
-        binding.bottomNavigation.addItem(AHBottomNavigationItem("Done", R.drawable.ic_repeat_black_24dp))
-        binding.bottomNavigation.addItem(AHBottomNavigationItem("Edit", R.drawable.ic_repeat_black_24dp))
-        binding.bottomNavigation.addItem(AHBottomNavigationItem("Delete", R.drawable.ic_repeat_black_24dp))
+        binding.bottomNavigation.addItem(AHBottomNavigationItem("Done", R.drawable.reward_done))
+        binding.bottomNavigation.addItem(AHBottomNavigationItem("Edit", R.drawable.reward_edit))
+        binding.bottomNavigation.addItem(AHBottomNavigationItem("Delete", R.drawable.reward_delete))
+        binding.bottomNavigation.setOnTabSelectedListener({ position, wasSelected ->
+            System.out.println("$position::$wasSelected")
+            true
+        })
+
     }
 
     override fun onItemClick(reward: Reward) {
-        viewModel.canAcquireReward(reward)
+//        viewModel.canAcquireReward(reward)
+        viewModel.selectReward(reward)
     }
 
     override fun showRewardAdd() {
@@ -103,7 +109,8 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun onRewardSelected() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        binding.bottomNavigation.visibility = View.VISIBLE
+        binding.rewardAddButton.visibility = View.INVISIBLE
     }
 }
 

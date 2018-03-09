@@ -74,7 +74,8 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
         }
     }
 
-    fun selectReward(position: Int) {
+    fun selectReward(reward: Reward) {
+        val position = rewardList.indexOf(reward)
         rewardList[position].isSelected = true
         callback.onRewardSelected()
     }
