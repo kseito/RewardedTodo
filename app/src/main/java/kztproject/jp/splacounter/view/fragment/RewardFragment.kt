@@ -64,13 +64,17 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         binding.bottomNavigation.addItem(AHBottomNavigationItem("Delete", R.drawable.reward_delete))
         binding.bottomNavigation.setOnTabSelectedListener({ position, wasSelected ->
             System.out.println("$position::$wasSelected")
+            when (position) {
+                0 -> {
+                    viewModel.acquireReward()
+                }
+            }
             true
         })
 
     }
 
     override fun onItemClick(reward: Reward) {
-//        viewModel.canAcquireReward(reward)
         viewModel.selectReward(reward)
     }
 
@@ -90,7 +94,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         AlertDialog.Builder(activity)
                 .setTitle(R.string.confirm_title)
                 .setMessage(String.format(getString(R.string.confirm_message), reward.name))
-                .setPositiveButton(android.R.string.ok, { _, _ -> viewModel.acquireReward(reward) })
+                .setPositiveButton(android.R.string.ok, { _, _ ->  })
                 .setNegativeButton(android.R.string.cancel, { _, _ -> run {} })
                 .show()
     }

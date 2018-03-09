@@ -72,35 +72,36 @@ class RewardViewModelTest {
     }
 
     @Test
-    fun testCanConsumeSuccess() {
-        val reward = DummyCreator.createDummyReward()
-        viewModel.setPoint(20)
-        viewModel.canAcquireReward(reward)
-
-        verify(mockCallback, times(1)).showConfirmDialog(reward)
-    }
-
-    @Test
-    fun testCanAcquireReward() {
-        viewModel.setPoint(0)
-        viewModel.canAcquireReward(DummyCreator.createDummyReward())
-        
-        verify(mockCallback, times(1)).showError()
-    }
-
-    @Test
     fun testAcquireRewardSuccess() {
-        whenever(mockMiniatureGardenClient.consumeCounter(anyInt(), anyInt())).thenReturn(Single.just(DummyCreator.createDummyCounter()))
-        viewModel.acquireReward(DummyCreator.createDummyReward())
+        whenever(mockMiniatureGardenClient.consumeCounter(anyInt(), anyInt()))
+                .thenReturn(Single.just(DummyCreator.createDummyCounter()))
+        viewModel.selectedReward = DummyCreator.createDummyReward()
+        viewModel.setPoint(20)
+        viewModel.acquireReward()
 
         verify(mockCallback, times(1)).successAcquireReward(any(), anyInt())
     }
 
     @Test
-    fun testAcquireRewardFailure() {
-        whenever(mockMiniatureGardenClient.consumeCounter(anyInt(), anyInt())).thenReturn(Single.error(SocketTimeoutException()))
+    fun testAcquireRewardFailure_PointShortage() {
+        whenever(mockMiniatureGardenClient.consumeCounter(anyInt(), anyInt()))
+                .thenReturn(Single.just(DummyCreator.createDummyCounter()))
+        val reward = DummyCreator.createDummyReward()
+        viewModel.setPoint(1)
+        viewModel.selectedReward = reward
+        viewModel.acquireReward()
 
-        viewModel.acquireReward(DummyCreator.createDummyReward())
+        verify(mockCallback, times(1)).showError()
+    }
+
+
+    @Test
+    fun testAcquireRewardFailure_SocketTimeOut() {
+        whenever(mockMiniatureGardenClient.consumeCounter(anyInt(), anyInt()))
+                .thenReturn(Single.error(SocketTimeoutException()))
+        viewModel.setPoint(20)
+        viewModel.selectedReward = DummyCreator.createDummyReward()
+        viewModel.acquireReward()
         verify(mockCallback, times(1)).showError()
     }
 

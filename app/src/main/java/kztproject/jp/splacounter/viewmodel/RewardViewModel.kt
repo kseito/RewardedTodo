@@ -15,6 +15,7 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
 
     private lateinit var callback: RewardViewModelCallback
     var rewardList: MutableList<Reward> = mutableListOf()
+    lateinit var selectedReward: Reward
     private var point: ObservableField<Int> = ObservableField()
     var isEmpty: ObservableField<Boolean> = ObservableField()
 
@@ -50,19 +51,17 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
                         { isEmpty.set(true) })
     }
 
-    fun canAcquireReward(reward: Reward) {
-        if (point.get() >= reward.consumePoint) {
-            callback.showConfirmDialog(reward)
-        } else {
-            callback.showError()
-        }
-    }
+    fun acquireReward() {
 
-    fun acquireReward(reward: Reward) {
-        miniatureGardenClient.consumeCounter(PrefsWrapper.userId, reward.consumePoint)
+        if (point.get() < selectedReward.consumePoint) {
+            callback.showError()
+            return
+        }
+
+        miniatureGardenClient.consumeCounter(PrefsWrapper.userId, selectedReward.consumePoint)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ counter -> callback.successAcquireReward(reward, counter.count) },
+                .subscribe({ counter -> callback.successAcquireReward(selectedReward, counter.count) },
                         { callback.showError() })
     }
 
@@ -78,6 +77,7 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
     fun selectReward(reward: Reward) {
         val position = rewardList.indexOf(reward)
         rewardList[position].isSelected = true
+        selectedReward = reward
         callback.onRewardSelected()
     }
 }
