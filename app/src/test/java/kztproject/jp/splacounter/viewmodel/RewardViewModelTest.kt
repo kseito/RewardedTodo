@@ -17,6 +17,7 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyInt
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import java.net.SocketTimeoutException
 
 @RunWith(RobolectricTestRunner::class)
 class RewardViewModelTest {
@@ -95,10 +96,13 @@ class RewardViewModelTest {
         verify(mockCallback, times(1)).successAcquireReward(any(), anyInt())
     }
 
-//    @Test
-//    fun testAcquireRewardFailure() {
-//        //TODO
-//    }
+    @Test
+    fun testAcquireRewardFailure() {
+        whenever(mockMiniatureGardenClient.consumeCounter(anyInt(), anyInt())).thenReturn(Single.error(SocketTimeoutException()))
+
+        viewModel.acquireReward(DummyCreator.createDummyReward())
+        verify(mockCallback, times(1)).showError()
+    }
 
     @Test
     fun testRemoveReward() {
@@ -116,8 +120,9 @@ class RewardViewModelTest {
 
     @Test
     fun testSelectReward() {
-        viewModel.rewardList.add(DummyCreator.createDummyReward())
-        viewModel.selectReward(0)
+        val reward = DummyCreator.createDummyReward()
+        viewModel.rewardList.add(reward)
+        viewModel.selectReward(reward)
 
         verify(mockCallback).onRewardSelected()
     }

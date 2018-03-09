@@ -62,7 +62,8 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
         miniatureGardenClient.consumeCounter(PrefsWrapper.userId, reward.consumePoint)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ counter -> callback.successAcquireReward(reward, counter.count) })
+                .subscribe({ counter -> callback.successAcquireReward(reward, counter.count) },
+                        { callback.showError() })
     }
 
     fun removeRewardIfNeeded(reward: Reward) {
