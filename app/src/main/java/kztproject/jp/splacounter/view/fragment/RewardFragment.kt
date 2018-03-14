@@ -75,7 +75,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun onItemClick(reward: Reward) {
-        viewModel.selectReward(reward)
+        viewModel.switchReward(reward)
     }
 
     override fun showRewardAdd() {
@@ -94,7 +94,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         AlertDialog.Builder(activity)
                 .setTitle(R.string.confirm_title)
                 .setMessage(String.format(getString(R.string.confirm_message), reward.name))
-                .setPositiveButton(android.R.string.ok, { _, _ ->  })
+                .setPositiveButton(android.R.string.ok, { _, _ -> })
                 .setNegativeButton(android.R.string.cancel, { _, _ -> run {} })
                 .show()
     }
@@ -112,9 +112,16 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         }
     }
 
-    override fun onRewardSelected() {
+    override fun onRewardSelected(position: Int) {
         binding.bottomNavigation.visibility = View.VISIBLE
         binding.rewardAddButton.visibility = View.INVISIBLE
+        binding.rewardListView.adapter.notifyItemChanged(position)
+    }
+
+    override fun onRewardDeSelected(position: Int) {
+        binding.bottomNavigation.visibility = View.INVISIBLE
+        binding.rewardAddButton.visibility = View.VISIBLE
+        binding.rewardListView.adapter.notifyItemChanged(position)
     }
 }
 

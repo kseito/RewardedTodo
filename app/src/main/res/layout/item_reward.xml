@@ -5,6 +5,8 @@
 
         <import type="android.view.View" />
 
+        <import type="kztproject.jp.splacounter.R" />
+
         <variable
             name="reward"
             type="kztproject.jp.splacounter.database.model.Reward" />
@@ -13,7 +15,7 @@
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@android:color/white"
+        android:background="@{reward.selected ? R.color.colorAccent : android.R.color.white}"
         android:orientation="vertical">
 
         <TextView

@@ -15,7 +15,7 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
 
     private lateinit var callback: RewardViewModelCallback
     var rewardList: MutableList<Reward> = mutableListOf()
-    lateinit var selectedReward: Reward
+    var selectedReward: Reward? = null
     private var point: ObservableField<Int> = ObservableField()
     var isEmpty: ObservableField<Boolean> = ObservableField()
 
@@ -52,17 +52,17 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
     }
 
     fun acquireReward() {
-
-        if (point.get() < selectedReward.consumePoint) {
+        val selectedReward: Reward = this.selectedReward
+                ?: throw NullPointerException("acquireReward() cannot call when selectedReward is null")
+        if (point.get() >= selectedReward.consumePoint) {
+            miniatureGardenClient.consumeCounter(PrefsWrapper.userId, selectedReward.consumePoint)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe({ counter -> callback.successAcquireReward(selectedReward, counter.count) },
+                            { callback.showError() })
+        } else {
             callback.showError()
-            return
         }
-
-        miniatureGardenClient.consumeCounter(PrefsWrapper.userId, selectedReward.consumePoint)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ counter -> callback.successAcquireReward(selectedReward, counter.count) },
-                        { callback.showError() })
     }
 
     fun removeRewardIfNeeded(reward: Reward) {
@@ -74,11 +74,24 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
         }
     }
 
-    fun selectReward(reward: Reward) {
-        val position = rewardList.indexOf(reward)
-        rewardList[position].isSelected = true
-        selectedReward = reward
-        callback.onRewardSelected()
+    fun switchReward(reward: Reward) {
+        val newPosition = rewardList.indexOf(reward)
+        if (selectedReward == reward) {
+            rewardList[newPosition].isSelected = false
+            selectedReward = null
+            callback.onRewardDeSelected(newPosition)
+        } else if(selectedReward != null && selectedReward != reward) {
+            rewardList[newPosition].isSelected = true
+            val oldPosition = rewardList.indexOf(selectedReward!!)
+            rewardList[oldPosition].isSelected = false
+            selectedReward = reward
+            callback.onRewardSelected(newPosition)
+            callback.onRewardDeSelected(oldPosition)
+        } else {
+            rewardList[newPosition].isSelected = true
+            selectedReward = reward
+            callback.onRewardSelected(newPosition)
+        }
     }
 }
 
@@ -94,5 +107,7 @@ interface RewardViewModelCallback {
 
     fun successAcquireReward(reward: Reward, point: Int)
 
-    fun onRewardSelected()
+    fun onRewardSelected(position: Int)
+
+    fun onRewardDeSelected(position: Int)
 }

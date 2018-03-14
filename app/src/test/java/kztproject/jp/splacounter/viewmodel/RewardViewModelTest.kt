@@ -123,8 +123,31 @@ class RewardViewModelTest {
     fun testSelectReward() {
         val reward = DummyCreator.createDummyReward()
         viewModel.rewardList.add(reward)
-        viewModel.selectReward(reward)
+        viewModel.switchReward(reward)
 
-        verify(mockCallback).onRewardSelected()
+        verify(mockCallback).onRewardSelected(anyInt())
+    }
+
+    @Test
+    fun testDeselectReward() {
+        val reward = DummyCreator.createDummyReward()
+        viewModel.rewardList.add(reward)
+        viewModel.switchReward(reward)
+        viewModel.switchReward(reward)
+
+        verify(mockCallback).onRewardSelected(anyInt())
+        verify(mockCallback).onRewardDeSelected(anyInt())
+    }
+
+    @Test
+    fun testReselectReward() {
+        val rewards = listOf(DummyCreator.createDummyReward(),
+                DummyCreator.createDummyNoRepeatReward())
+        viewModel.rewardList.addAll(rewards)
+        viewModel.switchReward(rewards[0])
+        viewModel.switchReward(rewards[1])
+
+        verify(mockCallback, times(2)).onRewardSelected(anyInt())
+        verify(mockCallback, times(1)).onRewardDeSelected(anyInt())
     }
 }
