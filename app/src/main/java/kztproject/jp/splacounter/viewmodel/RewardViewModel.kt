@@ -1,6 +1,7 @@
 package kztproject.jp.splacounter.viewmodel
 
 import android.databinding.ObservableField
+import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -65,13 +66,30 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
         }
     }
 
-    fun removeRewardIfNeeded(reward: Reward) {
-        if (!reward.needRepeat) {
-            Single.create<Unit> { rewardDao.deleteReward(reward) }
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribeOn(Schedulers.io())
-                    .subscribe()
+    fun confirmDelete() {
+        callback.showDeleteConfirmDialog(selectedReward!!)
+    }
+
+    fun deleteRewardIfNeeded(reward: Reward) {
+        if (reward.needRepeat) {
+            return
         }
+
+        deleteReward(reward, false)
+    }
+
+    fun deleteReward(reward: Reward, needCallback: Boolean) {
+        Completable.create { e ->
+            rewardDao.deleteReward(reward)
+            e.onComplete()
+        }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    if (needCallback) {
+                        callback.onRewardDeleted(reward)
+                    }
+                })
     }
 
     fun switchReward(reward: Reward) {
@@ -80,7 +98,7 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
             rewardList[newPosition].isSelected = false
             selectedReward = null
             callback.onRewardDeSelected(newPosition)
-        } else if(selectedReward != null && selectedReward != reward) {
+        } else if (selectedReward != null && selectedReward != reward) {
             rewardList[newPosition].isSelected = true
             val oldPosition = rewardList.indexOf(selectedReward!!)
             rewardList[oldPosition].isSelected = false
@@ -101,7 +119,7 @@ interface RewardViewModelCallback {
 
     fun showRewards(rewardList: MutableList<Reward>)
 
-    fun showConfirmDialog(reward: Reward)
+    fun showDeleteConfirmDialog(reward: Reward)
 
     fun showError()
 
@@ -110,4 +128,6 @@ interface RewardViewModelCallback {
     fun onRewardSelected(position: Int)
 
     fun onRewardDeSelected(position: Int)
+
+    fun onRewardDeleted(reward: Reward)
 }

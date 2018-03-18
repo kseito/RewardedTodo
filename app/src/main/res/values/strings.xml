@@ -15,7 +15,8 @@
     <string name="format_consume_point">%dP</string>
     <string name="reward_empty_text">Please add new reward</string>
     <string name="confirm_title">Confirm</string>
-    <string name="confirm_message">Do you acquire %s?</string>
+    <string name="reward_delete_message">%s was Deleted</string>
+    <string name="delete_confirm_message">Do you delete %s?</string>
     <string name="error_acquire_reward">You need more points</string>
 
     <!-- Reward Add -->

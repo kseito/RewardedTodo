@@ -107,16 +107,18 @@ class RewardViewModelTest {
 
     @Test
     fun testRemoveReward() {
-        viewModel.removeRewardIfNeeded(DummyCreator.createDummyReward())
+        viewModel.deleteRewardIfNeeded(DummyCreator.createDummyReward())
 
         verify(mockDao, times(0)).deleteReward(any())
+        verify(mockCallback, times(0)).onRewardDeleted(any())
     }
 
     @Test
     fun testNotRemoveReward() {
-        viewModel.removeRewardIfNeeded(DummyCreator.createDummyNoRepeatReward())
+        viewModel.deleteRewardIfNeeded(DummyCreator.createDummyNoRepeatReward())
 
         verify(mockDao, times(1)).deleteReward(any())
+        verify(mockCallback, times(0)).onRewardDeleted(any())
     }
 
     @Test
@@ -149,5 +151,22 @@ class RewardViewModelTest {
 
         verify(mockCallback, times(2)).onRewardSelected(anyInt())
         verify(mockCallback, times(1)).onRewardDeSelected(anyInt())
+    }
+
+    @Test
+    fun testConfirmDelete() {
+        viewModel.selectedReward = DummyCreator.createDummyReward()
+        viewModel.confirmDelete()
+
+        verify(mockCallback).showDeleteConfirmDialog(any())
+    }
+
+    @Test
+    fun testDeleteReward() {
+        val reward = DummyCreator.createDummyReward()
+        viewModel.deleteReward(reward, true)
+
+        verify(mockDao).deleteReward(any())
+        verify(mockCallback).onRewardDeleted(reward)
     }
 }

@@ -68,6 +68,9 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
                 0 -> {
                     viewModel.acquireReward()
                 }
+                2 -> {
+                    viewModel.confirmDelete()
+                }
             }
             true
         })
@@ -90,11 +93,11 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         binding.rewardListView.adapter = RewardListAdapter(rewardList, this)
     }
 
-    override fun showConfirmDialog(reward: Reward) {
+    override fun showDeleteConfirmDialog(reward: Reward) {
         AlertDialog.Builder(activity)
                 .setTitle(R.string.confirm_title)
-                .setMessage(String.format(getString(R.string.confirm_message), reward.name))
-                .setPositiveButton(android.R.string.ok, { _, _ -> })
+                .setMessage(String.format(getString(R.string.delete_confirm_message), reward.name))
+                .setPositiveButton(android.R.string.ok, { _, _ -> viewModel.deleteReward(reward, true)})
                 .setNegativeButton(android.R.string.cancel, { _, _ -> run {} })
                 .show()
     }
@@ -107,7 +110,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         Toast.makeText(context, "You consume $point points", Toast.LENGTH_SHORT).show()
 
         if (!reward.needRepeat) {
-            viewModel.removeRewardIfNeeded(reward)
+            viewModel.deleteRewardIfNeeded(reward)
             (binding.rewardListView.adapter as RewardListAdapter).remove(reward)
         }
     }
@@ -122,6 +125,12 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         binding.bottomNavigation.visibility = View.INVISIBLE
         binding.rewardAddButton.visibility = View.VISIBLE
         binding.rewardListView.adapter.notifyItemChanged(position)
+    }
+
+    override fun onRewardDeleted(reward: Reward) {
+        val message = String.format(getString(R.string.reward_delete_message), reward.name)
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        (binding.rewardListView.adapter as RewardListAdapter).remove(reward)
     }
 }
 
