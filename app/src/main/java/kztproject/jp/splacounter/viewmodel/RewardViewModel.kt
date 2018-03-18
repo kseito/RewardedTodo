@@ -87,6 +87,7 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
                 .subscribeOn(Schedulers.io())
                 .subscribe({
                     if (needCallback) {
+                        selectedReward = null
                         callback.onRewardDeleted(reward)
                     }
                 })
