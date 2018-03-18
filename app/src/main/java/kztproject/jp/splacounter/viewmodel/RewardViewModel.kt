@@ -104,8 +104,8 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
             val oldPosition = rewardList.indexOf(selectedReward!!)
             rewardList[oldPosition].isSelected = false
             selectedReward = reward
-            callback.onRewardSelected(newPosition)
             callback.onRewardDeSelected(oldPosition)
+            callback.onRewardSelected(newPosition)
         } else {
             rewardList[newPosition].isSelected = true
             selectedReward = reward
