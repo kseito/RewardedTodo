@@ -48,7 +48,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentRight="true"
             android:layout_margin="32dp"
-            android:onClick="@{() -> viewModel.showRewardAdd()}"
+            android:onClick="@{() -> viewModel.showRewardDetail()}"
             android:src="@drawable/add_button" />
 
     </RelativeLayout>

@@ -28,8 +28,8 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
         this.point.set(point)
     }
 
-    fun showRewardAdd() {
-        callback.showRewardAdd()
+    fun showRewardDetail() {
+        callback.showRewardDetail()
     }
 
     fun getRewards() {
@@ -116,7 +116,7 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
 
 interface RewardViewModelCallback {
 
-    fun showRewardAdd()
+    fun showRewardDetail()
 
     fun showRewards(rewardList: MutableList<Reward>)
 

@@ -13,13 +13,13 @@ import org.junit.Test
 import org.mockito.Matchers.anyString
 import org.mockito.Mockito.verify
 
-class RewardAddViewModelTest{
+class RewardDetailViewModelTest{
 
-    private val mockCallback: RewardAddViewModelCallback = mock()
+    private val mockCallback: RewardDetailViewModelCallback = mock()
 
     private val mockDao: RewardDao = mock()
 
-    private val viewModel: RewardAddViewModel = RewardAddViewModel(mockDao)
+    private val viewModel: RewardDetailViewModel = RewardDetailViewModel(mockDao)
 
     @Before
     fun setup() {

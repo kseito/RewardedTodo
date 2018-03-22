@@ -50,9 +50,9 @@ class RewardViewModelTest {
 
     @Test
     fun testShowRewardAdd() {
-        viewModel.showRewardAdd()
+        viewModel.showRewardDetail()
 
-        verify(mockCallback, times(1)).showRewardAdd()
+        verify(mockCallback, times(1)).showRewardDetail()
     }
 
     @Test

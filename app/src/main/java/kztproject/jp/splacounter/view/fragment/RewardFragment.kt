@@ -81,8 +81,8 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         viewModel.switchReward(reward)
     }
 
-    override fun showRewardAdd() {
-        val fragment = RewardAddFragment.newInstance()
+    override fun showRewardDetail() {
+        val fragment = RewardDetailFragment.newInstance()
         activity.supportFragmentManager.beginTransaction()
                 .replace(R.id.container, fragment)
                 .addToBackStack(fragment.javaClass.canonicalName)

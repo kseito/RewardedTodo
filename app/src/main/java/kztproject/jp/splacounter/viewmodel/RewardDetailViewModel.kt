@@ -13,7 +13,7 @@ import kztproject.jp.splacounter.database.RewardDao
 import kztproject.jp.splacounter.database.model.Reward
 import javax.inject.Inject
 
-class RewardAddViewModel @Inject constructor(private val rewardDao: RewardDao) : BaseObservable() {
+class RewardDetailViewModel @Inject constructor(private val rewardDao: RewardDao) : BaseObservable() {
 
     @Bindable
     private var name: String = ""
@@ -27,9 +27,9 @@ class RewardAddViewModel @Inject constructor(private val rewardDao: RewardDao) :
     @Bindable
     var needRepeat: Boolean = false
 
-    private lateinit var callback: RewardAddViewModelCallback
+    private lateinit var callback: RewardDetailViewModelCallback
 
-    fun setCallback(callback: RewardAddViewModelCallback) {
+    fun setCallback(callback: RewardDetailViewModelCallback) {
         this.callback = callback
     }
 
@@ -70,7 +70,7 @@ class RewardAddViewModel @Inject constructor(private val rewardDao: RewardDao) :
     }
 }
 
-interface RewardAddViewModelCallback {
+interface RewardDetailViewModelCallback {
 
     fun onSaveCompleted(rewardName: String)
 

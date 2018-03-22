@@ -10,21 +10,21 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import dagger.android.support.AndroidSupportInjection
-import kztproject.jp.splacounter.databinding.FragmentRewardAddBinding
-import kztproject.jp.splacounter.viewmodel.RewardAddViewModel
-import kztproject.jp.splacounter.viewmodel.RewardAddViewModelCallback
+import kztproject.jp.splacounter.databinding.FragmentRewardDetailBinding
+import kztproject.jp.splacounter.viewmodel.RewardDetailViewModel
+import kztproject.jp.splacounter.viewmodel.RewardDetailViewModelCallback
 import javax.inject.Inject
 
-class RewardAddFragment : Fragment(), RewardAddViewModelCallback {
-    private lateinit var binding: FragmentRewardAddBinding
+class RewardDetailFragment : Fragment(), RewardDetailViewModelCallback {
+    private lateinit var binding: FragmentRewardDetailBinding
 
     @Inject
-    lateinit var viewModel: RewardAddViewModel
+    lateinit var viewModel: RewardDetailViewModel
 
     companion object {
 
-        fun newInstance(): RewardAddFragment {
-            return RewardAddFragment()
+        fun newInstance(): RewardDetailFragment {
+            return RewardDetailFragment()
         }
     }
 
@@ -35,7 +35,7 @@ class RewardAddFragment : Fragment(), RewardAddViewModelCallback {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentRewardAddBinding.inflate(inflater, container, false)
+        binding = FragmentRewardDetailBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         return binding.root
     }
