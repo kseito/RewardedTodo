@@ -23,20 +23,6 @@ class RewardDetailViewModel @Inject constructor(private val rewardDao: RewardDao
         this.callback = callback
     }
 
-    fun setName(name: String) {
-        this.reward.name = name
-    }
-
-    fun setDescription(description: String) {
-        this.reward.description = description
-    }
-
-    fun setPoint(point: String) {
-        if (!point.isEmpty()) {
-            reward.consumePoint = point.toInt()
-        }
-    }
-
     fun saveReward() {
 
         if (reward.name.isEmpty()) {

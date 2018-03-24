@@ -2,6 +2,7 @@
 <layout>
 
     <data>
+        <import type="kztproject.jp.splacounter.viewmodel.BindingUtils"/>
 
         <variable
             name="viewModel"
@@ -21,6 +22,7 @@
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@={viewModel.reward.name}"
                 android:hint="@string/hint_title"
                 android:inputType="text" />
 
@@ -34,6 +36,7 @@
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@{viewModel.reward.description}"
                 android:hint="@string/hint_description"
                 android:inputType="textMultiLine" />
 
@@ -47,6 +50,7 @@
                 android:id="@+id/consume_point"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="@={BindingUtils.toString(viewModel.reward.consumePoint)}"
                 android:hint="@string/hint_point"
                 android:inputType="numberDecimal" />
 

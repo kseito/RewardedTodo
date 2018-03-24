@@ -38,8 +38,8 @@ class RewardDetailViewModelTest{
 
     @Test
     fun testSaveReward() {
-        viewModel.setName("test")
-        viewModel.setPoint("1")
+        viewModel.reward.name = "test"
+        viewModel.reward.consumePoint = 1
         viewModel.saveReward()
 
         verify(mockCallback).onSaveCompleted(anyString())
@@ -54,7 +54,7 @@ class RewardDetailViewModelTest{
 
     @Test
     fun testSaveRewardWithoutPoint() {
-        viewModel.setName("test")
+        viewModel.reward.name = "test"
         viewModel.saveReward()
 
         verify(mockCallback).onError(R.string.error_empty_point)
