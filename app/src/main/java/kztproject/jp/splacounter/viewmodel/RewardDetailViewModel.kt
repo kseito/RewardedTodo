@@ -7,7 +7,6 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
-import kztproject.jp.splacounter.BR
 import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.database.RewardDao
 import kztproject.jp.splacounter.database.model.Reward
@@ -16,16 +15,7 @@ import javax.inject.Inject
 class RewardDetailViewModel @Inject constructor(private val rewardDao: RewardDao) : BaseObservable() {
 
     @Bindable
-    private var name: String = ""
-
-    @Bindable
-    private var description: String = ""
-
-    @Bindable
-    private var point: String = "0"
-
-    @Bindable
-    var needRepeat: Boolean = false
+    var reward: Reward = Reward()
 
     private lateinit var callback: RewardDetailViewModelCallback
 
@@ -34,31 +24,28 @@ class RewardDetailViewModel @Inject constructor(private val rewardDao: RewardDao
     }
 
     fun setName(name: String) {
-        this.name = name
-        notifyPropertyChanged(BR.name)
+        this.reward.name = name
     }
 
     fun setDescription(description: String) {
-        this.description = description
-        notifyPropertyChanged(BR.description)
+        this.reward.description = description
     }
 
     fun setPoint(point: String) {
-        this.point = point
-        notifyPropertyChanged(BR.point)
+        if (!point.isEmpty()) {
+            reward.consumePoint = point.toInt()
+        }
     }
 
     fun saveReward() {
 
-        if (name.isEmpty()) {
+        if (reward.name.isEmpty()) {
             callback.onError(R.string.error_empty_title)
             return
-        } else if (point.isEmpty() || point == "0") {
+        } else if (reward.consumePoint == 0) {
             callback.onError(R.string.error_empty_point)
             return
         }
-
-        val reward = Reward(0, name, point.toInt(), description, needRepeat)
 
         Single.create<Reward> {
             rewardDao.insertReward(reward)
