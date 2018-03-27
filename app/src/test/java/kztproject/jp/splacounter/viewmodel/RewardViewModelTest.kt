@@ -169,4 +169,13 @@ class RewardViewModelTest {
         verify(mockDao).deleteReward(any())
         verify(mockCallback).onRewardDeleted(reward)
     }
+
+    @Test
+    fun testEditReward() {
+        val reward = DummyCreator.createDummyReward()
+        viewModel.selectedReward = reward
+        viewModel.editReward()
+
+        verify(mockCallback).onRewardEditSelected(reward)
+    }
 }

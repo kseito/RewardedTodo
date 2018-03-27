@@ -22,6 +22,7 @@ import kztproject.jp.splacounter.viewmodel.RewardViewModelCallback
 import javax.inject.Inject
 
 class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
+
     @Inject
     lateinit var viewModel: RewardViewModel
 
@@ -125,6 +126,10 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         binding.bottomNavigation.visibility = View.INVISIBLE
         binding.rewardAddButton.visibility = View.VISIBLE
         binding.rewardListView.adapter.notifyItemChanged(position)
+    }
+
+    override fun onRewardEditSelected(reward: Reward) {
+
     }
 
     override fun onRewardDeleted(reward: Reward) {

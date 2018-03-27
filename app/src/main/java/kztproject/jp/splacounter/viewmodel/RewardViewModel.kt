@@ -78,6 +78,10 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
         deleteReward(reward, false)
     }
 
+    fun editReward() {
+        callback.onRewardEditSelected(selectedReward!!)
+    }
+
     fun deleteReward(reward: Reward, needCallback: Boolean) {
         Completable.create { e ->
             rewardDao.deleteReward(reward)
@@ -131,4 +135,6 @@ interface RewardViewModelCallback {
     fun onRewardDeSelected(position: Int)
 
     fun onRewardDeleted(reward: Reward)
+
+    fun onRewardEditSelected(reward: Reward)
 }
