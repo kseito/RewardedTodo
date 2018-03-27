@@ -12,6 +12,9 @@ interface RewardDao {
     @Query("SELECT * FROM Reward")
     fun findAll(): Array<Reward>
 
+    @Query("SELECT * FROM Reward WHERE id = :id")
+    fun findBy(id: Int): Reward?
+
     @Update
     fun updateReward(address: Reward)
 

@@ -13,6 +13,7 @@ import kztproject.jp.splacounter.viewmodel.RewardDetailViewModelCallback
 import javax.inject.Inject
 
 class RewardDetailFragment : Fragment(), RewardDetailViewModelCallback {
+
     private lateinit var binding: FragmentRewardDetailBinding
 
     @Inject
@@ -20,8 +21,18 @@ class RewardDetailFragment : Fragment(), RewardDetailViewModelCallback {
 
     companion object {
 
+        private const val ARGS_ID = "id"
+
         fun newInstance(): RewardDetailFragment {
             return RewardDetailFragment()
+        }
+
+        fun newInstance(id: Int): RewardDetailFragment {
+            return RewardDetailFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(ARGS_ID, id)
+                }
+            }
         }
     }
 
@@ -35,6 +46,14 @@ class RewardDetailFragment : Fragment(), RewardDetailViewModelCallback {
         binding = FragmentRewardDetailBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
         return binding.root
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        if (arguments != null) {
+            val id = arguments.getInt(ARGS_ID)
+            viewModel.initialize(id)
+        }
     }
 
     override fun onSaveCompleted(rewardName: String) {

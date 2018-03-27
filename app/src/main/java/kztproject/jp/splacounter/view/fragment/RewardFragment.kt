@@ -69,6 +69,9 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
                 0 -> {
                     viewModel.acquireReward()
                 }
+                1 -> {
+                    viewModel.editReward()
+                }
                 2 -> {
                     viewModel.confirmDelete()
                 }
@@ -83,11 +86,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun showRewardDetail() {
-        val fragment = RewardDetailFragment.newInstance()
-        activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .addToBackStack(fragment.javaClass.canonicalName)
-                .commit()
+        replace(R.id.container, RewardDetailFragment.newInstance())
     }
 
     override fun showRewards(rewardList: MutableList<Reward>) {
@@ -129,7 +128,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun onRewardEditSelected(reward: Reward) {
-
+        replace(R.id.container, RewardDetailFragment.newInstance(reward.id))
     }
 
     override fun onRewardDeleted(reward: Reward) {

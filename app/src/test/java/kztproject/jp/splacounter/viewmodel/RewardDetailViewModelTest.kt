@@ -1,15 +1,19 @@
 package kztproject.jp.splacounter.viewmodel
 
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Scheduler
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
+import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.database.RewardDao
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Matchers.anyString
 import org.mockito.Mockito.verify
 
@@ -58,5 +62,14 @@ class RewardDetailViewModelTest{
         viewModel.saveReward()
 
         verify(mockCallback).onError(R.string.error_empty_point)
+    }
+
+    @Test
+    fun testInitialize() {
+        val reward = DummyCreator.createDummyReward()
+        whenever(mockDao.findBy(anyInt())).thenReturn(reward)
+        viewModel.initialize(1)
+
+        assertThat(viewModel.reward).isEqualTo(reward)
     }
 }
