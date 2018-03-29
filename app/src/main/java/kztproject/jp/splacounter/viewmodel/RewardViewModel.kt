@@ -80,6 +80,7 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
 
     fun editReward() {
         callback.onRewardEditSelected(selectedReward!!)
+        selectedReward = null
     }
 
     fun deleteReward(reward: Reward, needCallback: Boolean) {
