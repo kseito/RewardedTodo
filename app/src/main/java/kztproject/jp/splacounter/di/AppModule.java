@@ -44,6 +44,7 @@ class AppModule {
     @Singleton
     AppDatabase providesAppDatabase(Application application) {
         return Room.databaseBuilder(application, AppDatabase.class, "splacounter")
+                .fallbackToDestructiveMigration()
                 .build();
     }
 

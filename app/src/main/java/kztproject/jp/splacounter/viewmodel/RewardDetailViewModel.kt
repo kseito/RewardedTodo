@@ -3,62 +3,49 @@ package kztproject.jp.splacounter.viewmodel
 import android.databinding.BaseObservable
 import android.databinding.Bindable
 import android.support.annotation.StringRes
+import com.android.databinding.library.baseAdapters.BR
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
-import kztproject.jp.splacounter.BR
 import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.database.RewardDao
 import kztproject.jp.splacounter.database.model.Reward
 import javax.inject.Inject
 
-class RewardAddViewModel @Inject constructor(private val rewardDao: RewardDao) : BaseObservable() {
+class RewardDetailViewModel @Inject constructor(private val rewardDao: RewardDao) : BaseObservable() {
 
     @Bindable
-    private var name: String = ""
+    var reward: Reward = Reward()
 
-    @Bindable
-    private var description: String = ""
+    private lateinit var callback: RewardDetailViewModelCallback
 
-    @Bindable
-    private var point: String = "0"
+    fun initialize(id: Int) {
+        Single.create<Reward> { emitter ->
+            val reward = rewardDao.findBy(id)
+            emitter.onSuccess(reward)
+        }
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    reward -> this.reward = reward
+                    notifyPropertyChanged(BR.reward)
+                })
+    }
 
-    @Bindable
-    var needRepeat: Boolean = false
-
-    private lateinit var callback: RewardAddViewModelCallback
-
-    fun setCallback(callback: RewardAddViewModelCallback) {
+    fun setCallback(callback: RewardDetailViewModelCallback) {
         this.callback = callback
-    }
-
-    fun setName(name: String) {
-        this.name = name
-        notifyPropertyChanged(BR.name)
-    }
-
-    fun setDescription(description: String) {
-        this.description = description
-        notifyPropertyChanged(BR.description)
-    }
-
-    fun setPoint(point: String) {
-        this.point = point
-        notifyPropertyChanged(BR.point)
     }
 
     fun saveReward() {
 
-        if (name.isEmpty()) {
+        if (reward.name.isEmpty()) {
             callback.onError(R.string.error_empty_title)
             return
-        } else if (point.isEmpty() || point == "0") {
+        } else if (reward.consumePoint == 0) {
             callback.onError(R.string.error_empty_point)
             return
         }
-
-        val reward = Reward(0, name, point.toInt(), description, needRepeat)
 
         Single.create<Reward> {
             rewardDao.insertReward(reward)
@@ -70,7 +57,7 @@ class RewardAddViewModel @Inject constructor(private val rewardDao: RewardDao) :
     }
 }
 
-interface RewardAddViewModelCallback {
+interface RewardDetailViewModelCallback {
 
     fun onSaveCompleted(rewardName: String)
 

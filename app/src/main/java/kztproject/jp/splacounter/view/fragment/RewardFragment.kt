@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.android.databinding.library.baseAdapters.BR
+import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.database.model.Reward
@@ -58,29 +59,45 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getRewards()
+
+        binding.bottomNavigation.addItem(AHBottomNavigationItem("Done", R.drawable.reward_done))
+        binding.bottomNavigation.addItem(AHBottomNavigationItem("Edit", R.drawable.reward_edit))
+        binding.bottomNavigation.addItem(AHBottomNavigationItem("Delete", R.drawable.reward_delete))
+        binding.bottomNavigation.setOnTabSelectedListener({ position, wasSelected ->
+            System.out.println("$position::$wasSelected")
+            when (position) {
+                0 -> {
+                    viewModel.acquireReward()
+                }
+                1 -> {
+                    viewModel.editReward()
+                }
+                2 -> {
+                    viewModel.confirmDelete()
+                }
+            }
+            true
+        })
+
     }
 
     override fun onItemClick(reward: Reward) {
-        viewModel.canAcquireReward(reward)
+        viewModel.switchReward(reward)
     }
 
-    override fun showRewardAdd() {
-        val fragment = RewardAddFragment.newInstance()
-        activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.container, fragment)
-                .addToBackStack(fragment.javaClass.canonicalName)
-                .commit()
+    override fun showRewardDetail() {
+        replace(R.id.container, RewardDetailFragment.newInstance())
     }
 
     override fun showRewards(rewardList: MutableList<Reward>) {
         binding.rewardListView.adapter = RewardListAdapter(rewardList, this)
     }
 
-    override fun showConfirmDialog(reward: Reward) {
+    override fun showDeleteConfirmDialog(reward: Reward) {
         AlertDialog.Builder(activity)
                 .setTitle(R.string.confirm_title)
-                .setMessage(String.format(getString(R.string.confirm_message), reward.name))
-                .setPositiveButton(android.R.string.ok, { _, _ -> viewModel.acquireReward(reward) })
+                .setMessage(String.format(getString(R.string.delete_confirm_message), reward.name))
+                .setPositiveButton(android.R.string.ok, { _, _ -> viewModel.deleteReward(reward, true)})
                 .setNegativeButton(android.R.string.cancel, { _, _ -> run {} })
                 .show()
     }
@@ -93,9 +110,27 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         Toast.makeText(context, "You consume $point points", Toast.LENGTH_SHORT).show()
 
         if (!reward.needRepeat) {
-            viewModel.removeRewardIfNeeded(reward)
+            viewModel.deleteRewardIfNeeded(reward)
             (binding.rewardListView.adapter as RewardListAdapter).remove(reward)
         }
+    }
+
+    override fun onRewardSelected(position: Int) {
+        binding.rewardListView.adapter.notifyItemChanged(position)
+    }
+
+    override fun onRewardDeSelected(position: Int) {
+        binding.rewardListView.adapter.notifyItemChanged(position)
+    }
+
+    override fun onRewardEditSelected(reward: Reward) {
+        replace(R.id.container, RewardDetailFragment.newInstance(reward.id))
+    }
+
+    override fun onRewardDeleted(reward: Reward) {
+        val message = String.format(getString(R.string.reward_delete_message), reward.name)
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        (binding.rewardListView.adapter as RewardListAdapter).remove(reward)
     }
 }
 

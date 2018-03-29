@@ -4,7 +4,7 @@ import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
 import kztproject.jp.splacounter.view.fragment.AuthFragment;
 import kztproject.jp.splacounter.view.fragment.PlayFragment;
-import kztproject.jp.splacounter.view.fragment.RewardAddFragment;
+import kztproject.jp.splacounter.view.fragment.RewardDetailFragment;
 import kztproject.jp.splacounter.view.fragment.RewardFragment;
 
 @Module
@@ -19,5 +19,5 @@ abstract class FragmentBuilderModule {
     abstract RewardFragment contributeRewardFragment();
 
     @ContributesAndroidInjector
-    abstract RewardAddFragment contributeRewardAddFragment();
+    abstract RewardDetailFragment contributeRewardAddFragment();
 }

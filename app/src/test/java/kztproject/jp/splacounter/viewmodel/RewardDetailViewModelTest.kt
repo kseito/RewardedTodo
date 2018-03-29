@@ -1,25 +1,29 @@
 package kztproject.jp.splacounter.viewmodel
 
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Scheduler
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
+import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.database.RewardDao
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.Matchers.anyString
 import org.mockito.Mockito.verify
 
-class RewardAddViewModelTest{
+class RewardDetailViewModelTest{
 
-    private val mockCallback: RewardAddViewModelCallback = mock()
+    private val mockCallback: RewardDetailViewModelCallback = mock()
 
     private val mockDao: RewardDao = mock()
 
-    private val viewModel: RewardAddViewModel = RewardAddViewModel(mockDao)
+    private val viewModel: RewardDetailViewModel = RewardDetailViewModel(mockDao)
 
     @Before
     fun setup() {
@@ -38,8 +42,8 @@ class RewardAddViewModelTest{
 
     @Test
     fun testSaveReward() {
-        viewModel.setName("test")
-        viewModel.setPoint("1")
+        viewModel.reward.name = "test"
+        viewModel.reward.consumePoint = 1
         viewModel.saveReward()
 
         verify(mockCallback).onSaveCompleted(anyString())
@@ -54,9 +58,18 @@ class RewardAddViewModelTest{
 
     @Test
     fun testSaveRewardWithoutPoint() {
-        viewModel.setName("test")
+        viewModel.reward.name = "test"
         viewModel.saveReward()
 
         verify(mockCallback).onError(R.string.error_empty_point)
+    }
+
+    @Test
+    fun testInitialize() {
+        val reward = DummyCreator.createDummyReward()
+        whenever(mockDao.findBy(anyInt())).thenReturn(reward)
+        viewModel.initialize(1)
+
+        assertThat(viewModel.reward).isEqualTo(reward)
     }
 }
