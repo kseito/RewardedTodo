@@ -39,7 +39,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:visibility="invisible" />
+            android:visibility="@{viewModel.hasSelectReward ? View.VISIBLE : View.INVISIBLE}" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/reward_add_button"
@@ -49,7 +49,8 @@
             android:layout_alignParentRight="true"
             android:layout_margin="32dp"
             android:onClick="@{() -> viewModel.showRewardDetail()}"
-            android:src="@drawable/add_button" />
+            android:src="@drawable/add_button"
+            android:visibility="@{viewModel.hasSelectReward ? View.INVISIBLE : View.VISIBLE}" />
 
     </RelativeLayout>
 </layout>

@@ -17,6 +17,11 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
     private lateinit var callback: RewardViewModelCallback
     var rewardList: MutableList<Reward> = mutableListOf()
     var selectedReward: Reward? = null
+      set(value) {
+          hasSelectReward.set(value != null)
+          field = value
+      }
+    var hasSelectReward: ObservableField<Boolean> = ObservableField()
     private var point: ObservableField<Int> = ObservableField()
     var isEmpty: ObservableField<Boolean> = ObservableField()
 

@@ -116,14 +116,10 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun onRewardSelected(position: Int) {
-        binding.bottomNavigation.visibility = View.VISIBLE
-        binding.rewardAddButton.visibility = View.INVISIBLE
         binding.rewardListView.adapter.notifyItemChanged(position)
     }
 
     override fun onRewardDeSelected(position: Int) {
-        binding.bottomNavigation.visibility = View.INVISIBLE
-        binding.rewardAddButton.visibility = View.VISIBLE
         binding.rewardListView.adapter.notifyItemChanged(position)
     }
 
@@ -132,8 +128,6 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun onRewardDeleted(reward: Reward) {
-        binding.bottomNavigation.visibility = View.INVISIBLE
-        binding.rewardAddButton.visibility = View.VISIBLE
         val message = String.format(getString(R.string.reward_delete_message), reward.name)
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         (binding.rewardListView.adapter as RewardListAdapter).remove(reward)
