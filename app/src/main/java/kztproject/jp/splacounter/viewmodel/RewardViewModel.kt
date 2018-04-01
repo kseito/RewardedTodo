@@ -9,6 +9,7 @@ import kztproject.jp.splacounter.api.MiniatureGardenClient
 import kztproject.jp.splacounter.database.RewardDao
 import kztproject.jp.splacounter.database.model.Reward
 import kztproject.jp.splacounter.preference.PrefsWrapper
+import kztproject.jp.splacounter.util.GameCountUtils
 import javax.inject.Inject
 
 class RewardViewModel @Inject constructor(private val miniatureGardenClient: MiniatureGardenClient,
@@ -22,7 +23,7 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
           field = value
       }
     var hasSelectReward: ObservableField<Boolean> = ObservableField()
-    private var point: ObservableField<Int> = ObservableField()
+    var point: ObservableField<Int> = ObservableField()
     var isEmpty: ObservableField<Boolean> = ObservableField()
 
     fun setCallback(callback: RewardViewModelCallback) {
@@ -55,6 +56,13 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
                     isEmpty.set(false)
                 },
                         { isEmpty.set(true) })
+    }
+
+    fun loadPoint() {
+        miniatureGardenClient.getCounter(PrefsWrapper.userId)
+                .subscribeOn(Schedulers.io())
+                .subscribe({ point.set(GameCountUtils.convertGameCountFromCounter(it)) },
+                        { callback.onPointLoadFailed() })
     }
 
     fun acquireReward() {
@@ -143,4 +151,6 @@ interface RewardViewModelCallback {
     fun onRewardDeleted(reward: Reward)
 
     fun onRewardEditSelected(reward: Reward)
+
+    fun onPointLoadFailed()
 }

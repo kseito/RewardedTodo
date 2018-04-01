@@ -178,4 +178,21 @@ class RewardViewModelTest {
 
         verify(mockCallback).onRewardEditSelected(reward)
     }
+
+    @Test
+    fun testLoadPoint_Success() {
+        val dummyCounter = DummyCreator.createDummyCounter()
+        whenever(mockMiniatureGardenClient.getCounter(anyInt())).thenReturn(Single.just(dummyCounter))
+        viewModel.loadPoint()
+
+        assertThat(viewModel.point.get()).isEqualTo(dummyCounter.count)
+    }
+
+    @Test
+    fun testLoadPoint_Failure() {
+        whenever(mockMiniatureGardenClient.getCounter(anyInt())).thenReturn(Single.error(SocketTimeoutException()))
+        viewModel.loadPoint()
+
+        verify(mockCallback).onPointLoadFailed()
+    }
 }

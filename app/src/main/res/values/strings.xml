@@ -18,6 +18,7 @@
     <string name="reward_delete_message">%s was Deleted</string>
     <string name="delete_confirm_message">Do you delete %s?</string>
     <string name="error_acquire_reward">You need more points</string>
+    <string name="point_with_unit">%d Points</string>
 
     <!-- Reward Add -->
     <string name="hint_title">Reward Title</string>

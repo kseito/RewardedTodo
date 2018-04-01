@@ -22,13 +22,8 @@ class RewardActivity : AppCompatActivity(), HasSupportFragmentInjector {
     lateinit var binding: ActivityRewardBinding
 
     companion object {
-
-        private const val ARG_POINT = "point"
-
-        fun createIntent(context: Context, point: Int): Intent {
-            val intent = Intent(context, RewardActivity::class.java)
-            intent.putExtra(ARG_POINT, point)
-            return intent
+        fun createIntent(context: Context): Intent {
+            return Intent(context, RewardActivity::class.java)
         }
     }
 
@@ -36,9 +31,8 @@ class RewardActivity : AppCompatActivity(), HasSupportFragmentInjector {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_reward)
-        val point = intent.getIntExtra(ARG_POINT, 0);
         supportFragmentManager.beginTransaction()
-                .replace(R.id.container, RewardFragment.newInstance(point))
+                .replace(R.id.container, RewardFragment.newInstance())
                 .commit()
     }
 

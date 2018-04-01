@@ -65,7 +65,7 @@ class PlayFragment : Fragment(), PlayViewModel.Callback {
     }
 
     override fun showReward(gameCount: Int) {
-        startActivity(RewardActivity.createIntent(context, gameCount))
+        startActivity(RewardActivity.createIntent(context))
     }
 
     override fun showError(e: Throwable) {
