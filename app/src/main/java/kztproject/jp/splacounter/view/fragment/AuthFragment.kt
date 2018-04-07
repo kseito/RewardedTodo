@@ -60,7 +60,7 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
         Toast.makeText(activity, R.string.login_succeeded, Toast.LENGTH_SHORT).show()
 
         activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.container, PlayFragment.newInstance())
+                .replace(R.id.container, RewardFragment.newInstance())
                 .commit()
     }
 
