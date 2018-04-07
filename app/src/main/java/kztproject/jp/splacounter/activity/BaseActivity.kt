@@ -10,7 +10,8 @@ import dagger.android.support.HasSupportFragmentInjector
 import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.preference.PrefsWrapper
 import kztproject.jp.splacounter.view.fragment.AuthFragment
-import kztproject.jp.splacounter.view.fragment.PlayFragment
+import kztproject.jp.splacounter.view.fragment.RewardFragment
+import kztproject.jp.splacounter.view.fragment.replaceFragment
 import javax.inject.Inject
 
 class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
@@ -23,13 +24,9 @@ class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_base)
         if (PrefsWrapper.userId != 0) {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, PlayFragment.newInstance())
-                    .commit()
+            replaceFragment(R.id.container, RewardFragment.newInstance())
         } else {
-            supportFragmentManager.beginTransaction()
-                    .replace(R.id.container, AuthFragment.newInstance())
-                    .commit()
+            replaceFragment(R.id.container, AuthFragment.newInstance())
         }
     }
 

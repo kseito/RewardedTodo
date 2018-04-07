@@ -91,11 +91,6 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.9.0'
 }
 
-repositories {
-    mavenCentral()
-    google()
-}
-
 kapt {
     generateStubs = true
 }

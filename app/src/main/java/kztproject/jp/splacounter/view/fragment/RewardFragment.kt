@@ -76,7 +76,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun showRewardDetail() {
-        replace(R.id.container, RewardDetailFragment.newInstance())
+        replaceFragment(R.id.container, RewardDetailFragment.newInstance())
     }
 
     override fun showRewards(rewardList: MutableList<Reward>) {
@@ -114,7 +114,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun onRewardEditSelected(reward: Reward) {
-        replace(R.id.container, RewardDetailFragment.newInstance(reward.id))
+        replaceFragment(R.id.container, RewardDetailFragment.newInstance(reward.id))
     }
 
     override fun onRewardDeleted(reward: Reward) {
