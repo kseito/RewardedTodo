@@ -9,6 +9,7 @@ import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.api.MiniatureGardenClient
 import kztproject.jp.splacounter.database.RewardDao
 import kztproject.jp.splacounter.preference.PrefsWrapper
+import kztproject.jp.splacounter.util.GameCountUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
@@ -185,7 +186,7 @@ class RewardViewModelTest {
         whenever(mockMiniatureGardenClient.getCounter(anyInt())).thenReturn(Single.just(dummyCounter))
         viewModel.loadPoint()
 
-        assertThat(viewModel.point.get()).isEqualTo(dummyCounter.count)
+        assertThat(viewModel.point.get()).isEqualTo(GameCountUtils.convertGameCountFromCounter(dummyCounter))
     }
 
     @Test
