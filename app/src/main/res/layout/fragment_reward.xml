@@ -39,6 +39,7 @@
                 android:layout_marginRight="8dp"
                 android:paddingBottom="12dp"
                 android:paddingTop="12dp"
+                android:onClick="@{() -> viewModel.loadPoint()}"
                 android:src="@drawable/sync" />
 
             <TextView
