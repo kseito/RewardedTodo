@@ -13,8 +13,7 @@ import kztproject.jp.splacounter.MyApplication;
 @Component(modules = {
         AndroidInjectionModule.class,
         AppModule.class,
-        BaseActivityModule.class,
-        RewardActivityModule.class})
+        BaseActivityModule.class})
 public interface AppComponent {
     @Component.Builder
     interface Builder{
