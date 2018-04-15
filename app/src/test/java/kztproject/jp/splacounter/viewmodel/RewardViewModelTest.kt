@@ -9,6 +9,7 @@ import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.api.MiniatureGardenClient
 import kztproject.jp.splacounter.database.RewardDao
 import kztproject.jp.splacounter.preference.PrefsWrapper
+import kztproject.jp.splacounter.util.GameCountUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
@@ -177,5 +178,22 @@ class RewardViewModelTest {
         viewModel.editReward()
 
         verify(mockCallback).onRewardEditSelected(reward)
+    }
+
+    @Test
+    fun testLoadPoint_Success() {
+        val dummyCounter = DummyCreator.createDummyCounter()
+        whenever(mockMiniatureGardenClient.getCounter(anyInt())).thenReturn(Single.just(dummyCounter))
+        viewModel.loadPoint()
+
+        assertThat(viewModel.point.get()).isEqualTo(GameCountUtils.convertGameCountFromCounter(dummyCounter))
+    }
+
+    @Test
+    fun testLoadPoint_Failure() {
+        whenever(mockMiniatureGardenClient.getCounter(anyInt())).thenReturn(Single.error(SocketTimeoutException()))
+        viewModel.loadPoint()
+
+        verify(mockCallback).onPointLoadFailed()
     }
 }

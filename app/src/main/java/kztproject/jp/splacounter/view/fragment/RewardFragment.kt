@@ -21,32 +21,21 @@ import kztproject.jp.splacounter.viewmodel.RewardViewModelCallback
 import javax.inject.Inject
 
 class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
-
     @Inject
     lateinit var viewModel: RewardViewModel
 
     lateinit var binding: FragmentRewardBinding
 
     companion object {
-
-        private const val ARG_POINT = "point"
-
-        fun newInstance(point: Int): RewardFragment {
-            val args = Bundle()
-            args.putInt(ARG_POINT, point)
-
-            val fragment = RewardFragment()
-            fragment.arguments = args
-            return fragment
+        fun newInstance(): RewardFragment {
+            return RewardFragment()
         }
-
     }
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
         viewModel.setCallback(this)
-        viewModel.setPoint(arguments.getInt(ARG_POINT))
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -58,6 +47,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getRewards()
+        viewModel.loadPoint()
 
         binding.bottomNavigation.addItem(AHBottomNavigationItem("Done", R.drawable.reward_done))
         binding.bottomNavigation.addItem(AHBottomNavigationItem("Edit", R.drawable.reward_edit))
@@ -85,7 +75,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun showRewardDetail() {
-        replace(R.id.container, RewardDetailFragment.newInstance())
+        replaceFragment(R.id.container, RewardDetailFragment.newInstance())
     }
 
     override fun showRewards(rewardList: MutableList<Reward>) {
@@ -123,13 +113,17 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun onRewardEditSelected(reward: Reward) {
-        replace(R.id.container, RewardDetailFragment.newInstance(reward.id))
+        replaceFragment(R.id.container, RewardDetailFragment.newInstance(reward.id))
     }
 
     override fun onRewardDeleted(reward: Reward) {
         val message = String.format(getString(R.string.reward_delete_message), reward.name)
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         (binding.rewardListView.adapter as RewardListAdapter).remove(reward)
+    }
+
+    override fun onPointLoadFailed() {
+        Toast.makeText(context, "Point load failed", Toast.LENGTH_SHORT).show()
     }
 }
 

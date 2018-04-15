@@ -13,13 +13,52 @@
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/reward_list_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorAccent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:padding="8dp"
+                android:text="Reward List"
+                android:textColor="@android:color/black"
+                android:textSize="22sp" />
+
+            <ImageView
+                android:id="@+id/sync_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="8dp"
+                android:paddingBottom="12dp"
+                android:paddingTop="12dp"
+                android:onClick="@{() -> viewModel.loadPoint()}"
+                android:src="@drawable/sync" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|center_vertical"
+                android:paddingRight="8dp"
+                android:text="@{@string/point_with_unit(viewModel.point)}"
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/reward_list_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@id/reward_list_header"
             android:visibility="@{viewModel.isEmpty ? View.INVISIBLE : View.VISIBLE}"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
 
