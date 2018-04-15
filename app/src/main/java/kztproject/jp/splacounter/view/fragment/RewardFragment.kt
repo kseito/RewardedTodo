@@ -1,7 +1,6 @@
 package kztproject.jp.splacounter.view.fragment
 
 import android.content.Context
-import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.app.AlertDialog
@@ -162,9 +161,9 @@ class RewardListAdapter(private val rewardList: MutableList<Reward>, private val
     }
 }
 
-class ViewHolder(itemView: View?) : RecyclerView.ViewHolder(itemView) {
+class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-    private var binding: ItemRewardBinding = DataBindingUtil.bind(itemView)
+    private var binding: ItemRewardBinding = ItemRewardBinding.bind(itemView)
 
     fun getBinding(): ItemRewardBinding {
         return binding

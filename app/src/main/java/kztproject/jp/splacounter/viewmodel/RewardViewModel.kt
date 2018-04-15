@@ -60,7 +60,7 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
     fun acquireReward() {
         val selectedReward: Reward = this.selectedReward
                 ?: throw NullPointerException("acquireReward() cannot call when selectedReward is null")
-        if (point.get() >= selectedReward.consumePoint) {
+        if (point.get()!! >= selectedReward.consumePoint) {
             miniatureGardenClient.consumeCounter(PrefsWrapper.userId, selectedReward.consumePoint)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())

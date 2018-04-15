@@ -23,10 +23,10 @@ constructor(private val authRepository: AuthRepository) {
     }
 
     fun login() {
-        if (inputString.get().isEmpty()) {
+        if (inputString.get()!!.isEmpty()) {
             callback.showError(R.string.error_login_text_empty)
         } else {
-            authRepository.login(inputString.get())
+            authRepository.login(inputString.get()!!)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe { callback.showProgressDialog() }
