@@ -1,5 +1,7 @@
 package kztproject.jp.splacounter.view.fragment
 
+import android.animation.Animator
+import android.animation.AnimatorInflater
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -25,6 +27,8 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     lateinit var viewModel: RewardViewModel
 
     lateinit var binding: FragmentRewardBinding
+
+    var animation: Animator? = null
 
     companion object {
         fun newInstance(): RewardFragment {
@@ -127,11 +131,14 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun onStartLoadingPoint() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        animation = AnimatorInflater.loadAnimator(context, R.animator.rotate_animation).apply {
+            setTarget(binding.syncButton)
+            start()
+        }
     }
 
     override fun onTerminateLoadingPoint() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        animation?.let { it.cancel() }
     }
 }
 

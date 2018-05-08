@@ -60,9 +60,10 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
 
     fun loadPoint() {
         miniatureGardenClient.getCounter(PrefsWrapper.userId)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({ callback.onStartLoadingPoint() })
                 .doAfterTerminate({ callback.onTerminateLoadingPoint() })
-                .subscribeOn(Schedulers.io())
                 .subscribe({ point.set(GameCountUtils.convertGameCountFromCounter(it)) },
                         { callback.onPointLoadFailed() })
     }
