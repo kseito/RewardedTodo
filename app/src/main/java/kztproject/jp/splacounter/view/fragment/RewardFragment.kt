@@ -125,6 +125,14 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     override fun onPointLoadFailed() {
         Toast.makeText(context, "Point load failed", Toast.LENGTH_SHORT).show()
     }
+
+    override fun onStartLoadingPoint() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun onTerminateLoadingPoint() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
 }
 
 class RewardListAdapter(private val rewardList: MutableList<Reward>, private val clickListener: ClickListener)

@@ -18,10 +18,10 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
     private lateinit var callback: RewardViewModelCallback
     var rewardList: MutableList<Reward> = mutableListOf()
     var selectedReward: Reward? = null
-      set(value) {
-          hasSelectReward.set(value != null)
-          field = value
-      }
+        set(value) {
+            hasSelectReward.set(value != null)
+            field = value
+        }
     var hasSelectReward: ObservableField<Boolean> = ObservableField()
     var point: ObservableField<Int> = ObservableField()
     var isEmpty: ObservableField<Boolean> = ObservableField()
@@ -60,6 +60,8 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
 
     fun loadPoint() {
         miniatureGardenClient.getCounter(PrefsWrapper.userId)
+                .doOnSubscribe({ callback.onStartLoadingPoint() })
+                .doAfterTerminate({ callback.onTerminateLoadingPoint() })
                 .subscribeOn(Schedulers.io())
                 .subscribe({ point.set(GameCountUtils.convertGameCountFromCounter(it)) },
                         { callback.onPointLoadFailed() })
@@ -153,4 +155,8 @@ interface RewardViewModelCallback {
     fun onRewardEditSelected(reward: Reward)
 
     fun onPointLoadFailed()
+
+    fun onStartLoadingPoint()
+
+    fun onTerminateLoadingPoint()
 }
