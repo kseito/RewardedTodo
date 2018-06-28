@@ -48,17 +48,15 @@ class RewardDetailFragment : Fragment(), RewardDetailViewModelCallback {
         return binding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (arguments != null) {
-            val id = arguments.getInt(ARGS_ID)
-            viewModel.initialize(id)
-        }
+        val id = arguments?.getInt(ARGS_ID) ?: return
+        viewModel.initialize(id)
     }
 
     override fun onSaveCompleted(rewardName: String) {
         Toast.makeText(context, "Added $rewardName", Toast.LENGTH_SHORT).show()
-        fragmentManager.popBackStack()
+        fragmentManager?.popBackStack()
     }
 
     override fun onError(resourceId: Int) {

@@ -59,9 +59,7 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
     override fun loginSucceeded() {
         Toast.makeText(activity, R.string.login_succeeded, Toast.LENGTH_SHORT).show()
 
-        activity.supportFragmentManager.beginTransaction()
-                .replace(R.id.container, RewardFragment.newInstance())
-                .commit()
+        activity?.replaceFragment(R.id.container, RewardFragment.newInstance())
     }
 
     override fun loginFailed(e: Throwable) {
