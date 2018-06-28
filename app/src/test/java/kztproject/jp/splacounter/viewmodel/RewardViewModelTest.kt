@@ -187,6 +187,8 @@ class RewardViewModelTest {
         viewModel.loadPoint()
 
         assertThat(viewModel.point.get()).isEqualTo(GameCountUtils.convertGameCountFromCounter(dummyCounter))
+        verify(mockCallback).onStartLoadingPoint()
+        verify(mockCallback).onTerminateLoadingPoint()
     }
 
     @Test
@@ -194,6 +196,8 @@ class RewardViewModelTest {
         whenever(mockMiniatureGardenClient.getCounter(anyInt())).thenReturn(Single.error(SocketTimeoutException()))
         viewModel.loadPoint()
 
+        verify(mockCallback).onStartLoadingPoint()
+        verify(mockCallback).onTerminateLoadingPoint()
         verify(mockCallback).onPointLoadFailed()
     }
 }
