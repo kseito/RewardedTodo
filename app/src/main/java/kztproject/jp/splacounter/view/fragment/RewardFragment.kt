@@ -48,7 +48,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         return binding.root
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.getRewards()
         viewModel.loadPoint()
@@ -87,7 +87,8 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun showDeleteConfirmDialog(reward: Reward) {
-        AlertDialog.Builder(activity)
+        val activityContext = activity?.baseContext ?: return
+        AlertDialog.Builder(activityContext)
                 .setTitle(R.string.confirm_title)
                 .setMessage(String.format(getString(R.string.delete_confirm_message), reward.name))
                 .setPositiveButton(android.R.string.ok, { _, _ -> viewModel.deleteReward(reward, true)})
@@ -145,7 +146,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
 class RewardListAdapter(private val rewardList: MutableList<Reward>, private val clickListener: ClickListener)
     : RecyclerView.Adapter<ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int): ViewHolder? {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_reward, parent, false)
         return ViewHolder(view)
     }
