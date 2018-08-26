@@ -37,9 +37,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
+                android:onClick="@{() -> viewModel.loadPoint()}"
                 android:paddingBottom="12dp"
                 android:paddingTop="12dp"
-                android:onClick="@{() -> viewModel.loadPoint()}"
                 android:src="@drawable/sync" />
 
             <TextView
@@ -66,6 +66,7 @@
             android:id="@+id/empty_text_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/reward_list_header"
             android:layout_marginTop="16dp"
             android:gravity="center"
             android:text="@string/reward_empty_text"
