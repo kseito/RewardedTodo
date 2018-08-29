@@ -1,5 +1,6 @@
 package kztproject.jp.splacounter.viewmodel
 
+import android.content.res.Resources
 import android.databinding.BaseObservable
 import android.databinding.Bindable
 import android.support.annotation.StringRes
@@ -22,7 +23,7 @@ class RewardDetailViewModel @Inject constructor(private val rewardDao: RewardDao
 
     fun initialize(id: Int) {
         Single.create<Reward> { emitter ->
-            val reward = rewardDao.findBy(id)
+            val reward = rewardDao.findBy(id) ?: throw Resources.NotFoundException()
             emitter.onSuccess(reward)
         }
                 .observeOn(AndroidSchedulers.mainThread())
