@@ -56,6 +56,11 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
         progressDialog!!.dismiss()
     }
 
+    override fun signUpSucceeded() {
+        //TODO save user id and transition to RewardFragment
+        Toast.makeText(context, "Signed up!", Toast.LENGTH_SHORT).show()
+    }
+
     override fun loginSucceeded() {
         Toast.makeText(activity, R.string.login_succeeded, Toast.LENGTH_SHORT).show()
 

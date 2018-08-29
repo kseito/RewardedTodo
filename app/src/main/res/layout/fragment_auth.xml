@@ -38,5 +38,15 @@
             android:text="ログイン"
             fbutton:buttonColor="@color/colorAccent" />
 
+        <info.hoang8f.widget.FButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="新規登録"
+            android:layout_marginTop="@dimen/space_large"
+            android:onClick="@{() -> viewModel.signUp()}"
+            fbutton:buttonColor="@color/colorAccent"
+            />
+
     </LinearLayout>
 </layout>

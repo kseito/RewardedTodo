@@ -36,11 +36,21 @@ constructor(private val authRepository: AuthRepository) {
                     ) { e -> callback.loginFailed(e) }
         }
     }
+    fun signUp() {
+        if (inputString.get()!!.isEmpty()) {
+            callback.showError(R.string.error_login_text_empty)
+        } else {
+            //TODO call sign up API
+            callback.signUpSucceeded()
+        }
+    }
 
     interface Callback {
         fun showProgressDialog()
 
         fun dismissProgressDialog()
+
+        fun signUpSucceeded()
 
         fun loginSucceeded()
 
