@@ -16,6 +16,7 @@ android {
 
         buildConfigField "String", "MINIATURE_GARDEN_URL", "\"https://miniature-garden.herokuapp.com\""
         buildConfigField "String", "TODOIST_URL", "\"https://todoist.com\""
+        buildConfigField "String", "REWARD_LIST_SERVER_URL", "\"https://rewardlist.herokuapp.com\""
     }
 
     buildTypes {
