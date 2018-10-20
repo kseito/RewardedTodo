@@ -2,14 +2,14 @@ package kztproject.jp.splacounter
 
 import kztproject.jp.splacounter.database.model.Reward
 import kztproject.jp.splacounter.model.Counter
-import kztproject.jp.splacounter.model.User
+import kztproject.jp.splacounter.model.TodoistUser
 import kztproject.jp.splacounter.model.UserResponse
 
 object DummyCreator {
 
     fun createDummyUserResponse(): UserResponse {
         val response = UserResponse()
-        val user = User()
+        val user = TodoistUser()
         user.id = 1
         user.fullName = "test_user"
         response.user = user

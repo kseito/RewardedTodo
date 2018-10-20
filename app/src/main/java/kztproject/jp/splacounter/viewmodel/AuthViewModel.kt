@@ -40,8 +40,13 @@ constructor(private val authRepository: AuthRepository) {
         if (inputString.get()!!.isEmpty()) {
             callback.showError(R.string.error_login_text_empty)
         } else {
-            //TODO call sign up API
-            callback.signUpSucceeded()
+            authRepository.signUp(inputString.get()!!)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe { callback.showProgressDialog() }
+                    .doOnTerminate { callback.dismissProgressDialog() }
+                    .subscribe({callback.signUpSucceeded()}, {callback.showError(R.string.error_sign_up)})
+
         }
     }
 

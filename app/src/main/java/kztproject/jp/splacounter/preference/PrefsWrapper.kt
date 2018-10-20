@@ -13,9 +13,9 @@ object PrefsWrapper {
         prefs = PreferenceManager.getDefaultSharedPreferences(context)
     }
 
-    var userId: Int
-        get() = prefs.getInt(userIdKey, 0)
-        set(value) = prefs.edit().putInt(userIdKey, value).apply()
+    var userId: Long
+        get() = prefs.getLong(userIdKey, 0)
+        set(value) = prefs.edit().putLong(userIdKey, value).apply()
 
     var userName: String?
         get() = prefs.getString(userNameKey, "")

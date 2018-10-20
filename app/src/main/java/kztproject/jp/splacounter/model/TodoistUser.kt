@@ -2,7 +2,7 @@ package kztproject.jp.splacounter.model
 
 import com.google.gson.annotations.SerializedName
 
-class User {
+class TodoistUser {
 
     @SerializedName("id")
     var id: Int = 0
