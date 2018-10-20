@@ -46,4 +46,19 @@ class AuthRepositoryTest {
 
         assertThat(PrefsWrapper.userId).isEqualTo(dummyRewardUser.id)
     }
+
+    @Test
+    fun signUp() {
+        val dummyResponse: UserResponse = DummyCreator.createDummyUserResponse()
+        val dummyRewardUser: RewardUser = DummyCreator.createDummyRewardUser()
+        whenever(mockClient.getUser(anyString())).thenReturn(Single.just(dummyResponse))
+        whenever(mockRewardListClient.createUser(anyLong())).thenReturn(Single.just(dummyRewardUser))
+
+        repository.signUp("test")
+                .test()
+                .assertNoErrors()
+                .assertComplete()
+
+        assertThat(PrefsWrapper.userId).isEqualTo(dummyRewardUser.id)
+    }
 }
