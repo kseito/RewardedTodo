@@ -2,6 +2,7 @@ package kztproject.jp.splacounter
 
 import kztproject.jp.splacounter.database.model.Reward
 import kztproject.jp.splacounter.model.Counter
+import kztproject.jp.splacounter.model.RewardUser
 import kztproject.jp.splacounter.model.TodoistUser
 import kztproject.jp.splacounter.model.UserResponse
 
@@ -14,6 +15,10 @@ object DummyCreator {
         user.fullName = "test_user"
         response.user = user
         return response
+    }
+
+    fun createDummyRewardUser(): RewardUser {
+        return RewardUser(10, 123, 0)
     }
 
     fun createDummyCounter(): Counter {

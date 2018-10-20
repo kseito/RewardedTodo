@@ -10,7 +10,7 @@ interface RewardListService {
     @POST("/api/users")
     fun createUser(@Field("todoist_id") todoistId: Long): Single<RewardUser>
 
-    @GET("/api/users/{id}")
-    fun findUser(@Path("id") userId: Int): Single<RewardUser>
+    @GET("/api/users/{todoist_id}")
+    fun findUser(@Path("todoist_id") todoistId: Long): Single<RewardUser>
 
 }

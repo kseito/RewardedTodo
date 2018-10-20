@@ -13,7 +13,7 @@ class AuthRepository @Inject constructor(private val todoistClient: TodoistClien
 
     fun login(inputString: String): Completable {
         return todoistClient.getUser(inputString)
-                .flatMap { response: UserResponse -> rewardListClient.findUser(response.user.id) }
+                .flatMap { response: UserResponse -> rewardListClient.findUser(response.user.id.toLong()) }
                 .flatMapCompletable { save(it) }
     }
 

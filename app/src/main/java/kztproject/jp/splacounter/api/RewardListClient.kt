@@ -27,6 +27,6 @@ class RewardListClient(url: HttpUrl) {
 
     fun createUser(todoistId: Long) : Single<RewardUser> = service.createUser(todoistId)
 
-    fun findUser(userId: Int) : Single<RewardUser> = service.findUser(userId)
+    fun findUser(todoistId: Long) : Single<RewardUser> = service.findUser(todoistId)
 
 }
