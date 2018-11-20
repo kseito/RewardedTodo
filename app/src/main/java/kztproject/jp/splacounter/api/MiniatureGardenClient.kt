@@ -8,15 +8,11 @@ import javax.inject.Inject
 class MiniatureGardenClient @Inject
 constructor(private val service: MiniatureGardenService) {
 
-    fun getCounter(userId: Int): Single<Counter> {
-        return service.getCounter(userId)
+    fun getCounter(userId: Long): Single<Counter> {
+        return service.getCounter(userId.toInt())
     }
 
-    fun consumeCounter(userId: Int): Single<Counter> {
-        return service.consumeCounter(userId, GameCountUtils.GAME_UNIT)
-    }
-
-    fun consumeCounter(userId: Int, point: Int): Single<Counter> {
-        return service.consumeCounter(userId, GameCountUtils.GAME_UNIT * point)
+    fun consumeCounter(userId: Long, point: Int): Single<Counter> {
+        return service.consumeCounter(userId.toInt(), GameCountUtils.GAME_UNIT * point)
     }
 }

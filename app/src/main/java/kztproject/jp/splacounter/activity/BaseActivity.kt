@@ -23,7 +23,7 @@ class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_base)
-        if (PrefsWrapper.userId != 0) {
+        if (PrefsWrapper.userId != 0L) {
             replaceFragment(R.id.container, RewardFragment.newInstance())
         } else {
             replaceFragment(R.id.container, AuthFragment.newInstance())

@@ -16,6 +16,7 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyInt
+import org.mockito.ArgumentMatchers.anyLong
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import java.net.SocketTimeoutException
@@ -74,7 +75,7 @@ class RewardViewModelTest {
 
     @Test
     fun testAcquireRewardSuccess() {
-        whenever(mockMiniatureGardenClient.consumeCounter(anyInt(), anyInt()))
+        whenever(mockMiniatureGardenClient.consumeCounter(anyLong(), anyInt()))
                 .thenReturn(Single.just(DummyCreator.createDummyCounter()))
         viewModel.selectedReward = DummyCreator.createDummyReward()
         viewModel.setPoint(20)
@@ -85,7 +86,7 @@ class RewardViewModelTest {
 
     @Test
     fun testAcquireRewardFailure_PointShortage() {
-        whenever(mockMiniatureGardenClient.consumeCounter(anyInt(), anyInt()))
+        whenever(mockMiniatureGardenClient.consumeCounter(anyLong(), anyInt()))
                 .thenReturn(Single.just(DummyCreator.createDummyCounter()))
         val reward = DummyCreator.createDummyReward()
         viewModel.setPoint(1)
@@ -98,7 +99,7 @@ class RewardViewModelTest {
 
     @Test
     fun testAcquireRewardFailure_SocketTimeOut() {
-        whenever(mockMiniatureGardenClient.consumeCounter(anyInt(), anyInt()))
+        whenever(mockMiniatureGardenClient.consumeCounter(anyLong(), anyInt()))
                 .thenReturn(Single.error(SocketTimeoutException()))
         viewModel.setPoint(20)
         viewModel.selectedReward = DummyCreator.createDummyReward()
@@ -183,7 +184,7 @@ class RewardViewModelTest {
     @Test
     fun testLoadPoint_Success() {
         val dummyCounter = DummyCreator.createDummyCounter()
-        whenever(mockMiniatureGardenClient.getCounter(anyInt())).thenReturn(Single.just(dummyCounter))
+        whenever(mockMiniatureGardenClient.getCounter(anyLong())).thenReturn(Single.just(dummyCounter))
         viewModel.loadPoint()
 
         assertThat(viewModel.point.get()).isEqualTo(GameCountUtils.convertGameCountFromCounter(dummyCounter))
@@ -193,7 +194,7 @@ class RewardViewModelTest {
 
     @Test
     fun testLoadPoint_Failure() {
-        whenever(mockMiniatureGardenClient.getCounter(anyInt())).thenReturn(Single.error(SocketTimeoutException()))
+        whenever(mockMiniatureGardenClient.getCounter(anyLong())).thenReturn(Single.error(SocketTimeoutException()))
         viewModel.loadPoint()
 
         verify(mockCallback).onStartLoadingPoint()
