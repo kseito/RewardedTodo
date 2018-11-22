@@ -26,9 +26,9 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     @Inject
     lateinit var viewModel: RewardViewModel
 
-    lateinit var binding: FragmentRewardBinding
+    private lateinit var binding: FragmentRewardBinding
 
-    var animation: Animator? = null
+    private var animation: Animator? = null
 
     companion object {
         fun newInstance(): RewardFragment {
