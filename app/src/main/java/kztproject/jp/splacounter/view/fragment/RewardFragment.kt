@@ -72,6 +72,12 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
             true
         })
 
+        binding.navigationView.setNavigationItemSelectedListener { item ->
+            when(item.itemId) {
+                R.id.menu_logout -> Toast.makeText(context, "logout", Toast.LENGTH_LONG).show()
+            }
+            false
+        }
     }
 
     override fun onItemClick(reward: Reward) {
