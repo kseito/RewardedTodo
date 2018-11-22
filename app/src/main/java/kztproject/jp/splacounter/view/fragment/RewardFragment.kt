@@ -56,7 +56,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         binding.bottomNavigation.addItem(AHBottomNavigationItem("Done", R.drawable.reward_done))
         binding.bottomNavigation.addItem(AHBottomNavigationItem("Edit", R.drawable.reward_edit))
         binding.bottomNavigation.addItem(AHBottomNavigationItem("Delete", R.drawable.reward_delete))
-        binding.bottomNavigation.setOnTabSelectedListener({ position, wasSelected ->
+        binding.bottomNavigation.setOnTabSelectedListener { position, wasSelected ->
             System.out.println("$position::$wasSelected")
             when (position) {
                 0 -> {
@@ -70,7 +70,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
                 }
             }
             true
-        })
+        }
 
         binding.navigationView.setNavigationItemSelectedListener { item ->
             when(item.itemId) {
@@ -163,7 +163,7 @@ class RewardListAdapter(private val rewardList: MutableList<Reward>, private val
         val reward = rewardList[position]
         holder.getBinding().setVariable(BR.reward, reward)
         holder.getBinding().executePendingBindings()
-        holder.itemView.setOnClickListener({ clickListener.onItemClick(reward) })
+        holder.itemView.setOnClickListener { clickListener.onItemClick(reward) }
     }
 
     fun remove(deleteReward: Reward) {
