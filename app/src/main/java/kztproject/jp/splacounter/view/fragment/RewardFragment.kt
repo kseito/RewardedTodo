@@ -74,7 +74,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
         binding.navigationView.setNavigationItemSelectedListener { item ->
             when(item.itemId) {
-                R.id.menu_logout -> Toast.makeText(context, "logout", Toast.LENGTH_LONG).show()
+                R.id.menu_logout -> viewModel.logout()
             }
             false
         }
@@ -146,6 +146,10 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
     override fun onTerminateLoadingPoint() {
         animation?.let { it.cancel() }
+    }
+
+    override fun onLogout() {
+        activity?.replaceFragment(R.id.container, AuthFragment.newInstance())
     }
 }
 
