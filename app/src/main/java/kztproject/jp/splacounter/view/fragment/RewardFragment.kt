@@ -26,9 +26,9 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     @Inject
     lateinit var viewModel: RewardViewModel
 
-    lateinit var binding: FragmentRewardBinding
+    private lateinit var binding: FragmentRewardBinding
 
-    var animation: Animator? = null
+    private var animation: Animator? = null
 
     companion object {
         fun newInstance(): RewardFragment {
@@ -56,7 +56,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         binding.bottomNavigation.addItem(AHBottomNavigationItem("Done", R.drawable.reward_done))
         binding.bottomNavigation.addItem(AHBottomNavigationItem("Edit", R.drawable.reward_edit))
         binding.bottomNavigation.addItem(AHBottomNavigationItem("Delete", R.drawable.reward_delete))
-        binding.bottomNavigation.setOnTabSelectedListener({ position, wasSelected ->
+        binding.bottomNavigation.setOnTabSelectedListener { position, wasSelected ->
             System.out.println("$position::$wasSelected")
             when (position) {
                 0 -> {
@@ -70,8 +70,14 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
                 }
             }
             true
-        })
+        }
 
+        binding.navigationView.setNavigationItemSelectedListener { item ->
+            when(item.itemId) {
+                R.id.menu_logout -> viewModel.logout()
+            }
+            false
+        }
     }
 
     override fun onItemClick(reward: Reward) {
@@ -141,6 +147,10 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     override fun onTerminateLoadingPoint() {
         animation?.let { it.cancel() }
     }
+
+    override fun onLogout() {
+        activity?.replaceFragment(R.id.container, AuthFragment.newInstance())
+    }
 }
 
 class RewardListAdapter(private val rewardList: MutableList<Reward>, private val clickListener: ClickListener)
@@ -157,7 +167,7 @@ class RewardListAdapter(private val rewardList: MutableList<Reward>, private val
         val reward = rewardList[position]
         holder.getBinding().setVariable(BR.reward, reward)
         holder.getBinding().executePendingBindings()
-        holder.itemView.setOnClickListener({ clickListener.onItemClick(reward) })
+        holder.itemView.setOnClickListener { clickListener.onItemClick(reward) }
     }
 
     fun remove(deleteReward: Reward) {

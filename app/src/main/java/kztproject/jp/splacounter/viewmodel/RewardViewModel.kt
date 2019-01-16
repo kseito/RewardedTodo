@@ -133,6 +133,11 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
             callback.onRewardSelected(newPosition)
         }
     }
+
+    fun logout() {
+        PrefsWrapper.userId = 0
+        callback.onLogout()
+    }
 }
 
 interface RewardViewModelCallback {
@@ -160,4 +165,6 @@ interface RewardViewModelCallback {
     fun onStartLoadingPoint()
 
     fun onTerminateLoadingPoint()
+
+    fun onLogout()
 }
