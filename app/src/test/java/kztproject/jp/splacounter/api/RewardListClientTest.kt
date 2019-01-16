@@ -27,7 +27,7 @@ class RewardListClientTest {
                     return MockResponse().setResponseCode(400)
                 }
                 if (request.path.matches(Regex("/api/users/[0-9]+"))) {
-                    return MockResponse().setBody(readJsonFromResources("test_user.json")).setResponseCode(200)
+                    return MockResponse().setBody(readJsonFromResources("get_point.json")).setResponseCode(200)
                 }
                 if (request.method == HttpMethod.POST && request.path.matches(Regex("/api/users"))) {
                     return MockResponse().setBody(readJsonFromResources("new_user.json")).setResponseCode(200)
@@ -57,6 +57,12 @@ class RewardListClientTest {
         assertThat(actual.id).isEqualTo(1)
         assertThat(actual.todoistId).isEqualTo(505)
         assertThat(actual.point).isEqualTo(24)
+    }
+
+    @Test
+    fun getPoint() {
+        val actual = target.getPoint(1).blockingGet()
+        assertThat(actual).isEqualTo(12)
     }
 
     private fun readJsonFromResources(fileName: String): String {

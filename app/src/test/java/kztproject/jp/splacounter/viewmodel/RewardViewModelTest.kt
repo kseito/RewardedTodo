@@ -7,6 +7,7 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.api.MiniatureGardenClient
+import kztproject.jp.splacounter.api.RewardListClient
 import kztproject.jp.splacounter.database.RewardDao
 import kztproject.jp.splacounter.preference.PrefsWrapper
 import kztproject.jp.splacounter.util.GameCountUtils
@@ -26,6 +27,8 @@ class RewardViewModelTest {
 
     private val mockCallback: RewardViewModelCallback = mock()
 
+    private val mockRewardListClient: RewardListClient = mock()
+
     private val mockMiniatureGardenClient: MiniatureGardenClient = mock()
 
     private val mockDao: RewardDao = mock()
@@ -34,7 +37,7 @@ class RewardViewModelTest {
 
     @Before
     fun setup() {
-        viewModel = RewardViewModel(mockMiniatureGardenClient, mockDao)
+        viewModel = RewardViewModel(mockMiniatureGardenClient, mockRewardListClient, mockDao)
         viewModel.setCallback(mockCallback)
 
         PrefsWrapper.initialize(RuntimeEnvironment.application)

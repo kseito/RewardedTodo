@@ -29,4 +29,6 @@ class RewardListClient(url: HttpUrl) {
 
     fun findUser(todoistId: Long) : Single<RewardUser> = service.findUser(todoistId)
 
+    fun getPoint(userId: Long): Single<Int> = service.getPoint(userId).map { it.point }
+
 }
