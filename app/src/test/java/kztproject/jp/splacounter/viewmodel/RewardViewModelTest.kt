@@ -10,7 +10,6 @@ import kztproject.jp.splacounter.api.MiniatureGardenClient
 import kztproject.jp.splacounter.api.RewardListClient
 import kztproject.jp.splacounter.database.RewardDao
 import kztproject.jp.splacounter.preference.PrefsWrapper
-import kztproject.jp.splacounter.util.GameCountUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
@@ -186,18 +185,17 @@ class RewardViewModelTest {
 
     @Test
     fun testLoadPoint_Success() {
-        val dummyCounter = DummyCreator.createDummyCounter()
-        whenever(mockMiniatureGardenClient.getCounter(anyLong())).thenReturn(Single.just(dummyCounter))
+        whenever(mockRewardListClient.getPoint(anyLong())).thenReturn(Single.just(10))
         viewModel.loadPoint()
 
-        assertThat(viewModel.point.get()).isEqualTo(GameCountUtils.convertGameCountFromCounter(dummyCounter))
+        assertThat(viewModel.point.get()).isEqualTo(10)
         verify(mockCallback).onStartLoadingPoint()
         verify(mockCallback).onTerminateLoadingPoint()
     }
 
     @Test
     fun testLoadPoint_Failure() {
-        whenever(mockMiniatureGardenClient.getCounter(anyLong())).thenReturn(Single.error(SocketTimeoutException()))
+        whenever(mockRewardListClient.getPoint(anyLong())).thenReturn(Single.error(SocketTimeoutException()))
         viewModel.loadPoint()
 
         verify(mockCallback).onStartLoadingPoint()

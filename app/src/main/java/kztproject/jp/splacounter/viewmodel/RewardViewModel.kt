@@ -6,13 +6,14 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.api.MiniatureGardenClient
+import kztproject.jp.splacounter.api.RewardListClient
 import kztproject.jp.splacounter.database.RewardDao
 import kztproject.jp.splacounter.database.model.Reward
 import kztproject.jp.splacounter.preference.PrefsWrapper
-import kztproject.jp.splacounter.util.GameCountUtils
 import javax.inject.Inject
 
 class RewardViewModel @Inject constructor(private val miniatureGardenClient: MiniatureGardenClient,
+                                          private val rewardListClient: RewardListClient,
                                           private val rewardDao: RewardDao) {
 
     private lateinit var callback: RewardViewModelCallback
@@ -59,12 +60,12 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
     }
 
     fun loadPoint() {
-        miniatureGardenClient.getCounter(PrefsWrapper.userId)
+        rewardListClient.getPoint(PrefsWrapper.userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({ callback.onStartLoadingPoint() })
                 .doAfterTerminate({ callback.onTerminateLoadingPoint() })
-                .subscribe({ point.set(GameCountUtils.convertGameCountFromCounter(it)) },
+                .subscribe({ point.set(it) },
                         { callback.onPointLoadFailed() })
     }
 
