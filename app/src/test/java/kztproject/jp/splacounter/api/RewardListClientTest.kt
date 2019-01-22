@@ -29,8 +29,11 @@ class RewardListClientTest {
                 if (request.path.matches(Regex("/api/users/[0-9]+"))) {
                     return MockResponse().setBody(readJsonFromResources("get_point.json")).setResponseCode(200)
                 }
-                if (request.method == HttpMethod.POST && request.path.matches(Regex("/api/users"))) {
+                if (request.method == HttpMethod.POST && request.path.matches(Regex("/api/auth/sign_up"))) {
                     return MockResponse().setBody(readJsonFromResources("new_user.json")).setResponseCode(200)
+                }
+                if (request.path.matches(Regex("/api/auth/login.*"))) {
+                    return MockResponse().setBody(readJsonFromResources("test_user.json")).setResponseCode(200)
                 }
                 return MockResponse().setResponseCode(404)
             }
