@@ -26,8 +26,11 @@ class RewardListClientTest {
                 if (request == null || request.path == null) {
                     return MockResponse().setResponseCode(400)
                 }
-                if (request.path.matches(Regex("/api/users/[0-9]+"))) {
+                if (request.method == HttpMethod.GET && request.path.matches(Regex("/api/users/[0-9]+"))) {
                     return MockResponse().setBody(readJsonFromResources("get_point.json")).setResponseCode(200)
+                }
+                if (request.method == HttpMethod.PUT && request.path.matches(Regex("/api/users/[0-9]+"))) {
+                    return MockResponse().setBody(readJsonFromResources("test_user.json")).setResponseCode(200)
                 }
                 if (request.method == HttpMethod.POST && request.path.matches(Regex("/api/auth/sign_up"))) {
                     return MockResponse().setBody(readJsonFromResources("new_user.json")).setResponseCode(200)
@@ -66,6 +69,14 @@ class RewardListClientTest {
     fun getPoint() {
         val actual = target.getPoint(1).blockingGet()
         assertThat(actual).isEqualTo(12)
+    }
+
+    @Test
+    fun updatePoint() {
+        val actual = target.consumePoint(1, 1).blockingGet()
+        assertThat(actual.id).isEqualTo(1)
+        assertThat(actual.todoistId).isEqualTo(505)
+        assertThat(actual.point).isEqualTo(24)
     }
 
     private fun readJsonFromResources(fileName: String): String {

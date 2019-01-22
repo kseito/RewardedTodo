@@ -17,4 +17,9 @@ interface RewardListService {
     @GET("/api/users/{user_id}")
     fun getPoint(@Path("user_id") userId: Long): Single<RewardPoint>
 
+    //TODO change return value to RewardPoint
+    @FormUrlEncoded
+    @PUT("/api/users/{user_id}")
+    fun updatePoint(@Path("user_id") userId: Long,
+                    @Field("additional_point") additionalPoint: Int): Single<RewardUser>
 }

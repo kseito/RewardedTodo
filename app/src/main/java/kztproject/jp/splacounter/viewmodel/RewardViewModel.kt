@@ -5,15 +5,13 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kztproject.jp.splacounter.api.MiniatureGardenClient
 import kztproject.jp.splacounter.api.RewardListClient
 import kztproject.jp.splacounter.database.RewardDao
 import kztproject.jp.splacounter.database.model.Reward
 import kztproject.jp.splacounter.preference.PrefsWrapper
 import javax.inject.Inject
 
-class RewardViewModel @Inject constructor(private val miniatureGardenClient: MiniatureGardenClient,
-                                          private val rewardListClient: RewardListClient,
+class RewardViewModel @Inject constructor(private val rewardListClient: RewardListClient,
                                           private val rewardDao: RewardDao) {
 
     private lateinit var callback: RewardViewModelCallback
@@ -73,10 +71,10 @@ class RewardViewModel @Inject constructor(private val miniatureGardenClient: Min
         val selectedReward: Reward = this.selectedReward
                 ?: throw NullPointerException("acquireReward() cannot call when selectedReward is null")
         if (point.get()!! >= selectedReward.consumePoint) {
-            miniatureGardenClient.consumeCounter(PrefsWrapper.userId, selectedReward.consumePoint)
+            rewardListClient.consumePoint(PrefsWrapper.userId, selectedReward.consumePoint)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ counter -> callback.successAcquireReward(selectedReward, counter.count) },
+                    .subscribe({ user -> callback.successAcquireReward(selectedReward, user.point) },
                             { callback.showError() })
         } else {
             callback.showError()
