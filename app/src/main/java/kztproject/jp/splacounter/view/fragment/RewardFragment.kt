@@ -73,7 +73,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         }
 
         binding.navigationView.setNavigationItemSelectedListener { item ->
-            when(item.itemId) {
+            when (item.itemId) {
                 R.id.menu_logout -> viewModel.logout()
             }
             false
@@ -97,7 +97,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         AlertDialog.Builder(activityContext)
                 .setTitle(R.string.confirm_title)
                 .setMessage(String.format(getString(R.string.delete_confirm_message), reward.name))
-                .setPositiveButton(android.R.string.ok, { _, _ -> viewModel.deleteReward(reward, true)})
+                .setPositiveButton(android.R.string.ok, { _, _ -> viewModel.deleteReward(reward, true) })
                 .setNegativeButton(android.R.string.cancel, { _, _ -> run {} })
                 .show()
     }
@@ -116,11 +116,11 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun onRewardSelected(position: Int) {
-        binding.rewardListView.adapter.notifyItemChanged(position)
+        binding.rewardListView.adapter?.notifyItemChanged(position)
     }
 
     override fun onRewardDeSelected(position: Int) {
-        binding.rewardListView.adapter.notifyItemChanged(position)
+        binding.rewardListView.adapter?.notifyItemChanged(position)
     }
 
     override fun onRewardEditSelected(reward: Reward) {

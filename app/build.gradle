@@ -3,8 +3,8 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    compileSdkVersion 28
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
         applicationId "kztproject.jp.splacounter"
@@ -49,8 +49,8 @@ android {
 }
 
 ext {
-    support_library_version = '27.1.1'
-    dagger_version = '2.14.1'
+    support_library_version = '28.0.0'
+    dagger_version = '2.20'
     room_version = '1.1.1'
 }
 
@@ -73,7 +73,7 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
-    kapt 'com.android.databinding:compiler:3.1.4'
+    kapt 'androidx.databinding:databinding-compiler:3.3.0'
     implementation 'com.squareup.retrofit2:retrofit:2.4.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
