@@ -6,10 +6,9 @@ import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.DummyCreator
-import kztproject.jp.splacounter.api.MiniatureGardenClient
+import kztproject.jp.splacounter.api.RewardListClient
 import kztproject.jp.splacounter.database.RewardDao
 import kztproject.jp.splacounter.preference.PrefsWrapper
-import kztproject.jp.splacounter.util.GameCountUtils
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
@@ -26,7 +25,7 @@ class RewardViewModelTest {
 
     private val mockCallback: RewardViewModelCallback = mock()
 
-    private val mockMiniatureGardenClient: MiniatureGardenClient = mock()
+    private val mockRewardListClient: RewardListClient = mock()
 
     private val mockDao: RewardDao = mock()
 
@@ -34,7 +33,7 @@ class RewardViewModelTest {
 
     @Before
     fun setup() {
-        viewModel = RewardViewModel(mockMiniatureGardenClient, mockDao)
+        viewModel = RewardViewModel(mockRewardListClient, mockDao)
         viewModel.setCallback(mockCallback)
 
         PrefsWrapper.initialize(RuntimeEnvironment.application)
@@ -75,8 +74,8 @@ class RewardViewModelTest {
 
     @Test
     fun testAcquireRewardSuccess() {
-        whenever(mockMiniatureGardenClient.consumeCounter(anyLong(), anyInt()))
-                .thenReturn(Single.just(DummyCreator.createDummyCounter()))
+        whenever(mockRewardListClient.consumePoint(anyLong(), anyInt()))
+                .thenReturn(Single.just(DummyCreator.createDummyRewardUser()))
         viewModel.selectedReward = DummyCreator.createDummyReward()
         viewModel.setPoint(20)
         viewModel.acquireReward()
@@ -86,8 +85,8 @@ class RewardViewModelTest {
 
     @Test
     fun testAcquireRewardFailure_PointShortage() {
-        whenever(mockMiniatureGardenClient.consumeCounter(anyLong(), anyInt()))
-                .thenReturn(Single.just(DummyCreator.createDummyCounter()))
+        whenever(mockRewardListClient.consumePoint(anyLong(), anyInt()))
+                .thenReturn(Single.just(DummyCreator.createDummyRewardUser()))
         val reward = DummyCreator.createDummyReward()
         viewModel.setPoint(1)
         viewModel.selectedReward = reward
@@ -99,7 +98,7 @@ class RewardViewModelTest {
 
     @Test
     fun testAcquireRewardFailure_SocketTimeOut() {
-        whenever(mockMiniatureGardenClient.consumeCounter(anyLong(), anyInt()))
+        whenever(mockRewardListClient.consumePoint(anyLong(), anyInt()))
                 .thenReturn(Single.error(SocketTimeoutException()))
         viewModel.setPoint(20)
         viewModel.selectedReward = DummyCreator.createDummyReward()
@@ -183,18 +182,17 @@ class RewardViewModelTest {
 
     @Test
     fun testLoadPoint_Success() {
-        val dummyCounter = DummyCreator.createDummyCounter()
-        whenever(mockMiniatureGardenClient.getCounter(anyLong())).thenReturn(Single.just(dummyCounter))
+        whenever(mockRewardListClient.getPoint(anyLong())).thenReturn(Single.just(10))
         viewModel.loadPoint()
 
-        assertThat(viewModel.point.get()).isEqualTo(GameCountUtils.convertGameCountFromCounter(dummyCounter))
+        assertThat(viewModel.point.get()).isEqualTo(10)
         verify(mockCallback).onStartLoadingPoint()
         verify(mockCallback).onTerminateLoadingPoint()
     }
 
     @Test
     fun testLoadPoint_Failure() {
-        whenever(mockMiniatureGardenClient.getCounter(anyLong())).thenReturn(Single.error(SocketTimeoutException()))
+        whenever(mockRewardListClient.getPoint(anyLong())).thenReturn(Single.error(SocketTimeoutException()))
         viewModel.loadPoint()
 
         verify(mockCallback).onStartLoadingPoint()

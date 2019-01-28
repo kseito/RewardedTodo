@@ -25,8 +25,13 @@ class RewardListClient(url: HttpUrl) {
                 .create(RewardListService::class.java)
     }
 
-    fun createUser(todoistId: Long) : Single<RewardUser> = service.createUser(todoistId)
+    fun createUser(todoistId: Long): Single<RewardUser> = service.createUser(todoistId)
 
-    fun findUser(todoistId: Long) : Single<RewardUser> = service.findUser(todoistId)
+    fun findUser(todoistId: Long): Single<RewardUser> = service.findUser(todoistId)
+
+    fun getPoint(userId: Long): Single<Int> = service.getPoint(userId).map { it.point }
+
+    fun consumePoint(userId: Long, additionalPoint: Int): Single<RewardUser> =
+            service.updatePoint(userId, -additionalPoint)
 
 }

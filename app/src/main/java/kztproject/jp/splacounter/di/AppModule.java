@@ -8,7 +8,6 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import kztproject.jp.splacounter.BuildConfig;
-import kztproject.jp.splacounter.api.MiniatureGardenService;
 import kztproject.jp.splacounter.api.RewardListClient;
 import kztproject.jp.splacounter.api.TodoistService;
 import kztproject.jp.splacounter.database.AppDatabase;
@@ -21,16 +20,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
 class AppModule {
-
-    @Provides
-    MiniatureGardenService provideMiniatureGardenService() {
-        return new Retrofit.Builder()
-                .baseUrl(BuildConfig.MINIATURE_GARDEN_URL)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .build()
-                .create(MiniatureGardenService.class);
-    }
 
     @Provides
     @Singleton
