@@ -93,7 +93,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun showDeleteConfirmDialog(reward: Reward) {
-        val activityContext = activity?.baseContext ?: return
+        val activityContext = activity as Context? ?: return
         AlertDialog.Builder(activityContext)
                 .setTitle(R.string.confirm_title)
                 .setMessage(String.format(getString(R.string.delete_confirm_message), reward.name))
