@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.view.fragment
+package kztproject.jp.splacounter.reward.detail.ui
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -8,8 +8,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.databinding.FragmentRewardDetailBinding
-import kztproject.jp.splacounter.viewmodel.RewardDetailViewModel
-import kztproject.jp.splacounter.viewmodel.RewardDetailViewModelCallback
 import javax.inject.Inject
 
 class RewardDetailFragment : Fragment(), RewardDetailViewModelCallback {

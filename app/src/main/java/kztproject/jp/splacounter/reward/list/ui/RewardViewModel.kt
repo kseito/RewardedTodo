@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.viewmodel
+package kztproject.jp.splacounter.reward.list.ui
 
 import android.databinding.ObservableField
 import io.reactivex.Completable

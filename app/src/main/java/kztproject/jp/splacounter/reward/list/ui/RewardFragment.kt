@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.view.fragment
+package kztproject.jp.splacounter.reward.list.ui
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
@@ -15,11 +15,12 @@ import com.android.databinding.library.baseAdapters.BR
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.R
+import kztproject.jp.splacounter.auth.ui.AuthFragment
 import kztproject.jp.splacounter.database.model.Reward
 import kztproject.jp.splacounter.databinding.FragmentRewardBinding
 import kztproject.jp.splacounter.databinding.ItemRewardBinding
-import kztproject.jp.splacounter.viewmodel.RewardViewModel
-import kztproject.jp.splacounter.viewmodel.RewardViewModelCallback
+import kztproject.jp.splacounter.reward.detail.ui.RewardDetailFragment
+import kztproject.jp.splacounter.ui_common.replaceFragment
 import javax.inject.Inject
 
 class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {

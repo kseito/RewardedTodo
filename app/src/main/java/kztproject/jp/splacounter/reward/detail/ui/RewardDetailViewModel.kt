@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.viewmodel
+package kztproject.jp.splacounter.reward.detail.ui
 
 import android.content.res.Resources
 import android.databinding.BaseObservable

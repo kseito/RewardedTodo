@@ -2,11 +2,11 @@
 <layout>
 
     <data>
-        <import type="kztproject.jp.splacounter.viewmodel.BindingUtils"/>
+        <import type="kztproject.jp.splacounter.ui_common.BindingUtils"/>
 
         <variable
             name="viewModel"
-            type="kztproject.jp.splacounter.viewmodel.RewardDetailViewModel" />
+            type="kztproject.jp.splacounter.reward.detail.ui.RewardDetailViewModel" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

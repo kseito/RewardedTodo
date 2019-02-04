@@ -2,9 +2,9 @@ package kztproject.jp.splacounter.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import kztproject.jp.splacounter.view.fragment.AuthFragment
-import kztproject.jp.splacounter.view.fragment.RewardDetailFragment
-import kztproject.jp.splacounter.view.fragment.RewardFragment
+import kztproject.jp.splacounter.auth.ui.AuthFragment
+import kztproject.jp.splacounter.reward.detail.ui.RewardDetailFragment
+import kztproject.jp.splacounter.reward.list.ui.RewardFragment
 
 @Module
 internal abstract class FragmentBuilderModule {

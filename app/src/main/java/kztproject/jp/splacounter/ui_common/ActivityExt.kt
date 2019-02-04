@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.view.fragment
+package kztproject.jp.splacounter.ui_common
 
 import android.support.annotation.IdRes
 import android.support.v4.app.Fragment

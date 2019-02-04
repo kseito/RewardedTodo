@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.viewmodel
+package kztproject.jp.splacounter.auth.ui
 
 import android.databinding.ObservableField
 import android.support.annotation.StringRes

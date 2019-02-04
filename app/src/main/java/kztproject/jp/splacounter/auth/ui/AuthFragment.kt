@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.view.fragment
+package kztproject.jp.splacounter.auth.ui
 
 import android.app.ProgressDialog
 import android.os.Bundle
@@ -11,7 +11,8 @@ import android.widget.Toast
 import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.databinding.FragmentAuthBinding
-import kztproject.jp.splacounter.viewmodel.AuthViewModel
+import kztproject.jp.splacounter.reward.list.ui.RewardFragment
+import kztproject.jp.splacounter.ui_common.replaceFragment
 import javax.inject.Inject
 
 class AuthFragment : Fragment(), AuthViewModel.Callback {

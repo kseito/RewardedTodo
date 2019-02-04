@@ -9,6 +9,8 @@ import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.api.RewardListClient
 import kztproject.jp.splacounter.database.RewardDao
 import kztproject.jp.splacounter.preference.PrefsWrapper
+import kztproject.jp.splacounter.reward.list.ui.RewardViewModel
+import kztproject.jp.splacounter.reward.list.ui.RewardViewModelCallback
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before

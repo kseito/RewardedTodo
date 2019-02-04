@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.viewmodel
+package kztproject.jp.splacounter.ui_common
 
 import android.databinding.InverseMethod
 
