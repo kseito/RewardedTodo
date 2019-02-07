@@ -5,7 +5,7 @@ import android.support.annotation.StringRes
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.R
-import kztproject.jp.splacounter.repository.AuthRepository
+import kztproject.jp.splacounter.auth.repository.AuthRepository
 import javax.inject.Inject
 
 class AuthViewModel @Inject

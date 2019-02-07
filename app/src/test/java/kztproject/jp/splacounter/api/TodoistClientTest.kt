@@ -3,6 +3,8 @@ package kztproject.jp.splacounter.api
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
 import kztproject.jp.splacounter.DummyCreator
+import kztproject.jp.splacounter.auth.api.TodoistClient
+import kztproject.jp.splacounter.auth.api.TodoistService
 import org.junit.Before
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyString

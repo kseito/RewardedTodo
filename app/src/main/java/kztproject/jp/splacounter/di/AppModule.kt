@@ -6,7 +6,7 @@ import dagger.Module
 import dagger.Provides
 import kztproject.jp.splacounter.BuildConfig
 import kztproject.jp.splacounter.api.RewardListClient
-import kztproject.jp.splacounter.api.TodoistService
+import kztproject.jp.splacounter.auth.api.TodoistService
 import kztproject.jp.splacounter.database.AppDatabase
 import kztproject.jp.splacounter.database.RewardDao
 import kztproject.jp.splacounter.exception.InvalidUrlException

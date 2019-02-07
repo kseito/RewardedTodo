@@ -10,7 +10,7 @@ import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.BuildConfig
 import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.auth.ui.AuthViewModel
-import kztproject.jp.splacounter.repository.AuthRepository
+import kztproject.jp.splacounter.auth.repository.AuthRepository
 import org.junit.After
 import org.junit.Before
 import org.junit.Test

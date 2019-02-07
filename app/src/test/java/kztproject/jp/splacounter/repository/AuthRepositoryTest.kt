@@ -5,7 +5,8 @@ import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
 import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.api.RewardListClient
-import kztproject.jp.splacounter.api.TodoistClient
+import kztproject.jp.splacounter.auth.api.TodoistClient
+import kztproject.jp.splacounter.auth.repository.AuthRepository
 import kztproject.jp.splacounter.model.RewardUser
 import kztproject.jp.splacounter.model.UserResponse
 import kztproject.jp.splacounter.preference.PrefsWrapper
