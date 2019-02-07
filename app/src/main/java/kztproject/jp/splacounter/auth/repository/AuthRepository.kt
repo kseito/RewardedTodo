@@ -8,16 +8,17 @@ import kztproject.jp.splacounter.model.UserResponse
 import kztproject.jp.splacounter.preference.PrefsWrapper
 import javax.inject.Inject
 
-class AuthRepository @Inject constructor(private val todoistService: TodoistService,
-                                         private val rewardListClient: RewardListLoginService) {
+class AuthRepository @Inject
+constructor(private val todoistService: TodoistService,
+            private val rewardListClient: RewardListLoginService) : IAuthRepository {
 
-    fun login(inputString: String): Completable {
+    override fun login(inputString: String): Completable {
         return todoistService.getUser(inputString, "*", "[\"user\"]")
                 .flatMap { response: UserResponse -> rewardListClient.findUser(response.user.id.toLong()) }
                 .flatMapCompletable { save(it) }
     }
 
-    fun signUp(todoistToken: String): Completable {
+    override fun signUp(todoistToken: String): Completable {
         return todoistService.getUser(todoistToken, "*", "[\"user\"]")
                 .flatMap { response -> rewardListClient.createUser(response.user.id.toLong()) }
                 .flatMapCompletable { save(it) }

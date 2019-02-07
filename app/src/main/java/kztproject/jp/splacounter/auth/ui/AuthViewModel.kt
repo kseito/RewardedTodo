@@ -5,11 +5,11 @@ import android.support.annotation.StringRes
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.R
-import kztproject.jp.splacounter.auth.repository.AuthRepository
+import kztproject.jp.splacounter.auth.repository.IAuthRepository
 import javax.inject.Inject
 
 class AuthViewModel @Inject
-constructor(private val authRepository: AuthRepository) {
+constructor(private val authRepository: IAuthRepository) {
     private lateinit var callback: Callback
 
     var inputString = ObservableField<String>()

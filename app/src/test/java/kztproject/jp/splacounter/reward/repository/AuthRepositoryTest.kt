@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.repository
+package kztproject.jp.splacounter.reward.repository
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
