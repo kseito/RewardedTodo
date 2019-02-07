@@ -6,6 +6,7 @@ import dagger.Module
 import dagger.Provides
 import kztproject.jp.splacounter.BuildConfig
 import kztproject.jp.splacounter.api.RewardListClient
+import kztproject.jp.splacounter.auth.api.RewardListLoginService
 import kztproject.jp.splacounter.auth.api.TodoistService
 import kztproject.jp.splacounter.database.AppDatabase
 import kztproject.jp.splacounter.database.RewardDao
@@ -35,6 +36,17 @@ internal class AppModule {
     fun provideRewardListClient(): RewardListClient {
         val url = HttpUrl.parse(BuildConfig.REWARD_LIST_SERVER_URL)
         return url?.let { RewardListClient(it) } ?: throw InvalidUrlException()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRewardListLoginService(): RewardListLoginService {
+        return Retrofit.Builder()
+                .baseUrl(BuildConfig.REWARD_LIST_SERVER_URL)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(RewardListLoginService::class.java)
     }
 
     @Provides

@@ -1,7 +1,7 @@
 package kztproject.jp.splacounter.auth.repository
 
 import io.reactivex.Completable
-import kztproject.jp.splacounter.api.RewardListClient
+import kztproject.jp.splacounter.auth.api.RewardListLoginService
 import kztproject.jp.splacounter.auth.api.TodoistService
 import kztproject.jp.splacounter.model.RewardUser
 import kztproject.jp.splacounter.model.UserResponse
@@ -9,7 +9,7 @@ import kztproject.jp.splacounter.preference.PrefsWrapper
 import javax.inject.Inject
 
 class AuthRepository @Inject constructor(private val todoistService: TodoistService,
-                                         private val rewardListClient: RewardListClient) {
+                                         private val rewardListClient: RewardListLoginService) {
 
     fun login(inputString: String): Completable {
         return todoistService.getUser(inputString, "*", "[\"user\"]")

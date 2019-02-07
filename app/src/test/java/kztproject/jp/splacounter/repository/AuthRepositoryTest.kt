@@ -4,7 +4,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
 import kztproject.jp.splacounter.DummyCreator
-import kztproject.jp.splacounter.api.RewardListClient
+import kztproject.jp.splacounter.auth.api.RewardListLoginService
 import kztproject.jp.splacounter.auth.api.TodoistService
 import kztproject.jp.splacounter.auth.repository.AuthRepository
 import kztproject.jp.splacounter.model.RewardUser
@@ -23,14 +23,14 @@ import org.robolectric.RuntimeEnvironment
 class AuthRepositoryTest {
 
     private val mockClient = mock<TodoistService>()
-    private val mockRewardListClient = mock<RewardListClient>()
+    private val mockRewardListLoginService = mock<RewardListLoginService>()
 
     private lateinit var repository: AuthRepository
 
     @Before
     fun setup() {
         PrefsWrapper.initialize(RuntimeEnvironment.application)
-        repository = AuthRepository(mockClient, mockRewardListClient)
+        repository = AuthRepository(mockClient, mockRewardListLoginService)
     }
 
     @Test
@@ -38,7 +38,7 @@ class AuthRepositoryTest {
         val dummyResponse: UserResponse = DummyCreator.createDummyUserResponse()
         val dummyRewardUser: RewardUser = DummyCreator.createDummyRewardUser()
         whenever(mockClient.getUser(anyString(), anyString(), anyString())).thenReturn(Single.just(dummyResponse))
-        whenever(mockRewardListClient.findUser(anyLong())).thenReturn(Single.just(dummyRewardUser))
+        whenever(mockRewardListLoginService.findUser(anyLong())).thenReturn(Single.just(dummyRewardUser))
 
         repository.login("test")
                 .test()
@@ -53,7 +53,7 @@ class AuthRepositoryTest {
         val dummyResponse: UserResponse = DummyCreator.createDummyUserResponse()
         val dummyRewardUser: RewardUser = DummyCreator.createDummyRewardUser()
         whenever(mockClient.getUser(anyString(), anyString(), anyString())).thenReturn(Single.just(dummyResponse))
-        whenever(mockRewardListClient.createUser(anyLong())).thenReturn(Single.just(dummyRewardUser))
+        whenever(mockRewardListLoginService.createUser(anyLong())).thenReturn(Single.just(dummyRewardUser))
 
         repository.signUp("test")
                 .test()
