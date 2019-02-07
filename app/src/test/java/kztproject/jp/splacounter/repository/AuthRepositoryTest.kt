@@ -5,7 +5,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
 import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.api.RewardListClient
-import kztproject.jp.splacounter.auth.api.TodoistClient
+import kztproject.jp.splacounter.auth.api.TodoistService
 import kztproject.jp.splacounter.auth.repository.AuthRepository
 import kztproject.jp.splacounter.model.RewardUser
 import kztproject.jp.splacounter.model.UserResponse
@@ -22,7 +22,7 @@ import org.robolectric.RuntimeEnvironment
 @RunWith(RobolectricTestRunner::class)
 class AuthRepositoryTest {
 
-    private val mockClient = mock<TodoistClient>()
+    private val mockClient = mock<TodoistService>()
     private val mockRewardListClient = mock<RewardListClient>()
 
     private lateinit var repository: AuthRepository
@@ -37,7 +37,7 @@ class AuthRepositoryTest {
     fun login() {
         val dummyResponse: UserResponse = DummyCreator.createDummyUserResponse()
         val dummyRewardUser: RewardUser = DummyCreator.createDummyRewardUser()
-        whenever(mockClient.getUser(anyString())).thenReturn(Single.just(dummyResponse))
+        whenever(mockClient.getUser(anyString(), anyString(), anyString())).thenReturn(Single.just(dummyResponse))
         whenever(mockRewardListClient.findUser(anyLong())).thenReturn(Single.just(dummyRewardUser))
 
         repository.login("test")
@@ -52,7 +52,7 @@ class AuthRepositoryTest {
     fun signUp() {
         val dummyResponse: UserResponse = DummyCreator.createDummyUserResponse()
         val dummyRewardUser: RewardUser = DummyCreator.createDummyRewardUser()
-        whenever(mockClient.getUser(anyString())).thenReturn(Single.just(dummyResponse))
+        whenever(mockClient.getUser(anyString(), anyString(), anyString())).thenReturn(Single.just(dummyResponse))
         whenever(mockRewardListClient.createUser(anyLong())).thenReturn(Single.just(dummyRewardUser))
 
         repository.signUp("test")
