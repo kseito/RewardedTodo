@@ -7,12 +7,9 @@ import dagger.Provides
 import kztproject.jp.splacounter.BuildConfig
 import kztproject.jp.splacounter.auth.api.RewardListLoginService
 import kztproject.jp.splacounter.auth.api.TodoistService
-import kztproject.jp.splacounter.exception.InvalidUrlException
-import kztproject.jp.splacounter.reward.api.RewardListClient
 import kztproject.jp.splacounter.reward.api.RewardListService
 import kztproject.jp.splacounter.reward.database.AppDatabase
 import kztproject.jp.splacounter.reward.database.RewardDao
-import okhttp3.HttpUrl
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -30,13 +27,6 @@ internal class AppModule {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(TodoistService::class.java)
-    }
-
-    @Provides
-    @Singleton
-    fun provideRewardListClient(): RewardListClient {
-        val url = HttpUrl.parse(BuildConfig.REWARD_LIST_SERVER_URL)
-        return url?.let { RewardListClient(it) } ?: throw InvalidUrlException()
     }
 
     @Provides

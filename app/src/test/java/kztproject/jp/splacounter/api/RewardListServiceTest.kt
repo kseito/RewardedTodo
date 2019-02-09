@@ -1,6 +1,6 @@
 package kztproject.jp.splacounter.api
 
-import kztproject.jp.splacounter.reward.api.RewardListClient
+import kztproject.jp.splacounter.reward.api.RewardListService
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -10,15 +10,23 @@ import org.assertj.core.api.Assertions.fail
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.BufferedReader
 import java.io.IOException
 import java.io.InputStreamReader
 
 
-class RewardListClientTest {
+class RewardListServiceTest {
 
     private val mockWebServer: MockWebServer = MockWebServer()
-    private val target = RewardListClient(mockWebServer.url(""))
+    private val target = Retrofit.Builder()
+            .baseUrl(mockWebServer.url(""))
+            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            .create(RewardListService::class.java)
 
     @Before
     fun setup() {
@@ -47,12 +55,12 @@ class RewardListClientTest {
     @Test
     fun getPoint() {
         val actual = target.getPoint(1).blockingGet()
-        assertThat(actual).isEqualTo(12)
+        assertThat(actual.point).isEqualTo(12)
     }
 
     @Test
     fun updatePoint() {
-        val actual = target.consumePoint(1, 1).blockingGet()
+        val actual = target.updatePoint(1, 1).blockingGet()
         assertThat(actual.id).isEqualTo(1)
         assertThat(actual.todoistId).isEqualTo(505)
         assertThat(actual.point).isEqualTo(24)
