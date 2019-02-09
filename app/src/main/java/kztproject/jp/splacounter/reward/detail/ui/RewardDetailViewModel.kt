@@ -10,11 +10,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.R
-import kztproject.jp.splacounter.reward.database.RewardDao
 import kztproject.jp.splacounter.reward.database.model.Reward
+import kztproject.jp.splacounter.reward.repository.IRewardRepository
 import javax.inject.Inject
 
-class RewardDetailViewModel @Inject constructor(private val rewardDao: RewardDao) : BaseObservable() {
+class RewardDetailViewModel @Inject constructor(private val rewardRepository: IRewardRepository) : BaseObservable() {
 
     @Bindable
     var reward: Reward = Reward()
@@ -23,13 +23,13 @@ class RewardDetailViewModel @Inject constructor(private val rewardDao: RewardDao
 
     fun initialize(id: Int) {
         Single.create<Reward> { emitter ->
-            val reward = rewardDao.findBy(id) ?: throw Resources.NotFoundException()
+            val reward = rewardRepository.findBy(id) ?: throw Resources.NotFoundException()
             emitter.onSuccess(reward)
         }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe({
-                    reward -> this.reward = reward
+                .subscribe({ reward ->
+                    this.reward = reward
                     notifyPropertyChanged(BR.reward)
                 })
     }
@@ -49,7 +49,7 @@ class RewardDetailViewModel @Inject constructor(private val rewardDao: RewardDao
         }
 
         Single.create<Reward> {
-            rewardDao.insertReward(reward)
+            rewardRepository.createOrUpdate(reward)
             it.onSuccess(reward)
         }
                 .observeOn(AndroidSchedulers.mainThread())

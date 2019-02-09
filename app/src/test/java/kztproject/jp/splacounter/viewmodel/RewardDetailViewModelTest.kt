@@ -8,9 +8,9 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.R
-import kztproject.jp.splacounter.reward.database.RewardDao
 import kztproject.jp.splacounter.reward.detail.ui.RewardDetailViewModel
 import kztproject.jp.splacounter.reward.detail.ui.RewardDetailViewModelCallback
+import kztproject.jp.splacounter.reward.repository.IRewardRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
@@ -23,9 +23,9 @@ class RewardDetailViewModelTest{
 
     private val mockCallback: RewardDetailViewModelCallback = mock()
 
-    private val mockDao: RewardDao = mock()
+    private val mockRewardRepository: IRewardRepository = mock()
 
-    private val viewModel: RewardDetailViewModel = RewardDetailViewModel(mockDao)
+    private val viewModel: RewardDetailViewModel = RewardDetailViewModel(mockRewardRepository)
 
     @Before
     fun setup() {
@@ -69,7 +69,7 @@ class RewardDetailViewModelTest{
     @Test
     fun testInitialize() {
         val reward = DummyCreator.createDummyReward()
-        whenever(mockDao.findBy(anyInt())).thenReturn(reward)
+        whenever(mockRewardRepository.findBy(anyInt())).thenReturn(reward)
         viewModel.initialize(1)
 
         assertThat(viewModel.reward).isEqualTo(reward)
