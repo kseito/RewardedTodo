@@ -1,7 +1,7 @@
 package kztproject.jp.splacounter.auth.api
 
 import io.reactivex.Single
-import kztproject.jp.splacounter.model.RewardUser
+import kztproject.jp.splacounter.auth.api.model.RewardUser
 import retrofit2.http.*
 
 interface RewardListLoginService {

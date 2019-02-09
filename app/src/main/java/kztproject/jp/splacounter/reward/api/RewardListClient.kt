@@ -1,7 +1,7 @@
 package kztproject.jp.splacounter.reward.api
 
 import io.reactivex.Single
-import kztproject.jp.splacounter.model.RewardUser
+import kztproject.jp.splacounter.auth.api.model.RewardUser
 import okhttp3.HttpUrl
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
