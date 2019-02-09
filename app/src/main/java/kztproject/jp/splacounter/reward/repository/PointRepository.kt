@@ -2,13 +2,14 @@ package kztproject.jp.splacounter.reward.repository
 
 import io.reactivex.Single
 import kztproject.jp.splacounter.auth.api.model.RewardUser
-import kztproject.jp.splacounter.reward.api.RewardListClient
+import kztproject.jp.splacounter.reward.api.RewardListService
+import kztproject.jp.splacounter.reward.database.model.RewardPoint
 import javax.inject.Inject
 
-class PointRepository @Inject constructor(private val rewardListClient: RewardListClient): IPointRepository {
+class PointRepository @Inject constructor(private val rewardListClient: RewardListService) : IPointRepository {
 
-    override fun loadPoint(userId: Long): Single<Int> = rewardListClient.getPoint(userId)
+    override fun loadPoint(userId: Long): Single<RewardPoint> = rewardListClient.getPoint(userId)
 
     override fun consumePoint(userId: Long, additionalPoint: Int): Single<RewardUser> =
-            rewardListClient.consumePoint(userId, -additionalPoint)
+            rewardListClient.updatePoint(userId, -additionalPoint)
 }

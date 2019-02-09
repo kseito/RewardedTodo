@@ -5,12 +5,13 @@ import android.arch.persistence.room.Room
 import dagger.Module
 import dagger.Provides
 import kztproject.jp.splacounter.BuildConfig
-import kztproject.jp.splacounter.reward.api.RewardListClient
 import kztproject.jp.splacounter.auth.api.RewardListLoginService
 import kztproject.jp.splacounter.auth.api.TodoistService
+import kztproject.jp.splacounter.exception.InvalidUrlException
+import kztproject.jp.splacounter.reward.api.RewardListClient
+import kztproject.jp.splacounter.reward.api.RewardListService
 import kztproject.jp.splacounter.reward.database.AppDatabase
 import kztproject.jp.splacounter.reward.database.RewardDao
-import kztproject.jp.splacounter.exception.InvalidUrlException
 import okhttp3.HttpUrl
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -36,6 +37,17 @@ internal class AppModule {
     fun provideRewardListClient(): RewardListClient {
         val url = HttpUrl.parse(BuildConfig.REWARD_LIST_SERVER_URL)
         return url?.let { RewardListClient(it) } ?: throw InvalidUrlException()
+    }
+
+    @Provides
+    @Singleton
+    fun provideRewardListService(): RewardListService {
+        return Retrofit.Builder()
+                .baseUrl(BuildConfig.REWARD_LIST_SERVER_URL)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+                .create(RewardListService::class.java)
     }
 
     @Provides

@@ -4,6 +4,7 @@ import kztproject.jp.splacounter.auth.api.model.RewardUser
 import kztproject.jp.splacounter.auth.api.model.TodoistUser
 import kztproject.jp.splacounter.auth.api.model.UserResponse
 import kztproject.jp.splacounter.reward.database.model.Reward
+import kztproject.jp.splacounter.reward.database.model.RewardPoint
 
 object DummyCreator {
 
@@ -26,5 +27,9 @@ object DummyCreator {
 
     fun createDummyNoRepeatReward(): Reward {
         return Reward(2, "Test2", 7, "Test description", false)
+    }
+
+    fun createDummyRewardPoint(): RewardPoint {
+        return RewardPoint(10)
     }
 }

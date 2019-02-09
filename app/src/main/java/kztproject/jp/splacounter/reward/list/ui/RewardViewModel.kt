@@ -63,7 +63,7 @@ class RewardViewModel @Inject constructor(private val rewardListClient: IPointRe
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({ callback.onStartLoadingPoint() })
                 .doAfterTerminate({ callback.onTerminateLoadingPoint() })
-                .subscribe({ point.set(it) },
+                .subscribe({ point.set(it.point) },
                         { callback.onPointLoadFailed() })
     }
 

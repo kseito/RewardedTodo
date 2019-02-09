@@ -184,7 +184,8 @@ class RewardViewModelTest {
 
     @Test
     fun testLoadPoint_Success() {
-        whenever(mockPointRepository.loadPoint(anyLong())).thenReturn(Single.just(10))
+        val dummyPoint = DummyCreator.createDummyRewardPoint()
+        whenever(mockPointRepository.loadPoint(anyLong())).thenReturn(Single.just(dummyPoint))
         viewModel.loadPoint()
 
         assertThat(viewModel.point.get()).isEqualTo(10)
