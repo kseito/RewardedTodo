@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.model
+package kztproject.jp.splacounter.auth.api.model
 
 import com.google.gson.annotations.SerializedName
 

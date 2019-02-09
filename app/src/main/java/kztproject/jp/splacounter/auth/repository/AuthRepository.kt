@@ -4,7 +4,7 @@ import io.reactivex.Completable
 import kztproject.jp.splacounter.auth.api.RewardListLoginService
 import kztproject.jp.splacounter.auth.api.TodoistService
 import kztproject.jp.splacounter.model.RewardUser
-import kztproject.jp.splacounter.model.UserResponse
+import kztproject.jp.splacounter.auth.api.model.UserResponse
 import kztproject.jp.splacounter.preference.PrefsWrapper
 import javax.inject.Inject
 
