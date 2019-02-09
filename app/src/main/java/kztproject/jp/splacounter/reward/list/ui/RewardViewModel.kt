@@ -5,13 +5,13 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kztproject.jp.splacounter.preference.PrefsWrapper
 import kztproject.jp.splacounter.reward.database.RewardDao
 import kztproject.jp.splacounter.reward.database.model.Reward
-import kztproject.jp.splacounter.preference.PrefsWrapper
-import kztproject.jp.splacounter.reward.api.RewardListClient
+import kztproject.jp.splacounter.reward.repository.IPointRepository
 import javax.inject.Inject
 
-class RewardViewModel @Inject constructor(private val rewardListClient: RewardListClient,
+class RewardViewModel @Inject constructor(private val rewardListClient: IPointRepository,
                                           private val rewardDao: RewardDao) {
 
     private lateinit var callback: RewardViewModelCallback
@@ -58,7 +58,7 @@ class RewardViewModel @Inject constructor(private val rewardListClient: RewardLi
     }
 
     fun loadPoint() {
-        rewardListClient.getPoint(PrefsWrapper.userId)
+        rewardListClient.loadPoint(PrefsWrapper.userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({ callback.onStartLoadingPoint() })
