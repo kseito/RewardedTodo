@@ -4,7 +4,7 @@ import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.times
 import com.nhaarman.mockito_kotlin.verify
 import kztproject.jp.splacounter.DummyCreator
-import kztproject.jp.splacounter.database.RewardDao
+import kztproject.jp.splacounter.reward.database.RewardDao
 import org.junit.Test
 
 class RewardRepositoryTest {

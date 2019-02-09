@@ -1,6 +1,6 @@
 package kztproject.jp.splacounter
 
-import kztproject.jp.splacounter.database.model.Reward
+import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.model.Counter
 import kztproject.jp.splacounter.model.RewardUser
 import kztproject.jp.splacounter.model.TodoistUser

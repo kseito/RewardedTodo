@@ -16,7 +16,7 @@ import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.auth.ui.AuthFragment
-import kztproject.jp.splacounter.database.model.Reward
+import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.databinding.FragmentRewardBinding
 import kztproject.jp.splacounter.databinding.ItemRewardBinding
 import kztproject.jp.splacounter.reward.detail.ui.RewardDetailFragment

@@ -1,7 +1,7 @@
 package kztproject.jp.splacounter.reward.repository
 
-import kztproject.jp.splacounter.database.RewardDao
-import kztproject.jp.splacounter.database.model.Reward
+import kztproject.jp.splacounter.reward.database.RewardDao
+import kztproject.jp.splacounter.reward.database.model.Reward
 
 class RewardRepository constructor(private val rewardDao: RewardDao): IRewardRepository {
     override fun createOrUpdate(reward: Reward) = rewardDao.insertReward(reward)

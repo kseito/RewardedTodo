@@ -8,8 +8,8 @@ import kztproject.jp.splacounter.BuildConfig
 import kztproject.jp.splacounter.reward.api.RewardListClient
 import kztproject.jp.splacounter.auth.api.RewardListLoginService
 import kztproject.jp.splacounter.auth.api.TodoistService
-import kztproject.jp.splacounter.database.AppDatabase
-import kztproject.jp.splacounter.database.RewardDao
+import kztproject.jp.splacounter.reward.database.AppDatabase
+import kztproject.jp.splacounter.reward.database.RewardDao
 import kztproject.jp.splacounter.exception.InvalidUrlException
 import okhttp3.HttpUrl
 import retrofit2.Retrofit

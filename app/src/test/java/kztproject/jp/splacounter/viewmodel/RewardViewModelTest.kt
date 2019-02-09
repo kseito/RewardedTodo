@@ -7,7 +7,7 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.reward.api.RewardListClient
-import kztproject.jp.splacounter.database.RewardDao
+import kztproject.jp.splacounter.reward.database.RewardDao
 import kztproject.jp.splacounter.preference.PrefsWrapper
 import kztproject.jp.splacounter.reward.list.ui.RewardViewModel
 import kztproject.jp.splacounter.reward.list.ui.RewardViewModelCallback

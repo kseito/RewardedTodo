@@ -10,8 +10,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.R
-import kztproject.jp.splacounter.database.RewardDao
-import kztproject.jp.splacounter.database.model.Reward
+import kztproject.jp.splacounter.reward.database.RewardDao
+import kztproject.jp.splacounter.reward.database.model.Reward
 import javax.inject.Inject
 
 class RewardDetailViewModel @Inject constructor(private val rewardDao: RewardDao) : BaseObservable() {

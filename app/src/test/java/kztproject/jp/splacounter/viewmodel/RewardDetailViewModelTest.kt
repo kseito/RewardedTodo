@@ -8,7 +8,7 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.R
-import kztproject.jp.splacounter.database.RewardDao
+import kztproject.jp.splacounter.reward.database.RewardDao
 import kztproject.jp.splacounter.reward.detail.ui.RewardDetailViewModel
 import kztproject.jp.splacounter.reward.detail.ui.RewardDetailViewModelCallback
 import org.assertj.core.api.Assertions.assertThat
