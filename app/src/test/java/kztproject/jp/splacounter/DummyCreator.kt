@@ -1,10 +1,9 @@
 package kztproject.jp.splacounter
 
-import kztproject.jp.splacounter.reward.database.model.Reward
-import kztproject.jp.splacounter.model.Counter
 import kztproject.jp.splacounter.model.RewardUser
 import kztproject.jp.splacounter.model.TodoistUser
 import kztproject.jp.splacounter.model.UserResponse
+import kztproject.jp.splacounter.reward.database.model.Reward
 
 object DummyCreator {
 
@@ -19,13 +18,6 @@ object DummyCreator {
 
     fun createDummyRewardUser(): RewardUser {
         return RewardUser(10, 123, 0)
-    }
-
-    fun createDummyCounter(): Counter {
-        val counter = Counter()
-        counter.id = 1
-        counter.count = 10
-        return counter
     }
 
     fun createDummyReward(): Reward {
