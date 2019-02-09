@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.activity
+package kztproject.jp.splacounter
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
