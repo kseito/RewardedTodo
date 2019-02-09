@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.api
+package kztproject.jp.splacounter.reward.api
 
 import io.reactivex.Single
 import kztproject.jp.splacounter.database.model.RewardPoint

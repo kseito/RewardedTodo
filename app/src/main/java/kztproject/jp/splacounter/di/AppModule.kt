@@ -5,7 +5,7 @@ import android.arch.persistence.room.Room
 import dagger.Module
 import dagger.Provides
 import kztproject.jp.splacounter.BuildConfig
-import kztproject.jp.splacounter.api.RewardListClient
+import kztproject.jp.splacounter.reward.api.RewardListClient
 import kztproject.jp.splacounter.auth.api.RewardListLoginService
 import kztproject.jp.splacounter.auth.api.TodoistService
 import kztproject.jp.splacounter.database.AppDatabase

@@ -1,5 +1,6 @@
 package kztproject.jp.splacounter.api
 
+import kztproject.jp.splacounter.reward.api.RewardListClient
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
