@@ -6,9 +6,9 @@ import io.reactivex.Single
 import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.auth.api.RewardListLoginService
 import kztproject.jp.splacounter.auth.api.TodoistService
-import kztproject.jp.splacounter.auth.repository.AuthRepository
 import kztproject.jp.splacounter.auth.api.model.RewardUser
 import kztproject.jp.splacounter.auth.api.model.UserResponse
+import kztproject.jp.splacounter.auth.repository.AuthRepository
 import kztproject.jp.splacounter.preference.PrefsWrapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
@@ -24,13 +24,13 @@ class AuthRepositoryTest {
 
     private val mockClient = mock<TodoistService>()
     private val mockRewardListLoginService = mock<RewardListLoginService>()
+    private val prefsWrapper = PrefsWrapper(RuntimeEnvironment.application)
 
     private lateinit var repository: AuthRepository
 
     @Before
     fun setup() {
-        PrefsWrapper.initialize(RuntimeEnvironment.application)
-        repository = AuthRepository(mockClient, mockRewardListLoginService)
+        repository = AuthRepository(mockClient, mockRewardListLoginService, prefsWrapper)
     }
 
     @Test
@@ -45,7 +45,7 @@ class AuthRepositoryTest {
                 .assertNoErrors()
                 .assertComplete()
 
-        assertThat(PrefsWrapper.userId).isEqualTo(dummyRewardUser.id)
+        assertThat(prefsWrapper.userId).isEqualTo(dummyRewardUser.id)
     }
 
     @Test
@@ -60,6 +60,6 @@ class AuthRepositoryTest {
                 .assertNoErrors()
                 .assertComplete()
 
-        assertThat(PrefsWrapper.userId).isEqualTo(dummyRewardUser.id)
+        assertThat(prefsWrapper.userId).isEqualTo(dummyRewardUser.id)
     }
 }

@@ -7,6 +7,7 @@ import dagger.Provides
 import kztproject.jp.splacounter.BuildConfig
 import kztproject.jp.splacounter.auth.api.RewardListLoginService
 import kztproject.jp.splacounter.auth.api.TodoistService
+import kztproject.jp.splacounter.preference.PrefsWrapper
 import kztproject.jp.splacounter.reward.api.RewardPointService
 import kztproject.jp.splacounter.reward.database.AppDatabase
 import kztproject.jp.splacounter.reward.database.RewardDao
@@ -64,4 +65,9 @@ internal class AppModule {
     fun providesRewardDao(appDatabase: AppDatabase): RewardDao {
         return appDatabase.rewardDao()
     }
+
+    @Provides
+    @Singleton
+    fun providesPrefsWrapper(application: Application): PrefsWrapper
+            = PrefsWrapper(application.applicationContext)
 }

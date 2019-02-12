@@ -31,14 +31,14 @@ class RewardViewModelTest {
 
     private val mockDao: RewardDao = mock()
 
+    private val prefsWrapper = PrefsWrapper(RuntimeEnvironment.application)
+
     private lateinit var viewModel: RewardViewModel
 
     @Before
     fun setup() {
-        viewModel = RewardViewModel(mockPointRepository, mockDao)
+        viewModel = RewardViewModel(mockPointRepository, mockDao, prefsWrapper)
         viewModel.setCallback(mockCallback)
-
-        PrefsWrapper.initialize(RuntimeEnvironment.application)
 
         val scheduler = Schedulers.trampoline()
         RxJavaPlugins.setIoSchedulerHandler { scheduler }

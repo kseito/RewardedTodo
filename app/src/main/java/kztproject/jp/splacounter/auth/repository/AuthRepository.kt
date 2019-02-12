@@ -10,7 +10,8 @@ import javax.inject.Inject
 
 class AuthRepository @Inject
 constructor(private val todoistService: TodoistService,
-            private val rewardListClient: RewardListLoginService) : IAuthRepository {
+            private val rewardListClient: RewardListLoginService,
+            private val prefsWrapper: PrefsWrapper) : IAuthRepository {
 
     override fun login(inputString: String): Completable {
         return todoistService.getUser(inputString, "*", "[\"user\"]")
@@ -25,7 +26,7 @@ constructor(private val todoistService: TodoistService,
     }
 
     private fun save(user: RewardUser): Completable {
-        PrefsWrapper.userId = user.id
+        prefsWrapper.userId = user.id
         return Completable.complete()
     }
 }

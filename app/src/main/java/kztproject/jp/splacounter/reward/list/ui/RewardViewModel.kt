@@ -12,7 +12,8 @@ import kztproject.jp.splacounter.reward.repository.IPointRepository
 import javax.inject.Inject
 
 class RewardViewModel @Inject constructor(private val rewardListClient: IPointRepository,
-                                          private val rewardDao: RewardDao) {
+                                          private val rewardDao: RewardDao,
+                                          private val prefsWrapper: PrefsWrapper) {
 
     private lateinit var callback: RewardViewModelCallback
     var rewardList: MutableList<Reward> = mutableListOf()
@@ -58,7 +59,7 @@ class RewardViewModel @Inject constructor(private val rewardListClient: IPointRe
     }
 
     fun loadPoint() {
-        rewardListClient.loadPoint(PrefsWrapper.userId)
+        rewardListClient.loadPoint(prefsWrapper.userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe({ callback.onStartLoadingPoint() })
@@ -71,7 +72,7 @@ class RewardViewModel @Inject constructor(private val rewardListClient: IPointRe
         val selectedReward: Reward = this.selectedReward
                 ?: throw NullPointerException("acquireReward() cannot call when selectedReward is null")
         if (point.get()!! >= selectedReward.consumePoint) {
-            rewardListClient.consumePoint(PrefsWrapper.userId, selectedReward.consumePoint)
+            rewardListClient.consumePoint(prefsWrapper.userId, selectedReward.consumePoint)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe({ user -> callback.successAcquireReward(selectedReward, user.point) },
@@ -134,7 +135,7 @@ class RewardViewModel @Inject constructor(private val rewardListClient: IPointRe
     }
 
     fun logout() {
-        PrefsWrapper.userId = 0
+        prefsWrapper.userId = 0
         callback.onLogout()
     }
 }
