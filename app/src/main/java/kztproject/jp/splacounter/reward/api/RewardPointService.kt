@@ -5,7 +5,7 @@ import kztproject.jp.splacounter.auth.api.model.RewardUser
 import kztproject.jp.splacounter.reward.database.model.RewardPoint
 import retrofit2.http.*
 
-interface RewardListService {
+interface RewardPointService {
 
     @GET("/api/users/{user_id}")
     fun getPoint(@Path("user_id") userId: Long): Single<RewardPoint>

@@ -1,6 +1,6 @@
 package kztproject.jp.splacounter.api
 
-import kztproject.jp.splacounter.reward.api.RewardListService
+import kztproject.jp.splacounter.reward.api.RewardPointService
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -18,7 +18,7 @@ import java.io.IOException
 import java.io.InputStreamReader
 
 
-class RewardListServiceTest {
+class RewardPointServiceTest {
 
     private val mockWebServer: MockWebServer = MockWebServer()
     private val target = Retrofit.Builder()
@@ -26,7 +26,7 @@ class RewardListServiceTest {
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(RewardListService::class.java)
+            .create(RewardPointService::class.java)
 
     @Before
     fun setup() {

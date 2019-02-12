@@ -7,7 +7,7 @@ import dagger.Provides
 import kztproject.jp.splacounter.BuildConfig
 import kztproject.jp.splacounter.auth.api.RewardListLoginService
 import kztproject.jp.splacounter.auth.api.TodoistService
-import kztproject.jp.splacounter.reward.api.RewardListService
+import kztproject.jp.splacounter.reward.api.RewardPointService
 import kztproject.jp.splacounter.reward.database.AppDatabase
 import kztproject.jp.splacounter.reward.database.RewardDao
 import retrofit2.Retrofit
@@ -31,13 +31,13 @@ internal class AppModule {
 
     @Provides
     @Singleton
-    fun provideRewardListService(): RewardListService {
+    fun provideRewardPointService(): RewardPointService {
         return Retrofit.Builder()
                 .baseUrl(BuildConfig.REWARD_LIST_SERVER_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
-                .create(RewardListService::class.java)
+                .create(RewardPointService::class.java)
     }
 
     @Provides
