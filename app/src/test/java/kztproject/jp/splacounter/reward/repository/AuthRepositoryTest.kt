@@ -9,7 +9,7 @@ import kztproject.jp.splacounter.auth.api.TodoistService
 import kztproject.jp.splacounter.auth.api.model.RewardUser
 import kztproject.jp.splacounter.auth.api.model.UserResponse
 import kztproject.jp.splacounter.auth.repository.AuthRepository
-import kztproject.jp.splacounter.preference.PrefsWrapper
+import kztproject.jp.splacounter.auth.preference.PrefsWrapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test

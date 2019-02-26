@@ -9,10 +9,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import dagger.android.support.AndroidSupportInjection
-import kztproject.jp.splacounter.R
-import kztproject.jp.splacounter.databinding.FragmentAuthBinding
-import kztproject.jp.splacounter.reward.list.ui.RewardFragment
-import kztproject.jp.splacounter.ui_common.replaceFragment
+import project.seito.auth.R
+import project.seito.auth.databinding.FragmentAuthBinding
+import project.seito.screen_transition.IFragmentsInitializer
 import javax.inject.Inject
 
 class AuthFragment : Fragment(), AuthViewModel.Callback {
@@ -22,6 +21,9 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
 
     @Inject
     lateinit var viewModel: AuthViewModel
+
+    @Inject
+    lateinit var fragmentInitializer: IFragmentsInitializer
 
     companion object {
 
@@ -60,13 +62,17 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
     override fun signUpSucceeded() {
         Toast.makeText(context, "Signed up!", Toast.LENGTH_SHORT).show()
 
-        activity?.replaceFragment(R.id.container, RewardFragment.newInstance())
+        activity?.let {
+            fragmentInitializer.getRewardFragment(it)
+        }
     }
 
     override fun loginSucceeded() {
         Toast.makeText(activity, R.string.login_succeeded, Toast.LENGTH_SHORT).show()
 
-        activity?.replaceFragment(R.id.container, RewardFragment.newInstance())
+        activity?.let {
+            fragmentInitializer.getRewardFragment(it)
+        }
     }
 
     override fun loginFailed(e: Throwable) {

@@ -5,7 +5,7 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kztproject.jp.splacounter.preference.PrefsWrapper
+import kztproject.jp.splacounter.auth.preference.PrefsWrapper
 import kztproject.jp.splacounter.reward.database.RewardDao
 import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.repository.IPointRepository

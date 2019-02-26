@@ -4,8 +4,8 @@ import android.databinding.ObservableField
 import android.support.annotation.StringRes
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.auth.repository.IAuthRepository
+import project.seito.auth.R
 import javax.inject.Inject
 
 class AuthViewModel @Inject

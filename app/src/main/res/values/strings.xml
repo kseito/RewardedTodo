@@ -4,13 +4,6 @@
     <string name="game_reload">Reload</string>
     <string name="game_consume">Played</string>
 
-    <string name="error_sign_up">Sign up Failed</string>
-    <string name="error_login_text_empty">Please input your Todoist API token</string>
-
-    <!-- Auth -->
-    <string name="login_succeeded">Login succeeded</string>
-    <string name="login_failed">Login failed</string>
-
     <!-- Reward -->
     <string name="reward_title">Reward</string>
     <string name="format_consume_point">%dP</string>

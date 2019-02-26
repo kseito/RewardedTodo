@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.preference
+package kztproject.jp.splacounter.auth.preference
 
 import android.content.Context
 import android.content.SharedPreferences
