@@ -115,23 +115,26 @@ class RewardViewModel @Inject constructor(private val rewardListClient: IPointRe
     }
 
     fun switchReward(reward: Reward) {
+
         val newPosition = rewardList.indexOf(reward)
-        if (selectedReward == reward) {
-            rewardList[newPosition].isSelected = false
+        if (reward == selectedReward) {
             selectedReward = null
+            rewardList[newPosition].isSelected = false
             callback.onRewardDeSelected(newPosition)
-        } else if (selectedReward != null && selectedReward != reward) {
-            rewardList[newPosition].isSelected = true
-            val oldPosition = rewardList.indexOf(selectedReward!!)
-            rewardList[oldPosition].isSelected = false
-            selectedReward = reward
-            callback.onRewardDeSelected(oldPosition)
-            callback.onRewardSelected(newPosition)
-        } else {
-            rewardList[newPosition].isSelected = true
-            selectedReward = reward
-            callback.onRewardSelected(newPosition)
+            return
         }
+
+        selectedReward?.let {
+            val oldPosition = rewardList.indexOf(it)
+            if (oldPosition >= 0) {
+                rewardList[oldPosition].isSelected = false
+                callback.onRewardDeSelected(oldPosition)
+            }
+        }
+
+        rewardList[newPosition].isSelected = true
+        selectedReward = reward
+        callback.onRewardSelected(newPosition)
     }
 
     fun logout() {
