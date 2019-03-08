@@ -1,1 +1,1 @@
-include ':app', ':auth', ':screen_transition'
+include ':app', ':auth', ':screen_transition', ':reward'

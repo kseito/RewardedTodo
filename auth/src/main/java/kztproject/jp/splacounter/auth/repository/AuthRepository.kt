@@ -5,7 +5,7 @@ import kztproject.jp.splacounter.auth.api.RewardListLoginService
 import kztproject.jp.splacounter.auth.api.TodoistService
 import kztproject.jp.splacounter.auth.api.model.RewardUser
 import kztproject.jp.splacounter.auth.api.model.UserResponse
-import kztproject.jp.splacounter.auth.preference.PrefsWrapper
+import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
 class AuthRepository @Inject

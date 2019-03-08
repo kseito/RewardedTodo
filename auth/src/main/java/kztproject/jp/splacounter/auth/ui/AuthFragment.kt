@@ -11,7 +11,7 @@ import android.widget.Toast
 import dagger.android.support.AndroidSupportInjection
 import project.seito.auth.R
 import project.seito.auth.databinding.FragmentAuthBinding
-import project.seito.screen_transition.IFragmentsInitializer
+import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
 class AuthFragment : Fragment(), AuthViewModel.Callback {
@@ -23,7 +23,7 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
     lateinit var viewModel: AuthViewModel
 
     @Inject
-    lateinit var fragmentInitializer: IFragmentsInitializer
+    lateinit var fragmentTransitionManager: IFragmentsTransitionManager
 
     companion object {
 
@@ -63,7 +63,7 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
         Toast.makeText(context, "Signed up!", Toast.LENGTH_SHORT).show()
 
         activity?.let {
-            fragmentInitializer.getRewardFragment(it)
+            fragmentTransitionManager.transitionToRewardFragment(it)
         }
     }
 
@@ -71,7 +71,7 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
         Toast.makeText(activity, R.string.login_succeeded, Toast.LENGTH_SHORT).show()
 
         activity?.let {
-            fragmentInitializer.getRewardFragment(it)
+            fragmentTransitionManager.transitionToRewardFragment(it)
         }
     }
 

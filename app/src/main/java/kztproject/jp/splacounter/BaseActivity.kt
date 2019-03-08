@@ -8,9 +8,9 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kztproject.jp.splacounter.auth.ui.AuthFragment
-import kztproject.jp.splacounter.auth.preference.PrefsWrapper
 import kztproject.jp.splacounter.reward.list.ui.RewardFragment
 import kztproject.jp.splacounter.ui_common.replaceFragment
+import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
 class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
