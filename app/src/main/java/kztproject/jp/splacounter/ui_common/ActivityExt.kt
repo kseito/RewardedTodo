@@ -9,3 +9,10 @@ fun FragmentActivity.replaceFragment(@IdRes id: Int, fragment: Fragment) {
             .replace(id, fragment)
             .commit()
 }
+
+fun FragmentActivity.replaceFragmentWithStack(@IdRes id: Int, fragment: Fragment) {
+    supportFragmentManager.beginTransaction()
+            .replace(id, fragment)
+            .addToBackStack(fragment.javaClass.canonicalName)
+            .commit()
+}

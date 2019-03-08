@@ -6,6 +6,7 @@ import kztproject.jp.splacounter.auth.ui.AuthFragment
 import kztproject.jp.splacounter.reward.detail.ui.RewardDetailFragment
 import kztproject.jp.splacounter.reward.list.ui.RewardFragment
 import kztproject.jp.splacounter.ui_common.replaceFragment
+import kztproject.jp.splacounter.ui_common.replaceFragmentWithStack
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
@@ -18,7 +19,7 @@ class FragmentsTransitionManager @Inject constructor() : IFragmentsTransitionMan
             activity.replaceFragment(R.id.container, RewardFragment.newInstance())
 
     override fun transitionToRewardDetailFragment(activity: FragmentActivity?) {
-        activity?.replaceFragment(R.id.container, RewardDetailFragment.newInstance())
+        activity?.replaceFragmentWithStack(R.id.container, RewardDetailFragment.newInstance())
     }
 
     override fun transitionToRewardDetailFragment(activity: FragmentActivity?, rewardId: Int) {
