@@ -5,16 +5,16 @@ import dagger.Provides
 import kztproject.jp.splacounter.auth.api.RewardListLoginService
 import kztproject.jp.splacounter.auth.api.TodoistService
 import project.seito.auth.BuildConfig
+import project.seito.screen_transition.di.FragmentScope
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
-import javax.inject.Singleton
 
 @Module
 class AuthApiModule {
 
     @Provides
-    @Singleton
+    @FragmentScope
     fun provideTodoistService(): TodoistService {
         return Retrofit.Builder()
                 .baseUrl(BuildConfig.TODOIST_URL)
@@ -25,7 +25,7 @@ class AuthApiModule {
     }
 
     @Provides
-    @Singleton
+    @FragmentScope
     fun provideRewardListLoginService(): RewardListLoginService {
         return Retrofit.Builder()
                 .baseUrl(BuildConfig.REWARD_LIST_SERVER_URL)

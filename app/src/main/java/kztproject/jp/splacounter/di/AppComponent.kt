@@ -5,15 +5,13 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import kztproject.jp.splacounter.MyApplication
-import kztproject.jp.splacounter.auth.di.AuthApiModule
 import javax.inject.Singleton
 
 @Singleton
 @Component(modules = [
     AndroidInjectionModule::class,
     AppModule::class,
-    BaseActivityModule::class,
-    AuthApiModule::class])
+    BaseActivityModule::class])
 interface AppComponent {
     @Component.Builder
     interface Builder {
