@@ -48,7 +48,7 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
     //Databinding
-    kapt 'androidx.databinding:databinding-compiler:3.3.0'
+    kapt 'androidx.databinding:databinding-compiler:3.3.2'
 
     implementation 'info.hoang8f:fbutton:1.0.5'
 
