@@ -8,7 +8,10 @@ import kztproject.jp.splacounter.MyApplication
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AndroidInjectionModule::class, AppModule::class, BaseActivityModule::class])
+@Component(modules = [
+    AndroidInjectionModule::class,
+    AppModule::class,
+    BaseActivityModule::class])
 interface AppComponent {
     @Component.Builder
     interface Builder {

@@ -54,10 +54,9 @@ ext {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "com.android.support:appcompat-v7:$support_library_version"
     implementation "com.android.support:design:$support_library_version"
-    implementation 'info.hoang8f:fbutton:1.0.5'
+
     implementation 'com.facebook.stetho:stetho:1.4.2'
 
     //Dagger
@@ -69,14 +68,8 @@ dependencies {
     annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
 
-    kapt 'androidx.databinding:databinding-compiler:3.3.0'
-    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
-    implementation 'com.google.code.gson:gson:2.8.2'
+    kapt 'androidx.databinding:databinding-compiler:3.3.2'
 
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.1.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 
     //Room
@@ -84,14 +77,16 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"
     kapt "android.arch.persistence.room:compiler:$room_version"
 
-    implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
-
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.15.0'
     testImplementation "com.nhaarman:mockito-kotlin-kt1.1:1.5.0"
     testImplementation 'com.squareup.okhttp3:mockwebserver:3.11.0'
     testImplementation "org.robolectric:robolectric:3.5.1"
     testImplementation 'org.assertj:assertj-core:3.9.1'
+
+    implementation project(path: ':auth')
+    implementation project(path: ':reward')
+    implementation project(path: ':screen_transition')
 }
 
 kapt {

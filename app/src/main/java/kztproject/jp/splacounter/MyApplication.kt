@@ -8,7 +8,6 @@ import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasActivityInjector
 import kztproject.jp.splacounter.di.AppComponent
 import kztproject.jp.splacounter.di.DaggerAppComponent
-import kztproject.jp.splacounter.preference.PrefsWrapper
 import javax.inject.Inject
 
 class MyApplication : Application(), HasActivityInjector {
@@ -29,8 +28,6 @@ class MyApplication : Application(), HasActivityInjector {
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
         }
-
-        PrefsWrapper.initialize(applicationContext)
     }
 
     override fun activityInjector(): AndroidInjector<Activity> {
