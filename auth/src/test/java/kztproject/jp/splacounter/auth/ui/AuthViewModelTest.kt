@@ -1,23 +1,24 @@
-package kztproject.jp.splacounter.viewmodel
+package kztproject.jp.splacounter.auth.ui
 
 import com.nhaarman.mockito_kotlin.mock
+import com.nhaarman.mockito_kotlin.times
+import com.nhaarman.mockito_kotlin.verify
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Completable
 import io.reactivex.Scheduler
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
-import kztproject.jp.splacounter.BuildConfig
-import kztproject.jp.splacounter.R
-import kztproject.jp.splacounter.auth.ui.AuthViewModel
 import kztproject.jp.splacounter.auth.repository.AuthRepository
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.Mockito.*
+import org.mockito.ArgumentMatchers.anyString
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
+import project.seito.auth.BuildConfig
+import project.seito.auth.R
 
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class)

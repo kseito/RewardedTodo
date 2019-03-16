@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.api
+package project.seito.screen_transition.api
 
 class HttpMethod {
     companion object {

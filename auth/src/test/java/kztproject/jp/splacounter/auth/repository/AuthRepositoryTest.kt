@@ -1,23 +1,23 @@
-package kztproject.jp.splacounter.reward.repository
+package kztproject.jp.splacounter.auth.repository
+
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
 import io.reactivex.Single
-import kztproject.jp.splacounter.DummyCreator
+import kztproject.jp.splacounter.auth.DummyCreator
 import kztproject.jp.splacounter.auth.api.RewardListLoginService
 import kztproject.jp.splacounter.auth.api.TodoistService
 import kztproject.jp.splacounter.auth.api.model.RewardUser
 import kztproject.jp.splacounter.auth.api.model.UserResponse
-import kztproject.jp.splacounter.auth.repository.AuthRepository
-import kztproject.jp.splacounter.auth.preference.PrefsWrapper
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.anyLong
-import org.mockito.Mockito.anyString
+import org.mockito.ArgumentMatchers
+import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import project.seito.screen_transition.preference.PrefsWrapper
 
 @RunWith(RobolectricTestRunner::class)
 class AuthRepositoryTest {
@@ -37,8 +37,8 @@ class AuthRepositoryTest {
     fun login() {
         val dummyResponse: UserResponse = DummyCreator.createDummyUserResponse()
         val dummyRewardUser: RewardUser = DummyCreator.createDummyRewardUser()
-        whenever(mockClient.getUser(anyString(), anyString(), anyString())).thenReturn(Single.just(dummyResponse))
-        whenever(mockRewardListLoginService.findUser(anyLong())).thenReturn(Single.just(dummyRewardUser))
+        whenever(mockClient.getUser(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(Single.just(dummyResponse))
+        whenever(mockRewardListLoginService.findUser(ArgumentMatchers.anyLong())).thenReturn(Single.just(dummyRewardUser))
 
         repository.login("test")
                 .test()
@@ -52,8 +52,8 @@ class AuthRepositoryTest {
     fun signUp() {
         val dummyResponse: UserResponse = DummyCreator.createDummyUserResponse()
         val dummyRewardUser: RewardUser = DummyCreator.createDummyRewardUser()
-        whenever(mockClient.getUser(anyString(), anyString(), anyString())).thenReturn(Single.just(dummyResponse))
-        whenever(mockRewardListLoginService.createUser(anyLong())).thenReturn(Single.just(dummyRewardUser))
+        whenever(mockClient.getUser(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(Single.just(dummyResponse))
+        whenever(mockRewardListLoginService.createUser(ArgumentMatchers.anyLong())).thenReturn(Single.just(dummyRewardUser))
 
         repository.signUp("test")
                 .test()

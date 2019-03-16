@@ -1,21 +1,10 @@
 package kztproject.jp.splacounter
 
-import kztproject.jp.splacounter.auth.api.model.RewardUser
-import kztproject.jp.splacounter.auth.api.model.TodoistUser
-import kztproject.jp.splacounter.auth.api.model.UserResponse
+import kztproject.jp.splacounter.reward.api.model.RewardUser
 import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.database.model.RewardPoint
 
 object DummyCreator {
-
-    fun createDummyUserResponse(): UserResponse {
-        val response = UserResponse()
-        val user = TodoistUser()
-        user.id = 1
-        user.fullName = "test_user"
-        response.user = user
-        return response
-    }
 
     fun createDummyRewardUser(): RewardUser {
         return RewardUser(10, 123, 0)

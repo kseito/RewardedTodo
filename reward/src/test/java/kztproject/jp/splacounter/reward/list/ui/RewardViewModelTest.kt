@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.viewmodel
+package kztproject.jp.splacounter.reward.list.ui
 
 import com.nhaarman.mockito_kotlin.*
 import io.reactivex.Single
@@ -6,11 +6,8 @@ import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.DummyCreator
-import kztproject.jp.splacounter.auth.preference.PrefsWrapper
-import kztproject.jp.splacounter.reward.database.RewardDao
-import kztproject.jp.splacounter.reward.list.ui.RewardViewModel
-import kztproject.jp.splacounter.reward.list.ui.RewardViewModelCallback
 import kztproject.jp.splacounter.reward.repository.IPointRepository
+import kztproject.jp.splacounter.reward.repository.IRewardRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
@@ -20,6 +17,7 @@ import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyLong
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import project.seito.screen_transition.preference.PrefsWrapper
 import java.net.SocketTimeoutException
 
 @RunWith(RobolectricTestRunner::class)
@@ -29,7 +27,7 @@ class RewardViewModelTest {
 
     private val mockPointRepository: IPointRepository = mock()
 
-    private val mockDao: RewardDao = mock()
+    private val mockDao: IRewardRepository = mock()
 
     private val prefsWrapper = PrefsWrapper(RuntimeEnvironment.application)
 
@@ -112,7 +110,7 @@ class RewardViewModelTest {
     fun testRemoveReward() {
         viewModel.deleteRewardIfNeeded(DummyCreator.createDummyReward())
 
-        verify(mockDao, times(0)).deleteReward(any())
+        verify(mockDao, times(0)).delete(any())
         verify(mockCallback, times(0)).onRewardDeleted(any())
     }
 
@@ -120,7 +118,7 @@ class RewardViewModelTest {
     fun testNotRemoveReward() {
         viewModel.deleteRewardIfNeeded(DummyCreator.createDummyNoRepeatReward())
 
-        verify(mockDao, times(1)).deleteReward(any())
+        verify(mockDao, times(1)).delete(any())
         verify(mockCallback, times(0)).onRewardDeleted(any())
     }
 
@@ -169,7 +167,7 @@ class RewardViewModelTest {
         val reward = DummyCreator.createDummyReward()
         viewModel.deleteReward(reward, true)
 
-        verify(mockDao).deleteReward(any())
+        verify(mockDao).delete(any())
         verify(mockCallback).onRewardDeleted(reward)
     }
 

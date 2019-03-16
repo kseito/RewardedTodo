@@ -1,4 +1,5 @@
-package kztproject.jp.splacounter.viewmodel
+package kztproject.jp.splacounter.reward.detail.ui
+
 
 import com.nhaarman.mockito_kotlin.mock
 import com.nhaarman.mockito_kotlin.whenever
@@ -7,19 +8,17 @@ import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.DummyCreator
-import kztproject.jp.splacounter.R
-import kztproject.jp.splacounter.reward.detail.ui.RewardDetailViewModel
-import kztproject.jp.splacounter.reward.detail.ui.RewardDetailViewModelCallback
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
-import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.Matchers.anyString
-import org.mockito.Mockito.verify
+import org.mockito.ArgumentMatchers
+import org.mockito.Matchers
+import org.mockito.Mockito
+import project.seito.reward.R
 
-class RewardDetailViewModelTest{
+class RewardDetailViewModelTest {
 
     private val mockCallback: RewardDetailViewModelCallback = mock()
 
@@ -48,14 +47,14 @@ class RewardDetailViewModelTest{
         viewModel.reward.consumePoint = 1
         viewModel.saveReward()
 
-        verify(mockCallback).onSaveCompleted(anyString())
+        Mockito.verify(mockCallback).onSaveCompleted(Matchers.anyString())
     }
 
     @Test
     fun testSaveRewardWithoutTitle() {
         viewModel.saveReward()
 
-        verify(mockCallback).onError(R.string.error_empty_title)
+        Mockito.verify(mockCallback).onError(R.string.error_empty_title)
     }
 
     @Test
@@ -63,15 +62,15 @@ class RewardDetailViewModelTest{
         viewModel.reward.name = "test"
         viewModel.saveReward()
 
-        verify(mockCallback).onError(R.string.error_empty_point)
+        Mockito.verify(mockCallback).onError(R.string.error_empty_point)
     }
 
     @Test
     fun testInitialize() {
         val reward = DummyCreator.createDummyReward()
-        whenever(mockRewardRepository.findBy(anyInt())).thenReturn(reward)
+        whenever(mockRewardRepository.findBy(ArgumentMatchers.anyInt())).thenReturn(reward)
         viewModel.initialize(1)
 
-        assertThat(viewModel.reward).isEqualTo(reward)
+        Assertions.assertThat(viewModel.reward).isEqualTo(reward)
     }
 }
