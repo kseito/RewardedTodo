@@ -16,7 +16,11 @@ import javax.inject.Inject
 
 class AuthFragment : Fragment(), AuthViewModel.Callback {
 
-    private var progressDialog: ProgressDialog? = null
+    private val progressDialog: ProgressDialog by lazy {
+        ProgressDialog(activity).apply {
+            setMessage("Now Loading...")
+        }
+    }
     private var binding: FragmentAuthBinding? = null
 
     @Inject
@@ -48,15 +52,11 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
     }
 
     override fun showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = ProgressDialog(activity)
-            progressDialog!!.setMessage("Now Loading...")
-        }
-        progressDialog!!.show()
+        progressDialog.show()
     }
 
     override fun dismissProgressDialog() {
-        progressDialog!!.dismiss()
+        progressDialog.dismiss()
     }
 
     override fun signUpSucceeded() {
