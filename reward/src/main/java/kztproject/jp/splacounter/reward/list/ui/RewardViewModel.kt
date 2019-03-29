@@ -75,8 +75,10 @@ class RewardViewModel @Inject constructor(private val rewardListClient: IPointRe
             rewardListClient.consumePoint(prefsWrapper.userId, selectedReward.consumePoint)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ user -> callback.successAcquireReward(selectedReward, user.point) },
-                            { callback.showError() })
+                    .subscribe({ user ->
+                        callback.successAcquireReward(selectedReward, user.point)
+                        point.set(user.point)
+                    }, { callback.showError() })
         } else {
             callback.showError()
         }

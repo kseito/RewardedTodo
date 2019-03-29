@@ -109,8 +109,6 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun successAcquireReward(reward: Reward, point: Int) {
-        Toast.makeText(context, "You consume $point points", Toast.LENGTH_SHORT).show()
-
         if (!reward.needRepeat) {
             viewModel.deleteRewardIfNeeded(reward)
             (binding.rewardListView.adapter as RewardListAdapter).remove(reward)
@@ -147,7 +145,7 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun onTerminateLoadingPoint() {
-        animation?.let { it.cancel() }
+        animation?.cancel()
     }
 
     override fun onLogout() {
@@ -159,7 +157,7 @@ class RewardListAdapter(private val rewardList: MutableList<Reward>, private val
     : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent?.context).inflate(R.layout.item_reward, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_reward, parent, false)
         return ViewHolder(view)
     }
 
