@@ -1,5 +1,6 @@
 package kztproject.jp.splacounter.auth.ui
 
+import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
 import android.support.annotation.StringRes
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -9,7 +10,7 @@ import project.seito.auth.R
 import javax.inject.Inject
 
 class AuthViewModel @Inject
-constructor(private val authRepository: IAuthRepository) {
+constructor(private val authRepository: IAuthRepository) : ViewModel() {
     private lateinit var callback: Callback
 
     var inputString = ObservableField<String>()
@@ -36,6 +37,7 @@ constructor(private val authRepository: IAuthRepository) {
                     ) { e -> callback.loginFailed(e) }
         }
     }
+
     fun signUp() {
         if (inputString.get()!!.isEmpty()) {
             callback.showError(R.string.error_login_text_empty)
@@ -45,7 +47,7 @@ constructor(private val authRepository: IAuthRepository) {
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe { callback.showProgressDialog() }
                     .doOnTerminate { callback.dismissProgressDialog() }
-                    .subscribe({callback.signUpSucceeded()}, {callback.showError(R.string.error_sign_up)})
+                    .subscribe({ callback.signUpSucceeded() }, { callback.showError(R.string.error_sign_up) })
 
         }
     }

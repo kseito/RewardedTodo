@@ -9,6 +9,6 @@ import project.seito.screen_transition.di.FragmentScope
 abstract class AuthModule {
 
     @FragmentScope
-    @ContributesAndroidInjector(modules = [AuthRepositoryModule::class, AuthApiModule::class])
+    @ContributesAndroidInjector(modules = [AuthViewModelModule::class, AuthRepositoryModule::class, AuthApiModule::class])
     internal abstract fun contributeAuthFragment(): AuthFragment
 }

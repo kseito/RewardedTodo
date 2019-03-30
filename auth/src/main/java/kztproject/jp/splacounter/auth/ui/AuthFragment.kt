@@ -1,6 +1,8 @@
 package kztproject.jp.splacounter.auth.ui
 
 import android.app.ProgressDialog
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
@@ -24,6 +26,7 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
     private var binding: FragmentAuthBinding? = null
 
     @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var viewModel: AuthViewModel
 
     @Inject
@@ -42,6 +45,7 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AuthViewModel::class.java)
         viewModel.setCallback(this)
     }
 
