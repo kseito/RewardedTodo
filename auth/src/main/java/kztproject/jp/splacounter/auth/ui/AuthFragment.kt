@@ -55,15 +55,15 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
         return binding.root
     }
 
-    override fun showProgressDialog() {
+    override fun onStartAsyncProcess() {
         progressDialog.show()
     }
 
-    override fun dismissProgressDialog() {
+    override fun onFinishAsyncProcess() {
         progressDialog.dismiss()
     }
 
-    override fun signUpSucceeded() {
+    override fun onSuccessSignUp() {
         Toast.makeText(context, "Signed up!", Toast.LENGTH_SHORT).show()
 
         activity?.let {
@@ -71,7 +71,11 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
         }
     }
 
-    override fun loginSucceeded() {
+    override fun onFailedSignUp() {
+        Toast.makeText(activity, R.string.error_sign_up, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onSuccessLogin() {
         Toast.makeText(activity, R.string.login_succeeded, Toast.LENGTH_SHORT).show()
 
         activity?.let {
@@ -79,7 +83,8 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
         }
     }
 
-    override fun loginFailed(e: Throwable) {
+    override fun onFailedLogin(e: Throwable) {
+        e.printStackTrace()
         Toast.makeText(activity, R.string.login_failed, Toast.LENGTH_SHORT).show()
     }
 

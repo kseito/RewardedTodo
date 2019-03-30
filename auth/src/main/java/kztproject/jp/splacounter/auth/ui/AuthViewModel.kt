@@ -33,11 +33,11 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
             authRepository.login(inputString.get()!!)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { callback.showProgressDialog() }
-                    .doOnTerminate { callback.dismissProgressDialog() }
+                    .doOnSubscribe { callback.onStartAsyncProcess() }
+                    .doOnTerminate { callback.onFinishAsyncProcess() }
                     .subscribe(
-                            { callback.loginSucceeded() }
-                    ) { e -> callback.loginFailed(e) }
+                            { callback.onSuccessLogin() }
+                    ) { e -> callback.onFailedLogin(e) }
                     .addTo(compositeDisposable)
         }
     }
@@ -49,9 +49,9 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
             authRepository.signUp(inputString.get()!!)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { callback.showProgressDialog() }
-                    .doOnTerminate { callback.dismissProgressDialog() }
-                    .subscribe({ callback.signUpSucceeded() }, { callback.showError(R.string.error_sign_up) })
+                    .doOnSubscribe { callback.onStartAsyncProcess() }
+                    .doOnTerminate { callback.onFinishAsyncProcess() }
+                    .subscribe({ callback.onSuccessSignUp() }, { callback.onFailedSignUp() })
                     .addTo(compositeDisposable)
         }
     }
@@ -62,15 +62,17 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
     }
 
     interface Callback {
-        fun showProgressDialog()
+        fun onStartAsyncProcess()
 
-        fun dismissProgressDialog()
+        fun onFinishAsyncProcess()
 
-        fun signUpSucceeded()
+        fun onSuccessSignUp()
 
-        fun loginSucceeded()
+        fun onFailedSignUp()
 
-        fun loginFailed(e: Throwable)
+        fun onSuccessLogin()
+
+        fun onFailedLogin(e: Throwable)
 
         fun showError(@StringRes stringId: Int)
     }

@@ -53,9 +53,9 @@ class AuthViewModelTest {
         viewModel.inputString.set("test")
         viewModel.login()
 
-        verify(mockCallback, times(1)).showProgressDialog()
-        verify(mockCallback, times(1)).dismissProgressDialog()
-        verify(mockCallback, times(1)).loginSucceeded()
+        verify(mockCallback, times(1)).onStartAsyncProcess()
+        verify(mockCallback, times(1)).onFinishAsyncProcess()
+        verify(mockCallback, times(1)).onSuccessLogin()
     }
 
     @Test
@@ -66,9 +66,9 @@ class AuthViewModelTest {
         viewModel.inputString.set("test")
         viewModel.login()
 
-        verify(mockCallback, times(1)).showProgressDialog()
-        verify(mockCallback, times(1)).dismissProgressDialog()
-        verify(mockCallback, times(1)).loginFailed(exception)
+        verify(mockCallback, times(1)).onStartAsyncProcess()
+        verify(mockCallback, times(1)).onFinishAsyncProcess()
+        verify(mockCallback, times(1)).onFailedLogin(exception)
     }
 
     @Test
