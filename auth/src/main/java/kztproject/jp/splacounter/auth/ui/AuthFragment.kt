@@ -88,7 +88,7 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
         Toast.makeText(activity, R.string.login_failed, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showError(@StringRes stringId: Int) {
+    override fun onError(@StringRes stringId: Int) {
         Toast.makeText(context, getString(stringId), Toast.LENGTH_SHORT).show()
     }
 }

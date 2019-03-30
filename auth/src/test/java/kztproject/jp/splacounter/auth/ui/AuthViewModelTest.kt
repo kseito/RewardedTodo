@@ -79,6 +79,6 @@ class AuthViewModelTest {
         viewModel.inputString.set("")
         viewModel.login()
 
-        verify(mockCallback, times(1)).showError(R.string.error_login_text_empty)
+        verify(mockCallback, times(1)).onError(R.string.error_login_text_empty)
     }
 }

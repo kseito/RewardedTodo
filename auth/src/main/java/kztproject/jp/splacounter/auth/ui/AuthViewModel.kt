@@ -28,7 +28,7 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
 
     fun login() {
         if (inputString.get()!!.isEmpty()) {
-            callback.showError(R.string.error_login_text_empty)
+            callback.onError(R.string.error_login_text_empty)
         } else {
             authRepository.login(inputString.get()!!)
                     .subscribeOn(Schedulers.io())
@@ -44,7 +44,7 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
 
     fun signUp() {
         if (inputString.get()!!.isEmpty()) {
-            callback.showError(R.string.error_login_text_empty)
+            callback.onError(R.string.error_login_text_empty)
         } else {
             authRepository.signUp(inputString.get()!!)
                     .subscribeOn(Schedulers.io())
@@ -74,6 +74,6 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
 
         fun onFailedLogin(e: Throwable)
 
-        fun showError(@StringRes stringId: Int)
+        fun onError(@StringRes stringId: Int)
     }
 }
