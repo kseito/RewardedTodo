@@ -23,14 +23,14 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
             setMessage("Now Loading...")
         }
     }
-    private var binding: FragmentAuthBinding? = null
-
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
-    lateinit var viewModel: AuthViewModel
 
     @Inject
     lateinit var fragmentTransitionManager: IFragmentsTransitionManager
+
+    private lateinit var binding: FragmentAuthBinding
+    private lateinit var viewModel: AuthViewModel
 
     companion object {
 
@@ -51,8 +51,8 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentAuthBinding.inflate(inflater, container, false)
-        binding!!.viewModel = viewModel
-        return binding!!.root
+        binding.viewModel = viewModel
+        return binding.root
     }
 
     override fun showProgressDialog() {
