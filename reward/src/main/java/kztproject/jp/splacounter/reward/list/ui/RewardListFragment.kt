@@ -21,7 +21,7 @@ import project.seito.reward.databinding.ItemRewardBinding
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
-class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
+class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     @Inject
     lateinit var viewModel: RewardViewModel
 
@@ -33,8 +33,8 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     private var animation: Animator? = null
 
     companion object {
-        fun newInstance(): RewardFragment {
-            return RewardFragment()
+        fun newInstance(): RewardListFragment {
+            return RewardListFragment()
         }
     }
 
