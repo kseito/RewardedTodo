@@ -1,6 +1,8 @@
 package kztproject.jp.splacounter.auth.ui
 
 import android.app.ProgressDialog
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.annotation.StringRes
 import android.support.v4.app.Fragment
@@ -16,14 +18,19 @@ import javax.inject.Inject
 
 class AuthFragment : Fragment(), AuthViewModel.Callback {
 
-    private var progressDialog: ProgressDialog? = null
-    private var binding: FragmentAuthBinding? = null
-
+    private val progressDialog: ProgressDialog by lazy {
+        ProgressDialog(activity).apply {
+            setMessage("Now Loading...")
+        }
+    }
     @Inject
-    lateinit var viewModel: AuthViewModel
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @Inject
     lateinit var fragmentTransitionManager: IFragmentsTransitionManager
+
+    private lateinit var binding: FragmentAuthBinding
+    private lateinit var viewModel: AuthViewModel
 
     companion object {
 
@@ -38,28 +45,25 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AuthViewModel::class.java)
         viewModel.setCallback(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentAuthBinding.inflate(inflater, container, false)
-        binding!!.viewModel = viewModel
-        return binding!!.root
+        binding.viewModel = viewModel
+        return binding.root
     }
 
-    override fun showProgressDialog() {
-        if (progressDialog == null) {
-            progressDialog = ProgressDialog(activity)
-            progressDialog!!.setMessage("Now Loading...")
-        }
-        progressDialog!!.show()
+    override fun onStartAsyncProcess() {
+        progressDialog.show()
     }
 
-    override fun dismissProgressDialog() {
-        progressDialog!!.dismiss()
+    override fun onFinishAsyncProcess() {
+        progressDialog.dismiss()
     }
 
-    override fun signUpSucceeded() {
+    override fun onSuccessSignUp() {
         Toast.makeText(context, "Signed up!", Toast.LENGTH_SHORT).show()
 
         activity?.let {
@@ -67,7 +71,11 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
         }
     }
 
-    override fun loginSucceeded() {
+    override fun onFailedSignUp() {
+        Toast.makeText(activity, R.string.error_sign_up, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onSuccessLogin() {
         Toast.makeText(activity, R.string.login_succeeded, Toast.LENGTH_SHORT).show()
 
         activity?.let {
@@ -75,11 +83,12 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
         }
     }
 
-    override fun loginFailed(e: Throwable) {
+    override fun onFailedLogin(e: Throwable) {
+        e.printStackTrace()
         Toast.makeText(activity, R.string.login_failed, Toast.LENGTH_SHORT).show()
     }
 
-    override fun showError(@StringRes stringId: Int) {
+    override fun onError(@StringRes stringId: Int) {
         Toast.makeText(context, getString(stringId), Toast.LENGTH_SHORT).show()
     }
 }
