@@ -23,7 +23,7 @@ import javax.inject.Inject
 
 class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     @Inject
-    lateinit var viewModel: RewardViewModel
+    lateinit var viewModel: RewardListViewModel
 
     @Inject
     lateinit var fragmentTransitionManager: IFragmentsTransitionManager

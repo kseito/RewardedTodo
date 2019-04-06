@@ -9,7 +9,7 @@
 
         <variable
             name="viewModel"
-            type="kztproject.jp.splacounter.reward.list.ui.RewardViewModel" />
+            type="kztproject.jp.splacounter.reward.list.ui.RewardListViewModel" />
     </data>
 
     <android.support.v4.widget.DrawerLayout

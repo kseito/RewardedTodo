@@ -11,9 +11,9 @@ import kztproject.jp.splacounter.reward.repository.IRewardRepository
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
-class RewardViewModel @Inject constructor(private val rewardListClient: IPointRepository,
-                                          private val rewardDao: IRewardRepository,
-                                          private val prefsWrapper: PrefsWrapper) {
+class RewardListViewModel @Inject constructor(private val rewardListClient: IPointRepository,
+                                              private val rewardDao: IRewardRepository,
+                                              private val prefsWrapper: PrefsWrapper) {
 
     private lateinit var callback: RewardViewModelCallback
     var rewardList: MutableList<Reward> = mutableListOf()
