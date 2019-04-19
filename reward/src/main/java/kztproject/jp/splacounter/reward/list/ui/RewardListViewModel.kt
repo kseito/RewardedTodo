@@ -5,10 +5,12 @@ import android.databinding.ObservableField
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.repository.IPointRepository
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
+import project.seito.screen_transition.extention.addTo
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
@@ -26,6 +28,7 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
     var hasSelectReward: ObservableField<Boolean> = ObservableField()
     var point: ObservableField<Int> = ObservableField()
     var isEmpty: ObservableField<Boolean> = ObservableField()
+    private val compositeDisposable = CompositeDisposable()
 
     fun setCallback(callback: RewardViewModelCallback) {
         this.callback = callback
@@ -57,6 +60,7 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
                     isEmpty.set(false)
                 },
                         { isEmpty.set(true) })
+                .addTo(compositeDisposable)
     }
 
     fun loadPoint() {
@@ -67,6 +71,7 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
                 .doAfterTerminate({ callback.onTerminateLoadingPoint() })
                 .subscribe({ point.set(it.point) },
                         { callback.onPointLoadFailed() })
+                .addTo(compositeDisposable)
     }
 
     fun acquireReward() {
@@ -80,6 +85,7 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
                         callback.successAcquireReward(selectedReward, user.point)
                         point.set(user.point)
                     }, { callback.showError() })
+                    .addTo(compositeDisposable)
         } else {
             callback.showError()
         }
@@ -115,6 +121,7 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
                         callback.onRewardDeleted(reward)
                     }
                 })
+                .addTo(compositeDisposable)
     }
 
     fun switchReward(reward: Reward) {
@@ -143,6 +150,11 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
     fun logout() {
         prefsWrapper.userId = 0
         callback.onLogout()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.dispose()
     }
 }
 
