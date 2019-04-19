@@ -1,5 +1,6 @@
 package kztproject.jp.splacounter.reward.list.ui
 
+import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -13,7 +14,7 @@ import javax.inject.Inject
 
 class RewardListViewModel @Inject constructor(private val rewardListClient: IPointRepository,
                                               private val rewardDao: IRewardRepository,
-                                              private val prefsWrapper: PrefsWrapper) {
+                                              private val prefsWrapper: PrefsWrapper) : ViewModel() {
 
     private lateinit var callback: RewardViewModelCallback
     var rewardList: MutableList<Reward> = mutableListOf()

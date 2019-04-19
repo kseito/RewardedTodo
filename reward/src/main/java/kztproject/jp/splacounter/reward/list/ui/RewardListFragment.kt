@@ -2,6 +2,8 @@ package kztproject.jp.splacounter.reward.list.ui
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -23,6 +25,7 @@ import javax.inject.Inject
 
 class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var viewModel: RewardListViewModel
 
     @Inject
@@ -41,6 +44,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(RewardListViewModel::class.java)
         viewModel.setCallback(this)
     }
 

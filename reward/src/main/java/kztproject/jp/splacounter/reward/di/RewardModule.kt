@@ -8,7 +8,12 @@ import kztproject.jp.splacounter.reward.list.ui.RewardListFragment
 @Module
 abstract class RewardModule {
 
-    @ContributesAndroidInjector(modules = [PointRepositoryModule::class, RewardRepositoryModule::class, PointApiModule::class, RewardDatabaseModule::class])
+    @ContributesAndroidInjector(modules = [
+        PointRepositoryModule::class,
+        RewardListViewModelModule::class,
+        RewardRepositoryModule::class,
+        PointApiModule::class,
+        RewardDatabaseModule::class])
     internal abstract fun contributeRewardFragment(): RewardListFragment
 
     @ContributesAndroidInjector(modules = [PointRepositoryModule::class, RewardDatabaseModule::class, RewardRepositoryModule::class])
