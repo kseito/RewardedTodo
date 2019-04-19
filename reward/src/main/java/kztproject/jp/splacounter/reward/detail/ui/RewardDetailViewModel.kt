@@ -6,16 +6,19 @@ import android.databinding.ObservableField
 import android.support.annotation.StringRes
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Consumer
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
 import project.seito.reward.R
+import project.seito.screen_transition.extention.addTo
 import javax.inject.Inject
 
 class RewardDetailViewModel @Inject constructor(private val rewardRepository: IRewardRepository) : ViewModel() {
 
     var reward: ObservableField<Reward> = ObservableField()
+    private val compositeDisposable = CompositeDisposable()
 
     init {
         reward.set(Reward())
@@ -33,6 +36,7 @@ class RewardDetailViewModel @Inject constructor(private val rewardRepository: IR
                 .subscribe { reward ->
                     this.reward.set(reward)
                 }
+                .addTo(compositeDisposable)
     }
 
     fun setCallback(callback: RewardDetailViewModelCallback) {
@@ -56,6 +60,12 @@ class RewardDetailViewModel @Inject constructor(private val rewardRepository: IR
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(Consumer { callback.onSaveCompleted(it.name) })
+                .addTo(compositeDisposable)
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.dispose()
     }
 }
 
