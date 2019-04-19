@@ -67,8 +67,8 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
         rewardListClient.loadPoint(prefsWrapper.userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({ callback.onStartLoadingPoint() })
-                .doAfterTerminate({ callback.onTerminateLoadingPoint() })
+                .doOnSubscribe { callback.onStartLoadingPoint() }
+                .doAfterTerminate { callback.onTerminateLoadingPoint() }
                 .subscribe({ point.set(it.point) },
                         { callback.onPointLoadFailed() })
                 .addTo(compositeDisposable)
@@ -115,12 +115,12 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
         }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe({
+                .subscribe {
                     if (needCallback) {
                         selectedReward = null
                         callback.onRewardDeleted(reward)
                     }
-                })
+                }
                 .addTo(compositeDisposable)
     }
 
