@@ -103,8 +103,8 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         AlertDialog.Builder(activityContext)
                 .setTitle(R.string.confirm_title)
                 .setMessage(String.format(getString(R.string.delete_confirm_message), reward.name))
-                .setPositiveButton(android.R.string.ok, { _, _ -> viewModel.deleteReward(reward, true) })
-                .setNegativeButton(android.R.string.cancel, { _, _ -> run {} })
+                .setPositiveButton(android.R.string.ok) { _, _ -> viewModel.deleteReward(reward, true) }
+                .setNegativeButton(android.R.string.cancel) { _, _ -> run {} }
                 .show()
     }
 
