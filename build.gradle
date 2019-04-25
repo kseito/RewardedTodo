@@ -26,3 +26,52 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+apply plugin: 'jacoco'
+jacoco {
+    toolVersion = "0.8.1"
+}
+task jacocoMergeReports(type: JacocoMerge) {
+    group = 'Reporting'
+    description = "Merge all JaCoCo reports from projects into one."
+
+    gradle.afterProject { p, state ->
+        println("hoge")
+        if (p.rootProject != p && p.plugins.hasPlugin('jacoco')) {
+            println("fuga${p.path}")
+            dependsOn "${p.path}:testDebugUnitTest"
+            executionData "${p.buildDir}/jacoco/testDebugUnitTest.exec"
+        }
+    }
+}
+
+task jacocoTestReports(type: JacocoReport, dependsOn: 'jacocoMergeReports') {
+    group = 'Reporting'
+    description = "Generate Jacoco coverage reports for the build. Only unit tests."
+
+    executionData jacocoMergeReports.destinationFile
+
+    sourceDirectories = files()
+    classDirectories = files()
+
+    gradle.afterProject { p, state ->
+        if (p.rootProject != p && p.plugins.hasPlugin('jacoco')) {
+            classDirectories = classDirectories + files([
+                    fileTree(dir: "${p.buildDir}/tmp/kotlin-classes/debug")
+            ])
+            sourceDirectories = sourceDirectories + files([
+                    "${p.buildDir}/src/main/java"
+            ])
+        }
+    }
+
+    reports {
+        xml.enabled true
+        html.enabled true
+        csv.enabled false
+
+        println("howa${buildDir}")
+        xml.destination file("${buildDir}/reports/jacoco/report.xml")
+        html.destination file("${buildDir}/reports/jacoco/html")
+    }
+}
