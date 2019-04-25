@@ -79,7 +79,7 @@ repositories {
 }
 
 jacoco {
-    toolVersion = "0.7.7.201606060606"
+    toolVersion = "0.8.3"
 }
 def coverageExcludeFiles = ['**/R.class',
                             '**/R$*.class',
