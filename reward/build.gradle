@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'jacoco'
 
 android {
     compileSdkVersion 28
@@ -75,4 +76,41 @@ dependencies {
 }
 repositories {
     mavenCentral()
+}
+
+jacoco {
+    toolVersion = "0.8.3"
+}
+def coverageExcludeFiles = ['**/R.class',
+                            '**/R$*.class',
+                            '**/*Activity*.class',
+                            '**/*Fragment*.class',
+                            '**/databinding/*.*',
+                            '**/com/android/**/*.*',
+                            '**/BR.class',
+                            '**/Dagger*Component.class',
+                            '**/*_Factory.class'
+]
+task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
+    group = "Reporting"
+    description = "Generate Jacoco coverage reports after running tests."
+    reports {
+        xml.enabled true
+        html.enabled true
+        csv.enabled false
+        xml.destination file("${buildDir}/reports/jacoco/jacocoTestReport.xml")
+        html.destination file("${buildDir}/reports/jacoco/html")
+        classDirectories = files(
+                fileTree(
+                        dir: "${buildDir}/intermediates/javac/debug/compileDebugJavaWithJavac/classes/",
+                        exclude: coverageExcludeFiles
+                ) +
+                        fileTree(
+                                dir: "$buildDir/tmp/kotlin-classes/debug",
+                                excludes: coverageExcludeFiles
+                        )
+        )
+    }
+    sourceDirectories = files(['src/main/java'])
+    executionData = files "${buildDir}/jacoco/testDebugUnitTest.exec"
 }
