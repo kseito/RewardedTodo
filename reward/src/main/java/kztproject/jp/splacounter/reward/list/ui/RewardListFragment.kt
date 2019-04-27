@@ -2,6 +2,8 @@ package kztproject.jp.splacounter.reward.list.ui
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -21,9 +23,10 @@ import project.seito.reward.databinding.ItemRewardBinding
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
-class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
+class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     @Inject
-    lateinit var viewModel: RewardViewModel
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+    lateinit var viewModel: RewardListViewModel
 
     @Inject
     lateinit var fragmentTransitionManager: IFragmentsTransitionManager
@@ -33,14 +36,15 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
     private var animation: Animator? = null
 
     companion object {
-        fun newInstance(): RewardFragment {
-            return RewardFragment()
+        fun newInstance(): RewardListFragment {
+            return RewardListFragment()
         }
     }
 
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(RewardListViewModel::class.java)
         viewModel.setCallback(this)
     }
 
@@ -99,8 +103,8 @@ class RewardFragment : Fragment(), RewardViewModelCallback, ClickListener {
         AlertDialog.Builder(activityContext)
                 .setTitle(R.string.confirm_title)
                 .setMessage(String.format(getString(R.string.delete_confirm_message), reward.name))
-                .setPositiveButton(android.R.string.ok, { _, _ -> viewModel.deleteReward(reward, true) })
-                .setNegativeButton(android.R.string.cancel, { _, _ -> run {} })
+                .setPositiveButton(android.R.string.ok) { _, _ -> viewModel.deleteReward(reward, true) }
+                .setNegativeButton(android.R.string.cancel) { _, _ -> run {} }
                 .show()
     }
 

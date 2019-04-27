@@ -1,5 +1,7 @@
 package kztproject.jp.splacounter.reward.detail.ui
 
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
@@ -15,6 +17,7 @@ class RewardDetailFragment : Fragment(), RewardDetailViewModelCallback {
     private lateinit var binding: FragmentRewardDetailBinding
 
     @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var viewModel: RewardDetailViewModel
 
     companion object {
@@ -37,6 +40,7 @@ class RewardDetailFragment : Fragment(), RewardDetailViewModelCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(RewardDetailViewModel::class.java)
         viewModel.setCallback(this)
     }
 

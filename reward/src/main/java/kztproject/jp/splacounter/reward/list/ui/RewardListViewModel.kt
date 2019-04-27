@@ -1,19 +1,22 @@
 package kztproject.jp.splacounter.reward.list.ui
 
+import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
 import io.reactivex.Completable
 import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.repository.IPointRepository
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
+import project.seito.screen_transition.extention.addTo
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
-class RewardViewModel @Inject constructor(private val rewardListClient: IPointRepository,
-                                          private val rewardDao: IRewardRepository,
-                                          private val prefsWrapper: PrefsWrapper) {
+class RewardListViewModel @Inject constructor(private val rewardListClient: IPointRepository,
+                                              private val rewardDao: IRewardRepository,
+                                              private val prefsWrapper: PrefsWrapper) : ViewModel() {
 
     private lateinit var callback: RewardViewModelCallback
     var rewardList: MutableList<Reward> = mutableListOf()
@@ -25,6 +28,7 @@ class RewardViewModel @Inject constructor(private val rewardListClient: IPointRe
     var hasSelectReward: ObservableField<Boolean> = ObservableField()
     var point: ObservableField<Int> = ObservableField()
     var isEmpty: ObservableField<Boolean> = ObservableField()
+    private val compositeDisposable = CompositeDisposable()
 
     fun setCallback(callback: RewardViewModelCallback) {
         this.callback = callback
@@ -56,16 +60,18 @@ class RewardViewModel @Inject constructor(private val rewardListClient: IPointRe
                     isEmpty.set(false)
                 },
                         { isEmpty.set(true) })
+                .addTo(compositeDisposable)
     }
 
     fun loadPoint() {
         rewardListClient.loadPoint(prefsWrapper.userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe({ callback.onStartLoadingPoint() })
-                .doAfterTerminate({ callback.onTerminateLoadingPoint() })
+                .doOnSubscribe { callback.onStartLoadingPoint() }
+                .doAfterTerminate { callback.onTerminateLoadingPoint() }
                 .subscribe({ point.set(it.point) },
                         { callback.onPointLoadFailed() })
+                .addTo(compositeDisposable)
     }
 
     fun acquireReward() {
@@ -79,6 +85,7 @@ class RewardViewModel @Inject constructor(private val rewardListClient: IPointRe
                         callback.successAcquireReward(selectedReward, user.point)
                         point.set(user.point)
                     }, { callback.showError() })
+                    .addTo(compositeDisposable)
         } else {
             callback.showError()
         }
@@ -108,12 +115,13 @@ class RewardViewModel @Inject constructor(private val rewardListClient: IPointRe
         }
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe({
+                .subscribe {
                     if (needCallback) {
                         selectedReward = null
                         callback.onRewardDeleted(reward)
                     }
-                })
+                }
+                .addTo(compositeDisposable)
     }
 
     fun switchReward(reward: Reward) {
@@ -142,6 +150,11 @@ class RewardViewModel @Inject constructor(private val rewardListClient: IPointRe
     fun logout() {
         prefsWrapper.userId = 0
         callback.onLogout()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        compositeDisposable.dispose()
     }
 }
 

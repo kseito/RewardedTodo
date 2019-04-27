@@ -31,11 +31,11 @@ class RewardViewModelTest {
 
     private val prefsWrapper = PrefsWrapper(RuntimeEnvironment.application)
 
-    private lateinit var viewModel: RewardViewModel
+    private lateinit var viewModel: RewardListViewModel
 
     @Before
     fun setup() {
-        viewModel = RewardViewModel(mockPointRepository, mockDao, prefsWrapper)
+        viewModel = RewardListViewModel(mockPointRepository, mockDao, prefsWrapper)
         viewModel.setCallback(mockCallback)
 
         val scheduler = Schedulers.trampoline()

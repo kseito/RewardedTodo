@@ -8,7 +8,7 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kztproject.jp.splacounter.auth.ui.AuthFragment
-import kztproject.jp.splacounter.reward.list.ui.RewardFragment
+import kztproject.jp.splacounter.reward.list.ui.RewardListFragment
 import kztproject.jp.splacounter.ui_common.replaceFragment
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
@@ -26,7 +26,7 @@ class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_base)
         if (prefsWrapper.userId != 0L) {
-            replaceFragment(R.id.container, RewardFragment.newInstance())
+            replaceFragment(R.id.container, RewardListFragment.newInstance())
         } else {
             replaceFragment(R.id.container, AuthFragment.newInstance())
         }

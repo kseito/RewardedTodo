@@ -8,6 +8,7 @@ import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import kztproject.jp.splacounter.DummyCreator
+import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
 import org.assertj.core.api.Assertions
 import org.junit.After
@@ -43,8 +44,8 @@ class RewardDetailViewModelTest {
 
     @Test
     fun testSaveReward() {
-        viewModel.reward.name = "test"
-        viewModel.reward.consumePoint = 1
+        val reward = Reward("test", 1, "test description", false)
+        viewModel.reward.set(reward)
         viewModel.saveReward()
 
         Mockito.verify(mockCallback).onSaveCompleted(Matchers.anyString())
@@ -59,7 +60,8 @@ class RewardDetailViewModelTest {
 
     @Test
     fun testSaveRewardWithoutPoint() {
-        viewModel.reward.name = "test"
+        val reward = Reward("test", 0, "test description", false)
+        viewModel.reward.set(reward)
         viewModel.saveReward()
 
         Mockito.verify(mockCallback).onError(R.string.error_empty_point)
@@ -71,6 +73,6 @@ class RewardDetailViewModelTest {
         whenever(mockRewardRepository.findBy(ArgumentMatchers.anyInt())).thenReturn(reward)
         viewModel.initialize(1)
 
-        Assertions.assertThat(viewModel.reward).isEqualTo(reward)
+        Assertions.assertThat(viewModel.reward.get()).isEqualTo(reward)
     }
 }

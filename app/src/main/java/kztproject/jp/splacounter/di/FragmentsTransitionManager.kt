@@ -4,7 +4,7 @@ import android.support.v4.app.FragmentActivity
 import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.auth.ui.AuthFragment
 import kztproject.jp.splacounter.reward.detail.ui.RewardDetailFragment
-import kztproject.jp.splacounter.reward.list.ui.RewardFragment
+import kztproject.jp.splacounter.reward.list.ui.RewardListFragment
 import kztproject.jp.splacounter.ui_common.replaceFragment
 import kztproject.jp.splacounter.ui_common.replaceFragmentWithStack
 import project.seito.screen_transition.IFragmentsTransitionManager
@@ -16,7 +16,7 @@ class FragmentsTransitionManager @Inject constructor() : IFragmentsTransitionMan
     }
 
     override fun transitionToRewardFragment(activity: FragmentActivity) =
-            activity.replaceFragment(R.id.container, RewardFragment.newInstance())
+            activity.replaceFragment(R.id.container, RewardListFragment.newInstance())
 
     override fun transitionToRewardDetailFragment(activity: FragmentActivity?) {
         activity?.replaceFragmentWithStack(R.id.container, RewardDetailFragment.newInstance())
