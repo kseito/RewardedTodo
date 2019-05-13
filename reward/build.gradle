@@ -74,6 +74,10 @@ dependencies {
     annotationProcessor "android.arch.persistence.room:compiler:$room_version"
     kapt "android.arch.persistence.room:compiler:$room_version"
 
+    //Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1")
+
     implementation project(path: ':screen_transition')
 }
 repositories {

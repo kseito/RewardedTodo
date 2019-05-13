@@ -4,7 +4,7 @@ import kztproject.jp.splacounter.reward.database.model.Reward
 
 interface IRewardRepository {
 
-    fun createOrUpdate(reward: Reward)
+    suspend fun createOrUpdate(reward: Reward)
 
     fun delete(reward: Reward)
 
