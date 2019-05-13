@@ -4,10 +4,7 @@ import android.arch.lifecycle.ViewModel
 import android.content.res.Resources
 import android.databinding.ObservableField
 import android.support.annotation.StringRes
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
@@ -16,7 +13,6 @@ import kotlinx.coroutines.launch
 import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
 import project.seito.reward.R
-import project.seito.screen_transition.extention.addTo
 import javax.inject.Inject
 
 class RewardDetailViewModel @Inject constructor(private val rewardRepository: IRewardRepository) : ViewModel() {
@@ -34,16 +30,10 @@ class RewardDetailViewModel @Inject constructor(private val rewardRepository: IR
     private lateinit var callback: RewardDetailViewModelCallback
 
     fun initialize(id: Int) {
-        Single.create<Reward> { emitter ->
+        viewModelScope.launch {
             val reward = rewardRepository.findBy(id) ?: throw Resources.NotFoundException()
-            emitter.onSuccess(reward)
+            this@RewardDetailViewModel.reward.set(reward)
         }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe { reward ->
-                    this.reward.set(reward)
-                }
-                .addTo(compositeDisposable)
     }
 
     fun setCallback(callback: RewardDetailViewModelCallback) {

@@ -16,7 +16,11 @@ class RewardRepository @Inject constructor(private val rewardDao: RewardDao): IR
 
     override fun delete(reward: Reward) = rewardDao.deleteReward(reward)
 
-    override fun findBy(id: Int): Reward? = rewardDao.findBy(id)
+    override suspend fun findBy(id: Int): Reward? {
+        return withContext(Dispatchers.IO) {
+            rewardDao.findBy(id)
+        }
+    }
 
     override fun findAll(): Array<Reward> = rewardDao.findAll()
 
