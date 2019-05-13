@@ -3,10 +3,13 @@ package kztproject.jp.splacounter.reward.list.ui
 import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
 import io.reactivex.Completable
-import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.repository.IPointRepository
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
@@ -29,6 +32,8 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
     var point: ObservableField<Int> = ObservableField()
     var isEmpty: ObservableField<Boolean> = ObservableField()
     private val compositeDisposable = CompositeDisposable()
+    private val viewModelJob = Job()
+    private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     fun setCallback(callback: RewardViewModelCallback) {
         this.callback = callback
@@ -43,24 +48,12 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
     }
 
     fun getRewards() {
-        Single.create<MutableList<Reward>> {
-            val rewardList = mutableListOf<Reward>()
-            rewardList.addAll(rewardDao.findAll())
-            if (rewardList.size == 0) {
-                it.onError(IllegalStateException())
-            } else {
-                it.onSuccess(rewardList)
-            }
+        viewModelScope.launch {
+            val newRewardList = rewardDao.findAll()
+            rewardList.addAll(newRewardList)
+            isEmpty.set(newRewardList.isEmpty())
+            callback.showRewards(rewardList)
         }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    rewardList = it
-                    callback.showRewards(rewardList)
-                    isEmpty.set(false)
-                },
-                        { isEmpty.set(true) })
-                .addTo(compositeDisposable)
     }
 
     fun loadPoint() {

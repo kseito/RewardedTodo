@@ -10,5 +10,5 @@ interface IRewardRepository {
 
     suspend fun findBy(id: Int): Reward?
 
-    fun findAll(): Array<Reward>
+    suspend fun findAll(): Array<Reward>
 }
