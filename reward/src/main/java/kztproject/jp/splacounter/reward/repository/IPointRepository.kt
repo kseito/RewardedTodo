@@ -6,7 +6,7 @@ import kztproject.jp.splacounter.reward.database.model.RewardPoint
 
 interface IPointRepository {
 
-    fun loadPoint(userId: Long): Single<RewardPoint>
+    suspend fun loadPoint(userId: Long): RewardPoint
 
     fun consumePoint(userId: Long, additionalPoint: Int): Single<RewardUser>
 }

@@ -53,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end|center_vertical"
                     android:paddingRight="8dp"
-                    android:text="@{@string/point_with_unit(viewModel.point)}"
+                    android:text="@{@string/point_with_unit(viewModel.currentPoint)}"
                     android:textColor="@android:color/black"
                     android:textSize="18sp"
                     android:textStyle="bold" />

@@ -1,6 +1,7 @@
 package kztproject.jp.splacounter.reward.api
 
 import io.reactivex.Single
+import kotlinx.coroutines.Deferred
 import kztproject.jp.splacounter.reward.api.model.RewardUser
 import kztproject.jp.splacounter.reward.database.model.RewardPoint
 import retrofit2.http.*
@@ -8,7 +9,7 @@ import retrofit2.http.*
 interface RewardPointService {
 
     @GET("/api/users/{user_id}")
-    fun getPoint(@Path("user_id") userId: Long): Single<RewardPoint>
+    fun getPoint(@Path("user_id") userId: Long): Deferred<RewardPoint>
 
     //TODO change return value to RewardPoint
     @FormUrlEncoded

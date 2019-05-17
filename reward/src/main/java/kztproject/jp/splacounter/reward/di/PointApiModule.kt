@@ -1,5 +1,6 @@
 package kztproject.jp.splacounter.reward.di
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import kztproject.jp.splacounter.reward.api.RewardPointService
@@ -17,6 +18,7 @@ class PointApiModule {
                 .baseUrl(BuildConfig.REWARD_LIST_SERVER_URL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .build()
                 .create(RewardPointService::class.java)
     }

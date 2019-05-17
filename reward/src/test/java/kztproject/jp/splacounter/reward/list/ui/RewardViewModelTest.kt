@@ -186,7 +186,7 @@ class RewardViewModelTest {
         whenever(mockPointRepository.loadPoint(anyLong())).thenReturn(Single.just(dummyPoint))
         viewModel.loadPoint()
 
-        assertThat(viewModel.point.get()).isEqualTo(10)
+        assertThat(viewModel.currentPoint.get()).isEqualTo(10)
         verify(mockCallback).onStartLoadingPoint()
         verify(mockCallback).onTerminateLoadingPoint()
     }
