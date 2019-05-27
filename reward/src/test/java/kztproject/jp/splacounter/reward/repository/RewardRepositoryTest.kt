@@ -1,8 +1,9 @@
 package kztproject.jp.splacounter.reward.repository
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
+import kotlinx.coroutines.runBlocking
 import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.reward.database.RewardDao
 import org.junit.Test
@@ -19,9 +20,11 @@ class RewardRepositoryTest {
     @Test
     fun insertReward() {
         val dummyReward = DummyCreator.createDummyReward()
-        target.createOrUpdate(dummyReward)
+        runBlocking {
+            target.createOrUpdate(dummyReward)
 
-        verify(rewardDao, times(1)).insertReward(dummyReward)
+            verify(rewardDao, times(1)).insertReward(dummyReward)
+        }
     }
 
     @Test
@@ -34,16 +37,20 @@ class RewardRepositoryTest {
 
     @Test
     fun findBy() {
-        target.findBy(1)
+        runBlocking {
+            target.findBy(1)
 
-        verify(rewardDao, times(1)).findBy(1)
+            verify(rewardDao, times(1)).findBy(1)
+        }
     }
 
     @Test
     fun findAll() {
-        target.findAll()
+        runBlocking {
+            target.findAll()
 
-        verify(rewardDao, times(1)).findAll()
+            verify(rewardDao, times(1)).findAll()
+        }
     }
 
 }

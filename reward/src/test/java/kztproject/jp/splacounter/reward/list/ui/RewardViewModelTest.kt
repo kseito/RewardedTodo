@@ -1,10 +1,14 @@
 package kztproject.jp.splacounter.reward.list.ui
 
-import com.nhaarman.mockito_kotlin.*
+import com.nhaarman.mockitokotlin2.*
 import io.reactivex.Single
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.reward.repository.IPointRepository
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
@@ -41,12 +45,16 @@ class RewardViewModelTest {
         val scheduler = Schedulers.trampoline()
         RxJavaPlugins.setIoSchedulerHandler { scheduler }
         RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler }
+
+        Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @After
     fun teardown() {
         RxJavaPlugins.reset()
         RxAndroidPlugins.reset()
+
+        Dispatchers.resetMain()
     }
 
     @Test
@@ -58,7 +66,7 @@ class RewardViewModelTest {
 
     @Test
     fun testGetRewards() {
-        whenever(mockDao.findAll()).thenReturn(arrayOf(DummyCreator.createDummyReward()))
+        runBlocking { whenever(mockDao.findAll()).thenReturn(arrayOf(DummyCreator.createDummyReward())) }
         viewModel.getRewards()
 
         assertThat(viewModel.isEmpty.get()).isFalse()
@@ -183,7 +191,7 @@ class RewardViewModelTest {
     @Test
     fun testLoadPoint_Success() {
         val dummyPoint = DummyCreator.createDummyRewardPoint()
-        whenever(mockPointRepository.loadPoint(anyLong())).thenReturn(Single.just(dummyPoint))
+        runBlocking { whenever(mockPointRepository.loadPoint(anyLong())).thenReturn(dummyPoint) }
         viewModel.loadPoint()
 
         assertThat(viewModel.currentPoint.get()).isEqualTo(10)
@@ -193,7 +201,7 @@ class RewardViewModelTest {
 
     @Test
     fun testLoadPoint_Failure() {
-        whenever(mockPointRepository.loadPoint(anyLong())).thenReturn(Single.error(SocketTimeoutException()))
+        runBlocking { whenever(mockPointRepository.loadPoint(anyLong())).thenAnswer { throw SocketTimeoutException() } }
         viewModel.loadPoint()
 
         verify(mockCallback).onStartLoadingPoint()

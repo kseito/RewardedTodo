@@ -1,5 +1,7 @@
 package kztproject.jp.splacounter.reward.api
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -24,6 +26,7 @@ class RewardPointServiceTest {
     private val target = Retrofit.Builder()
             .baseUrl(mockWebServer.url(""))
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(RewardPointService::class.java)
@@ -54,8 +57,10 @@ class RewardPointServiceTest {
 
     @Test
     fun getPoint() {
-        val actual = target.getPoint(1).blockingGet()
-        assertThat(actual.point).isEqualTo(12)
+        runBlocking {
+            val actual = target.getPoint(1).await()
+            assertThat(actual.point).isEqualTo(12)
+        }
     }
 
     @Test

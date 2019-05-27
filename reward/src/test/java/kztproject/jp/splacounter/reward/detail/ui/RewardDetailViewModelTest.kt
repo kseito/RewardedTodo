@@ -1,12 +1,16 @@
 package kztproject.jp.splacounter.reward.detail.ui
 
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.whenever
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Scheduler
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
@@ -34,12 +38,16 @@ class RewardDetailViewModelTest {
         val scheduler: Scheduler = Schedulers.trampoline()
         RxJavaPlugins.setIoSchedulerHandler { scheduler }
         RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler }
+
+        Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @After
     fun teardown() {
         RxJavaPlugins.reset()
         RxAndroidPlugins.reset()
+
+        Dispatchers.resetMain()
     }
 
     @Test
@@ -70,7 +78,9 @@ class RewardDetailViewModelTest {
     @Test
     fun testInitialize() {
         val reward = DummyCreator.createDummyReward()
-        whenever(mockRewardRepository.findBy(ArgumentMatchers.anyInt())).thenReturn(reward)
+        runBlocking {
+            whenever(mockRewardRepository.findBy(ArgumentMatchers.anyInt())).thenReturn(reward)
+        }
         viewModel.initialize(1)
 
         Assertions.assertThat(viewModel.reward.get()).isEqualTo(reward)

@@ -1,22 +1,33 @@
 package kztproject.jp.splacounter.reward.repository
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
+import com.nhaarman.mockitokotlin2.doReturn
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
+import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.reward.api.RewardPointService
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
+import org.mockito.ArgumentMatchers.anyLong
+import org.mockito.Mockito.times
 
 class PointRepositoryTest {
 
-    private val mockRewardPointService: RewardPointService = mock()
+    private val mockRewardPointService: RewardPointService = mock {
+        onBlocking { getPoint(anyLong()) } doReturn GlobalScope.async { DummyCreator.createDummyRewardPoint() }
+    }
 
     private val target: PointRepository = PointRepository(mockRewardPointService)
 
     @Test
     fun loadPoint() {
-        target.loadPoint(1)
+        runBlocking {
+            val actual = target.loadPoint(1)
 
-        verify(mockRewardPointService, times(1)).getPoint(1)
+            assertThat(actual.point).isEqualTo(10)
+        }
     }
 
     @Test

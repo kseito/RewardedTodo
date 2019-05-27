@@ -47,8 +47,12 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
     fun getRewards() {
         viewModelScope.launch {
             val newRewardList = rewardDao.findAll()
+            isEmpty.set(newRewardList.isNullOrEmpty())
+            if (isEmpty.get() == true) {
+                return@launch
+            }
+
             rewardList.addAll(newRewardList)
-            isEmpty.set(newRewardList.isEmpty())
             callback.showRewards(rewardList)
         }
     }
@@ -56,10 +60,13 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
     fun loadPoint() {
         viewModelScope.launch {
             try {
+                callback.onStartLoadingPoint()
                 val point = rewardListClient.loadPoint(prefsWrapper.userId)
                 currentPoint.set(point.point)
             } catch (e: Exception) {
                 callback.onPointLoadFailed()
+            } finally {
+                callback.onTerminateLoadingPoint()
             }
         }
     }

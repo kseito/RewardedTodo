@@ -1,6 +1,7 @@
 package kztproject.jp.splacounter.reward.repository
 
 import io.reactivex.Single
+import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kztproject.jp.splacounter.reward.api.RewardPointService
@@ -12,9 +13,7 @@ import javax.inject.Inject
 class PointRepository @Inject constructor(private val rewardPointClient: RewardPointService) : IPointRepository {
 
     override suspend fun loadPoint(userId: Long): RewardPoint {
-        return withContext(Dispatchers.Default) {
-            rewardPointClient.getPoint(userId).await()
-        }
+        return rewardPointClient.getPoint(userId).await()
     }
 
     override fun consumePoint(userId: Long, additionalPoint: Int): Single<RewardUser> =
