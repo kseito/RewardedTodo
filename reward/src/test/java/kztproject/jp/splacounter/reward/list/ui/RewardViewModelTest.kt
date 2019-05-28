@@ -1,7 +1,6 @@
 package kztproject.jp.splacounter.reward.list.ui
 
 import com.nhaarman.mockitokotlin2.*
-import io.reactivex.Single
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
@@ -82,8 +81,7 @@ class RewardViewModelTest {
 
     @Test
     fun testAcquireRewardSuccess() {
-        whenever(mockPointRepository.consumePoint(anyLong(), anyInt()))
-                .thenReturn(Single.just(DummyCreator.createDummyRewardUser()))
+        runBlocking { whenever(mockPointRepository.consumePoint(anyLong(), anyInt())).thenReturn(DummyCreator.createDummyRewardUser()) }
         viewModel.selectedReward = DummyCreator.createDummyReward()
         viewModel.setPoint(20)
         viewModel.acquireReward()
@@ -93,8 +91,8 @@ class RewardViewModelTest {
 
     @Test
     fun testAcquireRewardFailure_PointShortage() {
-        whenever(mockPointRepository.consumePoint(anyLong(), anyInt()))
-                .thenReturn(Single.just(DummyCreator.createDummyRewardUser()))
+        runBlocking { whenever(mockPointRepository.consumePoint(anyLong(), anyInt())).thenReturn(DummyCreator.createDummyRewardUser()) }
+
         val reward = DummyCreator.createDummyReward()
         viewModel.setPoint(1)
         viewModel.selectedReward = reward
@@ -106,8 +104,7 @@ class RewardViewModelTest {
 
     @Test
     fun testAcquireRewardFailure_SocketTimeOut() {
-        whenever(mockPointRepository.consumePoint(anyLong(), anyInt()))
-                .thenReturn(Single.error(SocketTimeoutException()))
+        runBlocking { whenever(mockPointRepository.consumePoint(anyLong(), anyInt())).thenAnswer { throw SocketTimeoutException() } }
         viewModel.setPoint(20)
         viewModel.selectedReward = DummyCreator.createDummyReward()
         viewModel.acquireReward()

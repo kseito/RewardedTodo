@@ -75,14 +75,15 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
         val selectedReward: Reward = this.selectedReward
                 ?: throw NullPointerException("acquireReward() cannot call when selectedReward is null")
         if (currentPoint.get()!! >= selectedReward.consumePoint) {
-            rewardListClient.consumePoint(prefsWrapper.userId, selectedReward.consumePoint)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ user ->
-                        callback.successAcquireReward(selectedReward, user.point)
-                        currentPoint.set(user.point)
-                    }, { callback.showError() })
-                    .addTo(compositeDisposable)
+            viewModelScope.launch {
+                try {
+                    val user = rewardListClient.consumePoint(prefsWrapper.userId, selectedReward.consumePoint)
+                    callback.successAcquireReward(selectedReward, user.point)
+                    currentPoint.set(user.point)
+                } catch (e: Exception) {
+                    callback.showError()
+                }
+            }
         } else {
             callback.showError()
         }

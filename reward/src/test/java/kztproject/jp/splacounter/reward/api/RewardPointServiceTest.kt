@@ -65,10 +65,12 @@ class RewardPointServiceTest {
 
     @Test
     fun updatePoint() {
-        val actual = target.updatePoint(1, 1).blockingGet()
-        assertThat(actual.id).isEqualTo(1)
-        assertThat(actual.todoistId).isEqualTo(505)
-        assertThat(actual.point).isEqualTo(24)
+        runBlocking {
+            val actual = target.updatePoint(1, 1).await()
+            assertThat(actual.id).isEqualTo(1)
+            assertThat(actual.todoistId).isEqualTo(505)
+            assertThat(actual.point).isEqualTo(24)
+        }
     }
 
     private fun readJsonFromResources(fileName: String): String {
