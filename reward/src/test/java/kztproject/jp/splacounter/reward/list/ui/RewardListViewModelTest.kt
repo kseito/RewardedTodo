@@ -24,7 +24,7 @@ import project.seito.screen_transition.preference.PrefsWrapper
 import java.net.SocketTimeoutException
 
 @RunWith(RobolectricTestRunner::class)
-class RewardViewModelTest {
+class RewardListViewModelTest {
 
     private val mockCallback: RewardViewModelCallback = mock()
 
