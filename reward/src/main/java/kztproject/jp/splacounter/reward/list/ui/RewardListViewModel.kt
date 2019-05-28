@@ -40,7 +40,7 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
         callback.showRewardDetail()
     }
 
-    fun getRewards() {
+    fun loadRewards() {
         viewModelScope.launch {
             val newRewardList = rewardDao.findAll()
             isEmpty.set(newRewardList.isNullOrEmpty())
