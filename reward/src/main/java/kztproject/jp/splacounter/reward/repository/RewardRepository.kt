@@ -14,7 +14,11 @@ class RewardRepository @Inject constructor(private val rewardDao: RewardDao): IR
         }
     }
 
-    override fun delete(reward: Reward) = rewardDao.deleteReward(reward)
+    override suspend fun delete(reward: Reward) {
+        withContext(Dispatchers.IO) {
+            rewardDao.deleteReward(reward)
+        }
+    }
 
     override suspend fun findBy(id: Int): Reward? {
         return withContext(Dispatchers.IO) {

@@ -2,15 +2,11 @@ package kztproject.jp.splacounter.reward.list.ui
 
 import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
-import io.reactivex.Completable
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.*
 import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.repository.IPointRepository
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
-import project.seito.screen_transition.extention.addTo
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
@@ -107,19 +103,14 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
     }
 
     fun deleteReward(reward: Reward, needCallback: Boolean) {
-        Completable.create { e ->
+        viewModelScope.launch {
             rewardDao.delete(reward)
-            e.onComplete()
+
+            if (needCallback) {
+                selectedReward = null
+                callback.onRewardDeleted(reward)
+            }
         }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    if (needCallback) {
-                        selectedReward = null
-                        callback.onRewardDeleted(reward)
-                    }
-                }
-                .addTo(compositeDisposable)
     }
 
     fun switchReward(reward: Reward) {

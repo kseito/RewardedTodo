@@ -29,10 +29,12 @@ class RewardRepositoryTest {
 
     @Test
     fun deleteReward() {
-        val dummyReward = DummyCreator.createDummyReward()
-        target.delete(dummyReward)
+        runBlocking {
+            val dummyReward = DummyCreator.createDummyReward()
+            target.delete(dummyReward)
 
-        verify(rewardDao, times(1)).deleteReward(dummyReward)
+            verify(rewardDao, times(1)).deleteReward(dummyReward)
+        }
     }
 
     @Test

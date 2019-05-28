@@ -113,18 +113,22 @@ class RewardViewModelTest {
 
     @Test
     fun testRemoveReward() {
-        viewModel.deleteRewardIfNeeded(DummyCreator.createDummyReward())
+        runBlocking {
+            viewModel.deleteRewardIfNeeded(DummyCreator.createDummyReward())
 
-        verify(mockDao, times(0)).delete(any())
-        verify(mockCallback, times(0)).onRewardDeleted(any())
+            verify(mockDao, times(0)).delete(any())
+            verify(mockCallback, times(0)).onRewardDeleted(any())
+        }
     }
 
     @Test
     fun testNotRemoveReward() {
-        viewModel.deleteRewardIfNeeded(DummyCreator.createDummyNoRepeatReward())
+        runBlocking {
+            viewModel.deleteRewardIfNeeded(DummyCreator.createDummyNoRepeatReward())
 
-        verify(mockDao, times(1)).delete(any())
-        verify(mockCallback, times(0)).onRewardDeleted(any())
+            verify(mockDao, times(1)).delete(any())
+            verify(mockCallback, times(0)).onRewardDeleted(any())
+        }
     }
 
     @Test
@@ -169,11 +173,13 @@ class RewardViewModelTest {
 
     @Test
     fun testDeleteReward() {
-        val reward = DummyCreator.createDummyReward()
-        viewModel.deleteReward(reward, true)
+        runBlocking {
+            val reward = DummyCreator.createDummyReward()
+            viewModel.deleteReward(reward, true)
 
-        verify(mockDao).delete(any())
-        verify(mockCallback).onRewardDeleted(reward)
+            verify(mockDao).delete(any())
+            verify(mockCallback).onRewardDeleted(reward)
+        }
     }
 
     @Test

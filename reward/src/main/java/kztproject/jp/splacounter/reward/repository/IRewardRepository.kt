@@ -6,7 +6,7 @@ interface IRewardRepository {
 
     suspend fun createOrUpdate(reward: Reward)
 
-    fun delete(reward: Reward)
+    suspend fun delete(reward: Reward)
 
     suspend fun findBy(id: Int): Reward?
 
