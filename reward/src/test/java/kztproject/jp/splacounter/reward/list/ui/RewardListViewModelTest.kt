@@ -9,6 +9,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import kztproject.jp.splacounter.DummyCreator
+import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.repository.IPointRepository
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -70,6 +71,18 @@ class RewardListViewModelTest {
 
         assertThat(viewModel.isEmpty.get()).isFalse()
         verify(mockCallback, times(1)).showRewards(any())
+    }
+
+    @Test
+    fun shouldNotDuplicateRewards() {
+        argumentCaptor<MutableList<Reward>>().apply {
+            runBlocking { whenever(mockDao.findAll()).thenReturn(arrayOf(DummyCreator.createDummyReward())) }
+            viewModel.loadRewards()
+            viewModel.loadRewards()
+
+            verify(mockCallback, times(2)).showRewards(capture())
+            assertThat(this.firstValue.size).isEqualTo(1)
+        }
     }
 
     @Test
