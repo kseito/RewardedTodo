@@ -4,7 +4,6 @@ import android.arch.lifecycle.ViewModel
 import android.content.res.Resources
 import android.databinding.ObservableField
 import android.support.annotation.StringRes
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
@@ -18,8 +17,6 @@ import javax.inject.Inject
 class RewardDetailViewModel @Inject constructor(private val rewardRepository: IRewardRepository) : ViewModel() {
 
     var reward: ObservableField<Reward> = ObservableField()
-    private val compositeDisposable = CompositeDisposable()
-
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Main + viewModelJob)
 
@@ -58,7 +55,6 @@ class RewardDetailViewModel @Inject constructor(private val rewardRepository: IR
 
     override fun onCleared() {
         super.onCleared()
-        compositeDisposable.dispose()
         viewModelScope.cancel()
     }
 }

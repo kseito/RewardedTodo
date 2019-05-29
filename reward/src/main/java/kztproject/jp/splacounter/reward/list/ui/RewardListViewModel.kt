@@ -2,7 +2,6 @@ package kztproject.jp.splacounter.reward.list.ui
 
 import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
 import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.repository.IPointRepository
@@ -24,7 +23,6 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
     var hasSelectReward: ObservableField<Boolean> = ObservableField()
     var currentPoint: ObservableField<Int> = ObservableField()
     var isEmpty: ObservableField<Boolean> = ObservableField()
-    private val compositeDisposable = CompositeDisposable()
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
@@ -144,7 +142,6 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
 
     override fun onCleared() {
         super.onCleared()
-        compositeDisposable.dispose()
         viewModelScope.cancel()
     }
 }
