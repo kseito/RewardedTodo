@@ -5,3 +5,15 @@
 
 This is a side project I use to experiment new libraries, framework features and so on.  
 This app is to manage my rewards and points.
+
+## Architecture
+This app is composed with MVVM Architecture and separate each layer by multi module function.
+
+## Libraries
+This app use folloing libraries.
+- DataBinding
+- Retrofit2
+- RxJava2
+- Dagger2
+- Android Architecture Component(only Room)
+- Coroutines(WIP)
