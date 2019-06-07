@@ -56,7 +56,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.getRewards()
+        viewModel.loadRewards()
         viewModel.loadPoint()
 
         binding.bottomNavigation.addItem(AHBottomNavigationItem("Done", R.drawable.reward_done))

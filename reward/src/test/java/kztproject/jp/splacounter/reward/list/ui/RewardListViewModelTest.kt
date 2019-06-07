@@ -1,11 +1,12 @@
 package kztproject.jp.splacounter.reward.list.ui
 
-import com.nhaarman.mockito_kotlin.*
-import io.reactivex.Single
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.Schedulers
+import com.nhaarman.mockitokotlin2.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.setMain
 import kztproject.jp.splacounter.DummyCreator
+import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.repository.IPointRepository
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -21,7 +22,7 @@ import project.seito.screen_transition.preference.PrefsWrapper
 import java.net.SocketTimeoutException
 
 @RunWith(RobolectricTestRunner::class)
-class RewardViewModelTest {
+class RewardListViewModelTest {
 
     private val mockCallback: RewardViewModelCallback = mock()
 
@@ -38,15 +39,12 @@ class RewardViewModelTest {
         viewModel = RewardListViewModel(mockPointRepository, mockDao, prefsWrapper)
         viewModel.setCallback(mockCallback)
 
-        val scheduler = Schedulers.trampoline()
-        RxJavaPlugins.setIoSchedulerHandler { scheduler }
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler }
+        Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @After
     fun teardown() {
-        RxJavaPlugins.reset()
-        RxAndroidPlugins.reset()
+        Dispatchers.resetMain()
     }
 
     @Test
@@ -58,24 +56,35 @@ class RewardViewModelTest {
 
     @Test
     fun testGetRewards() {
-        whenever(mockDao.findAll()).thenReturn(arrayOf(DummyCreator.createDummyReward()))
-        viewModel.getRewards()
+        runBlocking { whenever(mockDao.findAll()).thenReturn(arrayOf(DummyCreator.createDummyReward())) }
+        viewModel.loadRewards()
 
         assertThat(viewModel.isEmpty.get()).isFalse()
         verify(mockCallback, times(1)).showRewards(any())
     }
 
     @Test
+    fun shouldNotDuplicateRewards() {
+        argumentCaptor<MutableList<Reward>>().apply {
+            runBlocking { whenever(mockDao.findAll()).thenReturn(arrayOf(DummyCreator.createDummyReward())) }
+            viewModel.loadRewards()
+            viewModel.loadRewards()
+
+            verify(mockCallback, times(2)).showRewards(capture())
+            assertThat(this.firstValue.size).isEqualTo(1)
+        }
+    }
+
+    @Test
     fun testGetRewards_Empty() {
-        viewModel.getRewards()
+        viewModel.loadRewards()
 
         assertThat(viewModel.isEmpty.get()).isTrue()
     }
 
     @Test
     fun testAcquireRewardSuccess() {
-        whenever(mockPointRepository.consumePoint(anyLong(), anyInt()))
-                .thenReturn(Single.just(DummyCreator.createDummyRewardUser()))
+        runBlocking { whenever(mockPointRepository.consumePoint(anyLong(), anyInt())).thenReturn(DummyCreator.createDummyRewardUser()) }
         viewModel.selectedReward = DummyCreator.createDummyReward()
         viewModel.setPoint(20)
         viewModel.acquireReward()
@@ -85,8 +94,8 @@ class RewardViewModelTest {
 
     @Test
     fun testAcquireRewardFailure_PointShortage() {
-        whenever(mockPointRepository.consumePoint(anyLong(), anyInt()))
-                .thenReturn(Single.just(DummyCreator.createDummyRewardUser()))
+        runBlocking { whenever(mockPointRepository.consumePoint(anyLong(), anyInt())).thenReturn(DummyCreator.createDummyRewardUser()) }
+
         val reward = DummyCreator.createDummyReward()
         viewModel.setPoint(1)
         viewModel.selectedReward = reward
@@ -98,8 +107,7 @@ class RewardViewModelTest {
 
     @Test
     fun testAcquireRewardFailure_SocketTimeOut() {
-        whenever(mockPointRepository.consumePoint(anyLong(), anyInt()))
-                .thenReturn(Single.error(SocketTimeoutException()))
+        runBlocking { whenever(mockPointRepository.consumePoint(anyLong(), anyInt())).thenAnswer { throw SocketTimeoutException() } }
         viewModel.setPoint(20)
         viewModel.selectedReward = DummyCreator.createDummyReward()
         viewModel.acquireReward()
@@ -108,18 +116,22 @@ class RewardViewModelTest {
 
     @Test
     fun testRemoveReward() {
-        viewModel.deleteRewardIfNeeded(DummyCreator.createDummyReward())
+        runBlocking {
+            viewModel.deleteRewardIfNeeded(DummyCreator.createDummyReward())
 
-        verify(mockDao, times(0)).delete(any())
-        verify(mockCallback, times(0)).onRewardDeleted(any())
+            verify(mockDao, times(0)).delete(any())
+            verify(mockCallback, times(0)).onRewardDeleted(any())
+        }
     }
 
     @Test
     fun testNotRemoveReward() {
-        viewModel.deleteRewardIfNeeded(DummyCreator.createDummyNoRepeatReward())
+        runBlocking {
+            viewModel.deleteRewardIfNeeded(DummyCreator.createDummyNoRepeatReward())
 
-        verify(mockDao, times(1)).delete(any())
-        verify(mockCallback, times(0)).onRewardDeleted(any())
+            verify(mockDao, times(1)).delete(any())
+            verify(mockCallback, times(0)).onRewardDeleted(any())
+        }
     }
 
     @Test
@@ -164,11 +176,13 @@ class RewardViewModelTest {
 
     @Test
     fun testDeleteReward() {
-        val reward = DummyCreator.createDummyReward()
-        viewModel.deleteReward(reward, true)
+        runBlocking {
+            val reward = DummyCreator.createDummyReward()
+            viewModel.deleteReward(reward, true)
 
-        verify(mockDao).delete(any())
-        verify(mockCallback).onRewardDeleted(reward)
+            verify(mockDao).delete(any())
+            verify(mockCallback).onRewardDeleted(reward)
+        }
     }
 
     @Test
@@ -183,17 +197,17 @@ class RewardViewModelTest {
     @Test
     fun testLoadPoint_Success() {
         val dummyPoint = DummyCreator.createDummyRewardPoint()
-        whenever(mockPointRepository.loadPoint(anyLong())).thenReturn(Single.just(dummyPoint))
+        runBlocking { whenever(mockPointRepository.loadPoint(anyLong())).thenReturn(dummyPoint) }
         viewModel.loadPoint()
 
-        assertThat(viewModel.point.get()).isEqualTo(10)
+        assertThat(viewModel.currentPoint.get()).isEqualTo(10)
         verify(mockCallback).onStartLoadingPoint()
         verify(mockCallback).onTerminateLoadingPoint()
     }
 
     @Test
     fun testLoadPoint_Failure() {
-        whenever(mockPointRepository.loadPoint(anyLong())).thenReturn(Single.error(SocketTimeoutException()))
+        runBlocking { whenever(mockPointRepository.loadPoint(anyLong())).thenAnswer { throw SocketTimeoutException() } }
         viewModel.loadPoint()
 
         verify(mockCallback).onStartLoadingPoint()

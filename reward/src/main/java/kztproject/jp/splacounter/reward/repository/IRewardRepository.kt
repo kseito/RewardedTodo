@@ -4,11 +4,11 @@ import kztproject.jp.splacounter.reward.database.model.Reward
 
 interface IRewardRepository {
 
-    fun createOrUpdate(reward: Reward)
+    suspend fun createOrUpdate(reward: Reward)
 
-    fun delete(reward: Reward)
+    suspend fun delete(reward: Reward)
 
-    fun findBy(id: Int): Reward?
+    suspend fun findBy(id: Int): Reward?
 
-    fun findAll(): Array<Reward>
+    suspend fun findAll(): Array<Reward>
 }

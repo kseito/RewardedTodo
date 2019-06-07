@@ -2,15 +2,10 @@ package kztproject.jp.splacounter.reward.list.ui
 
 import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
-import io.reactivex.Completable
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.*
 import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.repository.IPointRepository
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
-import project.seito.screen_transition.extention.addTo
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
@@ -26,66 +21,64 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
             field = value
         }
     var hasSelectReward: ObservableField<Boolean> = ObservableField()
-    var point: ObservableField<Int> = ObservableField()
+    var currentPoint: ObservableField<Int> = ObservableField()
     var isEmpty: ObservableField<Boolean> = ObservableField()
-    private val compositeDisposable = CompositeDisposable()
+    private val viewModelJob = Job()
+    private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     fun setCallback(callback: RewardViewModelCallback) {
         this.callback = callback
     }
 
     fun setPoint(point: Int) {
-        this.point.set(point)
+        this.currentPoint.set(point)
     }
 
     fun showRewardDetail() {
         callback.showRewardDetail()
     }
 
-    fun getRewards() {
-        Single.create<MutableList<Reward>> {
-            val rewardList = mutableListOf<Reward>()
-            rewardList.addAll(rewardDao.findAll())
-            if (rewardList.size == 0) {
-                it.onError(IllegalStateException())
-            } else {
-                it.onSuccess(rewardList)
+    fun loadRewards() {
+        viewModelScope.launch {
+            val newRewardList = rewardDao.findAll()
+            isEmpty.set(newRewardList.isNullOrEmpty())
+            if (isEmpty.get() == true) {
+                return@launch
             }
+
+            rewardList = mutableListOf()
+            rewardList.addAll(newRewardList)
+            callback.showRewards(rewardList)
         }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    rewardList = it
-                    callback.showRewards(rewardList)
-                    isEmpty.set(false)
-                },
-                        { isEmpty.set(true) })
-                .addTo(compositeDisposable)
     }
 
     fun loadPoint() {
-        rewardListClient.loadPoint(prefsWrapper.userId)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { callback.onStartLoadingPoint() }
-                .doAfterTerminate { callback.onTerminateLoadingPoint() }
-                .subscribe({ point.set(it.point) },
-                        { callback.onPointLoadFailed() })
-                .addTo(compositeDisposable)
+        viewModelScope.launch {
+            try {
+                callback.onStartLoadingPoint()
+                val point = rewardListClient.loadPoint(prefsWrapper.userId)
+                currentPoint.set(point.point)
+            } catch (e: Exception) {
+                callback.onPointLoadFailed()
+            } finally {
+                callback.onTerminateLoadingPoint()
+            }
+        }
     }
 
     fun acquireReward() {
         val selectedReward: Reward = this.selectedReward
                 ?: throw NullPointerException("acquireReward() cannot call when selectedReward is null")
-        if (point.get()!! >= selectedReward.consumePoint) {
-            rewardListClient.consumePoint(prefsWrapper.userId, selectedReward.consumePoint)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe({ user ->
-                        callback.successAcquireReward(selectedReward, user.point)
-                        point.set(user.point)
-                    }, { callback.showError() })
-                    .addTo(compositeDisposable)
+        if (currentPoint.get()!! >= selectedReward.consumePoint) {
+            viewModelScope.launch {
+                try {
+                    val user = rewardListClient.consumePoint(prefsWrapper.userId, selectedReward.consumePoint)
+                    callback.successAcquireReward(selectedReward, user.point)
+                    currentPoint.set(user.point)
+                } catch (e: Exception) {
+                    callback.showError()
+                }
+            }
         } else {
             callback.showError()
         }
@@ -109,19 +102,14 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
     }
 
     fun deleteReward(reward: Reward, needCallback: Boolean) {
-        Completable.create { e ->
+        viewModelScope.launch {
             rewardDao.delete(reward)
-            e.onComplete()
+
+            if (needCallback) {
+                selectedReward = null
+                callback.onRewardDeleted(reward)
+            }
         }
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe {
-                    if (needCallback) {
-                        selectedReward = null
-                        callback.onRewardDeleted(reward)
-                    }
-                }
-                .addTo(compositeDisposable)
     }
 
     fun switchReward(reward: Reward) {
@@ -154,7 +142,7 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
 
     override fun onCleared() {
         super.onCleared()
-        compositeDisposable.dispose()
+        viewModelScope.cancel()
     }
 }
 

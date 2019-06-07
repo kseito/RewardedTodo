@@ -23,6 +23,6 @@ class FragmentsTransitionManager @Inject constructor() : IFragmentsTransitionMan
     }
 
     override fun transitionToRewardDetailFragment(activity: FragmentActivity?, rewardId: Int) {
-        activity?.replaceFragment(R.id.container, RewardDetailFragment.newInstance(rewardId))
+        activity?.replaceFragmentWithStack(R.id.container, RewardDetailFragment.newInstance(rewardId))
     }
 }

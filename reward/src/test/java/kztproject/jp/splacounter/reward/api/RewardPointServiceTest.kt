@@ -1,5 +1,7 @@
 package kztproject.jp.splacounter.reward.api
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -11,7 +13,6 @@ import org.junit.Before
 import org.junit.Test
 import project.seito.screen_transition.api.HttpMethod
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.BufferedReader
 import java.io.IOException
@@ -23,7 +24,7 @@ class RewardPointServiceTest {
     private val mockWebServer: MockWebServer = MockWebServer()
     private val target = Retrofit.Builder()
             .baseUrl(mockWebServer.url(""))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(RewardPointService::class.java)
@@ -54,16 +55,20 @@ class RewardPointServiceTest {
 
     @Test
     fun getPoint() {
-        val actual = target.getPoint(1).blockingGet()
-        assertThat(actual.point).isEqualTo(12)
+        runBlocking {
+            val actual = target.getPoint(1).await()
+            assertThat(actual.point).isEqualTo(12)
+        }
     }
 
     @Test
     fun updatePoint() {
-        val actual = target.updatePoint(1, 1).blockingGet()
-        assertThat(actual.id).isEqualTo(1)
-        assertThat(actual.todoistId).isEqualTo(505)
-        assertThat(actual.point).isEqualTo(24)
+        runBlocking {
+            val actual = target.updatePoint(1, 1).await()
+            assertThat(actual.id).isEqualTo(1)
+            assertThat(actual.todoistId).isEqualTo(505)
+            assertThat(actual.point).isEqualTo(24)
+        }
     }
 
     private fun readJsonFromResources(fileName: String): String {
