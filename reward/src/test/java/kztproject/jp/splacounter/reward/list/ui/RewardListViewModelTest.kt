@@ -1,9 +1,6 @@
 package kztproject.jp.splacounter.reward.list.ui
 
 import com.nhaarman.mockitokotlin2.*
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
@@ -42,18 +39,11 @@ class RewardListViewModelTest {
         viewModel = RewardListViewModel(mockPointRepository, mockDao, prefsWrapper)
         viewModel.setCallback(mockCallback)
 
-        val scheduler = Schedulers.trampoline()
-        RxJavaPlugins.setIoSchedulerHandler { scheduler }
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler }
-
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @After
     fun teardown() {
-        RxJavaPlugins.reset()
-        RxAndroidPlugins.reset()
-
         Dispatchers.resetMain()
     }
 

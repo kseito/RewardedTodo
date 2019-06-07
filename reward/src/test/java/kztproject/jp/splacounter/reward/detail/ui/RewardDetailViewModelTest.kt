@@ -3,10 +3,6 @@ package kztproject.jp.splacounter.reward.detail.ui
 
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import io.reactivex.Scheduler
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
@@ -35,18 +31,11 @@ class RewardDetailViewModelTest {
     fun setup() {
         viewModel.setCallback(mockCallback)
 
-        val scheduler: Scheduler = Schedulers.trampoline()
-        RxJavaPlugins.setIoSchedulerHandler { scheduler }
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler }
-
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
 
     @After
     fun teardown() {
-        RxJavaPlugins.reset()
-        RxAndroidPlugins.reset()
-
         Dispatchers.resetMain()
     }
 
