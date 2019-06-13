@@ -1,5 +1,6 @@
 package kztproject.jp.splacounter.auth.di
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
 import kztproject.jp.splacounter.auth.api.RewardListLoginService
@@ -18,7 +19,7 @@ class AuthApiModule {
     fun provideTodoistService(): TodoistService {
         return Retrofit.Builder()
                 .baseUrl(BuildConfig.TODOIST_URL)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(TodoistService::class.java)
@@ -29,7 +30,7 @@ class AuthApiModule {
     fun provideRewardListLoginService(): RewardListLoginService {
         return Retrofit.Builder()
                 .baseUrl(BuildConfig.REWARD_LIST_SERVER_URL)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addCallAdapterFactory(CoroutineCallAdapterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(RewardListLoginService::class.java)

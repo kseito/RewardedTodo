@@ -1,10 +1,10 @@
 package kztproject.jp.splacounter.auth.repository
 
-import io.reactivex.Completable
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import kztproject.jp.splacounter.auth.api.RewardListLoginService
 import kztproject.jp.splacounter.auth.api.TodoistService
 import kztproject.jp.splacounter.auth.api.model.RewardUser
-import kztproject.jp.splacounter.auth.api.model.UserResponse
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
@@ -13,20 +13,21 @@ constructor(private val todoistService: TodoistService,
             private val rewardListClient: RewardListLoginService,
             private val prefsWrapper: PrefsWrapper) : IAuthRepository {
 
-    override fun login(inputString: String): Completable {
-        return todoistService.getUser(inputString, "*", "[\"user\"]")
-                .flatMap { response: UserResponse -> rewardListClient.findUser(response.user.id.toLong()) }
-                .flatMapCompletable { save(it) }
+    override suspend fun login(inputString: String) {
+        val response = todoistService.getUser(inputString, "*", "[\"user\"]").await()
+        val user = rewardListClient.findUser(response.user.id.toLong()).await()
+        save(user)
     }
 
-    override fun signUp(todoistToken: String): Completable {
-        return todoistService.getUser(todoistToken, "*", "[\"user\"]")
-                .flatMap { response -> rewardListClient.createUser(response.user.id.toLong()) }
-                .flatMapCompletable { save(it) }
+    override suspend fun signUp(todoistToken: String) {
+        return withContext(Dispatchers.IO) {
+            val response = todoistService.getUser(todoistToken, "*", "[\"user\"]").await()
+            val user = rewardListClient.createUser(response.user.id.toLong()).await()
+            save(user)
+        }
     }
 
-    private fun save(user: RewardUser): Completable {
+    private fun save(user: RewardUser) {
         prefsWrapper.userId = user.id
-        return Completable.complete()
     }
 }
