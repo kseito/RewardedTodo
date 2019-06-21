@@ -59,7 +59,9 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
                 val point = rewardListClient.loadPoint(prefsWrapper.userId)
                 currentPoint.set(point.point)
             } catch (e: Exception) {
-                callback.onPointLoadFailed()
+                if (isActive) {
+                    callback.onPointLoadFailed()
+                }
             } finally {
                 callback.onTerminateLoadingPoint()
             }
@@ -76,7 +78,9 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
                     callback.successAcquireReward(selectedReward, user.point)
                     currentPoint.set(user.point)
                 } catch (e: Exception) {
-                    callback.showError()
+                    if (isActive) {
+                        callback.showError()
+                    }
                 }
             }
         } else {
