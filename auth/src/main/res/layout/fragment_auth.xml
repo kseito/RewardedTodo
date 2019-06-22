@@ -13,20 +13,20 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/space_normal"
             android:layout_marginRight="@dimen/space_normal"
             android:layout_marginTop="64dp">
 
-            <android.support.v7.widget.AppCompatEditText
+            <EditText
                 android:id="@+id/token_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@={viewModel.inputString}"
                 android:hint="APIトークン" />
-        </android.support.design.widget.TextInputLayout>
+        </com.google.android.material.textfield.TextInputLayout>
 
         <info.hoang8f.widget.FButton
             android:id="@+id/login_button"

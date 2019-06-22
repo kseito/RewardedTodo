@@ -1,8 +1,8 @@
 package kztproject.jp.splacounter.auth.ui
 
-import android.arch.lifecycle.ViewModel
-import android.databinding.ObservableField
-import android.support.annotation.StringRes
+import androidx.lifecycle.ViewModel
+import androidx.databinding.ObservableField
+import androidx.annotation.StringRes
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main

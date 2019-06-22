@@ -1,6 +1,6 @@
 package kztproject.jp.splacounter.reward.database
 
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import kztproject.jp.splacounter.reward.database.model.Reward
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After

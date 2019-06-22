@@ -1,14 +1,14 @@
 package project.seito.screen_transition
 
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 
 interface IFragmentsTransitionManager {
 
-    fun transitionToRewardFragment(activity: FragmentActivity)
+    fun transitionToRewardFragment(activity: androidx.fragment.app.FragmentActivity)
 
-    fun transitionToRewardDetailFragment(activity: FragmentActivity?)
+    fun transitionToRewardDetailFragment(activity: androidx.fragment.app.FragmentActivity?)
 
-    fun transitionToRewardDetailFragment(activity: FragmentActivity?, rewardId: Int)
+    fun transitionToRewardDetailFragment(activity: androidx.fragment.app.FragmentActivity?, rewardId: Int)
 
-    fun transitionToAuthFragment(activity: FragmentActivity?)
+    fun transitionToAuthFragment(activity: androidx.fragment.app.FragmentActivity?)
 }

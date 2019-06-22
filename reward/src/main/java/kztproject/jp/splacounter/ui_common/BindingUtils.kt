@@ -1,6 +1,6 @@
 package kztproject.jp.splacounter.ui_common
 
-import android.databinding.InverseMethod
+import androidx.databinding.InverseMethod
 
 object BindingUtils {
 

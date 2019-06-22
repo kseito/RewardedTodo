@@ -1,6 +1,6 @@
 package kztproject.jp.splacounter.reward.database
 
-import android.arch.persistence.room.*
+import androidx.room.*
 import kztproject.jp.splacounter.reward.database.model.Reward
 
 @Dao

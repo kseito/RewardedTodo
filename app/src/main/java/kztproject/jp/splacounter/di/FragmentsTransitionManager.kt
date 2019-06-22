@@ -1,6 +1,6 @@
 package kztproject.jp.splacounter.di
 
-import android.support.v4.app.FragmentActivity
+import androidx.fragment.app.FragmentActivity
 import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.auth.ui.AuthFragment
 import kztproject.jp.splacounter.reward.detail.ui.RewardDetailFragment

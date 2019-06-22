@@ -1,9 +1,9 @@
 package kztproject.jp.splacounter.reward.detail.ui
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import android.content.res.Resources
-import android.databinding.ObservableField
-import android.support.annotation.StringRes
+import androidx.databinding.ObservableField
+import androidx.annotation.StringRes
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
