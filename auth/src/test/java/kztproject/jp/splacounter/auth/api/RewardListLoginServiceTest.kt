@@ -1,5 +1,7 @@
 package kztproject.jp.splacounter.auth.api
 
+import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
+import kotlinx.coroutines.runBlocking
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
@@ -11,7 +13,6 @@ import org.junit.Before
 import org.junit.Test
 import project.seito.screen_transition.api.HttpMethod
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.BufferedReader
 import java.io.IOException
@@ -22,7 +23,7 @@ class RewardListLoginServiceTest {
     private val mockWebServer: MockWebServer = MockWebServer()
     private val target = Retrofit.Builder()
             .baseUrl(mockWebServer.url(""))
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(RewardListLoginService::class.java)
@@ -53,18 +54,23 @@ class RewardListLoginServiceTest {
 
     @Test
     fun createUser() {
-        val actual = target.createUser(123456).blockingGet()
-        assertThat(actual.id).isEqualTo(1)
-        assertThat(actual.todoistId).isEqualTo(123456)
-        assertThat(actual.point).isEqualTo(0)
+        runBlocking {
+            val actual = target.createUser(123456).await()
+            assertThat(actual.id).isEqualTo(1)
+            assertThat(actual.todoistId).isEqualTo(123456)
+            assertThat(actual.point).isEqualTo(0)
+        }
     }
+
 
     @Test
     fun findUser() {
-        val actual = target.findUser(1).blockingGet()
-        assertThat(actual.id).isEqualTo(1)
-        assertThat(actual.todoistId).isEqualTo(505)
-        assertThat(actual.point).isEqualTo(24)
+        runBlocking {
+            val actual = target.findUser(1).await()
+            assertThat(actual.id).isEqualTo(1)
+            assertThat(actual.todoistId).isEqualTo(505)
+            assertThat(actual.point).isEqualTo(24)
+        }
     }
 
     private fun readJsonFromResources(fileName: String): String {

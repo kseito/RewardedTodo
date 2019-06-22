@@ -1,9 +1,11 @@
 package kztproject.jp.splacounter.auth.repository
 
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.Single
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.whenever
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import kztproject.jp.splacounter.auth.DummyCreator
 import kztproject.jp.splacounter.auth.api.RewardListLoginService
 import kztproject.jp.splacounter.auth.api.TodoistService
@@ -37,29 +39,27 @@ class AuthRepositoryTest {
     fun login() {
         val dummyResponse: UserResponse = DummyCreator.createDummyUserResponse()
         val dummyRewardUser: RewardUser = DummyCreator.createDummyRewardUser()
-        whenever(mockClient.getUser(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(Single.just(dummyResponse))
-        whenever(mockRewardListLoginService.findUser(ArgumentMatchers.anyLong())).thenReturn(Single.just(dummyRewardUser))
+        whenever(mockClient.getUser(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(GlobalScope.async { dummyResponse })
+        whenever(mockRewardListLoginService.findUser(ArgumentMatchers.anyLong())).thenReturn(GlobalScope.async { dummyRewardUser })
 
-        repository.login("test")
-                .test()
-                .assertNoErrors()
-                .assertComplete()
+        runBlocking {
+            repository.login("test")
 
-        assertThat(prefsWrapper.userId).isEqualTo(dummyRewardUser.id)
+            assertThat(prefsWrapper.userId).isEqualTo(dummyRewardUser.id)
+        }
     }
 
     @Test
     fun signUp() {
         val dummyResponse: UserResponse = DummyCreator.createDummyUserResponse()
         val dummyRewardUser: RewardUser = DummyCreator.createDummyRewardUser()
-        whenever(mockClient.getUser(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(Single.just(dummyResponse))
-        whenever(mockRewardListLoginService.createUser(ArgumentMatchers.anyLong())).thenReturn(Single.just(dummyRewardUser))
+        whenever(mockClient.getUser(Mockito.anyString(), Mockito.anyString(), Mockito.anyString())).thenReturn(GlobalScope.async { dummyResponse })
+        whenever(mockRewardListLoginService.createUser(ArgumentMatchers.anyLong())).thenReturn(GlobalScope.async { dummyRewardUser })
 
-        repository.signUp("test")
-                .test()
-                .assertNoErrors()
-                .assertComplete()
+        runBlocking {
+            repository.signUp("test")
 
-        assertThat(prefsWrapper.userId).isEqualTo(dummyRewardUser.id)
+            assertThat(prefsWrapper.userId).isEqualTo(dummyRewardUser.id)
+        }
     }
 }

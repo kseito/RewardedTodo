@@ -1,10 +1,8 @@
 package kztproject.jp.splacounter.auth.repository
 
-import io.reactivex.Completable
-
 interface IAuthRepository {
 
-    fun signUp(todoistToken: String): Completable
+    suspend fun signUp(todoistToken: String)
 
-    fun login(inputString: String): Completable
+    suspend fun login(inputString: String)
 }

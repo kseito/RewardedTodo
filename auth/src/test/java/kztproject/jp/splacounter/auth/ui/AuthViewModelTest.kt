@@ -1,36 +1,34 @@
 package kztproject.jp.splacounter.auth.ui
 
-import com.nhaarman.mockito_kotlin.mock
-import com.nhaarman.mockito_kotlin.times
-import com.nhaarman.mockito_kotlin.verify
-import com.nhaarman.mockito_kotlin.whenever
-import io.reactivex.Completable
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
 import io.reactivex.Scheduler
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
-import kztproject.jp.splacounter.auth.repository.AuthRepository
+import kotlinx.coroutines.runBlocking
+import kztproject.jp.splacounter.auth.repository.IAuthRepository
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyString
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import project.seito.auth.BuildConfig
 import project.seito.auth.R
-import java.lang.IllegalArgumentException
 
 @RunWith(RobolectricTestRunner::class)
 @Config(constants = BuildConfig::class)
 class AuthViewModelTest {
 
-    private val mockAuthRepository = mock<AuthRepository>()
+    private val mockAuthRepository = mock<IAuthRepository>()
 
     private val mockCallback = mock<AuthViewModel.Callback>()
 
-    lateinit var viewModel: AuthViewModel
+    private lateinit var viewModel: AuthViewModel
 
     @Before
     fun setup() {
@@ -50,8 +48,6 @@ class AuthViewModelTest {
 
     @Test
     fun signUpSuccess() {
-        whenever(mockAuthRepository.signUp(anyString())).thenReturn(Completable.complete())
-
         viewModel.inputString.set("test")
         viewModel.signUp()
 
@@ -62,8 +58,9 @@ class AuthViewModelTest {
 
     @Test
     fun signUpFailed() {
-        val exception = IllegalArgumentException()
-        whenever(mockAuthRepository.signUp(anyString())).thenReturn(Completable.error(exception))
+        runBlocking {
+            whenever(mockAuthRepository.signUp(anyString())).thenAnswer { throw IllegalArgumentException() }
+        }
 
         viewModel.inputString.set("test")
         viewModel.signUp()
@@ -82,8 +79,6 @@ class AuthViewModelTest {
 
     @Test
     fun loginSuccess() {
-        whenever(mockAuthRepository.login(anyString())).thenReturn(Completable.complete())
-
         viewModel.inputString.set("test")
         viewModel.login()
 
@@ -95,7 +90,9 @@ class AuthViewModelTest {
     @Test
     fun loginFailed() {
         val exception = NullPointerException()
-        whenever(mockAuthRepository.login(anyString())).thenReturn(Completable.error(exception))
+        runBlocking {
+            whenever(mockAuthRepository.login(anyString())).thenAnswer { throw exception }
+        }
 
         viewModel.inputString.set("test")
         viewModel.login()

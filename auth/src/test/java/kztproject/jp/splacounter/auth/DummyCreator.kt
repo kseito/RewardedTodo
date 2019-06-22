@@ -7,12 +7,10 @@ import kztproject.jp.splacounter.auth.api.model.UserResponse
 object DummyCreator {
 
     fun createDummyUserResponse(): UserResponse {
-        val response = UserResponse()
         val user = TodoistUser()
         user.id = 1
         user.fullName = "test_user"
-        response.user = user
-        return response
+        return UserResponse(user)
     }
 
     fun createDummyRewardUser(): RewardUser {

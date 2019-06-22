@@ -3,12 +3,11 @@ package kztproject.jp.splacounter.auth.ui
 import android.arch.lifecycle.ViewModel
 import android.databinding.ObservableField
 import android.support.annotation.StringRes
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
 import kztproject.jp.splacounter.auth.repository.IAuthRepository
 import project.seito.auth.R
-import project.seito.screen_transition.extention.addTo
 import javax.inject.Inject
 
 class AuthViewModel @Inject
@@ -17,6 +16,8 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
 
     var inputString = ObservableField<String>()
     private val compositeDisposable = CompositeDisposable()
+    private val viewModelJob = SupervisorJob()
+    private val viewModelScope = CoroutineScope(Main + viewModelJob)
 
     init {
         inputString.set("")
@@ -29,16 +30,19 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
     fun login() {
         if (inputString.get()!!.isEmpty()) {
             callback.onError(R.string.error_login_text_empty)
-        } else {
-            authRepository.login(inputString.get()!!)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { callback.onStartAsyncProcess() }
-                    .doOnTerminate { callback.onFinishAsyncProcess() }
-                    .subscribe(
-                            { callback.onSuccessLogin() }
-                    ) { e -> callback.onFailedLogin(e) }
-                    .addTo(compositeDisposable)
+            return
+        }
+
+        viewModelScope.launch {
+            try {
+                callback.onStartAsyncProcess()
+                authRepository.login(inputString.get()!!)
+                callback.onSuccessLogin()
+            } catch (error: Exception) {
+                callback.onFailedLogin(error)
+            } finally {
+                callback.onFinishAsyncProcess()
+            }
         }
     }
 
@@ -46,19 +50,24 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
         if (inputString.get()!!.isEmpty()) {
             callback.onError(R.string.error_login_text_empty)
         } else {
-            authRepository.signUp(inputString.get()!!)
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .doOnSubscribe { callback.onStartAsyncProcess() }
-                    .doOnTerminate { callback.onFinishAsyncProcess() }
-                    .subscribe({ callback.onSuccessSignUp() }, { callback.onFailedSignUp() })
-                    .addTo(compositeDisposable)
+            viewModelScope.launch {
+                try {
+                    callback.onStartAsyncProcess()
+                    authRepository.signUp(inputString.get()!!)
+                    callback.onSuccessSignUp()
+                } catch (error: Exception) {
+                    callback.onFailedSignUp()
+                } finally {
+                    callback.onFinishAsyncProcess()
+                }
+            }
         }
     }
 
     override fun onCleared() {
         super.onCleared()
         compositeDisposable.dispose()
+        viewModelScope.cancel()
     }
 
     interface Callback {
