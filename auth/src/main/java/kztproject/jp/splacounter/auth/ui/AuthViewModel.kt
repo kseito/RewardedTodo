@@ -3,7 +3,6 @@ package kztproject.jp.splacounter.auth.ui
 import androidx.lifecycle.ViewModel
 import androidx.databinding.ObservableField
 import androidx.annotation.StringRes
-import io.reactivex.disposables.CompositeDisposable
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
 import kztproject.jp.splacounter.auth.repository.IAuthRepository
@@ -15,7 +14,6 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
     private lateinit var callback: Callback
 
     var inputString = ObservableField<String>()
-    private val compositeDisposable = CompositeDisposable()
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(Main + viewModelJob)
 
@@ -66,7 +64,6 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
 
     override fun onCleared() {
         super.onCleared()
-        compositeDisposable.dispose()
         viewModelScope.cancel()
     }
 

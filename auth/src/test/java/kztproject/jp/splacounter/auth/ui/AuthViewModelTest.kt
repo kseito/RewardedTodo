@@ -4,13 +4,8 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
-import io.reactivex.Scheduler
-import io.reactivex.android.plugins.RxAndroidPlugins
-import io.reactivex.plugins.RxJavaPlugins
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.runBlocking
 import kztproject.jp.splacounter.auth.repository.IAuthRepository
-import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -34,16 +29,6 @@ class AuthViewModelTest {
     fun setup() {
         viewModel = AuthViewModel(mockAuthRepository)
         viewModel.setCallback(mockCallback)
-
-        val scheduler: Scheduler = Schedulers.trampoline()
-        RxJavaPlugins.setIoSchedulerHandler { scheduler }
-        RxAndroidPlugins.setInitMainThreadSchedulerHandler { scheduler }
-    }
-
-    @After
-    fun teardown() {
-        RxJavaPlugins.reset()
-        RxAndroidPlugins.reset()
     }
 
     @Test
