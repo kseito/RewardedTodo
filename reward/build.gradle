@@ -68,9 +68,9 @@ dependencies {
     //AAC
     implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel:2.0.0'
-    implementation 'androidx.room:room-runtime:2.0.0'
-    annotationProcessor 'androidx.room:room-compiler:2.0.0'
-    kapt 'androidx.room:room-compiler:2.0.0'
+    implementation "androidx.room:room-runtime:$room_version"
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
 
     //Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines_version"
