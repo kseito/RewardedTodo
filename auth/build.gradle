@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation "androidx.appcompat:appcompat:$appcompat_version"
 
     //Test
     testImplementation 'junit:junit:4.12'
