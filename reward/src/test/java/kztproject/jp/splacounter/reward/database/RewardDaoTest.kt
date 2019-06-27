@@ -9,11 +9,8 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
-import org.robolectric.annotation.Config
-import project.seito.reward.BuildConfig
 
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class)
 class RewardDaoTest {
 
     private lateinit var database: AppDatabase

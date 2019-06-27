@@ -11,12 +11,9 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyString
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.annotation.Config
-import project.seito.auth.BuildConfig
 import project.seito.auth.R
 
 @RunWith(RobolectricTestRunner::class)
-@Config(constants = BuildConfig::class)
 class AuthViewModelTest {
 
     private val mockAuthRepository = mock<IAuthRepository>()
