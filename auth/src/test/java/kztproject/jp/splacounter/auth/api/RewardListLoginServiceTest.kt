@@ -8,6 +8,7 @@ import okhttp3.mockwebserver.MockWebServer
 import okhttp3.mockwebserver.RecordedRequest
 import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.fail
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -87,7 +88,7 @@ class RewardListLoginServiceTest {
                 stringBuilder.append(buffer)
             }
         } catch (e: IOException) {
-            Assertions.fail(e.message, e)
+            fail<Any>(e.message, e)
         }
 
         return stringBuilder.toString()
