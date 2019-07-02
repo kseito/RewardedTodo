@@ -37,9 +37,7 @@ task jacocoMergeReports(type: JacocoMerge) {
     description = "Merge all JaCoCo reports from projects into one."
 
     gradle.afterProject { p, state ->
-        println("hoge")
         if (p.rootProject != p && p.plugins.hasPlugin('jacoco')) {
-            println("fuga${p.path}")
             dependsOn "${p.path}:testDebugUnitTest"
             executionData "${p.buildDir}/jacoco/testDebugUnitTest.exec"
         }
@@ -71,7 +69,6 @@ task jacocoTestReports(type: JacocoReport, dependsOn: 'jacocoMergeReports') {
         html.enabled true
         csv.enabled false
 
-        println("howa${buildDir}")
         xml.destination file("${buildDir}/reports/jacoco/report.xml")
         html.destination file("${buildDir}/reports/jacoco/html")
     }
