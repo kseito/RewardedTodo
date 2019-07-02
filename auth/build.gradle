@@ -57,7 +57,7 @@ dependencies {
     //DataBinding
     kapt "androidx.databinding:databinding-compiler:$gradle_plugin_version"
 
-    implementation 'info.hoang8f:fbutton:1.0.5'
+    implementation "info.hoang8f:fbutton:$fbutton_version"
 
 
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
