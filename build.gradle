@@ -57,12 +57,12 @@ task jacocoTestReports(type: JacocoReport, dependsOn: 'jacocoMergeReports') {
 
     gradle.afterProject { p, state ->
         if (p.rootProject != p && p.plugins.hasPlugin('jacoco')) {
-            classDirectories = classDirectories + files([
+            classDirectories.from(files([
                     fileTree(dir: "${p.buildDir}/tmp/kotlin-classes/debug")
-            ])
-            sourceDirectories = sourceDirectories + files([
+            ]))
+            sourceDirectories.from(files([
                     "${p.buildDir}/src/main/java"
-            ])
+            ]))
         }
     }
 
