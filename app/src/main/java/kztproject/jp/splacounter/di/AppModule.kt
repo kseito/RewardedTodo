@@ -1,7 +1,7 @@
 package kztproject.jp.splacounter.di
 
 import android.app.Application
-import android.arch.persistence.room.Room
+import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import kztproject.jp.splacounter.reward.database.AppDatabase

@@ -2,21 +2,21 @@ package kztproject.jp.splacounter.reward.list.ui
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
-import android.arch.lifecycle.ViewModelProvider
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.os.Bundle
-import android.support.v4.app.Fragment
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import com.android.databinding.library.baseAdapters.BR
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.RecyclerView
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.reward.database.model.Reward
+import project.seito.reward.BR
 import project.seito.reward.R
 import project.seito.reward.databinding.FragmentRewardBinding
 import project.seito.reward.databinding.ItemRewardBinding

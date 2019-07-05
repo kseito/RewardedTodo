@@ -1,6 +1,6 @@
 package kztproject.jp.splacounter.reward.di
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

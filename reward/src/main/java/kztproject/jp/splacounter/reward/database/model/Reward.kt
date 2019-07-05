@@ -1,8 +1,8 @@
 package kztproject.jp.splacounter.reward.database.model
 
-import android.arch.persistence.room.Entity
-import android.arch.persistence.room.Ignore
-import android.arch.persistence.room.PrimaryKey
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
 
 @Entity
 data class Reward(@PrimaryKey(autoGenerate = true) var id: Int,

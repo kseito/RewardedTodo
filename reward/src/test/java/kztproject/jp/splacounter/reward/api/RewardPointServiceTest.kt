@@ -85,7 +85,7 @@ class RewardPointServiceTest {
                 stringBuilder.append(buffer)
             }
         } catch (e: IOException) {
-            fail(e.message, e)
+            fail<Any>(e.message, e)
         }
 
         return stringBuilder.toString()
