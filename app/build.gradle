@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: "androidx.navigation.safeargs.kotlin"
 
 android {
     compileSdkVersion 28
@@ -54,6 +55,9 @@ dependencies {
     implementation 'com.google.android.material:material:1.0.0'
 
     implementation 'com.facebook.stetho:stetho:1.4.2'
+
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.1.0-beta02'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.1.0-beta02'
 
     //Dagger
     implementation "com.google.dagger:dagger:$dagger_version"

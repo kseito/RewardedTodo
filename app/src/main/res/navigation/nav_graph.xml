@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/nav_graph"
+            app:startDestination="@id/splash_fragment">
+
+    <fragment
+        android:id="@+id/auth_fragment"
+        android:name="kztproject.jp.splacounter.auth.ui.AuthFragment"
+        android:label="AuthFragment"/>
+
+    <fragment
+        android:id="@+id/reward_detail_fragment"
+        android:name="kztproject.jp.splacounter.reward.detail.ui.RewardDetailFragment"
+        android:label="RewardDetailFragment"/>
+
+    <fragment
+        android:id="@+id/reward_list_fragment"
+        android:name="kztproject.jp.splacounter.reward.list.ui.RewardListFragment"
+        android:label="RewardListFragment">
+
+        <action
+            android:id="@+id/action_rewardListFragment_to_rewardDetailFragment"
+            app:destination="@id/reward_detail_fragment"/>
+
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/splash_fragment"
+        android:name="kztproject.jp.splacounter.SplashFragment"
+        android:label="SplashFragment">
+
+        <action
+            android:id="@+id/to_rewardListFragment"
+            app:destination="@id/reward_list_fragment"/>
+
+        <action
+            android:id="@+id/to_authFragment"
+            app:destination="@id/auth_fragment"/>
+
+    </fragment>
+</navigation>
