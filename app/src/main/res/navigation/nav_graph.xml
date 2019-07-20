@@ -20,7 +20,7 @@
         android:label="RewardListFragment">
 
         <action
-            android:id="@+id/action_rewardListFragment_to_rewardDetailFragment"
+            android:id="@+id/to_rewardDetailFragment"
             app:destination="@id/reward_detail_fragment"/>
 
     </fragment>
@@ -33,11 +33,15 @@
 
         <action
             android:id="@+id/to_rewardListFragment"
-            app:destination="@id/reward_list_fragment"/>
+            app:destination="@id/reward_list_fragment"
+            app:popUpToInclusive="true"
+            app:popUpTo="@id/nav_graph"/>
 
         <action
             android:id="@+id/to_authFragment"
-            app:destination="@id/auth_fragment"/>
+            app:destination="@id/auth_fragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"/>
 
     </fragment>
 </navigation>
