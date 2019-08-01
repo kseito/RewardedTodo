@@ -12,7 +12,13 @@
     <fragment
         android:id="@+id/reward_detail_fragment"
         android:name="kztproject.jp.splacounter.reward.detail.ui.RewardDetailFragment"
-        android:label="RewardDetailFragment"/>
+        android:label="RewardDetailFragment">
+
+        <argument
+            android:name="reward_id"
+            app:argType="integer"
+            android:defaultValue="0"/>
+    </fragment>
 
     <fragment
         android:id="@+id/reward_list_fragment"
