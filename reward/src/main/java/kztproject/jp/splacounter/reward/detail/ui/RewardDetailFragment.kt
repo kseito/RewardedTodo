@@ -23,23 +23,6 @@ class RewardDetailFragment : Fragment(), RewardDetailViewModelCallback {
     lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var viewModel: RewardDetailViewModel
 
-    companion object {
-
-        private const val ARGS_ID = "id"
-
-        fun newInstance(): RewardDetailFragment {
-            return RewardDetailFragment()
-        }
-
-        fun newInstance(id: Int): RewardDetailFragment {
-            return RewardDetailFragment().apply {
-                arguments = Bundle().apply {
-                    putInt(ARGS_ID, id)
-                }
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
