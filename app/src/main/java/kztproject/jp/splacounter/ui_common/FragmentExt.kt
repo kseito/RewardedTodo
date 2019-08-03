@@ -8,3 +8,9 @@ fun Fragment.replaceFragment(layoutId: Int, targetFragment: Fragment) {
             .addToBackStack(targetFragment.javaClass.canonicalName)
             .commit()
 }
+
+fun Fragment.replaceFragmentWithNoStack(layoutId: Int, targetFragment: Fragment) {
+    val beginTransaction = fragmentManager?.beginTransaction() ?: return
+    beginTransaction.replace(layoutId, targetFragment)
+            .commit()
+}

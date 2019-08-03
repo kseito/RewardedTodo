@@ -32,16 +32,6 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
     private lateinit var binding: FragmentAuthBinding
     private lateinit var viewModel: AuthViewModel
 
-    companion object {
-
-        fun newInstance(): AuthFragment {
-            val args = Bundle()
-            val fragment = AuthFragment()
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)

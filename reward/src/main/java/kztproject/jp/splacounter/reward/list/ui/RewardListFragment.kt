@@ -35,12 +35,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
     private var animation: Animator? = null
 
-    companion object {
-        fun newInstance(): RewardListFragment {
-            return RewardListFragment()
-        }
-    }
-
     override fun onAttach(context: Context) {
         AndroidSupportInjection.inject(this)
         super.onAttach(context)
