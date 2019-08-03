@@ -16,8 +16,8 @@
 
         <argument
             android:name="reward_id"
-            app:argType="integer"
-            android:defaultValue="0"/>
+            android:defaultValue="0"
+            app:argType="integer"/>
     </fragment>
 
     <fragment
@@ -28,6 +28,12 @@
         <action
             android:id="@+id/to_rewardDetailFragment"
             app:destination="@id/reward_detail_fragment"/>
+
+        <action
+            android:id="@+id/to_auth_fragment"
+            app:destination="@id/auth_fragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"/>
 
     </fragment>
 
@@ -40,8 +46,8 @@
         <action
             android:id="@+id/to_rewardListFragment"
             app:destination="@id/reward_list_fragment"
-            app:popUpToInclusive="true"
-            app:popUpTo="@id/nav_graph"/>
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"/>
 
         <action
             android:id="@+id/to_authFragment"
