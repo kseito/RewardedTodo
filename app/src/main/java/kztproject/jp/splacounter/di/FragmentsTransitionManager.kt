@@ -1,6 +1,5 @@
 package kztproject.jp.splacounter.di
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import kztproject.jp.splacounter.R
