@@ -1,5 +1,6 @@
 package kztproject.jp.splacounter.di
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import kztproject.jp.splacounter.R
@@ -22,5 +23,9 @@ class FragmentsTransitionManager @Inject constructor() : IFragmentsTransitionMan
 
     override fun transitionToRewardDetailFragment(activity: FragmentActivity?, rewardId: Int) {
         activity?.findNavController(R.id.nav_host_fragment)?.navigate(RewardListFragmentDirections.toRewardDetailFragment(rewardId))
+    }
+
+    override fun popBackStack(activity: FragmentActivity?) {
+        activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
     }
 }

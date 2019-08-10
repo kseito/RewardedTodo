@@ -8,9 +8,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import dagger.android.support.AndroidSupportInjection
+import project.seito.reward.R
 import project.seito.reward.databinding.FragmentRewardDetailBinding
+import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
 class RewardDetailFragment : Fragment(), RewardDetailViewModelCallback {
@@ -18,6 +21,9 @@ class RewardDetailFragment : Fragment(), RewardDetailViewModelCallback {
     private lateinit var binding: FragmentRewardDetailBinding
 
     private val args: RewardDetailFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var transitionManager: IFragmentsTransitionManager
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -47,7 +53,7 @@ class RewardDetailFragment : Fragment(), RewardDetailViewModelCallback {
 
     override fun onSaveCompleted(rewardName: String) {
         Toast.makeText(context, "Added $rewardName", Toast.LENGTH_SHORT).show()
-        fragmentManager?.popBackStack()
+        transitionManager.popBackStack(activity)
     }
 
     override fun onError(resourceId: Int) {
