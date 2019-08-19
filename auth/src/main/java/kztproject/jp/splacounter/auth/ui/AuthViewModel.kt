@@ -36,6 +36,10 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
             return
         }
 
+        if (mutableDataLoading.value == true) {
+            return
+        }
+
         viewModelScope.launch {
             try {
                 mutableDataLoading.value = true
@@ -53,6 +57,11 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
         if (inputString.get()!!.isEmpty()) {
             callback.onError(R.string.error_login_text_empty)
         } else {
+
+            if (mutableDataLoading.value == true) {
+                return
+            }
+
             viewModelScope.launch {
                 try {
                     mutableDataLoading.value = true
