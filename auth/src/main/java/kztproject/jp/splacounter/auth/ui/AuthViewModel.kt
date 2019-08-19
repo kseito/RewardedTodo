@@ -1,8 +1,10 @@
 package kztproject.jp.splacounter.auth.ui
 
-import androidx.lifecycle.ViewModel
-import androidx.databinding.ObservableField
 import androidx.annotation.StringRes
+import androidx.databinding.ObservableField
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
 import kztproject.jp.splacounter.auth.repository.IAuthRepository
@@ -16,6 +18,9 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
     var inputString = ObservableField<String>()
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(Main + viewModelJob)
+
+    private val mutableDataLoading = MutableLiveData<Boolean>()
+    val dataLoading: LiveData<Boolean> = mutableDataLoading
 
     init {
         inputString.set("")
@@ -33,13 +38,13 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
 
         viewModelScope.launch {
             try {
-                callback.onStartAsyncProcess()
+                mutableDataLoading.value = true
                 authRepository.login(inputString.get()!!)
                 callback.onSuccessLogin()
             } catch (error: Exception) {
                 callback.onFailedLogin(error)
             } finally {
-                callback.onFinishAsyncProcess()
+                mutableDataLoading.value = false
             }
         }
     }
@@ -50,13 +55,13 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
         } else {
             viewModelScope.launch {
                 try {
-                    callback.onStartAsyncProcess()
+                    mutableDataLoading.value = true
                     authRepository.signUp(inputString.get()!!)
                     callback.onSuccessSignUp()
                 } catch (error: Exception) {
                     callback.onFailedSignUp()
                 } finally {
-                    callback.onFinishAsyncProcess()
+                    mutableDataLoading.value = false
                 }
             }
         }
@@ -68,10 +73,6 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
     }
 
     interface Callback {
-        fun onStartAsyncProcess()
-
-        fun onFinishAsyncProcess()
-
         fun onSuccessSignUp()
 
         fun onFailedSignUp()

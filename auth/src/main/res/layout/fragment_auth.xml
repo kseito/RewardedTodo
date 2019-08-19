@@ -2,12 +2,15 @@
 <layout>
 
     <data>
+        <import type="android.view.View"/>
+
         <variable
             name="viewModel"
             type="kztproject.jp.splacounter.auth.ui.AuthViewModel"/>
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:fbutton="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -47,6 +50,13 @@
             android:onClick="@{() -> viewModel.signUp()}"
             fbutton:buttonColor="@color/colorAccent"
             />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="@{viewModel.dataLoading ? View.VISIBLE : View.INVISIBLE}"/>
 
     </LinearLayout>
 </layout>
