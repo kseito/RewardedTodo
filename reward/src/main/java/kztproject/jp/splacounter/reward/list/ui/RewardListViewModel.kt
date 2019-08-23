@@ -46,7 +46,6 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
                 return@launch
             }
 
-            rewardList = mutableListOf()
             rewardList.addAll(newRewardList)
             callback.showRewards(rewardList)
         }
