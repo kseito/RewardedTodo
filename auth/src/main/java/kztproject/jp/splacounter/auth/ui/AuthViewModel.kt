@@ -40,9 +40,10 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
             return
         }
 
+        mutableDataLoading.value = true
+
         viewModelScope.launch {
             try {
-                mutableDataLoading.value = true
                 authRepository.login(inputString.get()!!)
                 callback.onSuccessLogin()
             } catch (error: Exception) {
@@ -62,9 +63,10 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
                 return
             }
 
+            mutableDataLoading.value = true
+
             viewModelScope.launch {
                 try {
-                    mutableDataLoading.value = true
                     authRepository.signUp(inputString.get()!!)
                     callback.onSuccessSignUp()
                 } catch (error: Exception) {
