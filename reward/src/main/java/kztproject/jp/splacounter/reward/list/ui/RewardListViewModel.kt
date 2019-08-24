@@ -1,7 +1,9 @@
 package kztproject.jp.splacounter.reward.list.ui
 
-import androidx.lifecycle.ViewModel
 import androidx.databinding.ObservableField
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.repository.IPointRepository
@@ -21,7 +23,8 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
             field = value
         }
     var hasSelectReward: ObservableField<Boolean> = ObservableField()
-    var currentPoint: ObservableField<Int> = ObservableField()
+    private var mutableRewardPoint = MutableLiveData<Int>()
+    var rewardPoint: LiveData<Int> = mutableRewardPoint
     var isEmpty: ObservableField<Boolean> = ObservableField()
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
@@ -31,7 +34,7 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
     }
 
     fun setPoint(point: Int) {
-        this.currentPoint.set(point)
+        mutableRewardPoint.value = point
     }
 
     fun showRewardDetail() {
@@ -56,7 +59,7 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
             try {
                 callback.onStartLoadingPoint()
                 val point = rewardListClient.loadPoint(prefsWrapper.userId)
-                currentPoint.set(point.point)
+                mutableRewardPoint.value = point.point
             } catch (e: Exception) {
                 if (isActive) {
                     callback.onPointLoadFailed()
@@ -70,12 +73,12 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
     fun acquireReward() {
         val selectedReward: Reward = this.selectedReward
                 ?: throw NullPointerException("acquireReward() cannot call when selectedReward is null")
-        if (currentPoint.get()!! >= selectedReward.consumePoint) {
+        if (rewardPoint.value!! >= selectedReward.consumePoint) {
             viewModelScope.launch {
                 try {
                     val user = rewardListClient.consumePoint(prefsWrapper.userId, selectedReward.consumePoint)
                     callback.successAcquireReward(selectedReward, user.point)
-                    currentPoint.set(user.point)
+                    mutableRewardPoint.value = user.point
                 } catch (e: Exception) {
                     if (isActive) {
                         callback.showError()

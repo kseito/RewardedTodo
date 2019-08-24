@@ -200,7 +200,7 @@ class RewardListViewModelTest {
         runBlocking { whenever(mockPointRepository.loadPoint(anyLong())).thenReturn(dummyPoint) }
         viewModel.loadPoint()
 
-        assertThat(viewModel.currentPoint.get()).isEqualTo(10)
+        assertThat(viewModel.rewardPoint).isEqualTo(10)
         verify(mockCallback).onStartLoadingPoint()
         verify(mockCallback).onTerminateLoadingPoint()
     }

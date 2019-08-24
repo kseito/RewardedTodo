@@ -40,10 +40,12 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         super.onAttach(context)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RewardListViewModel::class.java)
         viewModel.setCallback(this)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentRewardBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
         binding.viewModel = viewModel
         return binding.root
     }
