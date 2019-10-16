@@ -1,6 +1,5 @@
 package kztproject.jp.splacounter.reward.list.ui
 
-import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -25,7 +24,7 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
     var hasSelectReward: MutableLiveData<Boolean> = MutableLiveData()
     private var mutableRewardPoint = MutableLiveData<Int>()
     var rewardPoint: LiveData<Int> = mutableRewardPoint
-    var isEmpty: ObservableField<Boolean> = ObservableField()
+    var isEmpty: MutableLiveData<Boolean> = MutableLiveData()
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
@@ -44,8 +43,8 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
     fun loadRewards() {
         viewModelScope.launch {
             val newRewardList = rewardDao.findAll()
-            isEmpty.set(newRewardList.isNullOrEmpty())
-            if (isEmpty.get() == true) {
+            isEmpty.value = newRewardList.isNullOrEmpty()
+            if (isEmpty.value == true) {
                 return@launch
             }
 
