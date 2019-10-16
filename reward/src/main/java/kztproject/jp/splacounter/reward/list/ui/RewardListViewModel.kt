@@ -19,10 +19,10 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
     var rewardList: MutableList<Reward> = mutableListOf()
     var selectedReward: Reward? = null
         set(value) {
-            hasSelectReward.set(value != null)
+            hasSelectReward.value = value != null
             field = value
         }
-    var hasSelectReward: ObservableField<Boolean> = ObservableField()
+    var hasSelectReward: MutableLiveData<Boolean> = MutableLiveData()
     private var mutableRewardPoint = MutableLiveData<Int>()
     var rewardPoint: LiveData<Int> = mutableRewardPoint
     var isEmpty: ObservableField<Boolean> = ObservableField()
