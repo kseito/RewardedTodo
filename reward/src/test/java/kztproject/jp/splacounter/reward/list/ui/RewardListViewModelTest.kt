@@ -58,7 +58,7 @@ class RewardListViewModelTest {
         runBlocking { whenever(mockDao.findAll()).thenReturn(arrayOf(DummyCreator.createDummyReward())) }
         viewModel.loadRewards()
 
-        assertThat(viewModel.isEmpty.get()).isFalse()
+        assertThat(viewModel.isEmpty.value).isFalse()
         verify(mockCallback, times(1)).showRewards(any())
     }
 
@@ -66,7 +66,7 @@ class RewardListViewModelTest {
     fun testGetRewards_Empty() {
         viewModel.loadRewards()
 
-        assertThat(viewModel.isEmpty.get()).isTrue()
+        assertThat(viewModel.isEmpty.value).isTrue()
     }
 
     @Test
