@@ -23,4 +23,8 @@ class FragmentsTransitionManager @Inject constructor() : IFragmentsTransitionMan
     override fun transitionToRewardDetailFragment(activity: FragmentActivity?, rewardId: Int) {
         activity?.findNavController(R.id.nav_host_fragment)?.navigate(RewardListFragmentDirections.toRewardDetailFragment(rewardId))
     }
+
+    override fun popBackStack(activity: FragmentActivity?) {
+        activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+    }
 }

@@ -2,8 +2,9 @@ package kztproject.jp.splacounter.reward.detail.ui
 
 import androidx.lifecycle.ViewModel
 import android.content.res.Resources
-import androidx.databinding.ObservableField
 import androidx.annotation.StringRes
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
@@ -16,12 +17,13 @@ import javax.inject.Inject
 
 class RewardDetailViewModel @Inject constructor(private val rewardRepository: IRewardRepository) : ViewModel() {
 
-    var reward: ObservableField<Reward> = ObservableField()
+    private var mutableReward =  MutableLiveData<Reward>()
+    var reward: LiveData<Reward> = mutableReward
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Main + viewModelJob)
 
     init {
-        reward.set(Reward())
+        mutableReward.value = Reward()
     }
 
     private lateinit var callback: RewardDetailViewModelCallback
@@ -29,7 +31,7 @@ class RewardDetailViewModel @Inject constructor(private val rewardRepository: IR
     fun initialize(id: Int) {
         viewModelScope.launch {
             val reward = rewardRepository.findBy(id) ?: throw Resources.NotFoundException()
-            this@RewardDetailViewModel.reward.set(reward)
+            mutableReward.value = reward
         }
     }
 
@@ -38,7 +40,7 @@ class RewardDetailViewModel @Inject constructor(private val rewardRepository: IR
     }
 
     fun saveReward() {
-        val reward = this.reward.get() ?: throw IllegalStateException("reward is null")
+        val reward = this.reward.value ?: throw IllegalStateException("mutableReward is null")
         if (reward.name.isEmpty()) {
             callback.onError(R.string.error_empty_title)
             return

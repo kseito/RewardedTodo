@@ -1,6 +1,5 @@
 package kztproject.jp.splacounter.auth.ui
 
-import android.app.ProgressDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,11 +17,6 @@ import javax.inject.Inject
 
 class AuthFragment : Fragment(), AuthViewModel.Callback {
 
-    private val progressDialog: ProgressDialog by lazy {
-        ProgressDialog(activity).apply {
-            setMessage("Now Loading...")
-        }
-    }
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
@@ -41,16 +35,9 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentAuthBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this@AuthFragment
         binding.viewModel = viewModel
         return binding.root
-    }
-
-    override fun onStartAsyncProcess() {
-        progressDialog.show()
-    }
-
-    override fun onFinishAsyncProcess() {
-        progressDialog.dismiss()
     }
 
     override fun onSuccessSignUp() {

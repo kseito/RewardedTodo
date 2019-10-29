@@ -40,24 +40,28 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         super.onAttach(context)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RewardListViewModel::class.java)
         viewModel.setCallback(this)
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentRewardBinding.inflate(inflater, container, false)
+        binding.lifecycleOwner = this
         binding.viewModel = viewModel
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.loadRewards()
-        viewModel.loadPoint()
+        if (savedInstanceState == null) {
+            viewModel.loadRewards()
+            viewModel.loadPoint()
+        }
 
         binding.bottomNavigation.addItem(AHBottomNavigationItem("Done", R.drawable.reward_done))
         binding.bottomNavigation.addItem(AHBottomNavigationItem("Edit", R.drawable.reward_edit))
         binding.bottomNavigation.addItem(AHBottomNavigationItem("Delete", R.drawable.reward_delete))
         binding.bottomNavigation.setOnTabSelectedListener { position, wasSelected ->
-            System.out.println("$position::$wasSelected")
+            println("$position::$wasSelected")
             when (position) {
                 0 -> {
                     viewModel.acquireReward()
@@ -78,6 +82,8 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             }
             false
         }
+
+        binding.rewardListView.adapter = RewardListAdapter(viewModel.rewardList, this)
     }
 
     override fun onItemClick(reward: Reward) {

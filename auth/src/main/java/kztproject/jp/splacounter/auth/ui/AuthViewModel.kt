@@ -1,10 +1,14 @@
 package kztproject.jp.splacounter.auth.ui
 
-import androidx.lifecycle.ViewModel
-import androidx.databinding.ObservableField
 import androidx.annotation.StringRes
-import kotlinx.coroutines.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import kztproject.jp.splacounter.auth.repository.IAuthRepository
 import project.seito.auth.R
 import javax.inject.Inject
@@ -13,12 +17,15 @@ class AuthViewModel @Inject
 constructor(private val authRepository: IAuthRepository) : ViewModel() {
     private lateinit var callback: Callback
 
-    var inputString = ObservableField<String>()
+    var inputString = MutableLiveData<String>()
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(Main + viewModelJob)
 
+    private val mutableDataLoading = MutableLiveData<Boolean>()
+    val dataLoading: LiveData<Boolean> = mutableDataLoading
+
     init {
-        inputString.set("")
+        inputString.value = ""
     }
 
     fun setCallback(callback: Callback) {
@@ -26,37 +33,48 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
     }
 
     fun login() {
-        if (inputString.get()!!.isEmpty()) {
+        if (inputString.value!!.isEmpty()) {
             callback.onError(R.string.error_login_text_empty)
             return
         }
 
+        if (mutableDataLoading.value == true) {
+            return
+        }
+
+        mutableDataLoading.value = true
+
         viewModelScope.launch {
             try {
-                callback.onStartAsyncProcess()
-                authRepository.login(inputString.get()!!)
+                authRepository.login(inputString.value!!)
                 callback.onSuccessLogin()
             } catch (error: Exception) {
                 callback.onFailedLogin(error)
             } finally {
-                callback.onFinishAsyncProcess()
+                mutableDataLoading.value = false
             }
         }
     }
 
     fun signUp() {
-        if (inputString.get()!!.isEmpty()) {
+        if (inputString.value!!.isEmpty()) {
             callback.onError(R.string.error_login_text_empty)
         } else {
+
+            if (mutableDataLoading.value == true) {
+                return
+            }
+
+            mutableDataLoading.value = true
+
             viewModelScope.launch {
                 try {
-                    callback.onStartAsyncProcess()
-                    authRepository.signUp(inputString.get()!!)
+                    authRepository.signUp(inputString.value!!)
                     callback.onSuccessSignUp()
                 } catch (error: Exception) {
                     callback.onFailedSignUp()
                 } finally {
-                    callback.onFinishAsyncProcess()
+                    mutableDataLoading.value = false
                 }
             }
         }
@@ -68,10 +86,6 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
     }
 
     interface Callback {
-        fun onStartAsyncProcess()
-
-        fun onFinishAsyncProcess()
-
         fun onSuccessSignUp()
 
         fun onFailedSignUp()
