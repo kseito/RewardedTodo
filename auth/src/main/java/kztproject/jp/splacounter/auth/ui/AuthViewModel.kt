@@ -1,12 +1,14 @@
 package kztproject.jp.splacounter.auth.ui
 
 import androidx.annotation.StringRes
-import androidx.databinding.ObservableField
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import kztproject.jp.splacounter.auth.repository.IAuthRepository
 import project.seito.auth.R
 import javax.inject.Inject
@@ -15,7 +17,7 @@ class AuthViewModel @Inject
 constructor(private val authRepository: IAuthRepository) : ViewModel() {
     private lateinit var callback: Callback
 
-    var inputString = ObservableField<String>()
+    var inputString = MutableLiveData<String>()
     private val viewModelJob = SupervisorJob()
     private val viewModelScope = CoroutineScope(Main + viewModelJob)
 
@@ -23,7 +25,7 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
     val dataLoading: LiveData<Boolean> = mutableDataLoading
 
     init {
-        inputString.set("")
+        inputString.value = ""
     }
 
     fun setCallback(callback: Callback) {
@@ -31,7 +33,7 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
     }
 
     fun login() {
-        if (inputString.get()!!.isEmpty()) {
+        if (inputString.value!!.isEmpty()) {
             callback.onError(R.string.error_login_text_empty)
             return
         }
@@ -44,7 +46,7 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
 
         viewModelScope.launch {
             try {
-                authRepository.login(inputString.get()!!)
+                authRepository.login(inputString.value!!)
                 callback.onSuccessLogin()
             } catch (error: Exception) {
                 callback.onFailedLogin(error)
@@ -55,7 +57,7 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
     }
 
     fun signUp() {
-        if (inputString.get()!!.isEmpty()) {
+        if (inputString.value!!.isEmpty()) {
             callback.onError(R.string.error_login_text_empty)
         } else {
 
@@ -67,7 +69,7 @@ constructor(private val authRepository: IAuthRepository) : ViewModel() {
 
             viewModelScope.launch {
                 try {
-                    authRepository.signUp(inputString.get()!!)
+                    authRepository.signUp(inputString.value!!)
                     callback.onSuccessSignUp()
                 } catch (error: Exception) {
                     callback.onFailedSignUp()

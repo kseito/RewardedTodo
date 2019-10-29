@@ -42,7 +42,7 @@ class AuthViewModelTest {
     fun signUpSuccess() {
         mainCoroutineRule.pauseDispatcher()
 
-        viewModel.inputString.set("test")
+        viewModel.inputString.value = "test"
         viewModel.signUp()
 
         assertThat(viewModel.dataLoading.value).isTrue()
@@ -62,7 +62,7 @@ class AuthViewModelTest {
 
         mainCoroutineRule.pauseDispatcher()
 
-        viewModel.inputString.set("test")
+        viewModel.inputString.value = "test"
         viewModel.signUp()
 
         assertThat(viewModel.dataLoading.value).isTrue()
@@ -85,7 +85,7 @@ class AuthViewModelTest {
     fun loginSuccess() {
         mainCoroutineRule.pauseDispatcher()
 
-        viewModel.inputString.set("test")
+        viewModel.inputString.value = "test"
         viewModel.login()
 
         assertThat(viewModel.dataLoading.value).isTrue()
@@ -106,7 +106,7 @@ class AuthViewModelTest {
 
         mainCoroutineRule.pauseDispatcher()
 
-        viewModel.inputString.set("test")
+        viewModel.inputString.value = "test"
         viewModel.login()
 
         assertThat(viewModel.dataLoading.value).isTrue()
