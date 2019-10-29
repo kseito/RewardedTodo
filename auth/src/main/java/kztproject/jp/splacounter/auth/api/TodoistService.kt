@@ -6,7 +6,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface TodoistService {
-    @GET("/API/v7/sync")
+    @GET("/API/v8/sync")
     fun getUser(@Query("token") token: String, @Query("sync_token") syncToken: String,
                 @Query("resource_types") resourceTypes: String): Deferred<UserResponse>
 }
