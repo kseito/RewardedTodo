@@ -44,9 +44,6 @@ task jacocoTestReports(type: JacocoReport, dependsOn: 'jacocoMergeReports') {
 
     executionData jacocoMergeReports.destinationFile
 
-    sourceDirectories = files()
-    classDirectories = files()
-
     gradle.afterProject { p, state ->
         if (p.rootProject != p && p.plugins.hasPlugin('jacoco')) {
             classDirectories.from(files([
