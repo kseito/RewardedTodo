@@ -72,7 +72,7 @@ class RewardPointServiceTest {
     }
 
     private fun readJsonFromResources(fileName: String): String {
-        val inputStream = javaClass.classLoader.getResourceAsStream(fileName)
+        val inputStream = javaClass.classLoader!!.getResourceAsStream(fileName)
         val bufferedReader = BufferedReader(InputStreamReader(inputStream))
         val stringBuilder = StringBuilder()
         try {
