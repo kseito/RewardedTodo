@@ -112,7 +112,7 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
         csv.enabled false
         xml.destination file("${buildDir}/reports/jacoco/jacocoTestReport.xml")
         html.destination file("${buildDir}/reports/jacoco/html")
-        classDirectories = files(
+        classDirectories.from = files(
                 fileTree(
                         dir: "${buildDir}/intermediates/javac/debug/compileDebugJavaWithJavac/classes/",
                         exclude: coverageExcludeFiles
@@ -123,6 +123,6 @@ task jacocoTestReport(type: JacocoReport, dependsOn: ['testDebugUnitTest']) {
                         )
         )
     }
-    sourceDirectories = files(['src/main/java'])
-    executionData = files "${buildDir}/jacoco/testDebugUnitTest.exec"
+    sourceDirectories.from = files(['src/main/java'])
+    executionData.from = files "${buildDir}/jacoco/testDebugUnitTest.exec"
 }
