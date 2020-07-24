@@ -14,4 +14,15 @@ object BindingUtils {
     fun toInt(value: String): Int {
         return if (value.isEmpty()) 0 else Integer.parseInt(value)
     }
+
+    @JvmStatic
+    @InverseMethod("toFloat")
+    fun toString(value: Float): String {
+        return if (value == 0F) "" else value.toString()
+    }
+
+    @JvmStatic
+    fun toFloat(value: String): Float {
+        return if (value.isEmpty()) 0F else value.toFloat()
+    }
 }

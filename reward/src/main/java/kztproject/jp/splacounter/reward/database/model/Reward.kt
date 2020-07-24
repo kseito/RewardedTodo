@@ -8,15 +8,16 @@ import androidx.room.PrimaryKey
 data class Reward(@PrimaryKey(autoGenerate = true) var id: Int,
                   var name: String,
                   var consumePoint: Int,
+                  var probability: Float,
                   var description: String?,
                   var needRepeat: Boolean) {
 
     @Ignore
-    constructor(): this("", 0, null, false)
+    constructor() : this("", 0, 0F, null, false)
 
     @Ignore
-    constructor(name:String, consumePoint: Int, description: String?, needRepeat: Boolean) :
-            this(0, name, consumePoint, description, needRepeat)
+    constructor(name: String, consumePoint: Int, probability: Float, description: String?, needRepeat: Boolean) :
+            this(0, name, consumePoint, probability, description, needRepeat)
 
     @Ignore
     var isSelected: Boolean = false
