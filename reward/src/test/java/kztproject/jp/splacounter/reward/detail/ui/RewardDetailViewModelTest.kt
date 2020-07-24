@@ -46,7 +46,7 @@ class RewardDetailViewModelTest {
     @Test
     fun testSaveReward() {
         runBlocking {
-            val reward = Reward("test", 1, "test description", false)
+            val reward = Reward("test", 1, 10F, "test description", false)
             whenever(mockRewardRepository.findBy(anyInt())).thenReturn(reward)
         }
         viewModel.initialize(1)
@@ -65,7 +65,7 @@ class RewardDetailViewModelTest {
     @Test
     fun testSaveRewardWithoutPoint() {
         runBlocking {
-            val reward = Reward("test", 0, "test description", false)
+            val reward = Reward("test", 0, 10F, "test description", false)
             whenever(mockRewardRepository.findBy(anyInt())).thenReturn(reward)
         }
 
