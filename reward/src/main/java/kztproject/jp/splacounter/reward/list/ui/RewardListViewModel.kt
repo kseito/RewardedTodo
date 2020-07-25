@@ -46,8 +46,8 @@ class RewardListViewModel @Inject constructor(
 
     fun startLottery() {
         viewModelScope.launch {
-            val rewardId = lotteryUseCase.execute(rewardList)
-            rewardId?.let {
+            val reward = lotteryUseCase.execute(rewardList)
+            reward?.let {
                 callback.onHitLottery(it)
             } ?: callback.onMissLottery()
         }

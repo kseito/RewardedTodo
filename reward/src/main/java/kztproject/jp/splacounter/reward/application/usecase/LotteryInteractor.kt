@@ -6,12 +6,12 @@ import kotlin.math.roundToInt
 import kotlin.random.Random
 
 class LotteryInteractor @Inject constructor() : LotteryUseCase {
-    override suspend fun execute(rewards: List<Reward>): Int? {
+    override suspend fun execute(rewards: List<Reward>): Reward? {
         rewards.forEach {
             val denominator: Int = (100 / it.probability).roundToInt()
             val result = Random.nextInt(denominator)
             if (result == 0) {
-                return it.id
+                return it
             }
         }
         return null
