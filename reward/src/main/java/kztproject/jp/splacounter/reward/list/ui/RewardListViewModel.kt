@@ -45,7 +45,10 @@ class RewardListViewModel @Inject constructor(
     }
 
     fun startLottery() {
-        lotteryUseCase.execute(rewardList)
+        viewModelScope.launch {
+            val rewardId = lotteryUseCase.execute(rewardList)
+            println("rewardId is $rewardId")
+        }
     }
 
     fun loadRewards() {
