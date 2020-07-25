@@ -4,15 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
+import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
 import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.repository.IPointRepository
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
-class RewardListViewModel @Inject constructor(private val rewardListClient: IPointRepository,
-                                              private val rewardDao: IRewardRepository,
-                                              private val prefsWrapper: PrefsWrapper) : ViewModel() {
+class RewardListViewModel @Inject constructor(
+        private val rewardListClient: IPointRepository,
+        private val rewardDao: IRewardRepository,
+        private val prefsWrapper: PrefsWrapper,
+        private val lotteryUseCase: LotteryUseCase
+) : ViewModel() {
 
     private lateinit var callback: RewardViewModelCallback
     var rewardList: MutableList<Reward> = mutableListOf()
@@ -38,6 +42,10 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
 
     fun showRewardDetail() {
         callback.showRewardDetail()
+    }
+
+    fun startLottery() {
+        lotteryUseCase.execute(rewardList)
     }
 
     fun loadRewards() {
