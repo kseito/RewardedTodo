@@ -4,7 +4,7 @@ import kztproject.jp.splacounter.reward.database.model.Reward
 import javax.inject.Inject
 
 class LotteryInteractor @Inject constructor() : LotteryUseCase {
-    override suspend fun execute(rewards: List<Reward>): Int {
+    override suspend fun execute(rewards: List<Reward>): Int? {
         return 0
     }
 }
