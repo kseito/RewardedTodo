@@ -6,6 +6,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import kztproject.jp.splacounter.DummyCreator
+import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
 import kztproject.jp.splacounter.reward.repository.IPointRepository
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
 import org.assertj.core.api.Assertions.assertThat
@@ -31,11 +32,13 @@ class RewardListViewModelTest {
 
     private val prefsWrapper = PrefsWrapper(RuntimeEnvironment.application)
 
+    private val useCase: LotteryUseCase = mock()
+
     private lateinit var viewModel: RewardListViewModel
 
     @Before
     fun setup() {
-        viewModel = RewardListViewModel(mockPointRepository, mockDao, prefsWrapper)
+        viewModel = RewardListViewModel(mockPointRepository, mockDao, prefsWrapper, useCase)
         viewModel.setCallback(mockCallback)
 
         Dispatchers.setMain(Dispatchers.Unconfined)
