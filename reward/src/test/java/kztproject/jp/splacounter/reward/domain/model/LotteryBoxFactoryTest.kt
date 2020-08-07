@@ -14,7 +14,7 @@ class LotteryBoxFactoryTest {
 
     @Test
     fun OneReward() {
-        val rewards = listOf(Reward(1, "reward1", 1, 50F, null, false))
+        val rewards = TestRewardCreator.createOne()
         val lotteryBox = LotteryBoxFactory.create(rewards)
         val prizeTickets = lotteryBox.tickets.filterIsInstance<Ticket.Prize>()
         assertThat(prizeTickets.size).isEqualTo(5000)
