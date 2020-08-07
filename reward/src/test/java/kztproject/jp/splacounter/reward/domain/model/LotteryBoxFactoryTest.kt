@@ -18,5 +18,8 @@ class LotteryBoxFactoryTest {
         val lotteryBox = LotteryBoxFactory.create(rewards)
         val prizeTickets = lotteryBox.tickets.filterIsInstance<Ticket.Prize>()
         assertThat(prizeTickets.size).isEqualTo(5000)
+        prizeTickets.forEach {
+            assertThat(it.rewardId).isEqualTo(1)
+        }
     }
 }
