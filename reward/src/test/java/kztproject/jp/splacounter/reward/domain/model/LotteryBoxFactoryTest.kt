@@ -1,6 +1,5 @@
 package kztproject.jp.splacounter.reward.domain.model
 
-import kztproject.jp.splacounter.reward.database.model.Reward
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
@@ -21,5 +20,19 @@ class LotteryBoxFactoryTest {
         prizeTickets.forEach {
             assertThat(it.rewardId).isEqualTo(1)
         }
+    }
+
+    @Test
+    fun ThreeRewards() {
+        val rewards = TestRewardCreator.createThree()
+
+        val lotteryBox = LotteryBoxFactory.create(rewards)
+
+        val firstRewardTickets = lotteryBox.tickets.filter { it is Ticket.Prize && it.rewardId == 1 }
+        assertThat(firstRewardTickets.size).isEqualTo(5000)
+        val secondRewardTickets = lotteryBox.tickets.filter { it is Ticket.Prize && it.rewardId == 2 }
+        assertThat(secondRewardTickets.size).isEqualTo(100)
+        val thirdRewardTickets = lotteryBox.tickets.filter { it is Ticket.Prize && it.rewardId == 3 }
+        assertThat(thirdRewardTickets.size).isEqualTo(1)
     }
 }
