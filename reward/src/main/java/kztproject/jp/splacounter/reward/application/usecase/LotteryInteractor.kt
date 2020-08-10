@@ -1,6 +1,6 @@
 package kztproject.jp.splacounter.reward.application.usecase
 
-import kztproject.jp.splacounter.reward.database.model.Reward
+import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
 import kztproject.jp.splacounter.reward.domain.model.LotteryBoxFactory
 import kztproject.jp.splacounter.reward.domain.model.Ticket
 import javax.inject.Inject

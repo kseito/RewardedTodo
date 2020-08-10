@@ -1,6 +1,6 @@
 package kztproject.jp.splacounter.reward.domain.model
 
-import kztproject.jp.splacounter.reward.database.model.Reward
+import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
 
 object LotteryBoxFactory {
 
