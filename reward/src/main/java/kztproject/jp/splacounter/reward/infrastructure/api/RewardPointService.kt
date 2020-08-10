@@ -1,6 +1,6 @@
 @file:Suppress("DeferredIsResult")
 
-package kztproject.jp.splacounter.reward.api
+package kztproject.jp.splacounter.reward.infrastructure.api
 
 import kotlinx.coroutines.Deferred
 import kztproject.jp.splacounter.reward.api.model.RewardUser

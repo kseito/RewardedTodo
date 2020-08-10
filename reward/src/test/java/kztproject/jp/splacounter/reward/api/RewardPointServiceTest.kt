@@ -2,6 +2,7 @@ package kztproject.jp.splacounter.reward.api
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.runBlocking
+import kztproject.jp.splacounter.reward.infrastructure.api.RewardPointService
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
