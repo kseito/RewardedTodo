@@ -2,6 +2,7 @@ package kztproject.jp.splacounter.reward.database
 
 import androidx.room.Room
 import kztproject.jp.splacounter.reward.database.model.Reward
+import kztproject.jp.splacounter.reward.infrastructure.database.AppDatabase
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
