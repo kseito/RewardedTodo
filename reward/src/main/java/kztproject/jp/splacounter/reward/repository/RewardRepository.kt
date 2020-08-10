@@ -2,7 +2,7 @@ package kztproject.jp.splacounter.reward.repository
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kztproject.jp.splacounter.reward.database.RewardDao
+import kztproject.jp.splacounter.reward.infrastructure.database.RewardDao
 import kztproject.jp.splacounter.reward.database.model.Reward
 import javax.inject.Inject
 

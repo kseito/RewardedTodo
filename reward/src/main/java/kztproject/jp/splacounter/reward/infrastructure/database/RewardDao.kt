@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.reward.database
+package kztproject.jp.splacounter.reward.infrastructure.database
 
 import androidx.room.*
 import kztproject.jp.splacounter.reward.database.model.Reward

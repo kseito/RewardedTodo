@@ -5,7 +5,7 @@ import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
 import kztproject.jp.splacounter.DummyCreator
-import kztproject.jp.splacounter.reward.database.RewardDao
+import kztproject.jp.splacounter.reward.infrastructure.database.RewardDao
 import org.junit.Test
 
 class RewardRepositoryTest {
