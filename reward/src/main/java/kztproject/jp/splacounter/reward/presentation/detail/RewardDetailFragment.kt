@@ -10,8 +10,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import dagger.android.support.AndroidSupportInjection
-import kztproject.jp.splacounter.reward.detail.ui.RewardDetailViewModel
-import kztproject.jp.splacounter.reward.detail.ui.RewardDetailViewModelCallback
 import project.seito.reward.databinding.FragmentRewardDetailBinding
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject

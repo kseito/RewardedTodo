@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.reward.detail.ui
+package kztproject.jp.splacounter.reward.presentation.detail
 
 import androidx.lifecycle.ViewModel
 import android.content.res.Resources

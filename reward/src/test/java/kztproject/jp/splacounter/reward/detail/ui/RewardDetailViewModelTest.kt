@@ -9,6 +9,8 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import kztproject.jp.splacounter.reward.database.model.Reward
+import kztproject.jp.splacounter.reward.presentation.detail.RewardDetailViewModel
+import kztproject.jp.splacounter.reward.presentation.detail.RewardDetailViewModelCallback
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
 import org.junit.After
 import org.junit.Before

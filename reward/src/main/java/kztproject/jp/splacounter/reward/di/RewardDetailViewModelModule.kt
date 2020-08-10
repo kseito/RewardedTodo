@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import kztproject.jp.splacounter.reward.detail.ui.RewardDetailViewModel
+import kztproject.jp.splacounter.reward.presentation.detail.RewardDetailViewModel
 import project.seito.screen_transition.di.ViewModelKey
 
 @Module
