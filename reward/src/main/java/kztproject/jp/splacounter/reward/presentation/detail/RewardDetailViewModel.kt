@@ -11,7 +11,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
-import kztproject.jp.splacounter.reward.repository.IRewardRepository
+import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
 import project.seito.reward.R
 import javax.inject.Inject
 

@@ -7,7 +7,7 @@ import kotlinx.coroutines.*
 import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
 import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
 import kztproject.jp.splacounter.reward.application.repository.IPointRepository
-import kztproject.jp.splacounter.reward.repository.IRewardRepository
+import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 

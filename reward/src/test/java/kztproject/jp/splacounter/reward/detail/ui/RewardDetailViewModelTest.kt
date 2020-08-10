@@ -11,7 +11,7 @@ import kotlinx.coroutines.test.setMain
 import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
 import kztproject.jp.splacounter.reward.presentation.detail.RewardDetailViewModel
 import kztproject.jp.splacounter.reward.presentation.detail.RewardDetailViewModelCallback
-import kztproject.jp.splacounter.reward.repository.IRewardRepository
+import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule

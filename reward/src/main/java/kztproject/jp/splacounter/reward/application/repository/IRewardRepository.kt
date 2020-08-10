@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.reward.repository
+package kztproject.jp.splacounter.reward.application.repository
 
 import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
 
