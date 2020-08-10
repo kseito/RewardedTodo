@@ -3,7 +3,7 @@ package kztproject.jp.splacounter.reward.di
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import kztproject.jp.splacounter.reward.detail.ui.RewardDetailFragment
-import kztproject.jp.splacounter.reward.list.ui.RewardListFragment
+import kztproject.jp.splacounter.reward.presentation.list.RewardListFragment
 
 @Module
 abstract class RewardModule {

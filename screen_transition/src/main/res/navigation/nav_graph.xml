@@ -29,7 +29,7 @@
 
     <fragment
         android:id="@+id/reward_list_fragment"
-        android:name="kztproject.jp.splacounter.reward.list.ui.RewardListFragment"
+        android:name="kztproject.jp.splacounter.reward.presentation.list.RewardListFragment"
         android:label="RewardListFragment">
 
         <action
