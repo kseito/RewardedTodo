@@ -3,7 +3,7 @@
 package kztproject.jp.splacounter.reward.infrastructure.api
 
 import kotlinx.coroutines.Deferred
-import kztproject.jp.splacounter.reward.api.model.RewardUser
+import kztproject.jp.splacounter.reward.infrastructure.api.model.RewardUser
 import kztproject.jp.splacounter.reward.database.model.RewardPoint
 import retrofit2.http.*
 

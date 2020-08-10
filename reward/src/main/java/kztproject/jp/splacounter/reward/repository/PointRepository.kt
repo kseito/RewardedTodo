@@ -1,7 +1,7 @@
 package kztproject.jp.splacounter.reward.repository
 
 import kztproject.jp.splacounter.reward.infrastructure.api.RewardPointService
-import kztproject.jp.splacounter.reward.api.model.RewardUser
+import kztproject.jp.splacounter.reward.infrastructure.api.model.RewardUser
 import kztproject.jp.splacounter.reward.database.model.RewardPoint
 import javax.inject.Inject
 
