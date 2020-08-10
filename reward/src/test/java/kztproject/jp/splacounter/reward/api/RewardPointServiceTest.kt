@@ -58,7 +58,7 @@ class RewardPointServiceTest {
     fun getPoint() {
         runBlocking {
             val actual = target.getPoint(1).await()
-            assertThat(actual.point).isEqualTo(12)
+            assertThat(actual.value).isEqualTo(12)
         }
     }
 

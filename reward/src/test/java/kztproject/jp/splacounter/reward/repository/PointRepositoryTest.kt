@@ -28,7 +28,7 @@ class PointRepositoryTest {
         runBlocking {
             val actual = target.loadPoint(1)
 
-            assertThat(actual.point).isEqualTo(10)
+            assertThat(actual.value).isEqualTo(10)
         }
     }
 

@@ -72,7 +72,7 @@ class RewardListViewModel @Inject constructor(
             try {
                 callback.onStartLoadingPoint()
                 val point = rewardListClient.loadPoint(prefsWrapper.userId)
-                mutableRewardPoint.value = point.point
+                mutableRewardPoint.value = point.value
             } catch (e: Exception) {
                 if (isActive) {
                     callback.onPointLoadFailed()
