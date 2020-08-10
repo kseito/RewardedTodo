@@ -57,6 +57,20 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/consume_probability"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={BindingUtils.toString(viewModel.reward.probability)}"
+                android:hint="@string/hint_probability"
+                android:inputType="numberDecimal" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <androidx.appcompat.widget.AppCompatCheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

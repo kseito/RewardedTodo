@@ -4,15 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
+import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
 import kztproject.jp.splacounter.reward.database.model.Reward
 import kztproject.jp.splacounter.reward.repository.IPointRepository
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
-class RewardListViewModel @Inject constructor(private val rewardListClient: IPointRepository,
-                                              private val rewardDao: IRewardRepository,
-                                              private val prefsWrapper: PrefsWrapper) : ViewModel() {
+class RewardListViewModel @Inject constructor(
+        private val rewardListClient: IPointRepository,
+        private val rewardDao: IRewardRepository,
+        private val prefsWrapper: PrefsWrapper,
+        private val lotteryUseCase: LotteryUseCase
+) : ViewModel() {
 
     private lateinit var callback: RewardViewModelCallback
     var rewardList: MutableList<Reward> = mutableListOf()
@@ -40,6 +44,15 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
         callback.showRewardDetail()
     }
 
+    fun startLottery() {
+        viewModelScope.launch {
+            val reward = lotteryUseCase.execute(rewardList)
+            reward?.let {
+                callback.onHitLottery(it)
+            } ?: callback.onMissLottery()
+        }
+    }
+
     fun loadRewards() {
         viewModelScope.launch {
             val newRewardList = rewardDao.findAll()
@@ -48,6 +61,7 @@ class RewardListViewModel @Inject constructor(private val rewardListClient: IPoi
                 return@launch
             }
 
+            rewardList.clear()
             rewardList.addAll(newRewardList)
             callback.showRewards(rewardList)
         }
@@ -178,4 +192,8 @@ interface RewardViewModelCallback {
     fun onTerminateLoadingPoint()
 
     fun onLogout()
+
+    fun onHitLottery(reward: Reward)
+
+    fun onMissLottery()
 }

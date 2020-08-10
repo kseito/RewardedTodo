@@ -39,6 +39,7 @@ class RewardDetailFragment : Fragment(), RewardDetailViewModelCallback {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentRewardDetailBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
+        binding.lifecycleOwner = this
         return binding.root
     }
 

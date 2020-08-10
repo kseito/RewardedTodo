@@ -11,11 +11,11 @@ object DummyCreator {
     }
 
     fun createDummyReward(): Reward {
-        return Reward(1, "Test", 5, "Test description", true)
+        return Reward(1, "Test", 5, 10F, "Test description", true)
     }
 
     fun createDummyNoRepeatReward(): Reward {
-        return Reward(2, "Test2", 7, "Test description", false)
+        return Reward(2, "Test2", 7, 20F, "Test description", false)
     }
 
     fun createDummyRewardPoint(): RewardPoint {

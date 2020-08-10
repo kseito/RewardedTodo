@@ -98,6 +98,15 @@
                 android:src="@drawable/add_button"
                 android:visibility="@{viewModel.hasSelectReward ? View.INVISIBLE : View.VISIBLE}" />
 
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/reward_add_button"
+                android:layout_alignRight="@id/reward_add_button"
+                android:onClick="@{() -> viewModel.startLottery()}"
+                android:src="@drawable/lottery_button"
+                android:visibility="@{viewModel.hasSelectReward ? View.INVISIBLE : View.VISIBLE}"/>
+
         </RelativeLayout>
 
         <com.google.android.material.navigation.NavigationView

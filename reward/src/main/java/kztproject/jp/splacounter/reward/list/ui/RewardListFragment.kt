@@ -155,6 +155,16 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     override fun onLogout() {
         fragmentTransitionManager.transitionToAuthFragment(activity)
     }
+
+    override fun onHitLottery(reward: Reward) {
+        val message = "You won ${reward.name}!"
+        showDialog(message)
+    }
+
+    override fun onMissLottery() {
+        val message = "You missed the lottery"
+        showDialog(message)
+    }
 }
 
 class RewardListAdapter(private val rewardList: MutableList<Reward>, private val clickListener: ClickListener)
