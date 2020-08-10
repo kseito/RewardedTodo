@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.reward.list.ui
+package kztproject.jp.splacounter.reward.presentation.list
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import dagger.android.support.AndroidSupportInjection
-import kztproject.jp.splacounter.reward.database.model.Reward
+import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
 import project.seito.reward.BR
 import project.seito.reward.R
 import project.seito.reward.databinding.FragmentRewardBinding

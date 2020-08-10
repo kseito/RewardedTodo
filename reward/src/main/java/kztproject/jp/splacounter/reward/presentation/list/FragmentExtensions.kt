@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.reward.list.ui
+package kztproject.jp.splacounter.reward.presentation.list
 
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment

@@ -1,13 +1,13 @@
-package kztproject.jp.splacounter.reward.list.ui
+package kztproject.jp.splacounter.reward.presentation.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
-import kztproject.jp.splacounter.reward.database.model.Reward
-import kztproject.jp.splacounter.reward.repository.IPointRepository
-import kztproject.jp.splacounter.reward.repository.IRewardRepository
+import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
+import kztproject.jp.splacounter.reward.application.repository.IPointRepository
+import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
@@ -72,7 +72,7 @@ class RewardListViewModel @Inject constructor(
             try {
                 callback.onStartLoadingPoint()
                 val point = rewardListClient.loadPoint(prefsWrapper.userId)
-                mutableRewardPoint.value = point.point
+                mutableRewardPoint.value = point.value
             } catch (e: Exception) {
                 if (isActive) {
                     callback.onPointLoadFailed()

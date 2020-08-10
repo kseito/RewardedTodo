@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.room.Room
 import dagger.Module
 import dagger.Provides
-import kztproject.jp.splacounter.reward.database.AppDatabase
+import kztproject.jp.splacounter.reward.infrastructure.database.AppDatabase
 import project.seito.screen_transition.IFragmentsTransitionManager
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Singleton

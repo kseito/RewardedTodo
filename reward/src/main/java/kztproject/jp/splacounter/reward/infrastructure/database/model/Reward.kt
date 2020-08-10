@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.reward.database.model
+package kztproject.jp.splacounter.reward.infrastructure.database.model
 
 import androidx.room.Entity
 import androidx.room.Ignore

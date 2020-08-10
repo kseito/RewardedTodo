@@ -4,7 +4,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import kztproject.jp.splacounter.R
 import kztproject.jp.splacounter.auth.ui.AuthFragmentDirections
-import kztproject.jp.splacounter.reward.list.ui.RewardListFragmentDirections
+import kztproject.jp.splacounter.reward.presentation.list.RewardListFragmentDirections
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 

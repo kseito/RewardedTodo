@@ -1,8 +1,8 @@
 package kztproject.jp.splacounter
 
-import kztproject.jp.splacounter.reward.api.model.RewardUser
-import kztproject.jp.splacounter.reward.database.model.Reward
-import kztproject.jp.splacounter.reward.database.model.RewardPoint
+import kztproject.jp.splacounter.reward.infrastructure.api.model.RewardUser
+import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
+import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardPoint
 
 object DummyCreator {
 

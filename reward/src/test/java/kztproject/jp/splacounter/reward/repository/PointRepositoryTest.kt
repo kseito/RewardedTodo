@@ -7,7 +7,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import kztproject.jp.splacounter.DummyCreator
-import kztproject.jp.splacounter.reward.api.RewardPointService
+import kztproject.jp.splacounter.reward.infrastructure.api.RewardPointService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyInt
@@ -28,7 +28,7 @@ class PointRepositoryTest {
         runBlocking {
             val actual = target.loadPoint(1)
 
-            assertThat(actual.point).isEqualTo(10)
+            assertThat(actual.value).isEqualTo(10)
         }
     }
 

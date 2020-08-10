@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.reward.detail.ui
+package kztproject.jp.splacounter.reward.presentation.detail
 
 import androidx.lifecycle.ViewModel
 import android.content.res.Resources
@@ -10,8 +10,8 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kztproject.jp.splacounter.reward.database.model.Reward
-import kztproject.jp.splacounter.reward.repository.IRewardRepository
+import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
+import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
 import project.seito.reward.R
 import javax.inject.Inject
 
