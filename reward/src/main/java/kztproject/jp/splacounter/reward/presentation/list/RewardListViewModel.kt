@@ -8,6 +8,7 @@ import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
 import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
 import kztproject.jp.splacounter.reward.application.repository.IPointRepository
 import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
+import kztproject.jp.splacounter.reward.application.usecase.GetRewardsUseCase
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
@@ -15,7 +16,8 @@ class RewardListViewModel @Inject constructor(
         private val rewardListClient: IPointRepository,
         private val rewardDao: IRewardRepository,
         private val prefsWrapper: PrefsWrapper,
-        private val lotteryUseCase: LotteryUseCase
+        private val lotteryUseCase: LotteryUseCase,
+        private val getRewardsUseCase: GetRewardsUseCase
 ) : ViewModel() {
 
     private lateinit var callback: RewardViewModelCallback

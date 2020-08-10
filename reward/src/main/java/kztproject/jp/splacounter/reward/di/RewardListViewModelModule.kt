@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
+import kztproject.jp.splacounter.reward.application.usecase.GetRewardsInteractor
+import kztproject.jp.splacounter.reward.application.usecase.GetRewardsUseCase
 import kztproject.jp.splacounter.reward.application.usecase.LotteryInteractor
 import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
 import kztproject.jp.splacounter.reward.presentation.list.RewardListViewModel
@@ -19,4 +21,7 @@ interface RewardListViewModelModule {
 
     @Binds
     fun bindLotteryUseCase(useCase: LotteryInteractor): LotteryUseCase
+
+    @Binds
+    fun bindGetRewardsUseCase(useCase: GetRewardsInteractor): GetRewardsUseCase
 }
