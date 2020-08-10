@@ -16,8 +16,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.reward.database.model.Reward
-import kztproject.jp.splacounter.reward.list.ui.RewardListViewModel
-import kztproject.jp.splacounter.reward.list.ui.RewardViewModelCallback
 import project.seito.reward.BR
 import project.seito.reward.R
 import project.seito.reward.databinding.FragmentRewardBinding

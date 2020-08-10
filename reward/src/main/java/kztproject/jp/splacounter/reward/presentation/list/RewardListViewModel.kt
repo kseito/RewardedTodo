@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.reward.list.ui
+package kztproject.jp.splacounter.reward.presentation.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

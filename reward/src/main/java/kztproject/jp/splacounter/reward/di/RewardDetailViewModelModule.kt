@@ -5,7 +5,6 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import kztproject.jp.splacounter.reward.detail.ui.RewardDetailViewModel
-import kztproject.jp.splacounter.reward.list.ui.RewardListViewModel
 import project.seito.screen_transition.di.ViewModelKey
 
 @Module
