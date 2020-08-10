@@ -9,7 +9,7 @@ import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
 import kztproject.jp.splacounter.reward.presentation.list.RewardListViewModel
 import kztproject.jp.splacounter.reward.presentation.list.RewardViewModelCallback
-import kztproject.jp.splacounter.reward.repository.IPointRepository
+import kztproject.jp.splacounter.reward.application.repository.IPointRepository
 import kztproject.jp.splacounter.reward.repository.IRewardRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After

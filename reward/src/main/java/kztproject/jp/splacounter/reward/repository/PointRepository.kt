@@ -1,5 +1,6 @@
 package kztproject.jp.splacounter.reward.repository
 
+import kztproject.jp.splacounter.reward.application.repository.IPointRepository
 import kztproject.jp.splacounter.reward.infrastructure.api.RewardPointService
 import kztproject.jp.splacounter.reward.infrastructure.api.model.RewardUser
 import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardPoint
