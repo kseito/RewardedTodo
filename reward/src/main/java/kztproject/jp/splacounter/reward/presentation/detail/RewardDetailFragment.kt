@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.reward.detail.ui
+package kztproject.jp.splacounter.reward.presentation.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,10 +8,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.navigation.Navigation
 import androidx.navigation.fragment.navArgs
 import dagger.android.support.AndroidSupportInjection
-import project.seito.reward.R
+import kztproject.jp.splacounter.reward.detail.ui.RewardDetailViewModel
+import kztproject.jp.splacounter.reward.detail.ui.RewardDetailViewModelCallback
 import project.seito.reward.databinding.FragmentRewardDetailBinding
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
