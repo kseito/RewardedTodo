@@ -35,4 +35,17 @@ data class Reward(@PrimaryKey(autoGenerate = true) var id: Int,
                 this.needRepeat
         )
     }
+
+    companion object {
+        fun from(reward: Reward): kztproject.jp.splacounter.reward.infrastructure.database.model.Reward {
+            return Reward(
+                    reward.rewardId.value,
+                    reward.name,
+                    reward.consumePoint,
+                    reward.probability.value,
+                    reward.description,
+                    reward.needRepeat
+            )
+        }
+    }
 }
