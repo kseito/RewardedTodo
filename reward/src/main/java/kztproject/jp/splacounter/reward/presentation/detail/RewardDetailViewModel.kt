@@ -10,20 +10,20 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
+import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
 import project.seito.reward.R
 import javax.inject.Inject
 
 class RewardDetailViewModel @Inject constructor(private val rewardRepository: IRewardRepository) : ViewModel() {
 
-    private var mutableReward =  MutableLiveData<Reward>()
-    var reward: LiveData<Reward> = mutableReward
+    private var mutableReward =  MutableLiveData<RewardEntity>()
+    var rewardEntity: LiveData<RewardEntity> = mutableReward
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Main + viewModelJob)
 
     init {
-        mutableReward.value = Reward()
+        mutableReward.value = RewardEntity()
     }
 
     private lateinit var callback: RewardDetailViewModelCallback
@@ -40,7 +40,7 @@ class RewardDetailViewModel @Inject constructor(private val rewardRepository: IR
     }
 
     fun saveReward() {
-        val reward = this.reward.value ?: throw IllegalStateException("mutableReward is null")
+        val reward = this.rewardEntity.value ?: throw IllegalStateException("mutableReward is null")
         if (reward.name.isEmpty()) {
             callback.onError(R.string.error_empty_title)
             return

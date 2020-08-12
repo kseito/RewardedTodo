@@ -8,12 +8,12 @@ import kztproject.jp.splacounter.reward.domain.model.Reward
 import kztproject.jp.splacounter.reward.domain.model.RewardId
 
 @Entity
-data class Reward(@PrimaryKey(autoGenerate = true) var id: Int,
-                  var name: String,
-                  var consumePoint: Int,
-                  var probability: Float,
-                  var description: String?,
-                  var needRepeat: Boolean) {
+data class RewardEntity(@PrimaryKey(autoGenerate = true) var id: Int,
+                        var name: String,
+                        var consumePoint: Int,
+                        var probability: Float,
+                        var description: String?,
+                        var needRepeat: Boolean) {
 
     @Ignore
     constructor() : this("", 0, 0F, null, false)
@@ -37,8 +37,8 @@ data class Reward(@PrimaryKey(autoGenerate = true) var id: Int,
     }
 
     companion object {
-        fun from(reward: Reward): kztproject.jp.splacounter.reward.infrastructure.database.model.Reward {
-            return Reward(
+        fun from(reward: Reward): RewardEntity {
+            return RewardEntity(
                     reward.rewardId.value,
                     reward.name,
                     reward.consumePoint,

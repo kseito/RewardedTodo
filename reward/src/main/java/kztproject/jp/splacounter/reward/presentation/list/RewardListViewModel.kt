@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
-import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
+import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 import kztproject.jp.splacounter.reward.application.repository.IPointRepository
 import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
 import kztproject.jp.splacounter.reward.application.usecase.DeleteRewardUseCase
@@ -23,8 +23,8 @@ class RewardListViewModel @Inject constructor(
 ) : ViewModel() {
 
     private lateinit var callback: RewardViewModelCallback
-    var rewardList: MutableList<Reward> = mutableListOf()
-    var selectedReward: Reward? = null
+    var rewardEntityList: MutableList<RewardEntity> = mutableListOf()
+    var selectedRewardEntity: RewardEntity? = null
         set(value) {
             hasSelectReward.value = value != null
             field = value
@@ -50,7 +50,7 @@ class RewardListViewModel @Inject constructor(
 
     fun startLottery() {
         viewModelScope.launch {
-            val reward = lotteryUseCase.execute(rewardList)
+            val reward = lotteryUseCase.execute(rewardEntityList)
             reward?.let {
                 callback.onHitLottery(it)
             } ?: callback.onMissLottery()
@@ -65,9 +65,9 @@ class RewardListViewModel @Inject constructor(
                 return@launch
             }
 
-            rewardList.clear()
-            rewardList.addAll(newRewardList)
-            callback.showRewards(rewardList)
+            rewardEntityList.clear()
+            rewardEntityList.addAll(newRewardList)
+            callback.showRewards(rewardEntityList)
         }
     }
 
@@ -88,13 +88,13 @@ class RewardListViewModel @Inject constructor(
     }
 
     fun acquireReward() {
-        val selectedReward: Reward = this.selectedReward
+        val selectedRewardEntity: RewardEntity = this.selectedRewardEntity
                 ?: throw NullPointerException("acquireReward() cannot call when selectedReward is null")
-        if (rewardPoint.value!! >= selectedReward.consumePoint) {
+        if (rewardPoint.value!! >= selectedRewardEntity.consumePoint) {
             viewModelScope.launch {
                 try {
-                    val user = rewardListClient.consumePoint(prefsWrapper.userId, selectedReward.consumePoint)
-                    callback.successAcquireReward(selectedReward, user.point)
+                    val user = rewardListClient.consumePoint(prefsWrapper.userId, selectedRewardEntity.consumePoint)
+                    callback.successAcquireReward(selectedRewardEntity, user.point)
                     mutableRewardPoint.value = user.point
                 } catch (e: Exception) {
                     if (isActive) {
@@ -108,53 +108,53 @@ class RewardListViewModel @Inject constructor(
     }
 
     fun confirmDelete() {
-        callback.showDeleteConfirmDialog(selectedReward!!)
+        callback.showDeleteConfirmDialog(selectedRewardEntity!!)
     }
 
-    fun deleteRewardIfNeeded(reward: Reward) {
-        if (reward.needRepeat) {
+    fun deleteRewardIfNeeded(rewardEntity: RewardEntity) {
+        if (rewardEntity.needRepeat) {
             return
         }
 
-        deleteReward(reward, false)
+        deleteReward(rewardEntity, false)
     }
 
     fun editReward() {
-        callback.onRewardEditSelected(selectedReward!!)
-        selectedReward = null
+        callback.onRewardEditSelected(selectedRewardEntity!!)
+        selectedRewardEntity = null
     }
 
-    fun deleteReward(reward: Reward, needCallback: Boolean) {
+    fun deleteReward(rewardEntity: RewardEntity, needCallback: Boolean) {
         viewModelScope.launch {
-            rewardDao.delete(reward)
+            rewardDao.delete(rewardEntity)
 
             if (needCallback) {
-                selectedReward = null
-                callback.onRewardDeleted(reward)
+                selectedRewardEntity = null
+                callback.onRewardDeleted(rewardEntity)
             }
         }
     }
 
-    fun switchReward(reward: Reward) {
+    fun switchReward(rewardEntity: RewardEntity) {
 
-        val newPosition = rewardList.indexOf(reward)
-        if (reward == selectedReward) {
-            selectedReward = null
-            rewardList[newPosition].isSelected = false
+        val newPosition = rewardEntityList.indexOf(rewardEntity)
+        if (rewardEntity == selectedRewardEntity) {
+            selectedRewardEntity = null
+            rewardEntityList[newPosition].isSelected = false
             callback.onRewardDeSelected(newPosition)
             return
         }
 
-        selectedReward?.let {
-            val oldPosition = rewardList.indexOf(it)
+        selectedRewardEntity?.let {
+            val oldPosition = rewardEntityList.indexOf(it)
             if (oldPosition >= 0) {
-                rewardList[oldPosition].isSelected = false
+                rewardEntityList[oldPosition].isSelected = false
                 callback.onRewardDeSelected(oldPosition)
             }
         }
 
-        rewardList[newPosition].isSelected = true
-        selectedReward = reward
+        rewardEntityList[newPosition].isSelected = true
+        selectedRewardEntity = rewardEntity
         callback.onRewardSelected(newPosition)
     }
 
@@ -173,21 +173,21 @@ interface RewardViewModelCallback {
 
     fun showRewardDetail()
 
-    fun showRewards(rewardList: MutableList<Reward>)
+    fun showRewards(rewardEntityList: MutableList<RewardEntity>)
 
-    fun showDeleteConfirmDialog(reward: Reward)
+    fun showDeleteConfirmDialog(rewardEntity: RewardEntity)
 
     fun showError()
 
-    fun successAcquireReward(reward: Reward, point: Int)
+    fun successAcquireReward(rewardEntity: RewardEntity, point: Int)
 
     fun onRewardSelected(position: Int)
 
     fun onRewardDeSelected(position: Int)
 
-    fun onRewardDeleted(reward: Reward)
+    fun onRewardDeleted(rewardEntity: RewardEntity)
 
-    fun onRewardEditSelected(reward: Reward)
+    fun onRewardEditSelected(rewardEntity: RewardEntity)
 
     fun onPointLoadFailed()
 
@@ -197,7 +197,7 @@ interface RewardViewModelCallback {
 
     fun onLogout()
 
-    fun onHitLottery(reward: Reward)
+    fun onHitLottery(rewardEntity: RewardEntity)
 
     fun onMissLottery()
 }

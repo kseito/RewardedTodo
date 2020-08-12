@@ -1,7 +1,7 @@
 package kztproject.jp.splacounter.reward.application.usecase
 
-import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
+import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 
 interface LotteryUseCase {
-    suspend fun execute(rewards: List<Reward>): Reward?
+    suspend fun execute(rewardEntities: List<RewardEntity>): RewardEntity?
 }

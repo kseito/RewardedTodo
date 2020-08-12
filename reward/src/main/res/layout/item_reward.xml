@@ -7,7 +7,7 @@
 
         <variable
             name="reward"
-            type="kztproject.jp.splacounter.reward.infrastructure.database.model.Reward" />
+            type="kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity" />
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"

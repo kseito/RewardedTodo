@@ -1,14 +1,14 @@
 package kztproject.jp.splacounter.reward.application.repository
 
-import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
+import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 
 interface IRewardRepository {
 
-    suspend fun createOrUpdate(reward: Reward)
+    suspend fun createOrUpdate(rewardEntity: RewardEntity)
 
-    suspend fun delete(reward: Reward)
+    suspend fun delete(rewardEntity: RewardEntity)
 
-    suspend fun findBy(id: Int): Reward?
+    suspend fun findBy(id: Int): RewardEntity?
 
-    suspend fun findAll(): Array<Reward>
+    suspend fun findAll(): Array<RewardEntity>
 }

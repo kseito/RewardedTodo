@@ -1,12 +1,12 @@
 package kztproject.jp.splacounter.reward.domain.model
 
-import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
+import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 
 object LotteryBoxFactory {
 
-    fun create(rewards: List<Reward>): LotteryBox {
+    fun create(rewardEntities: List<RewardEntity>): LotteryBox {
         val tickets = mutableListOf<Ticket>()
-        rewards.forEach {
+        rewardEntities.forEach {
             val numOfTicket = (100 * it.probability).toInt()
             repeat(numOfTicket) { _ -> tickets.add(Ticket.Prize(it.id)) }
         }

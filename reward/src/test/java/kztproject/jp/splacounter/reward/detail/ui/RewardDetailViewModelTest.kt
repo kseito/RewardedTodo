@@ -8,7 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
+import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 import kztproject.jp.splacounter.reward.presentation.detail.RewardDetailViewModel
 import kztproject.jp.splacounter.reward.presentation.detail.RewardDetailViewModelCallback
 import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
@@ -48,7 +48,7 @@ class RewardDetailViewModelTest {
     @Test
     fun testSaveReward() {
         runBlocking {
-            val reward = Reward("test", 1, 10F, "test description", false)
+            val reward = RewardEntity("test", 1, 10F, "test description", false)
             whenever(mockRewardRepository.findBy(anyInt())).thenReturn(reward)
         }
         viewModel.initialize(1)
@@ -67,7 +67,7 @@ class RewardDetailViewModelTest {
     @Test
     fun testSaveRewardWithoutPoint() {
         runBlocking {
-            val reward = Reward("test", 0, 10F, "test description", false)
+            val reward = RewardEntity("test", 0, 10F, "test description", false)
             whenever(mockRewardRepository.findBy(anyInt())).thenReturn(reward)
         }
 

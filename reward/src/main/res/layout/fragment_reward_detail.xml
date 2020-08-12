@@ -22,7 +22,7 @@
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={viewModel.reward.name}"
+                android:text="@={viewModel.rewardEntity.name}"
                 android:hint="@string/hint_title"
                 android:inputType="text" />
 
@@ -36,7 +36,7 @@
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={viewModel.reward.description}"
+                android:text="@={viewModel.rewardEntity.description}"
                 android:singleLine="true"
                 android:hint="@string/hint_description"
                 android:inputType="textMultiLine" />
@@ -51,7 +51,7 @@
                 android:id="@+id/consume_point"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={BindingUtils.toString(viewModel.reward.consumePoint)}"
+                android:text="@={BindingUtils.toString(viewModel.rewardEntity.consumePoint)}"
                 android:hint="@string/hint_point"
                 android:inputType="numberDecimal" />
 
@@ -65,7 +65,7 @@
                 android:id="@+id/consume_probability"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@={BindingUtils.toString(viewModel.reward.probability)}"
+                android:text="@={BindingUtils.toString(viewModel.rewardEntity.probability)}"
                 android:hint="@string/hint_probability"
                 android:inputType="numberDecimal" />
 
@@ -75,7 +75,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:checked="@={viewModel.reward.needRepeat}"
+            android:checked="@={viewModel.rewardEntity.needRepeat}"
             android:textSize="18sp"
             android:text="@string/check_repeat"/>
 
