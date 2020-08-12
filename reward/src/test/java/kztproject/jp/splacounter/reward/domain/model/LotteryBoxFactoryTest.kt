@@ -18,7 +18,7 @@ class LotteryBoxFactoryTest {
         val prizeTickets = lotteryBox.tickets.filterIsInstance<Ticket.Prize>()
         assertThat(prizeTickets.size).isEqualTo(5000)
         prizeTickets.forEach {
-            assertThat(it.rewardId).isEqualTo(1)
+            assertThat(it.rewardId).isEqualTo(RewardId(1))
         }
     }
 
@@ -28,11 +28,11 @@ class LotteryBoxFactoryTest {
 
         val lotteryBox = LotteryBoxFactory.create(RewardCollection(rewards))
 
-        val firstRewardTickets = lotteryBox.tickets.filter { it is Ticket.Prize && it.rewardId == 1 }
+        val firstRewardTickets = lotteryBox.tickets.filter { it is Ticket.Prize && it.rewardId == RewardId(1) }
         assertThat(firstRewardTickets.size).isEqualTo(5000)
-        val secondRewardTickets = lotteryBox.tickets.filter { it is Ticket.Prize && it.rewardId == 2 }
+        val secondRewardTickets = lotteryBox.tickets.filter { it is Ticket.Prize && it.rewardId == RewardId(2) }
         assertThat(secondRewardTickets.size).isEqualTo(100)
-        val thirdRewardTickets = lotteryBox.tickets.filter { it is Ticket.Prize && it.rewardId == 3 }
+        val thirdRewardTickets = lotteryBox.tickets.filter { it is Ticket.Prize && it.rewardId == RewardId(3) }
         assertThat(thirdRewardTickets.size).isEqualTo(1)
     }
 }

@@ -5,7 +5,7 @@ sealed class Ticket {
         const val ISSUE_LIMIT = 10000
     }
 
-    class Prize(val rewardId: Int) : Ticket()
+    class Prize(val rewardId: RewardId) : Ticket()
 
     object Miss : Ticket()
 }

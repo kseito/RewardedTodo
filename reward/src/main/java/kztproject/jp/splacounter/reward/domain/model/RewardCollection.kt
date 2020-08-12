@@ -9,7 +9,7 @@ class RewardCollection(private val rewards: List<Reward>) {
         val tickets = mutableListOf<Ticket>()
         rewards.forEach {
             val numOfTicket = (100 * it.probability.value).toInt()
-            repeat(numOfTicket) { _ -> tickets.add(Ticket.Prize(it.rewardId.value)) }
+            repeat(numOfTicket) { _ -> tickets.add(Ticket.Prize(it.rewardId)) }
         }
         while (tickets.size < Ticket.ISSUE_LIMIT) {
             tickets.add(Ticket.Miss)
@@ -17,8 +17,8 @@ class RewardCollection(private val rewards: List<Reward>) {
         return tickets
     }
 
-    fun findBy(id: Int): Reward {
-        return rewards.first { it.rewardId.value == id }
+    fun findBy(id: RewardId): Reward {
+        return rewards.first { it.rewardId == id }
     }
 
     companion object {
