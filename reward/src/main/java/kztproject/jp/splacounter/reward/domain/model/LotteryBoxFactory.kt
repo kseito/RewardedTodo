@@ -4,11 +4,11 @@ import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEnti
 
 object LotteryBoxFactory {
 
-    fun create(rewardEntities: List<RewardEntity>): LotteryBox {
+    fun create(rewardEntities: List<Reward>): LotteryBox {
         val tickets = mutableListOf<Ticket>()
         rewardEntities.forEach {
-            val numOfTicket = (100 * it.probability).toInt()
-            repeat(numOfTicket) { _ -> tickets.add(Ticket.Prize(it.id)) }
+            val numOfTicket = (100 * it.probability.value).toInt()
+            repeat(numOfTicket) { _ -> tickets.add(Ticket.Prize(it.rewardId.value)) }
         }
         while(tickets.size < Ticket.ISSUE_LIMIT) {
             tickets.add(Ticket.Miss)
