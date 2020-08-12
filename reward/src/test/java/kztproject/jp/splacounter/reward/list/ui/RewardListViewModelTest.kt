@@ -36,7 +36,7 @@ class RewardListViewModelTest {
 
     private val prefsWrapper = PrefsWrapper(RuntimeEnvironment.application)
 
-    private val useCase: LotteryUseCase = mock()
+    private val mockLotteryUseCase: LotteryUseCase = mock()
 
     private lateinit var viewModel: RewardListViewModel
 
@@ -50,7 +50,7 @@ class RewardListViewModelTest {
                 mockPointRepository,
                 mockDao,
                 prefsWrapper,
-                useCase,
+                mockLotteryUseCase,
                 mockGetRewardsUseCase,
                 mockDeleteRewardUseCase)
         viewModel.setCallback(mockCallback)
