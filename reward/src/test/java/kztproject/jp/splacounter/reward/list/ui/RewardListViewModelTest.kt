@@ -6,11 +6,13 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import kztproject.jp.splacounter.DummyCreator
+import kztproject.jp.splacounter.reward.application.repository.IPointRepository
+import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
+import kztproject.jp.splacounter.reward.application.usecase.DeleteRewardUseCase
+import kztproject.jp.splacounter.reward.application.usecase.GetRewardsUseCase
 import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
 import kztproject.jp.splacounter.reward.presentation.list.RewardListViewModel
 import kztproject.jp.splacounter.reward.presentation.list.RewardViewModelCallback
-import kztproject.jp.splacounter.reward.application.repository.IPointRepository
-import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
@@ -38,9 +40,19 @@ class RewardListViewModelTest {
 
     private lateinit var viewModel: RewardListViewModel
 
+    private val mockGetRewardsUseCase: GetRewardsUseCase = mock()
+
+    private val mockDeleteRewardUseCase: DeleteRewardUseCase = mock()
+
     @Before
     fun setup() {
-        viewModel = RewardListViewModel(mockPointRepository, mockDao, prefsWrapper, useCase)
+        viewModel = RewardListViewModel(
+                mockPointRepository,
+                mockDao,
+                prefsWrapper,
+                useCase,
+                mockGetRewardsUseCase,
+                mockDeleteRewardUseCase)
         viewModel.setCallback(mockCallback)
 
         Dispatchers.setMain(Dispatchers.Unconfined)
