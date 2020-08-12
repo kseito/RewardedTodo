@@ -1,5 +1,6 @@
 package kztproject.jp.splacounter.reward.list.ui
 
+import androidx.test.core.app.ApplicationProvider
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
@@ -21,7 +22,6 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyLong
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import project.seito.screen_transition.preference.PrefsWrapper
 import java.net.SocketTimeoutException
 
@@ -34,7 +34,7 @@ class RewardListViewModelTest {
 
     private val mockDao: IRewardRepository = mock()
 
-    private val prefsWrapper = PrefsWrapper(RuntimeEnvironment.application)
+    private val prefsWrapper = PrefsWrapper(ApplicationProvider.getApplicationContext())
 
     private val mockLotteryUseCase: LotteryUseCase = mock()
 
