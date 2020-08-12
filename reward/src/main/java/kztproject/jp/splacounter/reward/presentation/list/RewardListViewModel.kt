@@ -4,12 +4,13 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
-import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
-import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 import kztproject.jp.splacounter.reward.application.repository.IPointRepository
 import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
 import kztproject.jp.splacounter.reward.application.usecase.DeleteRewardUseCase
 import kztproject.jp.splacounter.reward.application.usecase.GetRewardsUseCase
+import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
+import kztproject.jp.splacounter.reward.domain.model.RewardCollection
+import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
@@ -50,9 +51,10 @@ class RewardListViewModel @Inject constructor(
 
     fun startLottery() {
         viewModelScope.launch {
-            val reward = lotteryUseCase.execute(rewardEntityList)
+            val rewards = RewardCollection.convertFrom(rewardEntityList)
+            val reward = lotteryUseCase.execute(rewards)
             reward?.let {
-                callback.onHitLottery(it)
+                callback.onHitLottery(RewardEntity.from(it))
             } ?: callback.onMissLottery()
         }
     }
