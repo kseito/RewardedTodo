@@ -9,7 +9,7 @@ object TestRewardCreator {
                         RewardName("reward1"),
                         1,
                         Probability(50F),
-                        null,
+                        RewardDescription(null),
                         false)
         )
     }
@@ -21,7 +21,7 @@ object TestRewardCreator {
                         RewardName("reward1"),
                         1,
                         Probability(50F),
-                        null,
+                        RewardDescription(null),
                         false),
 
                 Reward(
@@ -29,14 +29,14 @@ object TestRewardCreator {
                         RewardName("reward2"),
                         1,
                         Probability(1F),
-                        null,
+                        RewardDescription(null),
                         false),
                 Reward(
                         RewardId(3),
                         RewardName("reward3"),
                         1,
                         Probability(0.01F),
-                        null,
+                        RewardDescription(null),
                         false)
         )
     }

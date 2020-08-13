@@ -3,10 +3,7 @@ package kztproject.jp.splacounter.reward.infrastructure.database.model
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import kztproject.jp.splacounter.reward.domain.model.Probability
-import kztproject.jp.splacounter.reward.domain.model.Reward
-import kztproject.jp.splacounter.reward.domain.model.RewardId
-import kztproject.jp.splacounter.reward.domain.model.RewardName
+import kztproject.jp.splacounter.reward.domain.model.*
 
 @Entity
 data class RewardEntity(@PrimaryKey(autoGenerate = true) var id: Int,
@@ -32,7 +29,7 @@ data class RewardEntity(@PrimaryKey(autoGenerate = true) var id: Int,
                 RewardName(this.name),
                 this.consumePoint,
                 Probability(this.probability),
-                this.description,
+                RewardDescription(this.description),
                 this.needRepeat
         )
     }
@@ -44,7 +41,7 @@ data class RewardEntity(@PrimaryKey(autoGenerate = true) var id: Int,
                     reward.name.value,
                     reward.consumePoint,
                     reward.probability.value,
-                    reward.description,
+                    reward.description.value,
                     reward.needRepeat
             )
         }

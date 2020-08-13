@@ -5,6 +5,6 @@ data class Reward(
         val name: RewardName,
         val consumePoint: Int,
         val probability: Probability,
-        val description: String?,
+        val description: RewardDescription,
         val needRepeat: Boolean
 )
