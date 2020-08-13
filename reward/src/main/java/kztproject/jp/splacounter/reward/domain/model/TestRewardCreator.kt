@@ -6,7 +6,7 @@ object TestRewardCreator {
         return listOf(
                 Reward(
                         RewardId(1),
-                        "reward1",
+                        RewardName("reward1"),
                         1,
                         Probability(50F),
                         null,
@@ -18,7 +18,7 @@ object TestRewardCreator {
         return listOf(
                 Reward(
                         RewardId(1),
-                        "reward1",
+                        RewardName("reward1"),
                         1,
                         Probability(50F),
                         null,
@@ -26,14 +26,14 @@ object TestRewardCreator {
 
                 Reward(
                         RewardId(2),
-                        "reward2",
+                        RewardName("reward2"),
                         1,
                         Probability(1F),
                         null,
                         false),
                 Reward(
                         RewardId(3),
-                        "reward3",
+                        RewardName("reward3"),
                         1,
                         Probability(0.01F),
                         null,

@@ -6,6 +6,7 @@ import androidx.room.PrimaryKey
 import kztproject.jp.splacounter.reward.domain.model.Probability
 import kztproject.jp.splacounter.reward.domain.model.Reward
 import kztproject.jp.splacounter.reward.domain.model.RewardId
+import kztproject.jp.splacounter.reward.domain.model.RewardName
 
 @Entity
 data class RewardEntity(@PrimaryKey(autoGenerate = true) var id: Int,
@@ -28,7 +29,7 @@ data class RewardEntity(@PrimaryKey(autoGenerate = true) var id: Int,
     fun convert(): Reward {
         return Reward(
                 RewardId(this.id),
-                this.name,
+                RewardName(this.name),
                 this.consumePoint,
                 Probability(this.probability),
                 this.description,
@@ -40,7 +41,7 @@ data class RewardEntity(@PrimaryKey(autoGenerate = true) var id: Int,
         fun from(reward: Reward): RewardEntity {
             return RewardEntity(
                     reward.rewardId.value,
-                    reward.name,
+                    reward.name.value,
                     reward.consumePoint,
                     reward.probability.value,
                     reward.description,
