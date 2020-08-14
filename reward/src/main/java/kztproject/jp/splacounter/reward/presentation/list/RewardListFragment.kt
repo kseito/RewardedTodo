@@ -119,14 +119,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         }
     }
 
-    override fun onRewardSelected(position: Int) {
-        binding.rewardListView.adapter?.notifyItemChanged(position)
-    }
-
-    override fun onRewardDeSelected(position: Int) {
-        binding.rewardListView.adapter?.notifyItemChanged(position)
-    }
-
     override fun onRewardEditSelected(rewardEntity: RewardEntity) {
         fragmentTransitionManager.transitionToRewardDetailFragment(activity, rewardEntity.id)
     }

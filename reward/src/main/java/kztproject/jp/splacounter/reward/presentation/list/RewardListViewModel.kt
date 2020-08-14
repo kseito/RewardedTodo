@@ -160,10 +160,6 @@ interface RewardViewModelCallback {
 
     fun successAcquireReward(rewardEntity: RewardEntity, point: Int)
 
-    fun onRewardSelected(position: Int)
-
-    fun onRewardDeSelected(position: Int)
-
     fun onRewardDeleted(rewardEntity: RewardEntity)
 
     fun onRewardEditSelected(rewardEntity: RewardEntity)
