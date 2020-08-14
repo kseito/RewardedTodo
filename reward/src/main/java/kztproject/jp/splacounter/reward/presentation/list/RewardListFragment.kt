@@ -87,7 +87,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun onItemClick(rewardEntity: RewardEntity) {
-        viewModel.switchReward(rewardEntity)
+        fragmentTransitionManager.transitionToRewardDetailFragment(activity, rewardEntity.id)
     }
 
     override fun showRewardDetail() {

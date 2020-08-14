@@ -137,29 +137,6 @@ class RewardListViewModel @Inject constructor(
         }
     }
 
-    fun switchReward(rewardEntity: RewardEntity) {
-
-        val newPosition = rewardEntityList.indexOf(rewardEntity)
-        if (rewardEntity == selectedRewardEntity) {
-            selectedRewardEntity = null
-            rewardEntityList[newPosition].isSelected = false
-            callback.onRewardDeSelected(newPosition)
-            return
-        }
-
-        selectedRewardEntity?.let {
-            val oldPosition = rewardEntityList.indexOf(it)
-            if (oldPosition >= 0) {
-                rewardEntityList[oldPosition].isSelected = false
-                callback.onRewardDeSelected(oldPosition)
-            }
-        }
-
-        rewardEntityList[newPosition].isSelected = true
-        selectedRewardEntity = rewardEntity
-        callback.onRewardSelected(newPosition)
-    }
-
     fun logout() {
         prefsWrapper.userId = 0
         callback.onLogout()

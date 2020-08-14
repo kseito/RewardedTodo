@@ -139,38 +139,6 @@ class RewardListViewModelTest {
     }
 
     @Test
-    fun testSelectReward() {
-        val reward = DummyCreator.createDummyReward()
-        viewModel.rewardEntityList.add(reward)
-        viewModel.switchReward(reward)
-
-        verify(mockCallback).onRewardSelected(anyInt())
-    }
-
-    @Test
-    fun testDeselectReward() {
-        val reward = DummyCreator.createDummyReward()
-        viewModel.rewardEntityList.add(reward)
-        viewModel.switchReward(reward)
-        viewModel.switchReward(reward)
-
-        verify(mockCallback).onRewardSelected(anyInt())
-        verify(mockCallback).onRewardDeSelected(anyInt())
-    }
-
-    @Test
-    fun testReselectReward() {
-        val rewards = listOf(DummyCreator.createDummyReward(),
-                DummyCreator.createDummyNoRepeatReward())
-        viewModel.rewardEntityList.addAll(rewards)
-        viewModel.switchReward(rewards[0])
-        viewModel.switchReward(rewards[1])
-
-        verify(mockCallback, times(2)).onRewardSelected(anyInt())
-        verify(mockCallback, times(1)).onRewardDeSelected(anyInt())
-    }
-
-    @Test
     fun testConfirmDelete() {
         viewModel.selectedRewardEntity = DummyCreator.createDummyReward()
         viewModel.confirmDelete()
