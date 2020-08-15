@@ -83,7 +83,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             false
         }
 
-        binding.rewardListView.adapter = RewardListAdapter(viewModel.rewardEntityList, this)
+        binding.rewardListView.adapter = RewardListAdapter(viewModel.rewardList, this)
     }
 
     override fun onItemClick(rewardEntity: Reward) {

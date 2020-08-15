@@ -86,7 +86,7 @@ class RewardListViewModelTest {
     @Test
     fun testAcquireRewardSuccess() {
         runBlocking { whenever(mockPointRepository.consumePoint(anyLong(), anyInt())).thenReturn(DummyCreator.createDummyRewardUser()) }
-        viewModel.selectedRewardEntity = DummyCreator.createDummyReward()
+        viewModel.selectedReward = DummyCreator.createDummyReward()
         viewModel.setPoint(20)
         viewModel.acquireReward()
 
@@ -99,7 +99,7 @@ class RewardListViewModelTest {
 
         val reward = DummyCreator.createDummyReward()
         viewModel.setPoint(1)
-        viewModel.selectedRewardEntity = reward
+        viewModel.selectedReward = reward
         viewModel.acquireReward()
 
         verify(mockCallback, times(1)).showError()
@@ -110,7 +110,7 @@ class RewardListViewModelTest {
     fun testAcquireRewardFailure_SocketTimeOut() {
         runBlocking { whenever(mockPointRepository.consumePoint(anyLong(), anyInt())).thenAnswer { throw SocketTimeoutException() } }
         viewModel.setPoint(20)
-        viewModel.selectedRewardEntity = DummyCreator.createDummyReward()
+        viewModel.selectedReward = DummyCreator.createDummyReward()
         viewModel.acquireReward()
         verify(mockCallback, times(1)).showError()
     }
@@ -137,7 +137,7 @@ class RewardListViewModelTest {
 
     @Test
     fun testConfirmDelete() {
-        viewModel.selectedRewardEntity = DummyCreator.createDummyReward()
+        viewModel.selectedReward = DummyCreator.createDummyReward()
         viewModel.confirmDelete()
 
         verify(mockCallback).showDeleteConfirmDialog(any())
@@ -157,7 +157,7 @@ class RewardListViewModelTest {
     @Test
     fun testEditReward() {
         val reward = DummyCreator.createDummyReward()
-        viewModel.selectedRewardEntity = reward
+        viewModel.selectedReward = reward
         viewModel.editReward()
 
         verify(mockCallback).onRewardEditSelected(reward)
