@@ -7,13 +7,12 @@
 
         <variable
             name="reward"
-            type="kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity" />
+            type="kztproject.jp.splacounter.reward.domain.model.Reward" />
     </data>
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@{reward.selected ? @color/colorAccent : @android:color/white}"
         android:orientation="vertical">
 
         <TextView

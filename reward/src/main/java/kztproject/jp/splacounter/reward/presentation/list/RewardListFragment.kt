@@ -15,7 +15,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import dagger.android.support.AndroidSupportInjection
-import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
+import kztproject.jp.splacounter.reward.domain.model.Reward
 import project.seito.reward.BR
 import project.seito.reward.R
 import project.seito.reward.databinding.FragmentRewardBinding
@@ -86,19 +86,19 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         binding.rewardListView.adapter = RewardListAdapter(viewModel.rewardEntityList, this)
     }
 
-    override fun onItemClick(rewardEntity: RewardEntity) {
-        fragmentTransitionManager.transitionToRewardDetailFragment(activity, rewardEntity.id)
+    override fun onItemClick(rewardEntity: Reward) {
+        fragmentTransitionManager.transitionToRewardDetailFragment(activity, rewardEntity.rewardId.value)
     }
 
     override fun showRewardDetail() {
         fragmentTransitionManager.transitionToRewardDetailFragment(activity)
     }
 
-    override fun showRewards(rewardEntityList: MutableList<RewardEntity>) {
+    override fun showRewards(rewardEntityList: MutableList<Reward>) {
         binding.rewardListView.adapter = RewardListAdapter(rewardEntityList, this)
     }
 
-    override fun showDeleteConfirmDialog(rewardEntity: RewardEntity) {
+    override fun showDeleteConfirmDialog(rewardEntity: Reward) {
         val activityContext = activity as Context? ?: return
         AlertDialog.Builder(activityContext)
                 .setTitle(R.string.confirm_title)
@@ -112,18 +112,18 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         Toast.makeText(context, R.string.error_acquire_reward, Toast.LENGTH_SHORT).show()
     }
 
-    override fun successAcquireReward(rewardEntity: RewardEntity, point: Int) {
+    override fun successAcquireReward(rewardEntity: Reward, point: Int) {
         if (!rewardEntity.needRepeat) {
             viewModel.deleteRewardIfNeeded(rewardEntity)
             (binding.rewardListView.adapter as RewardListAdapter).remove(rewardEntity)
         }
     }
 
-    override fun onRewardEditSelected(rewardEntity: RewardEntity) {
-        fragmentTransitionManager.transitionToRewardDetailFragment(activity, rewardEntity.id)
+    override fun onRewardEditSelected(rewardEntity: Reward) {
+        fragmentTransitionManager.transitionToRewardDetailFragment(activity, rewardEntity.rewardId.value)
     }
 
-    override fun onRewardDeleted(rewardEntity: RewardEntity) {
+    override fun onRewardDeleted(rewardEntity: Reward) {
         val message = String.format(getString(R.string.reward_delete_message), rewardEntity.name)
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         (binding.rewardListView.adapter as RewardListAdapter).remove(rewardEntity)
@@ -148,7 +148,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         fragmentTransitionManager.transitionToAuthFragment(activity)
     }
 
-    override fun onHitLottery(rewardEntity: RewardEntity) {
+    override fun onHitLottery(rewardEntity: Reward) {
         val message = "You won ${rewardEntity.name}!"
         showDialog(message)
     }
@@ -159,7 +159,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 }
 
-class RewardListAdapter(private val rewardEntityList: MutableList<RewardEntity>, private val clickListener: ClickListener)
+class RewardListAdapter(private val rewardEntityList: MutableList<Reward>, private val clickListener: ClickListener)
     : RecyclerView.Adapter<ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -176,7 +176,7 @@ class RewardListAdapter(private val rewardEntityList: MutableList<RewardEntity>,
         holder.itemView.setOnClickListener { clickListener.onItemClick(reward) }
     }
 
-    fun remove(deleteRewardEntity: RewardEntity) {
+    fun remove(deleteRewardEntity: Reward) {
         rewardEntityList.forEachIndexed { index, reward ->
             if (deleteRewardEntity == reward) {
                 rewardEntityList.remove(reward)
@@ -197,5 +197,5 @@ class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 }
 
 interface ClickListener {
-    fun onItemClick(rewardEntity: RewardEntity)
+    fun onItemClick(rewardEntity: Reward)
 }
