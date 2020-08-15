@@ -32,8 +32,6 @@ class RewardListViewModelTest {
 
     private val mockPointRepository: IPointRepository = mock()
 
-    private val mockDao: IRewardRepository = mock()
-
     private val prefsWrapper = PrefsWrapper(ApplicationProvider.getApplicationContext())
 
     private val mockLotteryUseCase: LotteryUseCase = mock()
@@ -48,7 +46,6 @@ class RewardListViewModelTest {
     fun setup() {
         viewModel = RewardListViewModel(
                 mockPointRepository,
-                mockDao,
                 prefsWrapper,
                 mockLotteryUseCase,
                 mockGetRewardsUseCase,
@@ -72,7 +69,7 @@ class RewardListViewModelTest {
 
     @Test
     fun testGetRewards() {
-        runBlocking { whenever(mockDao.findAll()).thenReturn(arrayOf(DummyCreator.createDummyReward())) }
+        runBlocking { whenever(mockGetRewardsUseCase.execute()).thenReturn(listOf(DummyCreator.createDummyReward())) }
         viewModel.loadRewards()
 
         assertThat(viewModel.isEmpty.value).isFalse()
@@ -123,7 +120,7 @@ class RewardListViewModelTest {
         runBlocking {
             viewModel.deleteRewardIfNeeded(DummyCreator.createDummyReward())
 
-            verify(mockDao, times(0)).delete(any())
+            verify(mockDeleteRewardUseCase, times(0)).execute(any())
             verify(mockCallback, times(0)).onRewardDeleted(any())
         }
     }
@@ -133,7 +130,7 @@ class RewardListViewModelTest {
         runBlocking {
             viewModel.deleteRewardIfNeeded(DummyCreator.createDummyNoRepeatReward())
 
-            verify(mockDao, times(1)).delete(any())
+            verify(mockDeleteRewardUseCase, times(1)).execute(any())
             verify(mockCallback, times(0)).onRewardDeleted(any())
         }
     }
@@ -152,7 +149,7 @@ class RewardListViewModelTest {
             val reward = DummyCreator.createDummyReward()
             viewModel.deleteReward(reward, true)
 
-            verify(mockDao).delete(any())
+            verify(mockDeleteRewardUseCase).execute(any())
             verify(mockCallback).onRewardDeleted(reward)
         }
     }

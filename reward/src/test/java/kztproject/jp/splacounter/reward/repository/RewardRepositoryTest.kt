@@ -19,7 +19,7 @@ class RewardRepositoryTest {
 
     @Test
     fun insertReward() {
-        val dummyReward = DummyCreator.createDummyReward()
+        val dummyReward = DummyCreator.createDummyRewardEntity()
         runBlocking {
             target.createOrUpdate(dummyReward)
 
@@ -30,7 +30,7 @@ class RewardRepositoryTest {
     @Test
     fun deleteReward() {
         runBlocking {
-            val dummyReward = DummyCreator.createDummyReward()
+            val dummyReward = DummyCreator.createDummyRewardEntity()
             target.delete(dummyReward)
 
             verify(rewardDao, times(1)).deleteReward(dummyReward)
