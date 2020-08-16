@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 import kztproject.jp.splacounter.reward.application.repository.IPointRepository
 import kztproject.jp.splacounter.reward.application.usecase.DeleteRewardUseCase
+import kztproject.jp.splacounter.reward.application.usecase.GetPointUseCase
 import kztproject.jp.splacounter.reward.application.usecase.GetRewardsUseCase
 import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
 import kztproject.jp.splacounter.reward.domain.model.Reward
@@ -18,7 +19,8 @@ class RewardListViewModel @Inject constructor(
         private val prefsWrapper: PrefsWrapper,
         private val lotteryUseCase: LotteryUseCase,
         private val getRewardsUseCase: GetRewardsUseCase,
-        private val deleteRewardUseCase: DeleteRewardUseCase
+        private val deleteRewardUseCase: DeleteRewardUseCase,
+        private val getPointUseCase: GetPointUseCase
 ) : ViewModel() {
 
     private lateinit var callback: RewardViewModelCallback
@@ -75,7 +77,7 @@ class RewardListViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 callback.onStartLoadingPoint()
-                val point = rewardListClient.loadPoint(prefsWrapper.userId)
+                val point = getPointUseCase.execute()
                 mutableRewardPoint.value = point.value
             } catch (e: Exception) {
                 if (isActive) {
