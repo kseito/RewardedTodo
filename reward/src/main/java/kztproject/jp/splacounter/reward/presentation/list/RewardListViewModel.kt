@@ -5,22 +5,19 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 import kztproject.jp.splacounter.reward.application.repository.IPointRepository
-import kztproject.jp.splacounter.reward.application.usecase.DeleteRewardUseCase
-import kztproject.jp.splacounter.reward.application.usecase.GetPointUseCase
-import kztproject.jp.splacounter.reward.application.usecase.GetRewardsUseCase
-import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
+import kztproject.jp.splacounter.reward.application.usecase.*
 import kztproject.jp.splacounter.reward.domain.model.Reward
 import kztproject.jp.splacounter.reward.domain.model.RewardCollection
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
 class RewardListViewModel @Inject constructor(
-        private val rewardListClient: IPointRepository,
         private val prefsWrapper: PrefsWrapper,
         private val lotteryUseCase: LotteryUseCase,
         private val getRewardsUseCase: GetRewardsUseCase,
         private val deleteRewardUseCase: DeleteRewardUseCase,
-        private val getPointUseCase: GetPointUseCase
+        private val getPointUseCase: GetPointUseCase,
+        private val usePointUseCase: UsePointUseCase
 ) : ViewModel() {
 
     private lateinit var callback: RewardViewModelCallback
@@ -95,7 +92,7 @@ class RewardListViewModel @Inject constructor(
         if (rewardPoint.value!! >= selectedReward.consumePoint) {
             viewModelScope.launch {
                 try {
-                    val user = rewardListClient.consumePoint(prefsWrapper.userId, selectedReward.consumePoint)
+                    val user = usePointUseCase.execute(selectedReward)
                     callback.successAcquireReward(selectedReward, user.point)
                     mutableRewardPoint.value = user.point
                 } catch (e: Exception) {

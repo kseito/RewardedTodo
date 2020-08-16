@@ -27,4 +27,7 @@ interface RewardListViewModelModule {
 
     @Binds
     fun bindGetPointUseCase(useCase: GetPointInteractor): GetPointUseCase
+
+    @Binds
+    fun bindUsePointUseCase(useCase: UsePointInteractor): UsePointUseCase
 }
