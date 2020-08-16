@@ -5,11 +5,11 @@ import kztproject.jp.splacounter.reward.domain.model.Reward
 import javax.inject.Inject
 
 class GetRewardsInteractor @Inject constructor(
-        private val rewardDao: IRewardRepository
+        private val rewardRepository: IRewardRepository
 ) : GetRewardsUseCase {
 
     override suspend fun execute(): List<Reward> {
-        return rewardDao.findAll()
+        return rewardRepository.findAll()
                 .map { it.convert() }
     }
 }
