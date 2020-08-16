@@ -7,11 +7,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import kztproject.jp.splacounter.DummyCreator
-import kztproject.jp.splacounter.reward.application.repository.IPointRepository
-import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
-import kztproject.jp.splacounter.reward.application.usecase.DeleteRewardUseCase
-import kztproject.jp.splacounter.reward.application.usecase.GetRewardsUseCase
-import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
+import kztproject.jp.splacounter.reward.application.usecase.*
 import kztproject.jp.splacounter.reward.presentation.list.RewardListViewModel
 import kztproject.jp.splacounter.reward.presentation.list.RewardViewModelCallback
 import org.assertj.core.api.Assertions.assertThat
@@ -20,7 +16,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.ArgumentMatchers.anyLong
 import org.robolectric.RobolectricTestRunner
 import project.seito.screen_transition.preference.PrefsWrapper
 import java.net.SocketTimeoutException
@@ -29,8 +24,6 @@ import java.net.SocketTimeoutException
 class RewardListViewModelTest {
 
     private val mockCallback: RewardViewModelCallback = mock()
-
-    private val mockPointRepository: IPointRepository = mock()
 
     private val prefsWrapper = PrefsWrapper(ApplicationProvider.getApplicationContext())
 
@@ -42,14 +35,20 @@ class RewardListViewModelTest {
 
     private val mockDeleteRewardUseCase: DeleteRewardUseCase = mock()
 
+    private val mockGetPointUseCase: GetPointUseCase = mock()
+
+    private val mockUsePointUseCase: UsePointUseCase = mock()
+
     @Before
     fun setup() {
         viewModel = RewardListViewModel(
-                mockPointRepository,
                 prefsWrapper,
                 mockLotteryUseCase,
                 mockGetRewardsUseCase,
-                mockDeleteRewardUseCase)
+                mockDeleteRewardUseCase,
+                mockGetPointUseCase,
+                mockUsePointUseCase
+        )
         viewModel.setCallback(mockCallback)
 
         Dispatchers.setMain(Dispatchers.Unconfined)
@@ -85,7 +84,7 @@ class RewardListViewModelTest {
 
     @Test
     fun testAcquireRewardSuccess() {
-        runBlocking { whenever(mockPointRepository.consumePoint(anyLong(), anyInt())).thenReturn(DummyCreator.createDummyRewardUser()) }
+        runBlocking { whenever(mockUsePointUseCase.execute(any())).thenReturn(DummyCreator.createDummyRewardUser()) }
         viewModel.selectedReward = DummyCreator.createDummyReward()
         viewModel.setPoint(20)
         viewModel.acquireReward()
@@ -95,7 +94,7 @@ class RewardListViewModelTest {
 
     @Test
     fun testAcquireRewardFailure_PointShortage() {
-        runBlocking { whenever(mockPointRepository.consumePoint(anyLong(), anyInt())).thenReturn(DummyCreator.createDummyRewardUser()) }
+        runBlocking { whenever(mockUsePointUseCase.execute(any())).thenReturn(DummyCreator.createDummyRewardUser()) }
 
         val reward = DummyCreator.createDummyReward()
         viewModel.setPoint(1)
@@ -108,7 +107,7 @@ class RewardListViewModelTest {
 
     @Test
     fun testAcquireRewardFailure_SocketTimeOut() {
-        runBlocking { whenever(mockPointRepository.consumePoint(anyLong(), anyInt())).thenAnswer { throw SocketTimeoutException() } }
+        runBlocking { whenever(mockUsePointUseCase.execute(any())).thenAnswer { throw SocketTimeoutException() } }
         viewModel.setPoint(20)
         viewModel.selectedReward = DummyCreator.createDummyReward()
         viewModel.acquireReward()
@@ -166,7 +165,7 @@ class RewardListViewModelTest {
     @Test
     fun testLoadPoint_Success() {
         val dummyPoint = DummyCreator.createDummyRewardPoint()
-        runBlocking { whenever(mockPointRepository.loadPoint(anyLong())).thenReturn(dummyPoint) }
+        runBlocking { whenever(mockGetPointUseCase.execute()).thenReturn(dummyPoint) }
         viewModel.loadPoint()
 
         assertThat(viewModel.rewardPoint.value).isEqualTo(10)
@@ -176,7 +175,7 @@ class RewardListViewModelTest {
 
     @Test
     fun testLoadPoint_Failure() {
-        runBlocking { whenever(mockPointRepository.loadPoint(anyLong())).thenAnswer { throw SocketTimeoutException() } }
+        runBlocking { whenever(mockGetPointUseCase.execute()).thenAnswer { throw SocketTimeoutException() } }
         viewModel.loadPoint()
 
         verify(mockCallback).onStartLoadingPoint()
