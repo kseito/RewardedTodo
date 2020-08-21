@@ -3,6 +3,7 @@ package kztproject.jp.splacounter.reward.repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
+import kztproject.jp.splacounter.reward.domain.model.Reward
 import kztproject.jp.splacounter.reward.infrastructure.database.RewardDao
 import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 import javax.inject.Inject
@@ -15,8 +16,9 @@ class RewardRepository @Inject constructor(private val rewardDao: RewardDao): IR
         }
     }
 
-    override suspend fun delete(rewardEntity: RewardEntity) {
+    override suspend fun delete(reward: Reward) {
         withContext(Dispatchers.IO) {
+            val rewardEntity = RewardEntity.from(reward)
             rewardDao.deleteReward(rewardEntity)
         }
     }
