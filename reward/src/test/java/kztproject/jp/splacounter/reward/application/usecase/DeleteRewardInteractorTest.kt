@@ -6,12 +6,13 @@ import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
 import kztproject.jp.splacounter.DummyCreator
+import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
 import kztproject.jp.splacounter.reward.infrastructure.database.RewardDao
 import org.junit.Test
 
 class DeleteRewardInteractorTest {
 
-    private val mockRewardDao: RewardDao = mock()
+    private val mockRewardDao: IRewardRepository = mock()
     private val interactor = DeleteRewardInteractor(mockRewardDao)
 
     @Test
@@ -21,7 +22,7 @@ class DeleteRewardInteractorTest {
 
             interactor.execute(dummyReward)
 
-            verify(mockRewardDao, times(1)).deleteReward(any())
+            verify(mockRewardDao, times(1)).delete(any())
         }
     }
 }
