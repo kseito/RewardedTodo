@@ -8,7 +8,7 @@ import kztproject.jp.splacounter.reward.infrastructure.database.RewardDao
 import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 import javax.inject.Inject
 
-class RewardRepository @Inject constructor(private val rewardDao: RewardDao): IRewardRepository {
+class RewardRepository @Inject constructor(private val rewardDao: RewardDao) : IRewardRepository {
 
     override suspend fun createOrUpdate(rewardEntity: RewardEntity) {
         withContext(Dispatchers.IO) {
@@ -29,9 +29,10 @@ class RewardRepository @Inject constructor(private val rewardDao: RewardDao): IR
         }
     }
 
-    override suspend fun findAll(): List<RewardEntity> {
+    override suspend fun findAll(): List<Reward> {
         return withContext(Dispatchers.IO) {
             rewardDao.findAll()
+                    .map { it.convert() }
         }
     }
 

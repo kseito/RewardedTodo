@@ -10,6 +10,5 @@ class GetRewardsInteractor @Inject constructor(
 
     override suspend fun execute(): List<Reward> {
         return rewardRepository.findAll()
-                .map { it.convert() }
     }
 }
