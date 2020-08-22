@@ -36,6 +36,8 @@ android {
                 includeNoLocationClasses = true
                 jacoco.excludes = ['jdk.internal.*']
             }
+
+            systemProperty "javax.net.ssl.trustStore", "JKS"
         }
     }
 }
