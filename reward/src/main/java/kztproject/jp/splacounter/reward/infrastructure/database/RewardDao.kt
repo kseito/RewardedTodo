@@ -1,23 +1,23 @@
 package kztproject.jp.splacounter.reward.infrastructure.database
 
 import androidx.room.*
-import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
+import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 
 @Dao
 interface RewardDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertReward(reward: Reward)
+    fun insertReward(rewardEntity: RewardEntity)
 
-    @Query("SELECT * FROM Reward")
-    fun findAll(): Array<Reward>
+    @Query("SELECT * FROM RewardEntity")
+    fun findAll(): List<RewardEntity>
 
-    @Query("SELECT * FROM Reward WHERE id = :id")
-    fun findBy(id: Int): Reward?
+    @Query("SELECT * FROM RewardEntity WHERE id = :id")
+    fun findBy(id: Int): RewardEntity?
 
     @Update
-    fun updateReward(address: Reward)
+    fun updateReward(address: RewardEntity)
 
     @Delete
-    fun deleteReward(reward: Reward)
+    fun deleteReward(rewardEntity: RewardEntity)
 }

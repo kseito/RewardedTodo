@@ -1,7 +1,8 @@
 package kztproject.jp.splacounter
 
+import kztproject.jp.splacounter.reward.domain.model.*
 import kztproject.jp.splacounter.reward.infrastructure.api.model.RewardUser
-import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
+import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardPoint
 
 object DummyCreator {
@@ -10,15 +11,35 @@ object DummyCreator {
         return RewardUser(10, 123, 0)
     }
 
-    fun createDummyReward(): Reward {
-        return Reward(1, "Test", 5, 10F, "Test description", true)
-    }
-
-    fun createDummyNoRepeatReward(): Reward {
-        return Reward(2, "Test2", 7, 20F, "Test description", false)
+    fun createDummyRewardEntity(): RewardEntity {
+        return RewardEntity(1, "Test", 5, 10F, "Test description", true)
     }
 
     fun createDummyRewardPoint(): RewardPoint {
         return RewardPoint(10)
+    }
+
+    fun createDummyRewards(): List<Reward> {
+        return listOf(
+                createDummyReward()
+        )
+    }
+
+    fun createDummyReward(): Reward {
+        return Reward(RewardId(1),
+                RewardName("Test"),
+                5,
+                Probability(10F),
+                RewardDescription("Test description"),
+                true)
+    }
+
+    fun createDummyNoRepeatReward(): Reward {
+        return Reward(RewardId(2),
+                RewardName("Test2"),
+                7,
+                Probability(20F),
+                RewardDescription("Test description"),
+                false)
     }
 }

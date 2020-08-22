@@ -4,18 +4,19 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
-import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
-import kztproject.jp.splacounter.reward.infrastructure.database.model.Reward
-import kztproject.jp.splacounter.reward.application.repository.IPointRepository
-import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
+import kztproject.jp.splacounter.reward.application.usecase.*
+import kztproject.jp.splacounter.reward.domain.model.Reward
+import kztproject.jp.splacounter.reward.domain.model.RewardCollection
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
 class RewardListViewModel @Inject constructor(
-        private val rewardListClient: IPointRepository,
-        private val rewardDao: IRewardRepository,
         private val prefsWrapper: PrefsWrapper,
-        private val lotteryUseCase: LotteryUseCase
+        private val lotteryUseCase: LotteryUseCase,
+        private val getRewardsUseCase: GetRewardsUseCase,
+        private val deleteRewardUseCase: DeleteRewardUseCase,
+        private val getPointUseCase: GetPointUseCase,
+        private val usePointUseCase: UsePointUseCase
 ) : ViewModel() {
 
     private lateinit var callback: RewardViewModelCallback
@@ -46,7 +47,8 @@ class RewardListViewModel @Inject constructor(
 
     fun startLottery() {
         viewModelScope.launch {
-            val reward = lotteryUseCase.execute(rewardList)
+            val rewards = RewardCollection(rewardList)
+            val reward = lotteryUseCase.execute(rewards)
             reward?.let {
                 callback.onHitLottery(it)
             } ?: callback.onMissLottery()
@@ -55,7 +57,7 @@ class RewardListViewModel @Inject constructor(
 
     fun loadRewards() {
         viewModelScope.launch {
-            val newRewardList = rewardDao.findAll()
+            val newRewardList = getRewardsUseCase.execute()
             isEmpty.value = newRewardList.isNullOrEmpty()
             if (isEmpty.value == true) {
                 return@launch
@@ -71,7 +73,7 @@ class RewardListViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 callback.onStartLoadingPoint()
-                val point = rewardListClient.loadPoint(prefsWrapper.userId)
+                val point = getPointUseCase.execute()
                 mutableRewardPoint.value = point.value
             } catch (e: Exception) {
                 if (isActive) {
@@ -89,7 +91,7 @@ class RewardListViewModel @Inject constructor(
         if (rewardPoint.value!! >= selectedReward.consumePoint) {
             viewModelScope.launch {
                 try {
-                    val user = rewardListClient.consumePoint(prefsWrapper.userId, selectedReward.consumePoint)
+                    val user = usePointUseCase.execute(selectedReward)
                     callback.successAcquireReward(selectedReward, user.point)
                     mutableRewardPoint.value = user.point
                 } catch (e: Exception) {
@@ -122,36 +124,13 @@ class RewardListViewModel @Inject constructor(
 
     fun deleteReward(reward: Reward, needCallback: Boolean) {
         viewModelScope.launch {
-            rewardDao.delete(reward)
+            deleteRewardUseCase.execute(reward)
 
             if (needCallback) {
                 selectedReward = null
                 callback.onRewardDeleted(reward)
             }
         }
-    }
-
-    fun switchReward(reward: Reward) {
-
-        val newPosition = rewardList.indexOf(reward)
-        if (reward == selectedReward) {
-            selectedReward = null
-            rewardList[newPosition].isSelected = false
-            callback.onRewardDeSelected(newPosition)
-            return
-        }
-
-        selectedReward?.let {
-            val oldPosition = rewardList.indexOf(it)
-            if (oldPosition >= 0) {
-                rewardList[oldPosition].isSelected = false
-                callback.onRewardDeSelected(oldPosition)
-            }
-        }
-
-        rewardList[newPosition].isSelected = true
-        selectedReward = reward
-        callback.onRewardSelected(newPosition)
     }
 
     fun logout() {
@@ -176,10 +155,6 @@ interface RewardViewModelCallback {
     fun showError()
 
     fun successAcquireReward(reward: Reward, point: Int)
-
-    fun onRewardSelected(position: Int)
-
-    fun onRewardDeSelected(position: Int)
 
     fun onRewardDeleted(reward: Reward)
 

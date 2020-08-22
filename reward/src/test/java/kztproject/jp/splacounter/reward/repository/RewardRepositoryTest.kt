@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
 import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.reward.infrastructure.database.RewardDao
+import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 import org.junit.Test
 
 class RewardRepositoryTest {
@@ -19,7 +20,7 @@ class RewardRepositoryTest {
 
     @Test
     fun insertReward() {
-        val dummyReward = DummyCreator.createDummyReward()
+        val dummyReward = DummyCreator.createDummyRewardEntity()
         runBlocking {
             target.createOrUpdate(dummyReward)
 
@@ -33,7 +34,7 @@ class RewardRepositoryTest {
             val dummyReward = DummyCreator.createDummyReward()
             target.delete(dummyReward)
 
-            verify(rewardDao, times(1)).deleteReward(dummyReward)
+            verify(rewardDao, times(1)).deleteReward(RewardEntity.from(dummyReward))
         }
     }
 
