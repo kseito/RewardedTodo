@@ -10,7 +10,7 @@ interface RewardDao {
     fun insertReward(rewardEntity: RewardEntity)
 
     @Query("SELECT * FROM RewardEntity")
-    fun findAll(): Array<RewardEntity>
+    fun findAll(): List<RewardEntity>
 
     @Query("SELECT * FROM RewardEntity WHERE id = :id")
     fun findBy(id: Int): RewardEntity?

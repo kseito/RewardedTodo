@@ -29,7 +29,7 @@ class RewardRepository @Inject constructor(private val rewardDao: RewardDao): IR
         }
     }
 
-    override suspend fun findAll(): Array<RewardEntity> {
+    override suspend fun findAll(): List<RewardEntity> {
         return withContext(Dispatchers.IO) {
             rewardDao.findAll()
         }
