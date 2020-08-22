@@ -36,7 +36,7 @@ android {
                 jacoco.excludes = ['jdk.internal.*']
             }
 
-            systemProperty "javax.net.ssl.trustStore", "JKS"
+            systemProperty "javax.net.ssl.trustStoreType", "JKS"
         }
     }
 }
