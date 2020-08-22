@@ -1,5 +1,6 @@
 package kztproject.jp.splacounter.reward.repository
 
+import androidx.test.core.app.ApplicationProvider
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -10,23 +11,28 @@ import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.reward.infrastructure.api.RewardPointService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyLong
 import org.mockito.Mockito.times
+import org.robolectric.RobolectricTestRunner
+import project.seito.screen_transition.preference.PrefsWrapper
 
+@RunWith(RobolectricTestRunner::class)
 class PointRepositoryTest {
 
     private val mockRewardPointService: RewardPointService = mock {
         onBlocking { getPoint(anyLong()) } doReturn GlobalScope.async { DummyCreator.createDummyRewardPoint() }
-        onBlocking { updatePoint(anyLong(), anyInt()) } doReturn GlobalScope.async { DummyCreator.createDummyRewardUser()}
+        onBlocking { updatePoint(anyLong(), anyInt()) } doReturn GlobalScope.async { DummyCreator.createDummyRewardUser() }
     }
+    private val preferences: PrefsWrapper = PrefsWrapper(ApplicationProvider.getApplicationContext())
 
-    private val target: PointRepository = PointRepository(mockRewardPointService)
+    private val target: PointRepository = PointRepository(mockRewardPointService, preferences)
 
     @Test
     fun loadPoint() {
         runBlocking {
-            val actual = target.loadPoint(1)
+            val actual = target.loadPoint()
 
             assertThat(actual.value).isEqualTo(10)
         }
