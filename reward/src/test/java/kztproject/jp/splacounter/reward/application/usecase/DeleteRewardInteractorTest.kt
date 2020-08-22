@@ -16,7 +16,7 @@ class DeleteRewardInteractorTest {
     private val interactor = DeleteRewardInteractor(mockRewardDao)
 
     @Test
-    fun canExecute() {
+    fun shouldDeleteReward() {
         runBlocking {
             val dummyReward = DummyCreator.createDummyReward()
 

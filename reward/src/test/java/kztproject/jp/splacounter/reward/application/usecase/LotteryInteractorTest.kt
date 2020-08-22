@@ -10,7 +10,7 @@ class LotteryInteractorTest {
     private val interactor = LotteryInteractor()
 
     @Test
-    fun gotPrize() {
+    fun shouldGetPrize() {
         val rewards = RewardCollection(
                 listOf(
                         Reward(RewardId(1),
@@ -29,7 +29,7 @@ class LotteryInteractorTest {
     }
 
     @Test
-    fun missedPrize() {
+    fun shouldMissPrize() {
         val rewards = RewardCollection(
                 listOf(
                         Reward(RewardId(1),
