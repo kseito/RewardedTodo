@@ -41,7 +41,9 @@ class PointRepositoryTest {
     @Suppress("DeferredResultUnused")
     @Test
     fun consumePoint() {
-        runBlocking { target.consumePoint(1, 2) }
+        preferences.userId = 1
+
+        runBlocking { target.consumePoint(2) }
 
         verify(mockRewardPointService, times(1)).updatePoint(1, -2)
     }

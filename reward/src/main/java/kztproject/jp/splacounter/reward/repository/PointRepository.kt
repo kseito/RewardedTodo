@@ -16,6 +16,6 @@ class PointRepository @Inject constructor(
         return rewardPointClient.getPoint(preferences.userId).await()
     }
 
-    override suspend fun consumePoint(userId: Long, additionalPoint: Int): RewardUser =
-            rewardPointClient.updatePoint(userId, -additionalPoint).await()
+    override suspend fun consumePoint(additionalPoint: Int): RewardUser =
+            rewardPointClient.updatePoint(preferences.userId, -additionalPoint).await()
 }

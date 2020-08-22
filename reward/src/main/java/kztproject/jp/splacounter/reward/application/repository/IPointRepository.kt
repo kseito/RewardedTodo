@@ -7,5 +7,5 @@ interface IPointRepository {
 
     suspend fun loadPoint(): RewardPoint
 
-    suspend fun consumePoint(userId: Long, additionalPoint: Int): RewardUser
+    suspend fun consumePoint(additionalPoint: Int): RewardUser
 }
