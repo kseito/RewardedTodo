@@ -19,6 +19,12 @@ object DummyCreator {
         return RewardPoint(10)
     }
 
+    fun createDummyRewards(): List<Reward> {
+        return listOf(
+                createDummyReward()
+        )
+    }
+
     fun createDummyReward(): Reward {
         return Reward(RewardId(1),
                 RewardName("Test"),
