@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:background="@android:color/white"
+            android:background="@drawable/reward_detail_background"
             android:orientation="vertical">
 
             <com.google.android.material.textfield.TextInputLayout
