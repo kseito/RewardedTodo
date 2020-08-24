@@ -2,91 +2,100 @@
 <layout>
 
     <data>
-        <import type="kztproject.jp.splacounter.ui_common.BindingUtils"/>
+
+        <import type="kztproject.jp.splacounter.ui_common.BindingUtils" />
 
         <variable
             name="viewModel"
             type="kztproject.jp.splacounter.reward.presentation.detail.RewardDetailViewModel" />
     </data>
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="#88000000"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.textfield.TextInputLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@={viewModel.rewardEntity.name}"
-                android:hint="@string/hint_title"
-                android:inputType="text" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@={viewModel.rewardEntity.description}"
-                android:singleLine="true"
-                android:hint="@string/hint_description"
-                android:inputType="textMultiLine" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/consume_point"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@={BindingUtils.toString(viewModel.rewardEntity.consumePoint)}"
-                android:hint="@string/hint_point"
-                android:inputType="numberDecimal" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <EditText
-                android:id="@+id/consume_probability"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@={BindingUtils.toString(viewModel.rewardEntity.probability)}"
-                android:hint="@string/hint_probability"
-                android:inputType="numberDecimal" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <androidx.appcompat.widget.AppCompatCheckBox
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:checked="@={viewModel.rewardEntity.needRepeat}"
-            android:textSize="18sp"
-            android:text="@string/check_repeat"/>
+            android:layout_gravity="bottom"
+            android:background="@android:color/white"
+            android:orientation="vertical">
 
-        <info.hoang8f.widget.FButton
-            android:id="@+id/add_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="32dp"
-            android:onClick="@{() -> viewModel.saveReward()}"
-            android:text="@string/button_add" />
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-    </LinearLayout>
+                <EditText
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_title"
+                    android:inputType="text"
+                    android:text="@={viewModel.rewardEntity.name}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_description"
+                    android:inputType="textMultiLine"
+                    android:singleLine="true"
+                    android:text="@={viewModel.rewardEntity.description}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/consume_point"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_point"
+                    android:inputType="numberDecimal"
+                    android:text="@={BindingUtils.toString(viewModel.rewardEntity.consumePoint)}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/consume_probability"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/hint_probability"
+                    android:inputType="numberDecimal"
+                    android:text="@={BindingUtils.toString(viewModel.rewardEntity.probability)}" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatCheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:checked="@={viewModel.rewardEntity.needRepeat}"
+                android:text="@string/check_repeat"
+                android:textSize="18sp" />
+
+            <info.hoang8f.widget.FButton
+                android:id="@+id/add_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="32dp"
+                android:onClick="@{() -> viewModel.saveReward()}"
+                android:text="@string/button_add" />
+
+        </LinearLayout>
+    </FrameLayout>
 </layout>
