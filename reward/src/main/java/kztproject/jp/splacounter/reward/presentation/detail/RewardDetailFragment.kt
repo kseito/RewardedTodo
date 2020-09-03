@@ -5,16 +5,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import dagger.android.support.AndroidSupportInjection
+import project.seito.reward.R
 import project.seito.reward.databinding.FragmentRewardDetailBinding
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
-class RewardDetailFragment : Fragment(), RewardDetailViewModelCallback {
+class RewardDetailFragment : DialogFragment(), RewardDetailViewModelCallback {
 
     private lateinit var binding: FragmentRewardDetailBinding
 
@@ -32,6 +33,7 @@ class RewardDetailFragment : Fragment(), RewardDetailViewModelCallback {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RewardDetailViewModel::class.java)
         viewModel.setCallback(this)
+        setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
