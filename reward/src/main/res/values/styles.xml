@@ -1,6 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
+    //TODO appモジュールと共通化する
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
