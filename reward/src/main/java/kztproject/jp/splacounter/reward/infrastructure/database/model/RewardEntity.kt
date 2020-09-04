@@ -21,9 +21,6 @@ data class RewardEntity(@PrimaryKey(autoGenerate = true) var id: Int,
     constructor(name: String, consumePoint: Int, probability: Float, description: String?, needRepeat: Boolean) :
             this(0, name, consumePoint, probability, description, needRepeat)
 
-    @Ignore
-    var isSelected: Boolean = false
-
     fun convert(): Reward {
         return Reward(
                 RewardId(this.id),
