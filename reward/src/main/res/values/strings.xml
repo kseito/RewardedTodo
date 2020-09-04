@@ -18,6 +18,7 @@
     <string name="hint_probability">Chance of Winning(Unit %)</string>
     <string name="check_repeat">Repeat</string>
     <string name="button_add">Add</string>
+    <string name="button_delete">Delete</string>
     <string name="error_empty_title">Input title</string>
     <string name="error_empty_point">Input point</string>
 </resources>
