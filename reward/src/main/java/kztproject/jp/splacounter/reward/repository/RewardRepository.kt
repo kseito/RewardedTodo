@@ -10,9 +10,9 @@ import javax.inject.Inject
 
 class RewardRepository @Inject constructor(private val rewardDao: RewardDao) : IRewardRepository {
 
-    override suspend fun createOrUpdate(rewardEntity: RewardEntity) {
+    override suspend fun createOrUpdate(reward: Reward) {
         withContext(Dispatchers.IO) {
-            rewardDao.insertReward(rewardEntity)
+            rewardDao.insertReward(RewardEntity.from(reward))
         }
     }
 

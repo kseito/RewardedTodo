@@ -1,17 +1,17 @@
 package kztproject.jp.splacounter.reward.presentation.detail
 
-import androidx.lifecycle.ViewModel
 import android.content.res.Resources
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
+import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 import project.seito.reward.R
 import javax.inject.Inject
 
@@ -19,7 +19,7 @@ class RewardDetailViewModel @Inject constructor(
         private val rewardRepository: IRewardRepository
 ) : ViewModel() {
 
-    private var mutableReward =  MutableLiveData<RewardEntity>()
+    private var mutableReward = MutableLiveData<RewardEntity>()
     var rewardEntity: LiveData<RewardEntity> = mutableReward
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Main + viewModelJob)
@@ -52,7 +52,7 @@ class RewardDetailViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            rewardRepository.createOrUpdate(reward)
+            rewardRepository.createOrUpdate(reward.convert())
             callback.onSaveCompleted(reward.name)
         }
     }
