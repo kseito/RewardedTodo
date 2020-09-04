@@ -6,7 +6,7 @@ import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
 import kztproject.jp.splacounter.reward.domain.model.Reward
 import kztproject.jp.splacounter.reward.infrastructure.database.RewardDao
 import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
-import kztproject.jp.splacounter.reward.presentation.detail.model.RewardInput
+import kztproject.jp.splacounter.reward.domain.model.RewardInput
 import javax.inject.Inject
 
 class RewardRepository @Inject constructor(private val rewardDao: RewardDao) : IRewardRepository {

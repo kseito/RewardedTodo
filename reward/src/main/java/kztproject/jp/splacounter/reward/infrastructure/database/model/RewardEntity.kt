@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import kztproject.jp.splacounter.reward.domain.model.*
-import kztproject.jp.splacounter.reward.presentation.detail.model.RewardInput
+import kztproject.jp.splacounter.reward.domain.model.RewardInput
 
 @Entity
 data class RewardEntity(@PrimaryKey(autoGenerate = true) var id: Int,

@@ -1,7 +1,7 @@
 package kztproject.jp.splacounter.reward.application.repository
 
 import kztproject.jp.splacounter.reward.domain.model.Reward
-import kztproject.jp.splacounter.reward.presentation.detail.model.RewardInput
+import kztproject.jp.splacounter.reward.domain.model.RewardInput
 
 interface IRewardRepository {
 

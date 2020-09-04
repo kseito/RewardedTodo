@@ -1,6 +1,4 @@
-package kztproject.jp.splacounter.reward.presentation.detail.model
-
-import kztproject.jp.splacounter.reward.domain.model.*
+package kztproject.jp.splacounter.reward.domain.model
 
 data class RewardInput(
         var id: Int? = null,
