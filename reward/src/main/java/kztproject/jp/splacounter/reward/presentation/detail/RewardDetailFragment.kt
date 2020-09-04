@@ -1,15 +1,19 @@
 package kztproject.jp.splacounter.reward.presentation.detail
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import dagger.android.support.AndroidSupportInjection
+import kztproject.jp.splacounter.reward.domain.model.Reward
+import kztproject.jp.splacounter.reward.domain.model.RewardName
 import project.seito.reward.R
 import project.seito.reward.databinding.FragmentRewardDetailBinding
 import project.seito.screen_transition.IFragmentsTransitionManager
@@ -55,6 +59,21 @@ class RewardDetailFragment : DialogFragment(), RewardDetailViewModelCallback {
     override fun onSaveCompleted(rewardName: String) {
         Toast.makeText(context, "Added $rewardName", Toast.LENGTH_SHORT).show()
         transitionManager.popBackStack(activity)
+    }
+
+    override fun onConfirmToRewardDeletion(reward: Reward) {
+        val activityContext = activity as Context? ?: return
+        AlertDialog.Builder(activityContext)
+                .setTitle(R.string.confirm_title)
+                .setMessage(String.format(getString(R.string.delete_confirm_message), reward.name.value))
+                .setPositiveButton(android.R.string.ok) { _, _ -> viewModel.deleteReward() }
+                .setNegativeButton(android.R.string.cancel) { _, _ -> run {} }
+                .show()
+    }
+
+    override fun onDeleteCompleted(rewardName: RewardName) {
+        val message = String.format(getString(R.string.reward_delete_message), rewardName.value)
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onError(resourceId: Int) {

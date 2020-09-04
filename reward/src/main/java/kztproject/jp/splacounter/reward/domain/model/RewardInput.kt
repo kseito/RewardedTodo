@@ -1,5 +1,7 @@
 package kztproject.jp.splacounter.reward.domain.model
 
+import kztproject.jp.splacounter.reward.domain.model.*
+
 data class RewardInput(
         var id: Int? = null,
         var name: String? = null,

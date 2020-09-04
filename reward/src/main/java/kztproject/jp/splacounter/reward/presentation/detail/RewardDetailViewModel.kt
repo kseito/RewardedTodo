@@ -11,14 +11,19 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
+import kztproject.jp.splacounter.reward.application.usecase.DeleteRewardUseCase
+import kztproject.jp.splacounter.reward.domain.model.Reward
 import kztproject.jp.splacounter.reward.domain.model.RewardInput
+import kztproject.jp.splacounter.reward.domain.model.RewardName
 import project.seito.reward.R
 import javax.inject.Inject
 
 class RewardDetailViewModel @Inject constructor(
-        private val rewardRepository: IRewardRepository
+        private val rewardRepository: IRewardRepository,
+        private val deleteRewardUseCase: DeleteRewardUseCase
 ) : ViewModel() {
 
+    private var reward: Reward? = null
     private var mutableRewardInput = MutableLiveData<RewardInput>()
     var rewardInput: LiveData<RewardInput> = mutableRewardInput
     private val viewModelJob = Job()
@@ -34,6 +39,7 @@ class RewardDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val reward = rewardRepository.findBy(id) ?: throw Resources.NotFoundException()
             mutableRewardInput.value = RewardInput.from(reward)
+            this@RewardDetailViewModel.reward = reward
         }
     }
 
@@ -57,6 +63,21 @@ class RewardDetailViewModel @Inject constructor(
         }
     }
 
+    fun confirmToRewardDeletion() {
+        reward?.let {
+            callback.onConfirmToRewardDeletion(it)
+        }
+    }
+
+    fun deleteReward() {
+        viewModelScope.launch {
+            reward?.let {
+                deleteRewardUseCase.execute(it)
+                callback.onDeleteCompleted(it.name)
+            }
+        }
+    }
+
     override fun onCleared() {
         super.onCleared()
         viewModelScope.cancel()
@@ -66,6 +87,10 @@ class RewardDetailViewModel @Inject constructor(
 interface RewardDetailViewModelCallback {
 
     fun onSaveCompleted(rewardName: String)
+
+    fun onConfirmToRewardDeletion(reward: Reward)
+
+    fun onDeleteCompleted(rewardName: RewardName)
 
     fun onError(@StringRes resourceId: Int)
 }
