@@ -6,11 +6,12 @@ import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
 import kztproject.jp.splacounter.reward.domain.model.Reward
 import kztproject.jp.splacounter.reward.infrastructure.database.RewardDao
 import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
+import kztproject.jp.splacounter.reward.presentation.detail.model.RewardInput
 import javax.inject.Inject
 
 class RewardRepository @Inject constructor(private val rewardDao: RewardDao) : IRewardRepository {
 
-    override suspend fun createOrUpdate(reward: Reward) {
+    override suspend fun createOrUpdate(reward: RewardInput) {
         withContext(Dispatchers.IO) {
             rewardDao.insertReward(RewardEntity.from(reward))
         }

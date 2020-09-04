@@ -11,7 +11,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
-import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
+import kztproject.jp.splacounter.reward.presentation.detail.model.RewardInput
 import project.seito.reward.R
 import javax.inject.Inject
 
@@ -19,13 +19,13 @@ class RewardDetailViewModel @Inject constructor(
         private val rewardRepository: IRewardRepository
 ) : ViewModel() {
 
-    private var mutableReward = MutableLiveData<RewardEntity>()
-    var rewardEntity: LiveData<RewardEntity> = mutableReward
+    private var mutableReward = MutableLiveData<RewardInput>()
+    var rewardEntity: LiveData<RewardInput> = mutableReward
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Main + viewModelJob)
 
     init {
-        mutableReward.value = RewardEntity()
+        mutableReward.value = RewardInput()
     }
 
     private lateinit var callback: RewardDetailViewModelCallback
@@ -33,7 +33,7 @@ class RewardDetailViewModel @Inject constructor(
     fun initialize(id: Int) {
         viewModelScope.launch {
             val reward = rewardRepository.findBy(id) ?: throw Resources.NotFoundException()
-            mutableReward.value = RewardEntity.from(reward)
+            mutableReward.value = RewardInput.from(reward)
         }
     }
 
@@ -43,7 +43,7 @@ class RewardDetailViewModel @Inject constructor(
 
     fun saveReward() {
         val reward = this.rewardEntity.value ?: throw IllegalStateException("mutableReward is null")
-        if (reward.name.isEmpty()) {
+        if (reward.name.isNullOrEmpty()) {
             callback.onError(R.string.error_empty_title)
             return
         } else if (reward.consumePoint == 0) {
@@ -52,8 +52,8 @@ class RewardDetailViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            rewardRepository.createOrUpdate(reward.convert())
-            callback.onSaveCompleted(reward.name)
+            rewardRepository.createOrUpdate(reward)
+            callback.onSaveCompleted(reward.name!!)
         }
     }
 
