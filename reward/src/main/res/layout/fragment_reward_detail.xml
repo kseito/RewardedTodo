@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
 
@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -23,8 +23,11 @@
             android:padding="8dp">
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@id/description_container"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <EditText
                     android:id="@+id/name"
@@ -37,8 +40,10 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/description_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@id/consume_point_container">
 
                 <EditText
                     android:id="@+id/description"
@@ -52,8 +57,10 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/consume_point_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@id/probability_container">
 
                 <EditText
                     android:id="@+id/consume_point"
@@ -66,8 +73,10 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/probability_container"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@id/need_repeat">
 
                 <EditText
                     android:id="@+id/consume_probability"
@@ -80,12 +89,15 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatCheckBox
+                android:id="@+id/need_repeat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:checked="@={viewModel.rewardEntity.needRepeat}"
                 android:text="@string/check_repeat"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                app:layout_constraintBottom_toTopOf="@id/add_button"
+                app:layout_constraintLeft_toLeftOf="parent" />
 
             <info.hoang8f.widget.FButton
                 android:id="@+id/add_button"
@@ -94,8 +106,10 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="32dp"
                 android:onClick="@{() -> viewModel.saveReward()}"
-                android:text="@string/button_add" />
+                android:text="@string/button_add"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent" />
 
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </FrameLayout>
 </layout>
