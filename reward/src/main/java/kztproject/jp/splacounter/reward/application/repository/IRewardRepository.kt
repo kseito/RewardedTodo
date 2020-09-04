@@ -9,7 +9,7 @@ interface IRewardRepository {
 
     suspend fun delete(rewardEntity: Reward)
 
-    suspend fun findBy(id: Int): RewardEntity?
+    suspend fun findBy(id: Int): Reward?
 
     suspend fun findAll(): List<Reward>
 }

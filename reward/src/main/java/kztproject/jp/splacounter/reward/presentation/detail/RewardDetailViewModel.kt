@@ -15,7 +15,9 @@ import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
 import project.seito.reward.R
 import javax.inject.Inject
 
-class RewardDetailViewModel @Inject constructor(private val rewardRepository: IRewardRepository) : ViewModel() {
+class RewardDetailViewModel @Inject constructor(
+        private val rewardRepository: IRewardRepository
+) : ViewModel() {
 
     private var mutableReward =  MutableLiveData<RewardEntity>()
     var rewardEntity: LiveData<RewardEntity> = mutableReward
@@ -31,7 +33,7 @@ class RewardDetailViewModel @Inject constructor(private val rewardRepository: IR
     fun initialize(id: Int) {
         viewModelScope.launch {
             val reward = rewardRepository.findBy(id) ?: throw Resources.NotFoundException()
-            mutableReward.value = reward
+            mutableReward.value = RewardEntity.from(reward)
         }
     }
 

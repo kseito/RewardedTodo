@@ -23,9 +23,9 @@ class RewardRepository @Inject constructor(private val rewardDao: RewardDao) : I
         }
     }
 
-    override suspend fun findBy(id: Int): RewardEntity? {
+    override suspend fun findBy(id: Int): Reward? {
         return withContext(Dispatchers.IO) {
-            rewardDao.findBy(id)
+            rewardDao.findBy(id)?.convert()
         }
     }
 
