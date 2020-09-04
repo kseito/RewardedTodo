@@ -19,13 +19,13 @@ class RewardDetailViewModel @Inject constructor(
         private val rewardRepository: IRewardRepository
 ) : ViewModel() {
 
-    private var mutableReward = MutableLiveData<RewardInput>()
-    var rewardEntity: LiveData<RewardInput> = mutableReward
+    private var mutableRewardInput = MutableLiveData<RewardInput>()
+    var rewardInput: LiveData<RewardInput> = mutableRewardInput
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Main + viewModelJob)
 
     init {
-        mutableReward.value = RewardInput()
+        mutableRewardInput.value = RewardInput()
     }
 
     private lateinit var callback: RewardDetailViewModelCallback
@@ -33,7 +33,7 @@ class RewardDetailViewModel @Inject constructor(
     fun initialize(id: Int) {
         viewModelScope.launch {
             val reward = rewardRepository.findBy(id) ?: throw Resources.NotFoundException()
-            mutableReward.value = RewardInput.from(reward)
+            mutableRewardInput.value = RewardInput.from(reward)
         }
     }
 
@@ -42,7 +42,7 @@ class RewardDetailViewModel @Inject constructor(
     }
 
     fun saveReward() {
-        val reward = this.rewardEntity.value ?: throw IllegalStateException("mutableReward is null")
+        val reward = this.rewardInput.value ?: throw IllegalStateException("mutableReward is null")
         if (reward.name.isNullOrEmpty()) {
             callback.onError(R.string.error_empty_title)
             return
