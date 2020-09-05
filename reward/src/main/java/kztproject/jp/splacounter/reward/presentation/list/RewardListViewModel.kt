@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import kztproject.jp.splacounter.reward.application.usecase.*
 import kztproject.jp.splacounter.reward.domain.model.Reward
 import kztproject.jp.splacounter.reward.domain.model.RewardCollection
@@ -57,15 +58,16 @@ class RewardListViewModel @Inject constructor(
 
     fun loadRewards() {
         viewModelScope.launch {
-            val newRewardList = getRewardsUseCase.execute()
-            isEmpty.value = newRewardList.isNullOrEmpty()
-            if (isEmpty.value == true) {
-                return@launch
-            }
+            getRewardsUseCase.executeAsFlow().collect { newRewardList ->
+                isEmpty.value = newRewardList.isNullOrEmpty()
+                if (isEmpty.value == true) {
+                    return@collect
+                }
 
-            rewardList.clear()
-            rewardList.addAll(newRewardList)
-            callback.showRewards(rewardList)
+                rewardList.clear()
+                rewardList.addAll(newRewardList)
+                callback.showRewards(rewardList)
+            }
         }
     }
 
