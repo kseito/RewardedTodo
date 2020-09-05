@@ -8,10 +8,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
+import kztproject.jp.splacounter.DummyCreator
 import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 import kztproject.jp.splacounter.reward.presentation.detail.RewardDetailViewModel
 import kztproject.jp.splacounter.reward.presentation.detail.RewardDetailViewModelCallback
 import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
+import kztproject.jp.splacounter.reward.application.usecase.DeleteRewardUseCase
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -26,6 +28,7 @@ class RewardDetailViewModelTest {
     private val mockCallback: RewardDetailViewModelCallback = mock()
 
     private val mockRewardRepository: IRewardRepository = mock()
+    private val mockDeleteRewardUseCase: DeleteRewardUseCase = mock()
 
     private lateinit var viewModel: RewardDetailViewModel
 
@@ -34,7 +37,10 @@ class RewardDetailViewModelTest {
 
     @Before
     fun setup() {
-        viewModel = RewardDetailViewModel(mockRewardRepository)
+        viewModel = RewardDetailViewModel(
+                mockRewardRepository,
+                mockDeleteRewardUseCase
+        )
         viewModel.setCallback(mockCallback)
 
         Dispatchers.setMain(Dispatchers.Unconfined)
@@ -48,7 +54,7 @@ class RewardDetailViewModelTest {
     @Test
     fun testSaveReward() {
         runBlocking {
-            val reward = RewardEntity("test", 1, 10F, "test description", false)
+            val reward = DummyCreator.createDummyReward()
             whenever(mockRewardRepository.findBy(anyInt())).thenReturn(reward)
         }
         viewModel.initialize(1)
@@ -62,18 +68,5 @@ class RewardDetailViewModelTest {
         viewModel.saveReward()
 
         Mockito.verify(mockCallback).onError(R.string.error_empty_title)
-    }
-
-    @Test
-    fun testSaveRewardWithoutPoint() {
-        runBlocking {
-            val reward = RewardEntity("test", 0, 10F, "test description", false)
-            whenever(mockRewardRepository.findBy(anyInt())).thenReturn(reward)
-        }
-
-        viewModel.initialize(1)
-        viewModel.saveReward()
-
-        Mockito.verify(mockCallback).onError(R.string.error_empty_point)
     }
 }

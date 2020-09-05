@@ -1,5 +1,6 @@
 package kztproject.jp.splacounter.reward.repository
 
+import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
@@ -20,11 +21,11 @@ class RewardRepositoryTest {
 
     @Test
     fun insertReward() {
-        val dummyReward = DummyCreator.createDummyRewardEntity()
+        val dummyReward = DummyCreator.createDummyRewardInput()
         runBlocking {
             target.createOrUpdate(dummyReward)
 
-            verify(rewardDao, times(1)).insertReward(dummyReward)
+            verify(rewardDao, times(1)).insertReward(any())
         }
     }
 
