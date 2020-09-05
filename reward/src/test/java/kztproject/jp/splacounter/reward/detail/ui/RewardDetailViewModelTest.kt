@@ -58,7 +58,7 @@ class RewardDetailViewModelTest {
     fun testSaveReward() {
         runBlocking {
             val reward = DummyCreator.createDummyReward()
-            whenever(mockRewardRepository.findBy(anyInt())).thenReturn(reward)
+            whenever(mockGetRewardUseCase.execute(RewardId(anyInt()))).thenReturn(reward)
         }
         viewModel.initialize(RewardId(1))
         viewModel.saveReward()
