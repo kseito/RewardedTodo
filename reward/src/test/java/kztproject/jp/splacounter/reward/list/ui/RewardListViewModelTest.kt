@@ -3,6 +3,7 @@ package kztproject.jp.splacounter.reward.list.ui
 import androidx.test.core.app.ApplicationProvider
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -68,7 +69,7 @@ class RewardListViewModelTest {
 
     @Test
     fun testGetRewards() {
-        runBlocking { whenever(mockGetRewardsUseCase.execute()).thenReturn(listOf(DummyCreator.createDummyReward())) }
+        runBlocking { whenever(mockGetRewardsUseCase.executeAsFlow()).thenReturn(flowOf(listOf(DummyCreator.createDummyReward()))) }
         viewModel.loadRewards()
 
         assertThat(viewModel.isEmpty.value).isFalse()
@@ -77,6 +78,7 @@ class RewardListViewModelTest {
 
     @Test
     fun testGetRewards_Empty() {
+        runBlocking { whenever(mockGetRewardsUseCase.executeAsFlow()).thenReturn(flowOf(emptyList())) }
         viewModel.loadRewards()
 
         assertThat(viewModel.isEmpty.value).isTrue()
