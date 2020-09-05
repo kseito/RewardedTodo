@@ -9,11 +9,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import kztproject.jp.splacounter.DummyCreator
-import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
-import kztproject.jp.splacounter.reward.presentation.detail.RewardDetailViewModel
-import kztproject.jp.splacounter.reward.presentation.detail.RewardDetailViewModelCallback
 import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
 import kztproject.jp.splacounter.reward.application.usecase.DeleteRewardUseCase
+import kztproject.jp.splacounter.reward.application.usecase.GetRewardUseCase
+import kztproject.jp.splacounter.reward.domain.model.RewardId
+import kztproject.jp.splacounter.reward.presentation.detail.RewardDetailViewModel
+import kztproject.jp.splacounter.reward.presentation.detail.RewardDetailViewModelCallback
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -29,6 +30,7 @@ class RewardDetailViewModelTest {
 
     private val mockRewardRepository: IRewardRepository = mock()
     private val mockDeleteRewardUseCase: DeleteRewardUseCase = mock()
+    private val mockGetRewardUseCase: GetRewardUseCase = mock()
 
     private lateinit var viewModel: RewardDetailViewModel
 
@@ -39,7 +41,8 @@ class RewardDetailViewModelTest {
     fun setup() {
         viewModel = RewardDetailViewModel(
                 mockRewardRepository,
-                mockDeleteRewardUseCase
+                mockDeleteRewardUseCase,
+                mockGetRewardUseCase
         )
         viewModel.setCallback(mockCallback)
 
@@ -57,7 +60,7 @@ class RewardDetailViewModelTest {
             val reward = DummyCreator.createDummyReward()
             whenever(mockRewardRepository.findBy(anyInt())).thenReturn(reward)
         }
-        viewModel.initialize(1)
+        viewModel.initialize(RewardId(1))
         viewModel.saveReward()
 
         Mockito.verify(mockCallback).onSaveCompleted(Matchers.anyString())

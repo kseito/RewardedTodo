@@ -12,7 +12,9 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
 import kztproject.jp.splacounter.reward.application.usecase.DeleteRewardUseCase
+import kztproject.jp.splacounter.reward.application.usecase.GetRewardUseCase
 import kztproject.jp.splacounter.reward.domain.model.Reward
+import kztproject.jp.splacounter.reward.domain.model.RewardId
 import kztproject.jp.splacounter.reward.domain.model.RewardInput
 import kztproject.jp.splacounter.reward.domain.model.RewardName
 import project.seito.reward.R
@@ -20,7 +22,8 @@ import javax.inject.Inject
 
 class RewardDetailViewModel @Inject constructor(
         private val rewardRepository: IRewardRepository,
-        private val deleteRewardUseCase: DeleteRewardUseCase
+        private val deleteRewardUseCase: DeleteRewardUseCase,
+        private val getRewardUseCase: GetRewardUseCase
 ) : ViewModel() {
 
     private var reward: Reward? = null
@@ -35,9 +38,9 @@ class RewardDetailViewModel @Inject constructor(
 
     private lateinit var callback: RewardDetailViewModelCallback
 
-    fun initialize(id: Int) {
+    fun initialize(id: RewardId) {
         viewModelScope.launch {
-            val reward = rewardRepository.findBy(id) ?: throw Resources.NotFoundException()
+            val reward = getRewardUseCase.execute(id) ?: throw Resources.NotFoundException()
             mutableRewardInput.value = RewardInput.from(reward)
             this@RewardDetailViewModel.reward = reward
         }

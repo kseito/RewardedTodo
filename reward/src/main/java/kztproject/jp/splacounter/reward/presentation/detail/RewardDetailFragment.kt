@@ -13,6 +13,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.reward.domain.model.Reward
+import kztproject.jp.splacounter.reward.domain.model.RewardId
 import kztproject.jp.splacounter.reward.domain.model.RewardName
 import project.seito.reward.R
 import project.seito.reward.databinding.FragmentRewardDetailBinding
@@ -53,7 +54,7 @@ class RewardDetailFragment : DialogFragment(), RewardDetailViewModelCallback {
         if (id <= 0) {
             return
         }
-        viewModel.initialize(id)
+        viewModel.initialize(RewardId(id))
     }
 
     override fun onSaveCompleted(rewardName: String) {
