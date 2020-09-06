@@ -33,11 +33,7 @@ class RewardListViewModelTest {
 
     private val mockGetRewardsUseCase: GetRewardsUseCase = mock()
 
-    private val mockDeleteRewardUseCase: DeleteRewardUseCase = mock()
-
     private val mockGetPointUseCase: GetPointUseCase = mock()
-
-    private val mockUsePointUseCase: UsePointUseCase = mock()
 
     @Before
     fun setup() {
@@ -45,9 +41,7 @@ class RewardListViewModelTest {
                 prefsWrapper,
                 mockLotteryUseCase,
                 mockGetRewardsUseCase,
-                mockDeleteRewardUseCase,
-                mockGetPointUseCase,
-                mockUsePointUseCase
+                mockGetPointUseCase
         )
         viewModel.setCallback(mockCallback)
 
