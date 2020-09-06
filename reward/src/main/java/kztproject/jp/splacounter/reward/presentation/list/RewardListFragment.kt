@@ -81,16 +81,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         Toast.makeText(context, R.string.error_acquire_reward, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onRewardEditSelected(reward: Reward) {
-        fragmentTransitionManager.transitionToRewardDetailFragment(activity, reward.rewardId.value)
-    }
-
-    override fun onRewardDeleted(reward: Reward) {
-        val message = String.format(getString(R.string.reward_delete_message), reward.name)
-        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-        (binding.rewardListView.adapter as RewardListAdapter).remove(reward)
-    }
-
     override fun onPointLoadFailed() {
         Toast.makeText(context, "Point load failed", Toast.LENGTH_SHORT).show()
     }

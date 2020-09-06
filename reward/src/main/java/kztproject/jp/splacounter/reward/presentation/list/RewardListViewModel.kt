@@ -33,10 +33,6 @@ class RewardListViewModel @Inject constructor(
         this.callback = callback
     }
 
-    fun setPoint(point: Int) {
-        mutableRewardPoint.value = point
-    }
-
     fun showRewardDetail() {
         callback.showRewardDetail()
     }
@@ -100,10 +96,6 @@ interface RewardViewModelCallback {
     fun showRewards(rewardList: MutableList<Reward>)
 
     fun showError()
-
-    fun onRewardDeleted(reward: Reward)
-
-    fun onRewardEditSelected(reward: Reward)
 
     fun onPointLoadFailed()
 
