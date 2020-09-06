@@ -5,6 +5,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -24,6 +25,7 @@ import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import project.seito.reward.R
 
+@ExperimentalCoroutinesApi
 class RewardDetailViewModelTest {
 
     private val mockCallback: RewardDetailViewModelCallback = mock()
