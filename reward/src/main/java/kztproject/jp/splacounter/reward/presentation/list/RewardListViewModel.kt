@@ -87,54 +87,6 @@ class RewardListViewModel @Inject constructor(
         }
     }
 
-    fun acquireReward() {
-        val selectedReward: Reward = this.selectedReward
-                ?: throw NullPointerException("acquireReward() cannot call when selectedReward is null")
-        if (rewardPoint.value!! >= selectedReward.consumePoint) {
-            viewModelScope.launch {
-                try {
-                    val user = usePointUseCase.execute(selectedReward)
-                    callback.successAcquireReward(selectedReward, user.point)
-                    mutableRewardPoint.value = user.point
-                } catch (e: Exception) {
-                    if (isActive) {
-                        callback.showError()
-                    }
-                }
-            }
-        } else {
-            callback.showError()
-        }
-    }
-
-    fun confirmDelete() {
-        callback.showDeleteConfirmDialog(selectedReward!!)
-    }
-
-    fun deleteRewardIfNeeded(reward: Reward) {
-        if (reward.needRepeat) {
-            return
-        }
-
-        deleteReward(reward, false)
-    }
-
-    fun editReward() {
-        callback.onRewardEditSelected(selectedReward!!)
-        selectedReward = null
-    }
-
-    fun deleteReward(reward: Reward, needCallback: Boolean) {
-        viewModelScope.launch {
-            deleteRewardUseCase.execute(reward)
-
-            if (needCallback) {
-                selectedReward = null
-                callback.onRewardDeleted(reward)
-            }
-        }
-    }
-
     fun logout() {
         prefsWrapper.userId = 0
         callback.onLogout()
@@ -152,11 +104,7 @@ interface RewardViewModelCallback {
 
     fun showRewards(rewardList: MutableList<Reward>)
 
-    fun showDeleteConfirmDialog(reward: Reward)
-
     fun showError()
-
-    fun successAcquireReward(reward: Reward, point: Int)
 
     fun onRewardDeleted(reward: Reward)
 

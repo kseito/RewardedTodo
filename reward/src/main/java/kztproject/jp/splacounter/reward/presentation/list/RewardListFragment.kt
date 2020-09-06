@@ -57,25 +57,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             viewModel.loadPoint()
         }
 
-        binding.bottomNavigation.addItem(AHBottomNavigationItem("Done", R.drawable.reward_done))
-        binding.bottomNavigation.addItem(AHBottomNavigationItem("Edit", R.drawable.reward_edit))
-        binding.bottomNavigation.addItem(AHBottomNavigationItem("Delete", R.drawable.reward_delete))
-        binding.bottomNavigation.setOnTabSelectedListener { position, wasSelected ->
-            println("$position::$wasSelected")
-            when (position) {
-                0 -> {
-                    viewModel.acquireReward()
-                }
-                1 -> {
-                    viewModel.editReward()
-                }
-                2 -> {
-                    viewModel.confirmDelete()
-                }
-            }
-            true
-        }
-
         binding.navigationView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.menu_logout -> viewModel.logout()
@@ -98,25 +79,8 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         binding.rewardListView.adapter = RewardListAdapter(rewardEntityList, this)
     }
 
-    override fun showDeleteConfirmDialog(rewardEntity: Reward) {
-        val activityContext = activity as Context? ?: return
-        AlertDialog.Builder(activityContext)
-                .setTitle(R.string.confirm_title)
-                .setMessage(String.format(getString(R.string.delete_confirm_message), rewardEntity.name))
-                .setPositiveButton(android.R.string.ok) { _, _ -> viewModel.deleteReward(rewardEntity, true) }
-                .setNegativeButton(android.R.string.cancel) { _, _ -> run {} }
-                .show()
-    }
-
     override fun showError() {
         Toast.makeText(context, R.string.error_acquire_reward, Toast.LENGTH_SHORT).show()
-    }
-
-    override fun successAcquireReward(rewardEntity: Reward, point: Int) {
-        if (!rewardEntity.needRepeat) {
-            viewModel.deleteRewardIfNeeded(rewardEntity)
-            (binding.rewardListView.adapter as RewardListAdapter).remove(rewardEntity)
-        }
     }
 
     override fun onRewardEditSelected(rewardEntity: Reward) {

@@ -16,7 +16,6 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.anyInt
 import org.robolectric.RobolectricTestRunner
 import project.seito.screen_transition.preference.PrefsWrapper
 import java.net.SocketTimeoutException
@@ -82,86 +81,6 @@ class RewardListViewModelTest {
         viewModel.loadRewards()
 
         assertThat(viewModel.isEmpty.value).isTrue()
-    }
-
-    @Test
-    fun testAcquireRewardSuccess() {
-        runBlocking { whenever(mockUsePointUseCase.execute(any())).thenReturn(DummyCreator.createDummyRewardUser()) }
-        viewModel.selectedReward = DummyCreator.createDummyReward()
-        viewModel.setPoint(20)
-        viewModel.acquireReward()
-
-        verify(mockCallback, times(1)).successAcquireReward(any(), anyInt())
-    }
-
-    @Test
-    fun testAcquireRewardFailure_PointShortage() {
-        runBlocking { whenever(mockUsePointUseCase.execute(any())).thenReturn(DummyCreator.createDummyRewardUser()) }
-
-        val reward = DummyCreator.createDummyReward()
-        viewModel.setPoint(1)
-        viewModel.selectedReward = reward
-        viewModel.acquireReward()
-
-        verify(mockCallback, times(1)).showError()
-    }
-
-
-    @Test
-    fun testAcquireRewardFailure_SocketTimeOut() {
-        runBlocking { whenever(mockUsePointUseCase.execute(any())).thenAnswer { throw SocketTimeoutException() } }
-        viewModel.setPoint(20)
-        viewModel.selectedReward = DummyCreator.createDummyReward()
-        viewModel.acquireReward()
-        verify(mockCallback, times(1)).showError()
-    }
-
-    @Test
-    fun testRemoveReward() {
-        runBlocking {
-            viewModel.deleteRewardIfNeeded(DummyCreator.createDummyReward())
-
-            verify(mockDeleteRewardUseCase, times(0)).execute(any())
-            verify(mockCallback, times(0)).onRewardDeleted(any())
-        }
-    }
-
-    @Test
-    fun testNotRemoveReward() {
-        runBlocking {
-            viewModel.deleteRewardIfNeeded(DummyCreator.createDummyNoRepeatReward())
-
-            verify(mockDeleteRewardUseCase, times(1)).execute(any())
-            verify(mockCallback, times(0)).onRewardDeleted(any())
-        }
-    }
-
-    @Test
-    fun testConfirmDelete() {
-        viewModel.selectedReward = DummyCreator.createDummyReward()
-        viewModel.confirmDelete()
-
-        verify(mockCallback).showDeleteConfirmDialog(any())
-    }
-
-    @Test
-    fun testDeleteReward() {
-        runBlocking {
-            val reward = DummyCreator.createDummyReward()
-            viewModel.deleteReward(reward, true)
-
-            verify(mockDeleteRewardUseCase).execute(any())
-            verify(mockCallback).onRewardDeleted(reward)
-        }
-    }
-
-    @Test
-    fun testEditReward() {
-        val reward = DummyCreator.createDummyReward()
-        viewModel.selectedReward = reward
-        viewModel.editReward()
-
-        verify(mockCallback).onRewardEditSelected(reward)
     }
 
     @Test
