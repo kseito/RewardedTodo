@@ -8,12 +8,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
-import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem
 import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.reward.domain.model.Reward
 import project.seito.reward.BR
@@ -75,22 +73,22 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         fragmentTransitionManager.transitionToRewardDetailFragment(activity)
     }
 
-    override fun showRewards(rewardEntityList: MutableList<Reward>) {
-        binding.rewardListView.adapter = RewardListAdapter(rewardEntityList, this)
+    override fun showRewards(rewardList: MutableList<Reward>) {
+        binding.rewardListView.adapter = RewardListAdapter(rewardList, this)
     }
 
     override fun showError() {
         Toast.makeText(context, R.string.error_acquire_reward, Toast.LENGTH_SHORT).show()
     }
 
-    override fun onRewardEditSelected(rewardEntity: Reward) {
-        fragmentTransitionManager.transitionToRewardDetailFragment(activity, rewardEntity.rewardId.value)
+    override fun onRewardEditSelected(reward: Reward) {
+        fragmentTransitionManager.transitionToRewardDetailFragment(activity, reward.rewardId.value)
     }
 
-    override fun onRewardDeleted(rewardEntity: Reward) {
-        val message = String.format(getString(R.string.reward_delete_message), rewardEntity.name)
+    override fun onRewardDeleted(reward: Reward) {
+        val message = String.format(getString(R.string.reward_delete_message), reward.name)
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-        (binding.rewardListView.adapter as RewardListAdapter).remove(rewardEntity)
+        (binding.rewardListView.adapter as RewardListAdapter).remove(reward)
     }
 
     override fun onPointLoadFailed() {
@@ -112,8 +110,8 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         fragmentTransitionManager.transitionToAuthFragment(activity)
     }
 
-    override fun onHitLottery(rewardEntity: Reward) {
-        val message = "You won ${rewardEntity.name}!"
+    override fun onHitLottery(reward: Reward) {
+        val message = "You won ${reward.name}!"
         showDialog(message)
     }
 
