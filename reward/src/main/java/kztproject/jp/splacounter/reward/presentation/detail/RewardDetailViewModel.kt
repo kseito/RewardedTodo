@@ -10,9 +10,9 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
 import kztproject.jp.splacounter.reward.application.usecase.DeleteRewardUseCase
 import kztproject.jp.splacounter.reward.application.usecase.GetRewardUseCase
+import kztproject.jp.splacounter.reward.application.usecase.SaveRewardUseCase
 import kztproject.jp.splacounter.reward.domain.model.Reward
 import kztproject.jp.splacounter.reward.domain.model.RewardId
 import kztproject.jp.splacounter.reward.domain.model.RewardInput
@@ -21,9 +21,9 @@ import project.seito.reward.R
 import javax.inject.Inject
 
 class RewardDetailViewModel @Inject constructor(
-        private val rewardRepository: IRewardRepository,
         private val deleteRewardUseCase: DeleteRewardUseCase,
-        private val getRewardUseCase: GetRewardUseCase
+        private val getRewardUseCase: GetRewardUseCase,
+        private val saveRewardUseCase: SaveRewardUseCase
 ) : ViewModel() {
 
     private var reward: Reward? = null
@@ -61,7 +61,7 @@ class RewardDetailViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            rewardRepository.createOrUpdate(reward)
+            saveRewardUseCase.execute(reward)
             callback.onSaveCompleted(reward.name!!)
         }
     }

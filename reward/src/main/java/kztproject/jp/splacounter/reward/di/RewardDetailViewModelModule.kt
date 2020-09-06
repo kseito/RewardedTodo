@@ -4,10 +4,7 @@ import androidx.lifecycle.ViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-import kztproject.jp.splacounter.reward.application.usecase.DeleteRewardInteractor
-import kztproject.jp.splacounter.reward.application.usecase.DeleteRewardUseCase
-import kztproject.jp.splacounter.reward.application.usecase.GetRewardInteractor
-import kztproject.jp.splacounter.reward.application.usecase.GetRewardUseCase
+import kztproject.jp.splacounter.reward.application.usecase.*
 import kztproject.jp.splacounter.reward.presentation.detail.RewardDetailViewModel
 import project.seito.screen_transition.di.ViewModelKey
 
@@ -24,4 +21,7 @@ interface RewardDetailViewModelModule {
 
     @Binds
     fun bindGetRewardUseCase(useCase: GetRewardInteractor): GetRewardUseCase
+
+    @Binds
+    fun bindSaveRewardUseCase(useCase: SaveRewardInteractor): SaveRewardUseCase
 }
