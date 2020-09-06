@@ -20,7 +20,7 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.Matchers
+import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
 import project.seito.reward.R
 
@@ -63,7 +63,7 @@ class RewardDetailViewModelTest {
         viewModel.initialize(RewardId(1))
         viewModel.saveReward()
 
-        Mockito.verify(mockCallback).onSaveCompleted(Matchers.anyString())
+        Mockito.verify(mockCallback).onSaveCompleted(anyString())
     }
 
     @Test
