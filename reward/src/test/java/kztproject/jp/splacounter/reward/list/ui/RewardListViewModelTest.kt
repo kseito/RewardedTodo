@@ -3,6 +3,7 @@ package kztproject.jp.splacounter.reward.list.ui
 import androidx.test.core.app.ApplicationProvider
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
@@ -20,6 +21,7 @@ import org.robolectric.RobolectricTestRunner
 import project.seito.screen_transition.preference.PrefsWrapper
 import java.net.SocketTimeoutException
 
+@ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
 class RewardListViewModelTest {
 
