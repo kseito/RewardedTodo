@@ -13,14 +13,14 @@ class SaveRewardInteractor @Inject constructor(
         private val rewardRepository: IRewardRepository
 ) : SaveRewardUseCase {
     override suspend fun execute(reward: RewardInput): Result<Unit> {
-        if (reward.name.isNullOrEmpty()) {
-            return Failure(CommonException(R.string.error_empty_title))
-        } else if (reward.consumePoint == null) {
-            return Failure(CommonException(R.string.error_empty_point))
-        } else if (reward.probability == null) {
-            return Failure(CommonException(R.string.error_empty_probability))
+        return when {
+            reward.name.isNullOrEmpty() -> Failure(CommonException(R.string.error_empty_title))
+            reward.consumePoint == null -> Failure(CommonException(R.string.error_empty_point))
+            reward.probability == null -> Failure(CommonException(R.string.error_empty_probability))
+            else -> {
+                rewardRepository.createOrUpdate(reward)
+                Success(Unit)
+            }
         }
-        rewardRepository.createOrUpdate(reward)
-        return Success(Unit)
     }
 }
