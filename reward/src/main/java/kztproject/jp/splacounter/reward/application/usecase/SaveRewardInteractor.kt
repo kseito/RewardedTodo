@@ -17,6 +17,8 @@ class SaveRewardInteractor @Inject constructor(
             return Failure(CommonException(R.string.error_empty_title))
         } else if (reward.consumePoint == null) {
             return Failure(CommonException(R.string.error_empty_point))
+        } else if (reward.probability == null) {
+            return Failure(CommonException(R.string.error_empty_probability))
         }
         rewardRepository.createOrUpdate(reward)
         return Success(Unit)

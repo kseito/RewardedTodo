@@ -21,4 +21,5 @@
     <string name="button_delete">Delete</string>
     <string name="error_empty_title">Input title</string>
     <string name="error_empty_point">Input point</string>
+    <string name="error_empty_probability">Input chance of Winning</string>
 </resources>
