@@ -10,6 +10,8 @@ import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kztproject.jp.splacounter.reward.application.model.Failure
+import kztproject.jp.splacounter.reward.application.model.Success
 import kztproject.jp.splacounter.reward.application.usecase.DeleteRewardUseCase
 import kztproject.jp.splacounter.reward.application.usecase.GetRewardUseCase
 import kztproject.jp.splacounter.reward.application.usecase.SaveRewardUseCase
@@ -61,8 +63,11 @@ class RewardDetailViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            saveRewardUseCase.execute(reward)
-            callback.onSaveCompleted(reward.name!!)
+            val result = saveRewardUseCase.execute(reward)
+            when(result) {
+                is Success -> callback.onSaveCompleted(reward.name!!)
+                is Failure -> callback.onError(result.reason.messageId)
+            }
         }
     }
 
