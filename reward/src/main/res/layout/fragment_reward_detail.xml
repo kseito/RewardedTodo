@@ -106,7 +106,7 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="32dp"
                 android:onClick="@{() -> viewModel.saveReward()}"
-                android:text="@string/button_add"
+                android:text="@string/button_save"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent" />
 
