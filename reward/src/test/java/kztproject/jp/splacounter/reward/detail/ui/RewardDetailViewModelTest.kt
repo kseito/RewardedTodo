@@ -10,6 +10,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import kztproject.jp.splacounter.DummyCreator
+import kztproject.jp.splacounter.reward.application.model.Success
 import kztproject.jp.splacounter.reward.application.usecase.DeleteRewardUseCase
 import kztproject.jp.splacounter.reward.application.usecase.GetRewardUseCase
 import kztproject.jp.splacounter.reward.application.usecase.SaveRewardUseCase
@@ -60,12 +61,15 @@ class RewardDetailViewModelTest {
     fun testSaveReward() {
         runBlocking {
             val reward = DummyCreator.createDummyReward()
+            val rewardInput = DummyCreator.createDummyRewardInput()
             whenever(mockGetRewardUseCase.execute(RewardId(anyInt()))).thenReturn(reward)
-        }
-        viewModel.initialize(RewardId(1))
-        viewModel.saveReward()
+            whenever(mockSaveRewardUseCase.execute(rewardInput)).thenReturn(Success(Unit))
+            viewModel.initialize(RewardId(1))
 
-        Mockito.verify(mockCallback).onSaveCompleted(anyString())
+            viewModel.saveReward()
+
+            Mockito.verify(mockCallback).onSaveCompleted(anyString())
+        }
     }
 
     @Test
