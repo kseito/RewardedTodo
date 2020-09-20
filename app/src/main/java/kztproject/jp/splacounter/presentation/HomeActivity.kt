@@ -10,6 +10,7 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kztproject.jp.splacounter.R
+import kztproject.jp.splacounter.databinding.ActivityBaseBinding
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
@@ -21,6 +22,7 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasSupportFrag
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: HomeViewModel
+    private lateinit var binding: ActivityBaseBinding
 
     @Inject
     lateinit var fragmentTransitionManager: IFragmentsTransitionManager
@@ -32,8 +34,7 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasSupportFrag
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
         viewModel.initialize(this)
 
-        val navigationDrawer = findViewById<NavigationView>(R.id.navigation_view)
-        navigationDrawer.setNavigationItemSelectedListener { item ->
+        binding.navigationView.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.menu_logout -> viewModel.logout()
             }
