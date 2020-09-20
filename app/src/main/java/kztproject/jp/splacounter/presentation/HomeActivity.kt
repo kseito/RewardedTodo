@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.navigation.NavigationView
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
@@ -33,8 +32,8 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasSupportFrag
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
         viewModel.initialize(this)
 
-        val bottomNavigationView = findViewById<NavigationView>(R.id.navigation_view)
-        bottomNavigationView.setNavigationItemSelectedListener { item ->
+        val navigationDrawer = findViewById<NavigationView>(R.id.navigation_view)
+        navigationDrawer.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.menu_logout -> viewModel.logout()
             }
