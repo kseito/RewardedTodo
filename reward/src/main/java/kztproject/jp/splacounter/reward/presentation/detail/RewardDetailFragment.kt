@@ -75,6 +75,7 @@ class RewardDetailFragment : DialogFragment(), RewardDetailViewModelCallback {
     override fun onDeleteCompleted(rewardName: RewardName) {
         val message = String.format(getString(R.string.reward_delete_message), rewardName.value)
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+        transitionManager.popBackStack(activity)
     }
 
     override fun onError(resourceId: Int) {
