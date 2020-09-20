@@ -47,7 +47,7 @@
 
     <fragment
         android:id="@+id/splash_fragment"
-        android:name="kztproject.jp.splacounter.SplashFragment"
+        android:name="kztproject.jp.splacounter.presentation.SplashFragment"
         android:label="SplashFragment">
 
         <action

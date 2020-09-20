@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter
+package kztproject.jp.splacounter.presentation
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.*
+import kztproject.jp.splacounter.R
 import project.seito.screen_transition.preference.PrefsWrapper
 
 class SplashFragment : Fragment() {
