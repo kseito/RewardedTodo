@@ -10,7 +10,7 @@ import dagger.android.support.HasSupportFragmentInjector
 import kztproject.jp.splacounter.R
 import javax.inject.Inject
 
-class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {
+class HomeActivity : AppCompatActivity(), HasSupportFragmentInjector {
 
     @Inject
     lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
