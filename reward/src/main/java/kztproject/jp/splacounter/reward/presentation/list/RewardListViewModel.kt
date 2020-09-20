@@ -10,11 +10,9 @@ import kztproject.jp.splacounter.reward.application.usecase.GetRewardsUseCase
 import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
 import kztproject.jp.splacounter.reward.domain.model.Reward
 import kztproject.jp.splacounter.reward.domain.model.RewardCollection
-import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
 class RewardListViewModel @Inject constructor(
-        private val prefsWrapper: PrefsWrapper,
         private val lotteryUseCase: LotteryUseCase,
         private val getRewardsUseCase: GetRewardsUseCase,
         private val getPointUseCase: GetPointUseCase
@@ -78,11 +76,6 @@ class RewardListViewModel @Inject constructor(
         }
     }
 
-    fun logout() {
-        prefsWrapper.userId = 0
-        callback.onLogout()
-    }
-
     override fun onCleared() {
         super.onCleared()
         viewModelScope.cancel()
@@ -102,8 +95,6 @@ interface RewardViewModelCallback {
     fun onStartLoadingPoint()
 
     fun onTerminateLoadingPoint()
-
-    fun onLogout()
 
     fun onHitLottery(reward: Reward)
 
