@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter
+package kztproject.jp.splacounter.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +7,7 @@ import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
+import kztproject.jp.splacounter.R
 import javax.inject.Inject
 
 class BaseActivity : AppCompatActivity(), HasSupportFragmentInjector {

@@ -2,7 +2,7 @@ package kztproject.jp.splacounter.di
 
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
-import kztproject.jp.splacounter.BaseActivity
+import kztproject.jp.splacounter.presentation.BaseActivity
 import kztproject.jp.splacounter.auth.di.AuthModule
 import kztproject.jp.splacounter.reward.di.RewardModule
 
