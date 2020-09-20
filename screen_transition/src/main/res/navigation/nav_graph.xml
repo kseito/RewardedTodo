@@ -16,7 +16,7 @@
             app:popUpToInclusive="true"/>
     </fragment>
 
-    <fragment
+    <dialog
         android:id="@+id/reward_detail_fragment"
         android:name="kztproject.jp.splacounter.reward.presentation.detail.RewardDetailFragment"
         android:label="RewardDetailFragment">
@@ -25,7 +25,7 @@
             android:name="reward_id"
             android:defaultValue="0"
             app:argType="integer"/>
-    </fragment>
+    </dialog>
 
     <fragment
         android:id="@+id/reward_list_fragment"

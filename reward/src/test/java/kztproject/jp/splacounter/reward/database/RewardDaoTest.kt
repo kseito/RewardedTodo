@@ -1,8 +1,12 @@
 package kztproject.jp.splacounter.reward.database
 
 import androidx.room.Room
-import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.runBlocking
 import kztproject.jp.splacounter.reward.infrastructure.database.AppDatabase
+import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
@@ -11,6 +15,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 
+@ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
 class RewardDaoTest {
 
@@ -62,5 +67,16 @@ class RewardDaoTest {
         val rewards = dao.findAll()
         assertThat(rewards.size).isEqualTo(3)
         assertThat(rewards[0].name).isEqualTo("nintendo switch")
+    }
+
+    @Test
+    fun findAllAsFlow() = runBlocking {
+        val dao = database.rewardDao()
+        testRewards.forEach { dao.insertReward(it) }
+
+        val rewards = dao.findAllAsFlow().take(1).first()
+        assertThat(rewards.size).isEqualTo(3)
+        assertThat(rewards[0].name).isEqualTo("nintendo switch")
+        Unit
     }
 }

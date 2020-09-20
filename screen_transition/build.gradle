@@ -42,8 +42,8 @@ dependencies {
     kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
     //AAC
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.0.0'
+    implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycle_version"
 }
 repositories {
     mavenCentral()

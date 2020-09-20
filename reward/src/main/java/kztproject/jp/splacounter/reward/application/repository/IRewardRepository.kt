@@ -1,15 +1,18 @@
 package kztproject.jp.splacounter.reward.application.repository
 
+import kotlinx.coroutines.flow.Flow
 import kztproject.jp.splacounter.reward.domain.model.Reward
-import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
+import kztproject.jp.splacounter.reward.domain.model.RewardInput
 
 interface IRewardRepository {
 
-    suspend fun createOrUpdate(rewardEntity: RewardEntity)
+    suspend fun createOrUpdate(reward: RewardInput)
 
-    suspend fun delete(rewardEntity: Reward)
+    suspend fun delete(reward: Reward)
 
-    suspend fun findBy(id: Int): RewardEntity?
+    suspend fun findBy(id: Int): Reward?
 
     suspend fun findAll(): List<Reward>
+
+    suspend fun findAllAsFlow(): Flow<List<Reward>>
 }

@@ -1,37 +1,52 @@
 package kztproject.jp.splacounter.reward.presentation.detail
 
-import androidx.lifecycle.ViewModel
 import android.content.res.Resources
 import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kztproject.jp.splacounter.reward.infrastructure.database.model.RewardEntity
-import kztproject.jp.splacounter.reward.application.repository.IRewardRepository
+import kztproject.jp.splacounter.reward.application.model.Failure
+import kztproject.jp.splacounter.reward.application.model.Success
+import kztproject.jp.splacounter.reward.application.usecase.DeleteRewardUseCase
+import kztproject.jp.splacounter.reward.application.usecase.GetRewardUseCase
+import kztproject.jp.splacounter.reward.application.usecase.SaveRewardUseCase
+import kztproject.jp.splacounter.reward.domain.model.Reward
+import kztproject.jp.splacounter.reward.domain.model.RewardId
+import kztproject.jp.splacounter.reward.domain.model.RewardInput
+import kztproject.jp.splacounter.reward.domain.model.RewardName
 import project.seito.reward.R
 import javax.inject.Inject
 
-class RewardDetailViewModel @Inject constructor(private val rewardRepository: IRewardRepository) : ViewModel() {
+class RewardDetailViewModel @Inject constructor(
+        private val deleteRewardUseCase: DeleteRewardUseCase,
+        private val getRewardUseCase: GetRewardUseCase,
+        private val saveRewardUseCase: SaveRewardUseCase
+) : ViewModel() {
 
-    private var mutableReward =  MutableLiveData<RewardEntity>()
-    var rewardEntity: LiveData<RewardEntity> = mutableReward
+    private var reward: Reward? = null
+    private var mutableRewardInput = MutableLiveData<RewardInput>()
+    var rewardInput: LiveData<RewardInput> = mutableRewardInput
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Main + viewModelJob)
+    val canDeleteReward: MutableLiveData<Boolean> = MutableLiveData(false)
 
     init {
-        mutableReward.value = RewardEntity()
+        mutableRewardInput.value = RewardInput()
     }
 
     private lateinit var callback: RewardDetailViewModelCallback
 
-    fun initialize(id: Int) {
+    fun initialize(id: RewardId) {
         viewModelScope.launch {
-            val reward = rewardRepository.findBy(id) ?: throw Resources.NotFoundException()
-            mutableReward.value = reward
+            val reward = getRewardUseCase.execute(id) ?: throw Resources.NotFoundException()
+            mutableRewardInput.value = RewardInput.from(reward)
+            this@RewardDetailViewModel.reward = reward
+            canDeleteReward.value = true
         }
     }
 
@@ -40,8 +55,8 @@ class RewardDetailViewModel @Inject constructor(private val rewardRepository: IR
     }
 
     fun saveReward() {
-        val reward = this.rewardEntity.value ?: throw IllegalStateException("mutableReward is null")
-        if (reward.name.isEmpty()) {
+        val reward = this.rewardInput.value ?: throw IllegalStateException("mutableReward is null")
+        if (reward.name.isNullOrEmpty()) {
             callback.onError(R.string.error_empty_title)
             return
         } else if (reward.consumePoint == 0) {
@@ -50,8 +65,26 @@ class RewardDetailViewModel @Inject constructor(private val rewardRepository: IR
         }
 
         viewModelScope.launch {
-            rewardRepository.createOrUpdate(reward)
-            callback.onSaveCompleted(reward.name)
+            val result = saveRewardUseCase.execute(reward)
+            when (result) {
+                is Success -> callback.onSaveCompleted(reward.name!!)
+                is Failure -> callback.onError(result.reason.messageId)
+            }
+        }
+    }
+
+    fun confirmToRewardDeletion() {
+        reward?.let {
+            callback.onConfirmToRewardDeletion(it)
+        }
+    }
+
+    fun deleteReward() {
+        viewModelScope.launch {
+            reward?.let {
+                deleteRewardUseCase.execute(it)
+                callback.onDeleteCompleted(it.name)
+            }
         }
     }
 
@@ -64,6 +97,10 @@ class RewardDetailViewModel @Inject constructor(private val rewardRepository: IR
 interface RewardDetailViewModelCallback {
 
     fun onSaveCompleted(rewardName: String)
+
+    fun onConfirmToRewardDeletion(reward: Reward)
+
+    fun onDeleteCompleted(rewardName: RewardName)
 
     fun onError(@StringRes resourceId: Int)
 }
