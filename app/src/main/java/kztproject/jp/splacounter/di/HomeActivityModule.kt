@@ -13,7 +13,7 @@ import kztproject.jp.splacounter.reward.presentation.list.RewardListViewModel
 import project.seito.screen_transition.di.ViewModelKey
 
 @Module
-internal abstract class BaseActivityModule {
+internal abstract class HomeActivityModule {
     @ContributesAndroidInjector(modules = [RewardModule::class, AuthModule::class])
     internal abstract fun contributeBaseActivity(): HomeActivity
 
