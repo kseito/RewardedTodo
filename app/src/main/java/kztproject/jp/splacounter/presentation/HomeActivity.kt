@@ -2,9 +2,9 @@ package kztproject.jp.splacounter.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import com.google.android.material.navigation.NavigationView
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -30,7 +30,7 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasSupportFrag
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_base)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_base)
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
         viewModel.initialize(this)
 
@@ -48,6 +48,7 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasSupportFrag
     }
 
     override fun onLogout() {
+        binding.drawerLayout.closeDrawers()
         fragmentTransitionManager.transitionToAuthFragment(this)
     }
 }
