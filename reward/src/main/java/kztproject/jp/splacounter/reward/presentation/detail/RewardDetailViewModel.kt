@@ -33,6 +33,7 @@ class RewardDetailViewModel @Inject constructor(
     var rewardInput: LiveData<RewardInput> = mutableRewardInput
     private val viewModelJob = Job()
     private val viewModelScope = CoroutineScope(Main + viewModelJob)
+    val canDeleteReward: MutableLiveData<Boolean> = MutableLiveData(false)
 
     init {
         mutableRewardInput.value = RewardInput()
@@ -45,6 +46,7 @@ class RewardDetailViewModel @Inject constructor(
             val reward = getRewardUseCase.execute(id) ?: throw Resources.NotFoundException()
             mutableRewardInput.value = RewardInput.from(reward)
             this@RewardDetailViewModel.reward = reward
+            canDeleteReward.value = true
         }
     }
 
@@ -64,7 +66,7 @@ class RewardDetailViewModel @Inject constructor(
 
         viewModelScope.launch {
             val result = saveRewardUseCase.execute(reward)
-            when(result) {
+            when (result) {
                 is Success -> callback.onSaveCompleted(reward.name!!)
                 is Failure -> callback.onError(result.reason.messageId)
             }
