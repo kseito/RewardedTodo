@@ -26,4 +26,8 @@
     <!-- Home Menu -->
     <string name="menu_todo">Todo</string>
     <string name="menu_reward">Reward</string>
+
+    <!-- Drawer Menu -->
+    <string name="section_other">Other</string>
+    <string name="menu_logout">Logout</string>
 </resources>
