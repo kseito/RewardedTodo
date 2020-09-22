@@ -10,7 +10,7 @@ import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.support.HasSupportFragmentInjector
 import kztproject.jp.splacounter.R
-import kztproject.jp.splacounter.databinding.ActivityBaseBinding
+import kztproject.jp.splacounter.databinding.ActivityHomeBinding
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
@@ -22,7 +22,7 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasSupportFrag
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: HomeViewModel
-    private lateinit var binding: ActivityBaseBinding
+    private lateinit var binding: ActivityHomeBinding
 
     @Inject
     lateinit var fragmentTransitionManager: IFragmentsTransitionManager
@@ -30,7 +30,7 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasSupportFrag
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_base)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
         viewModel.initialize(this)
 
