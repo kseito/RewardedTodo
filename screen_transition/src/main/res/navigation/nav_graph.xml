@@ -16,6 +16,12 @@
             app:popUpToInclusive="true"/>
     </fragment>
 
+    <fragment
+        android:id="@+id/todo_list_fragment"
+        android:name="kztproject.jp.splacounter.presentation.todo.TodoListFragment"
+        android:label="TodoListFragment"
+        />
+
     <dialog
         android:id="@+id/reward_detail_fragment"
         android:name="kztproject.jp.splacounter.reward.presentation.detail.RewardDetailFragment"

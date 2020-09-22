@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.ui.setupWithNavController
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
@@ -39,8 +41,8 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasSupportFrag
                 R.id.menu_logout -> viewModel.logout()
             }
             false
-
         }
+        binding.bottomNavigation.setupWithNavController((Navigation.findNavController(this@HomeActivity, R.id.nav_host_fragment)))
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
