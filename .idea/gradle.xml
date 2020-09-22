@@ -13,6 +13,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/auth" />
+            <option value="$PROJECT_DIR$/presentation" />
+            <option value="$PROJECT_DIR$/presentation/todo" />
             <option value="$PROJECT_DIR$/reward" />
             <option value="$PROJECT_DIR$/screen_transition" />
           </set>
