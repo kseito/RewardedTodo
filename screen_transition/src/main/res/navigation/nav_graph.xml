@@ -68,5 +68,11 @@
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true"/>
 
+        <action
+            android:id="@+id/to_TodoListFragment"
+            app:destination="@id/todo_list_fragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true"/>
+
     </fragment>
 </navigation>

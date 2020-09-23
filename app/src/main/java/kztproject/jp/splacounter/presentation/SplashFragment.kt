@@ -33,7 +33,7 @@ class SplashFragment : Fragment() {
 
         val prefsWrapper = PrefsWrapper(context)
         if (prefsWrapper.userId != 0L) {
-            findNavController().navigate(SplashFragmentDirections.toRewardListFragment())
+            findNavController().navigate(SplashFragmentDirections.toTodoListFragment())
         } else {
             findNavController().navigate(SplashFragmentDirections.toAuthFragment())
         }
