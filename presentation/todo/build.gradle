@@ -42,6 +42,7 @@ dependencies {
     implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
     kapt "androidx.databinding:databinding-compiler:$gradle_plugin_version"
     implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation 'com.google.android.material:material:1.2.1'
 
     //Dagger
     implementation "com.google.dagger:dagger:$dagger_version"

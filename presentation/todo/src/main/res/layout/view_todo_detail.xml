@@ -3,9 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#eeeeee"
     android:paddingLeft="16dp"
     android:paddingTop="24dp"
-    android:paddingRight="16dp">
+    android:paddingRight="16dp"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="176dp"
+    app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
     <EditText
         android:id="@+id/todo_title"
@@ -17,18 +21,51 @@
         android:id="@+id/todo_repeating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:text="@string/todo_repeating"
         android:textSize="16sp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/todo_title"
-        app:layout_goneMarginTop="8dp" />
+        app:layout_constraintTop_toBottomOf="@id/todo_title" />
 
-    <NumberPicker
+    <TextView
+        android:id="@+id/todo_reward"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reward"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/ticket_icon"
+        app:layout_constraintBottom_toBottomOf="@id/ticket_icon"/>
+
+    <ImageView
+        android:id="@+id/ticket_icon"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_marginLeft="18dp"
+        android:src="@drawable/ic_ticket"
+        android:layout_marginTop="16dp"
+        app:layout_constraintLeft_toRightOf="@id/todo_reward"
+        app:layout_constraintTop_toBottomOf="@id/todo_repeating" />
+
+    <TextView
+        android:id="@+id/multiplication_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:text="x"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/number_of_ticket"
+        app:layout_constraintLeft_toRightOf="@id/ticket_icon" />
+
+    <EditText
         android:id="@+id/number_of_ticket"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/todo_repeating" />
+        android:layout_marginLeft="8dp"
+        android:text="1"
+        app:layout_constraintBaseline_toBaselineOf="@id/todo_reward"
+        app:layout_constraintLeft_toRightOf="@id/multiplication_icon" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
