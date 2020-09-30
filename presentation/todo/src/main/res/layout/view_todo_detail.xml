@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#eeeeee"
@@ -15,7 +16,10 @@
         android:id="@+id/todo_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:importantForAutofill="no"
+        android:inputType="text"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="LabelFor" />
 
     <CheckBox
         android:id="@+id/todo_repeating"
@@ -31,29 +35,30 @@
         android:id="@+id/todo_reward"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Reward"
+        android:text="@string/todo_reward"
         android:textColor="@android:color/black"
         android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@id/ticket_icon"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="@id/ticket_icon"
-        app:layout_constraintBottom_toBottomOf="@id/ticket_icon"/>
+        app:layout_constraintTop_toTopOf="@id/ticket_icon" />
 
     <ImageView
         android:id="@+id/ticket_icon"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        android:layout_marginLeft="18dp"
-        android:src="@drawable/ic_ticket"
+        android:layout_marginStart="18dp"
         android:layout_marginTop="16dp"
+        android:src="@drawable/ic_ticket"
         app:layout_constraintLeft_toRightOf="@id/todo_reward"
-        app:layout_constraintTop_toBottomOf="@id/todo_repeating" />
+        app:layout_constraintTop_toBottomOf="@id/todo_repeating"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/multiplication_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:text="x"
+        android:layout_marginStart="12dp"
+        android:text="@string/multiplication"
         android:textColor="@android:color/black"
         android:textSize="16sp"
         app:layout_constraintBaseline_toBaselineOf="@id/number_of_ticket"
@@ -63,9 +68,11 @@
         android:id="@+id/number_of_ticket"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
-        android:text="1"
+        android:layout_marginStart="8dp"
         app:layout_constraintBaseline_toBaselineOf="@id/todo_reward"
-        app:layout_constraintLeft_toRightOf="@id/multiplication_icon" />
+        app:layout_constraintLeft_toRightOf="@id/multiplication_icon"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        tools:ignore="LabelFor" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="todo_repeating">Repeating</string>
+    <string name="todo_reward">Reward</string>
+    <string name="multiplication">x</string>
 </resources>
