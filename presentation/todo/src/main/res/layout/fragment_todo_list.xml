@@ -16,10 +16,6 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <include
-            android:id="@+id/todo_detail"
-            layout="@layout/view_todo_detail" />
-
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

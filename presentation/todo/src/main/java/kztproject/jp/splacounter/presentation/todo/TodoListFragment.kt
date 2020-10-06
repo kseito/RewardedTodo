@@ -5,13 +5,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.presentation.todo.databinding.FragmentTodoListBinding
+import kztproject.jp.splacounter.presentation.todo.databinding.ViewTodoDetailBinding
 import kztproject.jp.splacounter.presentation.todo.model.DummyTodo
 import javax.inject.Inject
 
@@ -39,7 +42,6 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initTodoListViewAdapter()
-        initBottomSheet()
 
         viewModel.loadTodo()
     }
@@ -53,18 +55,19 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener {
         })
     }
 
-    private fun initBottomSheet() {
-        val behavior = BottomSheetBehavior.from(binding.todoDetail)
-        behavior.state = BottomSheetBehavior.STATE_HIDDEN
-    }
-
     override fun onClick(item: DummyTodo) {
-        val behavior = BottomSheetBehavior.from(binding.todoDetail)
-        if(behavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
-            behavior.state = BottomSheetBehavior.STATE_HIDDEN
-        } else {
-            behavior.state = BottomSheetBehavior.STATE_COLLAPSED
-            // TODO display detail
-        }
+        val bottomSheet = BottomSheetDialog(context!!)
+        val binding = DataBindingUtil.inflate<ViewTodoDetailBinding>(
+                LayoutInflater.from(context), R.layout.view_todo_detail, this.binding.root as ViewGroup, false
+        )
+        bottomSheet.setContentView(binding.root)
+        bottomSheet.show()
+//        val behavior = BottomSheetBehavior.from(binding.todoDetail)
+//        if(behavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+//            behavior.state = BottomSheetBehavior.STATE_HIDDEN
+//        } else {
+//            behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+//            // TODO display detail
+//        }
     }
 }
