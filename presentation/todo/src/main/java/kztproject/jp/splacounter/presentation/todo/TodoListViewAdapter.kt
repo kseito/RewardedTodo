@@ -10,6 +10,11 @@ import javax.inject.Inject
 
 class TodoListViewAdapter @Inject constructor() : RecyclerView.Adapter<TodoListViewAdapter.ViewHolder>() {
 
+    interface OnItemClickListener {
+        fun onClick(item: DummyTodo)
+    }
+
+    private lateinit var listener: OnItemClickListener
     private val todoList = mutableListOf<DummyTodo>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -18,9 +23,16 @@ class TodoListViewAdapter @Inject constructor() : RecyclerView.Adapter<TodoListV
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.binding.todo = todoList[position]
+        holder.itemView.setOnClickListener {
+            listener.onClick(todoList[position])
+        }
     }
 
     override fun getItemCount(): Int = todoList.size
+
+    fun setListener(listener: OnItemClickListener) {
+        this.listener = listener
+    }
 
     fun setTodo(todoList: List<DummyTodo>) {
         this.todoList.clear()

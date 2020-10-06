@@ -4,16 +4,17 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.presentation.todo.databinding.FragmentTodoListBinding
+import kztproject.jp.splacounter.presentation.todo.model.DummyTodo
 import javax.inject.Inject
 
-class TodoListFragment : Fragment() {
+class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener {
 
     private lateinit var binding: FragmentTodoListBinding
 
@@ -37,10 +38,15 @@ class TodoListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.todoListView.layoutManager = LinearLayoutManager(context)
+        adapter.setListener(this)
         binding.todoListView.adapter = adapter
         viewModel.observeTodo().observe(viewLifecycleOwner, Observer { todoList ->
             adapter.setTodo(todoList)
         })
         viewModel.loadTodo()
+    }
+
+    override fun onClick(item: DummyTodo) {
+        // TODO implement display BottomSheet
     }
 }
