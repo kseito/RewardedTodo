@@ -38,15 +38,19 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        initTodoListViewAdapter()
+        initBottomSheet()
+
+        viewModel.loadTodo()
+    }
+
+    private fun initTodoListViewAdapter() {
         binding.todoListView.layoutManager = LinearLayoutManager(context)
         adapter.setListener(this)
         binding.todoListView.adapter = adapter
         viewModel.observeTodo().observe(viewLifecycleOwner, Observer { todoList ->
             adapter.setTodo(todoList)
         })
-        viewModel.loadTodo()
-
-        initBottomSheet()
     }
 
     private fun initBottomSheet() {
