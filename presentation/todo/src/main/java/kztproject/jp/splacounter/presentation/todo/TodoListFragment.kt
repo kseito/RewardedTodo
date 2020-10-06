@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.presentation.todo.databinding.FragmentTodoListBinding
 import kztproject.jp.splacounter.presentation.todo.model.DummyTodo
@@ -47,6 +48,12 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener {
     }
 
     override fun onClick(item: DummyTodo) {
-        // TODO implement display BottomSheet
+        val behavior = BottomSheetBehavior.from(binding.todoDetail)
+        if(behavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
+            behavior.state = BottomSheetBehavior.STATE_HIDDEN
+        } else {
+            behavior.state = BottomSheetBehavior.STATE_COLLAPSED
+            // TODO display detail
+        }
     }
 }
