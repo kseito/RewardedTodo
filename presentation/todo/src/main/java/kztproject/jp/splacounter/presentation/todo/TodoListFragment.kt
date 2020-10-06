@@ -45,6 +45,13 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener {
             adapter.setTodo(todoList)
         })
         viewModel.loadTodo()
+
+        initBottomSheet()
+    }
+
+    private fun initBottomSheet() {
+        val behavior = BottomSheetBehavior.from(binding.todoDetail)
+        behavior.state = BottomSheetBehavior.STATE_HIDDEN
     }
 
     override fun onClick(item: DummyTodo) {
