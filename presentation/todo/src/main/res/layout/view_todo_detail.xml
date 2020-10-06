@@ -26,6 +26,7 @@
             android:layout_height="wrap_content"
             android:importantForAutofill="no"
             android:inputType="text"
+            android:text="@{todo.name}"
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="LabelFor" />
 

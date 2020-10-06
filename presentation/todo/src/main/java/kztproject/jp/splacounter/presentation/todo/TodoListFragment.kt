@@ -61,13 +61,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener {
                 LayoutInflater.from(context), R.layout.view_todo_detail, this.binding.root as ViewGroup, false
         )
         bottomSheet.setContentView(binding.root)
+        binding.todo = item
         bottomSheet.show()
-//        val behavior = BottomSheetBehavior.from(binding.todoDetail)
-//        if(behavior.state == BottomSheetBehavior.STATE_COLLAPSED) {
-//            behavior.state = BottomSheetBehavior.STATE_HIDDEN
-//        } else {
-//            behavior.state = BottomSheetBehavior.STATE_COLLAPSED
-//            // TODO display detail
-//        }
     }
 }
