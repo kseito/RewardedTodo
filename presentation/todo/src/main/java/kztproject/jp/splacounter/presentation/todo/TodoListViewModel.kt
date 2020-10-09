@@ -13,7 +13,7 @@ class TodoListViewModel @Inject constructor() : ViewModel() {
     fun loadTodo() {
         val todoList = listOf(1, 2, 3, 4, 5)
                 .map {
-                    Todo("Test Todo $it")
+                    Todo(it.toLong(), "Test Todo $it", 0.5f, true)
                 }
         this.todoList.value = todoList
     }
