@@ -5,17 +5,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kztproject.jp.splacounter.presentation.todo.databinding.TodoListItemBinding
-import kztproject.jp.splacounter.presentation.todo.model.DummyTodo
+import kztproject.jp.splacounter.presentation.todo.model.Todo
 import javax.inject.Inject
 
 class TodoListViewAdapter @Inject constructor() : RecyclerView.Adapter<TodoListViewAdapter.ViewHolder>() {
 
     interface OnItemClickListener {
-        fun onClick(item: DummyTodo)
+        fun onClick(item: Todo)
     }
 
     private lateinit var listener: OnItemClickListener
-    private val todoList = mutableListOf<DummyTodo>()
+    private val todoList = mutableListOf<Todo>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.todo_list_item, parent, false))
@@ -34,7 +34,7 @@ class TodoListViewAdapter @Inject constructor() : RecyclerView.Adapter<TodoListV
         this.listener = listener
     }
 
-    fun setTodo(todoList: List<DummyTodo>) {
+    fun setTodo(todoList: List<Todo>) {
         this.todoList.clear()
         this.todoList.addAll(todoList)
         notifyDataSetChanged()

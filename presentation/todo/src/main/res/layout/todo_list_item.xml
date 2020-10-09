@@ -4,7 +4,7 @@
     <data>
         <variable
             name="todo"
-            type="kztproject.jp.splacounter.presentation.todo.model.DummyTodo" />
+            type="kztproject.jp.splacounter.presentation.todo.model.Todo" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"

@@ -1,6 +1,6 @@
 package kztproject.jp.splacounter.presentation.todo.model
 
-data class DummyTodo(
+data class Todo(
         val id: Long,
         val name: String,
         val numberOfTicketsObtained: Float,

@@ -4,18 +4,16 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.presentation.todo.databinding.FragmentTodoListBinding
 import kztproject.jp.splacounter.presentation.todo.databinding.ViewTodoDetailBinding
-import kztproject.jp.splacounter.presentation.todo.model.DummyTodo
+import kztproject.jp.splacounter.presentation.todo.model.Todo
 import javax.inject.Inject
 
 class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener {
@@ -55,7 +53,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener {
         })
     }
 
-    override fun onClick(item: DummyTodo) {
+    override fun onClick(item: Todo) {
         val bottomSheet = BottomSheetDialog(context!!)
         val binding = DataBindingUtil.inflate<ViewTodoDetailBinding>(
                 LayoutInflater.from(context), R.layout.view_todo_detail, this.binding.root as ViewGroup, false
