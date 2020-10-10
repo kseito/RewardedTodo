@@ -77,12 +77,13 @@
             app:layout_constraintBaseline_toBaselineOf="@id/number_of_ticket"
             app:layout_constraintLeft_toRightOf="@id/ticket_icon" />
 
-        <TextView
+        <EditText
             android:id="@+id/number_of_ticket"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:importantForAutofill="no"
+            android:inputType="numberDecimal"
             android:text="@{String.valueOf(todo.numberOfTicketsObtained)}"
             android:textSize="16sp"
             android:textColor="@android:color/black"
