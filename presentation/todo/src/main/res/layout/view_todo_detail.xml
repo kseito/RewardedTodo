@@ -2,6 +2,7 @@
 <layout>
 
     <data>
+
         <variable
             name="todo"
             type="kztproject.jp.splacounter.presentation.todo.model.Todo" />
@@ -11,7 +12,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="#eeeeee"
         android:paddingLeft="16dp"
         android:paddingTop="24dp"
@@ -35,8 +36,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="@string/todo_repeating"
             android:checked="@{todo.isRepeat}"
+            android:text="@string/todo_repeating"
             android:textSize="16sp"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toBottomOf="@id/todo_title" />
@@ -58,9 +59,11 @@
             android:layout_height="32dp"
             android:layout_marginStart="18dp"
             android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
             android:src="@drawable/ic_ticket"
             app:layout_constraintLeft_toRightOf="@id/todo_reward"
             app:layout_constraintTop_toBottomOf="@id/todo_repeating"
+            app:layout_constraintBottom_toBottomOf="parent"
             tools:ignore="ContentDescription" />
 
         <TextView
@@ -74,14 +77,15 @@
             app:layout_constraintBaseline_toBaselineOf="@id/number_of_ticket"
             app:layout_constraintLeft_toRightOf="@id/ticket_icon" />
 
-        <EditText
+        <TextView
             android:id="@+id/number_of_ticket"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:importantForAutofill="no"
-            android:inputType="number"
             android:text="@{String.valueOf(todo.numberOfTicketsObtained)}"
+            android:textSize="16sp"
+            android:textColor="@android:color/black"
             app:layout_constraintBaseline_toBaselineOf="@id/todo_reward"
             app:layout_constraintLeft_toRightOf="@id/multiplication_icon"
             tools:ignore="LabelFor" />
