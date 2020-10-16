@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import kztproject.jp.splacounter.presentation.todo.databinding.TodoListItemBinding
-import kztproject.jp.splacounter.presentation.todo.model.Todo
+import kztproject.jp.splacounter.todo.domain.Todo
 import javax.inject.Inject
 
 class TodoListViewAdapter @Inject constructor() : RecyclerView.Adapter<TodoListViewAdapter.ViewHolder>() {

@@ -31,6 +31,7 @@ android {
 
 dependencies {
     implementation project(path: ':screen_transition')
+    implementation project(path: ':feature:todo')
 
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"

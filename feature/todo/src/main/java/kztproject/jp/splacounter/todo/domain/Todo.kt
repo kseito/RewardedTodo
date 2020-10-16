@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.presentation.todo.model
+package kztproject.jp.splacounter.todo.domain
 
 data class Todo(
         val id: Long,

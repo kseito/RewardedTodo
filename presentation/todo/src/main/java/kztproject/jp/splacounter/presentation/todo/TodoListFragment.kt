@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -14,7 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.presentation.todo.databinding.FragmentTodoListBinding
 import kztproject.jp.splacounter.presentation.todo.databinding.ViewTodoDetailBinding
-import kztproject.jp.splacounter.presentation.todo.model.Todo
+import kztproject.jp.splacounter.todo.domain.Todo
 import javax.inject.Inject
 
 class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener {
