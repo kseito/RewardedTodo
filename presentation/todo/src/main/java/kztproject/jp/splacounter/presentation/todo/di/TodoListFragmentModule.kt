@@ -5,6 +5,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import kztproject.jp.splacounter.presentation.todo.TodoListViewModel
+import kztproject.jp.splacounter.todo.application.GetTodoListInteractor
+import kztproject.jp.splacounter.todo.application.GetTodoListUseCase
 import project.seito.screen_transition.di.ViewModelKey
 
 @Module
@@ -14,4 +16,7 @@ interface TodoListFragmentModule {
     @IntoMap
     @ViewModelKey(TodoListViewModel::class)
     fun bindVideoTrimMuteViewModel(viewModel: TodoListViewModel): ViewModel
+
+    @Binds
+    fun bindGetTodoListUseCase(useCase: GetTodoListInteractor): GetTodoListUseCase
 }
