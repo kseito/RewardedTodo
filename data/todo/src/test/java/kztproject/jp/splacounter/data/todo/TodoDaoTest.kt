@@ -45,4 +45,20 @@ class TodoDaoTest {
             assertThat(isRepeat).isTrue()
         }
     }
+
+    @Test
+    fun deleteTodo() {
+        val dao = database.todoDao()
+        dummyTodoList.forEach { dao.insertOrUpdate(it) }
+
+        var todoList = dao.findAll()
+        assertThat(todoList.size).isEqualTo(3)
+
+        dao.delete(dummyTodoList[0])
+
+        todoList = dao.findAll()
+        assertThat(todoList.size).isEqualTo(2)
+        assertThat(todoList[0].id).isEqualTo(2)
+        assertThat(todoList[1].id).isEqualTo(3)
+    }
 }
