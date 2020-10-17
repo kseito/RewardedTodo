@@ -32,7 +32,7 @@ class TodoDaoTest {
     }
 
     @Test
-    fun insertReward() {
+    fun insertAndFindTodo() {
         val dao = database.todoDao()
         dummyTodoList.forEach { dao.insertOrUpdate(it) }
 
