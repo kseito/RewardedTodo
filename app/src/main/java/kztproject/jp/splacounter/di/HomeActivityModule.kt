@@ -8,9 +8,7 @@ import dagger.multibindings.IntoMap
 import kztproject.jp.splacounter.presentation.HomeActivity
 import kztproject.jp.splacounter.auth.di.AuthModule
 import kztproject.jp.splacounter.presentation.HomeViewModel
-import kztproject.jp.splacounter.presentation.todo.di.TodoModule
 import kztproject.jp.splacounter.reward.di.RewardModule
-import kztproject.jp.splacounter.reward.presentation.list.RewardListViewModel
 import project.seito.screen_transition.di.ViewModelKey
 
 @Module
