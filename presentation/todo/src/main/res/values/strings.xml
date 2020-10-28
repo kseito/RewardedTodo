@@ -3,4 +3,7 @@
     <string name="todo_repeating">Repeating</string>
     <string name="todo_reward">Reward</string>
     <string name="multiplication">x</string>
+
+    <string name="button_save">Save</string>
+    <string name="button_delete">Delete</string>
 </resources>
