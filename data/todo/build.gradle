@@ -41,6 +41,8 @@ dependencies {
 
     //Dagger
     implementation "com.google.dagger:dagger:$dagger_version"
+    annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
     //Room
     implementation "androidx.room:room-runtime:$room_version"
@@ -48,4 +50,5 @@ dependencies {
     kapt "androidx.room:room-compiler:$room_version"
 
     implementation project(path: ':feature:todo')
+    implementation project(path: ':common:database')
 }

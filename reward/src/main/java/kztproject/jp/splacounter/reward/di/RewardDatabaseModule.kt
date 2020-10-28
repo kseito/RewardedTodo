@@ -13,7 +13,7 @@ class RewardDatabaseModule {
 
     @Provides
     fun providesAppDatabase(application: Application): AppDatabase {
-        return DatabaseInitializer.init(application, AppDatabase::class.java)
+        return DatabaseInitializer.init(application, AppDatabase::class.java, "reward")
     }
 
     @Provides
