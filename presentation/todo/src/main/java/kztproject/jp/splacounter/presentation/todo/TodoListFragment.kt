@@ -60,6 +60,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener {
         )
         bottomSheet.setContentView(binding.root)
         binding.todo = item
+        binding.viewModel = viewModel
         bottomSheet.show()
     }
 }

@@ -7,6 +7,8 @@ import dagger.multibindings.IntoMap
 import kztproject.jp.splacounter.presentation.todo.TodoListViewModel
 import kztproject.jp.splacounter.todo.application.GetTodoListInteractor
 import kztproject.jp.splacounter.todo.application.GetTodoListUseCase
+import kztproject.jp.splacounter.todo.application.UpdateTodoInteractor
+import kztproject.jp.splacounter.todo.application.UpdateTodoUseCase
 import project.seito.screen_transition.di.ViewModelKey
 
 @Module
@@ -19,4 +21,7 @@ interface TodoListFragmentModule {
 
     @Binds
     fun bindGetTodoListUseCase(useCase: GetTodoListInteractor): GetTodoListUseCase
+
+    @Binds
+    fun bindUpdateTodoListUseCase(useCase: UpdateTodoInteractor): UpdateTodoUseCase
 }
