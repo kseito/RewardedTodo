@@ -61,4 +61,14 @@ class TodoDaoTest {
         assertThat(todoList[0].id).isEqualTo(2)
         assertThat(todoList[1].id).isEqualTo(3)
     }
+
+    @Test
+    fun update() {
+        val dao = database.todoDao()
+        dao.insertOrUpdate(dummyTodoList[0])
+        dao.insertOrUpdate(dummyTodoList[0].copy(name = "test 1 Copy"))
+        val actual = dao.findAll()[0]
+
+        assertThat(actual).isEqualTo(dummyTodoList[0].copy(name = "test 1 Copy"))
+    }
 }
