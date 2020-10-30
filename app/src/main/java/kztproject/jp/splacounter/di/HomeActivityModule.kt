@@ -11,6 +11,7 @@ import kztproject.jp.splacounter.presentation.HomeViewModel
 import kztproject.jp.splacounter.di.scope.ActivityScope
 import kztproject.jp.splacounter.di.reward.RewardDatabaseModule
 import kztproject.jp.splacounter.di.reward.RewardModule
+import kztproject.jp.splacounter.di.todo.TodoDatabaseModule
 import project.seito.screen_transition.di.ViewModelKey
 
 @Module
@@ -21,7 +22,8 @@ internal abstract class HomeActivityModule {
         RewardModule::class,
         AuthModule::class,
         TodoModule::class,
-        RewardDatabaseModule::class])
+        RewardDatabaseModule::class,
+        TodoDatabaseModule::class])
     internal abstract fun contributeBaseActivity(): HomeActivity
 
     @Binds

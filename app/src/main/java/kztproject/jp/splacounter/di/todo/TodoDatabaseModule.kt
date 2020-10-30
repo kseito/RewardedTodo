@@ -6,11 +6,13 @@ import dagger.Provides
 import kztproject.jp.splacounter.common.database.DatabaseInitializer
 import kztproject.jp.splacounter.data.todo.AppDatabase
 import kztproject.jp.splacounter.data.todo.TodoDao
+import kztproject.jp.splacounter.di.scope.ActivityScope
 
 @Module
 class TodoDatabaseModule {
 
     @Provides
+    @ActivityScope
     fun providesAppDatabase(application: Application): AppDatabase {
         return DatabaseInitializer.init(application, AppDatabase::class.java, "todo")
     }
