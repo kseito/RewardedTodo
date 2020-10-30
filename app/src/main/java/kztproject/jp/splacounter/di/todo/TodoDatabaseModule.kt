@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.data.todo.di
+package kztproject.jp.splacounter.di.todo
 
 import android.app.Application
 import dagger.Module

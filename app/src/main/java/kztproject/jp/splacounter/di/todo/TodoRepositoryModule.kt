@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.data.todo.di
+package kztproject.jp.splacounter.di.todo
 
 import dagger.Binds
 import dagger.Module

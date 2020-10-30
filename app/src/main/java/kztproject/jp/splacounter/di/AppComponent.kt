@@ -5,8 +5,7 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import kztproject.jp.splacounter.MyApplication
-import kztproject.jp.splacounter.data.todo.di.TodoDatabaseModule
-import kztproject.jp.splacounter.data.todo.di.TodoRepositoryModule
+import kztproject.jp.splacounter.di.todo.TodoDatabaseModule
 import project.seito.screen_transition.di.ViewModelModule
 import javax.inject.Singleton
 

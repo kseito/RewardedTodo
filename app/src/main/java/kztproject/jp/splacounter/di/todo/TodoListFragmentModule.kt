@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.presentation.todo.di
+package kztproject.jp.splacounter.di.todo
 
 import androidx.lifecycle.ViewModel
 import dagger.Binds
