@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.reward.di
+package kztproject.jp.splacounter.di.reward
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import dagger.Module

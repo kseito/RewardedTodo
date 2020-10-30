@@ -71,6 +71,11 @@ dependencies {
 
     kapt "androidx.databinding:databinding-compiler:$gradle_plugin_version"
 
+    //Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+    implementation 'com.google.code.gson:gson:2.8.2'
+    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$rx_coroutines_adapter_version"
 
     //Room
     implementation "androidx.room:room-runtime:$room_version"

@@ -9,8 +9,8 @@ import kztproject.jp.splacounter.auth.di.AuthModule
 import kztproject.jp.splacounter.presentation.HomeActivity
 import kztproject.jp.splacounter.presentation.HomeViewModel
 import kztproject.jp.splacounter.reward.di.ActivityScope
-import kztproject.jp.splacounter.reward.di.RewardDatabaseModule
-import kztproject.jp.splacounter.reward.di.RewardModule
+import kztproject.jp.splacounter.di.reward.RewardDatabaseModule
+import kztproject.jp.splacounter.di.reward.RewardModule
 import project.seito.screen_transition.di.ViewModelKey
 
 @Module

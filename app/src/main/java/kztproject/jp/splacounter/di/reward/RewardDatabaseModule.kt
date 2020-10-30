@@ -1,9 +1,10 @@
-package kztproject.jp.splacounter.reward.di
+package kztproject.jp.splacounter.di.reward
 
 import android.app.Application
 import dagger.Module
 import dagger.Provides
 import kztproject.jp.splacounter.common.database.DatabaseInitializer
+import kztproject.jp.splacounter.reward.di.ActivityScope
 import kztproject.jp.splacounter.reward.infrastructure.database.AppDatabase
 import kztproject.jp.splacounter.reward.infrastructure.database.RewardDao
 

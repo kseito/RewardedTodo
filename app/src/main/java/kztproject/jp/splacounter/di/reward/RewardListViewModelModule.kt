@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.reward.di
+package kztproject.jp.splacounter.di.reward
 
 import androidx.lifecycle.ViewModel
 import dagger.Binds
