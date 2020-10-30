@@ -3,6 +3,10 @@ package kztproject.jp.splacounter.data.todo
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -32,11 +36,11 @@ class TodoDaoTest {
     }
 
     @Test
-    fun insertAndFindTodo() {
+    fun insertAndFindTodo() = runBlocking {
         val dao = database.todoDao()
         dummyTodoList.forEach { dao.insertOrUpdate(it) }
 
-        val actual = dao.findAll()
+        val actual = dao.findAll().take(1).first()
         assertThat(actual.size).isEqualTo(3)
         actual[0].run {
             assertThat(id).isEqualTo(1)
@@ -47,28 +51,26 @@ class TodoDaoTest {
     }
 
     @Test
-    fun deleteTodo() {
+    fun deleteTodo() = runBlocking {
         val dao = database.todoDao()
         dummyTodoList.forEach { dao.insertOrUpdate(it) }
 
-        var todoList = dao.findAll()
-        assertThat(todoList.size).isEqualTo(3)
-
         dao.delete(dummyTodoList[0])
 
-        todoList = dao.findAll()
+        val todoList = dao.findAll().take(1).first()
         assertThat(todoList.size).isEqualTo(2)
         assertThat(todoList[0].id).isEqualTo(2)
         assertThat(todoList[1].id).isEqualTo(3)
     }
 
     @Test
-    fun update() {
+    fun update() = runBlocking {
         val dao = database.todoDao()
         dao.insertOrUpdate(dummyTodoList[0])
         dao.insertOrUpdate(dummyTodoList[0].copy(name = "test 1 Copy"))
-        val actual = dao.findAll()[0]
-
+        val actual = dao.findAll().take(1).first()[0]
         assertThat(actual).isEqualTo(dummyTodoList[0].copy(name = "test 1 Copy"))
+
+
     }
 }
