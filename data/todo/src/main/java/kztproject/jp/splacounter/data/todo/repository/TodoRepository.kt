@@ -1,5 +1,7 @@
 package kztproject.jp.splacounter.data.todo.repository
 
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kztproject.jp.splacounter.data.todo.TodoDao
 import kztproject.jp.splacounter.data.todo.TodoEntity
 import kztproject.jp.splacounter.todo.domain.Todo
@@ -8,13 +10,15 @@ import javax.inject.Inject
 
 class TodoRepository @Inject constructor(private val todoDao: TodoDao) : ITodoRepository {
 
-    override suspend fun findAll(): List<Todo> {
+    override fun findAll(): Flow<List<Todo>> {
 //        (1..10)
 //                .map {
 //                    Todo(it.toLong(), "Test Todo $it", 0.5f, true)
 //                }.forEach { todoDao.insertOrUpdate(it.convert()) }
 
-        return todoDao.findAll().map { it.convert() }
+        return todoDao.findAll().map { list ->
+            list.map { todo -> todo.convert() }
+        }
     }
 
     override suspend fun update(todo: Todo) {

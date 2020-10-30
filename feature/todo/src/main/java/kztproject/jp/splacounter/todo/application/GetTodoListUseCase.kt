@@ -1,8 +1,9 @@
 package kztproject.jp.splacounter.todo.application
 
+import kotlinx.coroutines.flow.Flow
 import kztproject.jp.splacounter.todo.domain.Todo
 
 
 interface GetTodoListUseCase {
-    suspend fun execute(): List<Todo>
+    fun execute(): Flow<List<Todo>>
 }
