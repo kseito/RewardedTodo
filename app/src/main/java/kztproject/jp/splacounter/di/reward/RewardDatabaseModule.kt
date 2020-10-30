@@ -4,7 +4,7 @@ import android.app.Application
 import dagger.Module
 import dagger.Provides
 import kztproject.jp.splacounter.common.database.DatabaseInitializer
-import kztproject.jp.splacounter.reward.di.ActivityScope
+import kztproject.jp.splacounter.di.scope.ActivityScope
 import kztproject.jp.splacounter.reward.infrastructure.database.AppDatabase
 import kztproject.jp.splacounter.reward.infrastructure.database.RewardDao
 

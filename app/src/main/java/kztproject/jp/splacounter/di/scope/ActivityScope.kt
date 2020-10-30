@@ -1,4 +1,4 @@
-package kztproject.jp.splacounter.reward.di
+package kztproject.jp.splacounter.di.scope
 
 import javax.inject.Scope
 
