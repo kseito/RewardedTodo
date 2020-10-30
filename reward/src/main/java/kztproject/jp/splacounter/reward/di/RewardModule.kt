@@ -12,14 +12,12 @@ abstract class RewardModule {
         PointRepositoryModule::class,
         RewardListViewModelModule::class,
         RewardRepositoryModule::class,
-        PointApiModule::class,
-        RewardDatabaseModule::class])
+        PointApiModule::class])
     internal abstract fun contributeRewardFragment(): RewardListFragment
 
     @ContributesAndroidInjector(modules = [
         RewardDetailViewModelModule::class,
         PointRepositoryModule::class,
-        RewardDatabaseModule::class,
         RewardRepositoryModule::class])
     internal abstract fun contributeRewardAddFragment(): RewardDetailFragment
 }

@@ -5,15 +5,23 @@ import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
-import kztproject.jp.splacounter.presentation.HomeActivity
 import kztproject.jp.splacounter.auth.di.AuthModule
+import kztproject.jp.splacounter.presentation.HomeActivity
 import kztproject.jp.splacounter.presentation.HomeViewModel
+import kztproject.jp.splacounter.reward.di.ActivityScope
+import kztproject.jp.splacounter.reward.di.RewardDatabaseModule
 import kztproject.jp.splacounter.reward.di.RewardModule
 import project.seito.screen_transition.di.ViewModelKey
 
 @Module
 internal abstract class HomeActivityModule {
-    @ContributesAndroidInjector(modules = [RewardModule::class, AuthModule::class, TodoModule::class])
+
+    @ActivityScope
+    @ContributesAndroidInjector(modules = [
+        RewardModule::class,
+        AuthModule::class,
+        TodoModule::class,
+        RewardDatabaseModule::class])
     internal abstract fun contributeBaseActivity(): HomeActivity
 
     @Binds
