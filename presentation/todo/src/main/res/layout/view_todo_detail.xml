@@ -113,6 +113,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginStart="16dp"
             android:text="@string/button_delete"
+            android:onClick="@{() -> viewModel.deleteTodo(todo)}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toRightOf="@id/save_button"
             app:layout_constraintTop_toBottomOf="@id/ticket_icon" />
