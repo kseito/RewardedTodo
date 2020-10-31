@@ -16,7 +16,7 @@ import kztproject.jp.splacounter.presentation.todo.databinding.ViewTodoDetailBin
 import kztproject.jp.splacounter.todo.domain.Todo
 import javax.inject.Inject
 
-class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener {
+class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, TodoListViewModel.Callback {
 
     private lateinit var binding: FragmentTodoListBinding
 
@@ -27,10 +27,13 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener {
     @Inject
     lateinit var adapter: TodoListViewAdapter
 
+    private var todoDetailDialog: BottomSheetDialog? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(this, viewModelFactory).get(TodoListViewModel::class.java)
+        viewModel.initialize(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -60,5 +63,11 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener {
         binding.todo = item
         binding.viewModel = viewModel
         bottomSheet.show()
+
+        todoDetailDialog = bottomSheet
+    }
+
+    override fun afterTodoUpdate() {
+        todoDetailDialog?.dismiss()
     }
 }

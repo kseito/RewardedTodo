@@ -16,21 +16,30 @@ class TodoListViewModel @Inject constructor(
         private val deleteTodoUseCase: DeleteTodoUseCase
 ) : ViewModel() {
 
+    private lateinit var callback: Callback
     val todoList: LiveData<List<Todo>> = getTodoListUseCase.execute().asLiveData()
+
+    fun initialize(callback: Callback) {
+        this.callback = callback
+    }
 
     fun updateTodo(todo: Todo) {
         viewModelScope.launch(Dispatchers.Default) {
             updateTodoUseCase.execute(todo)
+
+            callback.afterTodoUpdate()
         }
     }
 
     fun deleteTodo(todo: Todo) {
         viewModelScope.launch(Dispatchers.Default) {
             deleteTodoUseCase.execute(todo)
+
+            callback.afterTodoUpdate()
         }
     }
 
     interface Callback {
-        fun loadTodoCompleted()
+        fun afterTodoUpdate()
     }
 }
