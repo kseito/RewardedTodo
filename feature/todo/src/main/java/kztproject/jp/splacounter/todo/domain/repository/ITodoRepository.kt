@@ -7,4 +7,6 @@ interface ITodoRepository {
     fun findAll(): Flow<List<Todo>>
 
     suspend fun update(todo: Todo)
+
+    suspend fun delete(todo: Todo)
 }

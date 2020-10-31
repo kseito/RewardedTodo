@@ -25,6 +25,10 @@ class TodoRepository @Inject constructor(private val todoDao: TodoDao) : ITodoRe
         todoDao.insertOrUpdate(todo.convert())
     }
 
+    override suspend fun delete(todo: Todo) {
+        todoDao.delete(todo.convert())
+    }
+
     private fun TodoEntity.convert(): Todo {
         return Todo(
                 this.id,
