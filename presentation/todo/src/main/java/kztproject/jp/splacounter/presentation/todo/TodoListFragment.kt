@@ -43,6 +43,12 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initTodoListViewAdapter()
+
+        binding.addButton.setOnClickListener {
+            //TODO 編集用のMutableなクラスを準備する
+            val dummy = Todo(1, "", 0f, true)
+            showTodoDetail(dummy)
+        }
     }
 
     private fun initTodoListViewAdapter() {
@@ -55,6 +61,10 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
     }
 
     override fun onClick(item: Todo) {
+        showTodoDetail(item)
+    }
+
+    private fun showTodoDetail(item: Todo) {
         val bottomSheet = BottomSheetDialog(context!!)
         val binding = DataBindingUtil.inflate<ViewTodoDetailBinding>(
                 LayoutInflater.from(context), R.layout.view_todo_detail, this.binding.root as ViewGroup, false
