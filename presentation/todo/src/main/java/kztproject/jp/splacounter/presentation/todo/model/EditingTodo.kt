@@ -1,13 +1,16 @@
 package kztproject.jp.splacounter.presentation.todo.model
 
+import androidx.databinding.BaseObservable
+import androidx.databinding.Bindable
 import kztproject.jp.splacounter.todo.domain.Todo
 
 data class EditingTodo(
         var id: Long? = null,
         var name: String = "",
         var numberOfTicketsObtained: Float = 0f,
-        var isRepeat: Boolean = false
-) {
+        private var isRepeat: Boolean = false
+) : BaseObservable() {
+
     companion object {
         fun from(todo: Todo): EditingTodo {
             return EditingTodo(
@@ -17,6 +20,15 @@ data class EditingTodo(
                     todo.isRepeat
             )
         }
+    }
+
+    @Bindable
+    fun getIsRepeat(): Boolean {
+        return isRepeat
+    }
+
+    fun setIsRepeat(value: Boolean) {
+        isRepeat = value
     }
 
     fun toTodo(): Todo {
