@@ -40,7 +40,7 @@ class TodoRepository @Inject constructor(private val todoDao: TodoDao) : ITodoRe
 
     private fun Todo.convert(): TodoEntity {
         return TodoEntity(
-                this.id,
+                this.id ?: 0,
                 this.name,
                 this.numberOfTicketsObtained,
                 this.isRepeat

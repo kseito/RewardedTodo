@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kztproject.jp.splacounter.presentation.todo.model.EditingTodo
 import kztproject.jp.splacounter.todo.application.DeleteTodoUseCase
 import kztproject.jp.splacounter.todo.application.GetTodoListUseCase
 import kztproject.jp.splacounter.todo.application.UpdateTodoUseCase
@@ -23,17 +24,17 @@ class TodoListViewModel @Inject constructor(
         this.callback = callback
     }
 
-    fun updateTodo(todo: Todo) {
+    fun updateTodo(todo: EditingTodo) {
         viewModelScope.launch(Dispatchers.Default) {
-            updateTodoUseCase.execute(todo)
+            updateTodoUseCase.execute(todo.toTodo())
 
             callback.afterTodoUpdate()
         }
     }
 
-    fun deleteTodo(todo: Todo) {
+    fun deleteTodo(todo: EditingTodo) {
         viewModelScope.launch(Dispatchers.Default) {
-            deleteTodoUseCase.execute(todo)
+            deleteTodoUseCase.execute(todo.toTodo())
 
             callback.afterTodoUpdate()
         }

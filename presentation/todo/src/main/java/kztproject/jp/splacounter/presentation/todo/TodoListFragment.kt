@@ -13,6 +13,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.android.support.AndroidSupportInjection
 import kztproject.jp.splacounter.presentation.todo.databinding.FragmentTodoListBinding
 import kztproject.jp.splacounter.presentation.todo.databinding.ViewTodoDetailBinding
+import kztproject.jp.splacounter.presentation.todo.model.EditingTodo
 import kztproject.jp.splacounter.todo.domain.Todo
 import javax.inject.Inject
 
@@ -45,9 +46,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
         initTodoListViewAdapter()
 
         binding.addButton.setOnClickListener {
-            //TODO 編集用のMutableなクラスを準備する
-            val dummy = Todo(1, "", 0f, true)
-            showTodoDetail(dummy)
+            showTodoDetail(EditingTodo())
         }
     }
 
@@ -61,10 +60,11 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
     }
 
     override fun onClick(item: Todo) {
-        showTodoDetail(item)
+        val editingTodo = EditingTodo.from(item)
+        showTodoDetail(editingTodo)
     }
 
-    private fun showTodoDetail(item: Todo) {
+    private fun showTodoDetail(item: EditingTodo) {
         val bottomSheet = BottomSheetDialog(context!!)
         val binding = DataBindingUtil.inflate<ViewTodoDetailBinding>(
                 LayoutInflater.from(context), R.layout.view_todo_detail, this.binding.root as ViewGroup, false
