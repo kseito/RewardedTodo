@@ -7,7 +7,7 @@ import kztproject.jp.splacounter.todo.domain.Todo
 data class EditingTodo(
         var id: Long? = null,
         var name: String = "",
-        var numberOfTicketsObtained: Float = 0f,
+        private var numberOfTicketsObtained: Float = 0f,
         private var isRepeat: Boolean = false
 ) : BaseObservable() {
 
@@ -20,6 +20,15 @@ data class EditingTodo(
                     todo.isRepeat
             )
         }
+    }
+
+    @Bindable
+    fun getNumberOfTicketsObtained(): Float {
+        return numberOfTicketsObtained
+    }
+
+    fun setNumberOfTicketsObtained(value: Float) {
+        numberOfTicketsObtained = value
     }
 
     @Bindable

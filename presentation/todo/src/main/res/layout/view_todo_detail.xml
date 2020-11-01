@@ -2,6 +2,7 @@
 <layout>
 
     <data>
+        <import type="kztproject.jp.splacounter.presentation.todo.binding.Converter"/>
 
         <variable
             name="todo"
@@ -88,7 +89,7 @@
             android:layout_marginStart="8dp"
             android:importantForAutofill="no"
             android:inputType="numberDecimal"
-            android:text="@{String.valueOf(todo.numberOfTicketsObtained)}"
+            android:text="@={Converter.numberOfTicketsToString(todo.numberOfTicketsObtained)}"
             android:textColor="@android:color/black"
             android:textSize="16sp"
             app:layout_constraintBaseline_toBaselineOf="@id/todo_reward"
