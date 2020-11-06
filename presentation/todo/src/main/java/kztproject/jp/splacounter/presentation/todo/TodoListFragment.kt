@@ -53,10 +53,12 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
 
     private fun initTodoListViewAdapter() {
         val layoutManager = LinearLayoutManager(context)
-        binding.todoListView.layoutManager = layoutManager
         adapter.setListener(this)
-        binding.todoListView.adapter = adapter
-        binding.todoListView.addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
+        binding.todoListView.apply {
+            this.layoutManager = layoutManager
+            addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
+            this.adapter = this@TodoListFragment.adapter
+        }
         viewModel.todoList.observe(viewLifecycleOwner, Observer { todoList ->
             adapter.setTodo(todoList)
         })
