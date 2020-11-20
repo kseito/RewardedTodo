@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
@@ -67,6 +68,10 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
     override fun onClick(item: Todo) {
         val editingTodo = EditingTodo.from(item)
         showTodoDetail(editingTodo)
+    }
+
+    override fun onCompleted(item: Todo) {
+        Toast.makeText(context, "Completed!", Toast.LENGTH_LONG).show()
     }
 
     private fun showTodoDetail(item: EditingTodo) {

@@ -12,6 +12,8 @@ class TodoListViewAdapter @Inject constructor() : RecyclerView.Adapter<TodoListV
 
     interface OnItemClickListener {
         fun onClick(item: Todo)
+
+        fun onCompleted(item: Todo)
     }
 
     private lateinit var listener: OnItemClickListener
@@ -25,6 +27,9 @@ class TodoListViewAdapter @Inject constructor() : RecyclerView.Adapter<TodoListV
         holder.binding.todo = todoList[position]
         holder.itemView.setOnClickListener {
             listener.onClick(todoList[position])
+        }
+        holder.binding.checkButton.setOnClickListener {
+            listener.onCompleted(todoList[position])
         }
     }
 
