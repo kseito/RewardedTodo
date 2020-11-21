@@ -1,8 +1,9 @@
 package kztproject.jp.splacounter.data.ticket
 
 import android.content.SharedPreferences
+import javax.inject.Inject
 
-class TicketRepository constructor(private val preferences: SharedPreferences) : ITicketRepository {
+class TicketRepository @Inject constructor(private val preferences: SharedPreferences) : ITicketRepository {
 
     companion object {
         private const val NUMBER_OF_TICKET = "number_of_ticket"

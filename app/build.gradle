@@ -90,6 +90,7 @@ dependencies {
     //TODO I don`t know why this module is needed
     implementation project(path: ':feature:todo')
     implementation project(path: ':data:todo')
+    implementation project(path: ':data:ticket')
     implementation project(path: ':common:database')
 }
 
