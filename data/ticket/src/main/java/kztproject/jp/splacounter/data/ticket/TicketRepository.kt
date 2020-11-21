@@ -10,8 +10,9 @@ class TicketRepository @Inject constructor(private val preferences: SharedPrefer
     }
 
     override fun addTicket(numberOfTicket: Float) {
+        val current = getNumberOfTicket()
         preferences.edit()
-                .putFloat(NUMBER_OF_TICKET, numberOfTicket)
+                .putFloat(NUMBER_OF_TICKET, current + numberOfTicket)
                 .apply()
     }
 
