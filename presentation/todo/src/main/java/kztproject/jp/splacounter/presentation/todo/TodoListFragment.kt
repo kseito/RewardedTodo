@@ -71,7 +71,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
     }
 
     override fun onCompleted(item: Todo) {
-        Toast.makeText(context, "Completed!", Toast.LENGTH_LONG).show()
+        viewModel.completeTodo(item)
     }
 
     private fun showTodoDetail(item: EditingTodo) {

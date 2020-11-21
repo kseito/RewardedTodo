@@ -24,4 +24,7 @@ interface TodoListFragmentModule {
 
     @Binds
     fun bindDeleteTodoListUseCase(useCase: DeleteTodoInteractor): DeleteTodoUseCase
+
+    @Binds
+    fun bindCompleteTodoUseCase(useCase: CompleteTodoInteractor): CompleteTodoUseCase
 }
