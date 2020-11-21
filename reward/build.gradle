@@ -101,6 +101,7 @@ dependencies {
 
     implementation project(path: ':screen_transition')
     implementation project(path: ':common:database')
+    implementation project(path: ':data:ticket')
 }
 repositories {
     mavenCentral()
