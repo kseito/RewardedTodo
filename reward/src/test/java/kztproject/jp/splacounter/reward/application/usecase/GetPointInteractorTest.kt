@@ -4,19 +4,19 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
-import kztproject.jp.splacounter.reward.application.repository.IPointRepository
+import kztproject.jp.splacounter.data.ticket.ITicketRepository
 import org.junit.Test
 
 class GetPointInteractorTest {
 
-    private val mockPointRepository: IPointRepository = mock()
+    private val mockTicketRepository: ITicketRepository = mock()
 
     @Test
     fun shouldGetPoint() {
         runBlocking {
-            val interactor = GetPointInteractor(mockPointRepository)
+            val interactor = GetPointInteractor(mockTicketRepository)
             interactor.execute()
-            verify(mockPointRepository, times(1)).loadPoint()
+            verify(mockTicketRepository, times(1)).getNumberOfTicket()
         }
     }
 }
