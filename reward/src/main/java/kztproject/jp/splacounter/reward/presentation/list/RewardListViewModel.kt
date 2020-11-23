@@ -42,6 +42,7 @@ class RewardListViewModel @Inject constructor(
             reward?.let {
                 callback.onHitLottery(it)
             } ?: callback.onMissLottery()
+            loadPoint()
         }
     }
 
