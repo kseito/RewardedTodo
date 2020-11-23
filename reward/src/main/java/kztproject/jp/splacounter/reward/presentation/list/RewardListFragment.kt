@@ -90,7 +90,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun onHitLottery(reward: Reward) {
-        val message = "You won ${reward.name}!"
+        val message = "You won ${reward.name.value}!"
         showDialog(message)
     }
 
