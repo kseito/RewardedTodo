@@ -52,14 +52,13 @@ android {
 dependencies {
     implementation Libraries.Kotlin.stdlib
 
-    implementation "androidx.appcompat:appcompat:$appcompat_version"
-    implementation 'com.google.android.material:material:1.0.0'
-    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
+    implementation Libraries.AndroidX.appCompat
+    implementation Libraries.AndroidX.design
+    implementation Libraries.AndroidX.constraintLayout
+    implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
+    implementation Libraries.AndroidX.NavigationComponent.uiKtx
 
     implementation 'com.facebook.stetho:stetho:1.4.2'
-
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
 
     //Dagger
     implementation "com.google.dagger:dagger:$dagger_version"

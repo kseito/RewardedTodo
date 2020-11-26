@@ -6,8 +6,14 @@ object Libraries {
     }
 
     object AndroidX {
+        val appCompat = "androidx.appcompat:appcompat:1.1.0"
+        val design = "com.google.android.material:material:1.0.0"
+        val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
+
         object NavigationComponent {
             const val version = "2.1.0"
+            val fragmentKtx = "androidx.navigation:navigation-fragment-ktx:${version}"
+            val uiKtx = "androidx.navigation:navigation-ui-ktx:${version}"
         }
     }
 }
