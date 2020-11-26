@@ -1,1 +1,6 @@
+include ':data:ticket'
+include ':common:database'
+include ':data:todo'
+include ':feature:todo'
+include ':presentation:todo'
 include ':app', ':auth', ':screen_transition', ':reward'

@@ -100,6 +100,8 @@ dependencies {
     implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$rx_coroutines_adapter_version"
 
     implementation project(path: ':screen_transition')
+    implementation project(path: ':common:database')
+    implementation project(path: ':data:ticket')
 }
 repositories {
     mavenCentral()

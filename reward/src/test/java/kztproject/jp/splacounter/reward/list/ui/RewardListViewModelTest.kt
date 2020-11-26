@@ -1,6 +1,5 @@
 package kztproject.jp.splacounter.reward.list.ui
 
-import androidx.test.core.app.ApplicationProvider
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -9,7 +8,9 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import kztproject.jp.splacounter.DummyCreator
-import kztproject.jp.splacounter.reward.application.usecase.*
+import kztproject.jp.splacounter.reward.application.usecase.GetPointUseCase
+import kztproject.jp.splacounter.reward.application.usecase.GetRewardsUseCase
+import kztproject.jp.splacounter.reward.application.usecase.LotteryUseCase
 import kztproject.jp.splacounter.reward.presentation.list.RewardListViewModel
 import kztproject.jp.splacounter.reward.presentation.list.RewardViewModelCallback
 import org.assertj.core.api.Assertions.assertThat
@@ -18,7 +19,6 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import project.seito.screen_transition.preference.PrefsWrapper
 import java.net.SocketTimeoutException
 
 @ExperimentalCoroutinesApi
@@ -26,8 +26,6 @@ import java.net.SocketTimeoutException
 class RewardListViewModelTest {
 
     private val mockCallback: RewardViewModelCallback = mock()
-
-    private val prefsWrapper = PrefsWrapper(ApplicationProvider.getApplicationContext())
 
     private val mockLotteryUseCase: LotteryUseCase = mock()
 
@@ -40,7 +38,6 @@ class RewardListViewModelTest {
     @Before
     fun setup() {
         viewModel = RewardListViewModel(
-                prefsWrapper,
                 mockLotteryUseCase,
                 mockGetRewardsUseCase,
                 mockGetPointUseCase

@@ -3,6 +3,9 @@ jobs:
   build:
     docker:
       - image: circleci/android:api-28
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
     environment:
       JAVA_OPTS: -Xmx3584m
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx3584m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false -Dorg.gradle.parallel=false'
@@ -21,4 +24,5 @@ jobs:
           name: Run Tests
           command: |
             ./gradlew test jacocoTestReports
-            bash <(curl -s https://codecov.io/bash)
+#            TODO cannot pass
+#            bash <(curl -s https://codecov.io/bash)

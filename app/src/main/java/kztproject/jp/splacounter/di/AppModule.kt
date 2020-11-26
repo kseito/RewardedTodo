@@ -1,10 +1,11 @@
 package kztproject.jp.splacounter.di
 
 import android.app.Application
-import androidx.room.Room
+import android.content.Context
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import dagger.Module
 import dagger.Provides
-import kztproject.jp.splacounter.reward.infrastructure.database.AppDatabase
 import project.seito.screen_transition.IFragmentsTransitionManager
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Singleton
@@ -14,15 +15,13 @@ internal class AppModule {
 
     @Provides
     @Singleton
-    fun providesAppDatabase(application: Application): AppDatabase {
-        return Room.databaseBuilder(application, AppDatabase::class.java, "splacounter")
-                .fallbackToDestructiveMigration()
-                .build()
-    }
+    fun providesPrefsWrapper(application: Application): PrefsWrapper = PrefsWrapper(application.applicationContext)
 
     @Provides
     @Singleton
-    fun providesPrefsWrapper(application: Application): PrefsWrapper = PrefsWrapper(application.applicationContext)
+    fun provideSharedPreferences(application: Application): SharedPreferences {
+        return PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
+    }
 
     @Provides
     @Singleton

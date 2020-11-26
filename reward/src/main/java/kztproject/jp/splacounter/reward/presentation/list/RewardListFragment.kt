@@ -55,13 +55,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             viewModel.loadPoint()
         }
 
-        binding.navigationView.setNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.menu_logout -> viewModel.logout()
-            }
-            false
-        }
-
         binding.rewardListView.adapter = RewardListAdapter(viewModel.rewardList, this)
     }
 
@@ -96,12 +89,8 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         animation?.cancel()
     }
 
-    override fun onLogout() {
-        fragmentTransitionManager.transitionToAuthFragment(activity)
-    }
-
     override fun onHitLottery(reward: Reward) {
-        val message = "You won ${reward.name}!"
+        val message = "You won ${reward.name.value}!"
         showDialog(message)
     }
 

@@ -5,6 +5,7 @@ import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
 import kztproject.jp.splacounter.MyApplication
+import kztproject.jp.splacounter.di.todo.TodoDatabaseModule
 import project.seito.screen_transition.di.ViewModelModule
 import javax.inject.Singleton
 
@@ -12,8 +13,9 @@ import javax.inject.Singleton
 @Component(modules = [
     AndroidInjectionModule::class,
     AppModule::class,
-    BaseActivityModule::class,
-    ViewModelModule::class])
+    HomeActivityModule::class,
+    ViewModelModule::class,
+    RepositoriesModule::class])
 interface AppComponent {
     @Component.Builder
     interface Builder {
