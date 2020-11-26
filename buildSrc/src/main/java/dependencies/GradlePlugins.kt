@@ -1,3 +1,5 @@
+package dependencies
+
 object GradlePlugins {
     object Android {
         const val version = "4.0.0"
