@@ -33,4 +33,13 @@ object Libraries {
         val androidSupport =  "com.google.dagger:dagger-android-support:${version}"
         val androidProcesser = "com.google.dagger:dagger-android-processor:${version}"
     }
+
+    object Retrofit {
+        const val version = "2.4.0"
+        val core = "com.squareup.retrofit2:retrofit:${version}"
+        val gsonConverter = "com.squareup.retrofit2:converter-gson:${version}"
+        val coroutinesAdapter = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
+    }
+
+    val gson = "com.google.code.gson:gson:2.8.2"
 }

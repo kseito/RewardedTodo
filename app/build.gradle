@@ -76,10 +76,10 @@ dependencies {
     kapt Libraries.Dagger.androidProcesser
 
     //Retrofit
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    implementation 'com.google.code.gson:gson:2.8.2'
-    implementation "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:$rx_coroutines_adapter_version"
+    implementation Libraries.Retrofit.core
+    implementation Libraries.Retrofit.gsonConverter
+    implementation Libraries.Retrofit.coroutinesAdapter
+    implementation Libraries.gson
 
     implementation project(path: ':auth')
     implementation project(path: ':reward')
