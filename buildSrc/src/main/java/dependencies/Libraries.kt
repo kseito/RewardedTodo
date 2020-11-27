@@ -9,6 +9,7 @@ object Libraries {
         val appCompat = "androidx.appcompat:appcompat:1.1.0"
         val design = "com.google.android.material:material:1.0.0"
         val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
+        val dataBinding = "androidx.databinding:databinding-compiler:${GradlePlugins.Android.version}"
 
         object Room {
             const val version = "2.2.4"

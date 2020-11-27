@@ -57,6 +57,7 @@ dependencies {
     implementation Libraries.AndroidX.constraintLayout
     implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
     implementation Libraries.AndroidX.NavigationComponent.uiKtx
+    kapt Libraries.AndroidX.dataBinding
 
     //Room
     implementation Libraries.AndroidX.Room.runtime
