@@ -10,6 +10,13 @@ object Libraries {
         val design = "com.google.android.material:material:1.0.0"
         val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
 
+        object Room {
+            const val version = "2.2.4"
+            val runtime = "androidx.room:room-runtime:${version}"
+            val compiler = "androidx.room:room-compiler:${version}"
+            val kaptCompiler = "androidx.room:room-compiler:${version}"
+        }
+
         object NavigationComponent {
             const val version = "2.1.0"
             val fragmentKtx = "androidx.navigation:navigation-fragment-ktx:${version}"
