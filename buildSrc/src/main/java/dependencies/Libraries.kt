@@ -24,4 +24,13 @@ object Libraries {
             val uiKtx = "androidx.navigation:navigation-ui-ktx:${version}"
         }
     }
+
+    object Dagger {
+        const val version = "2.20"
+        val core = "com.google.dagger:dagger:${version}"
+        val compiler = "com.google.dagger:dagger-compiler:${version}"
+        val android = "com.google.dagger:dagger-android:${version}"
+        val androidSupport =  "com.google.dagger:dagger-android-support:${version}"
+        val androidProcesser = "com.google.dagger:dagger-android-processor:${version}"
+    }
 }
