@@ -40,8 +40,8 @@ android {
         exclude 'META-INF/todo_debug.kotlin_module'
     }
 
-    dataBinding {
-        enabled = true
+    buildFeatures {
+        dataBinding = true
     }
 
     sourceSets {
@@ -74,8 +74,6 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-android-processor:$dagger_version"
     kapt "com.google.dagger:dagger-android-processor:$dagger_version"
-
-    kapt "androidx.databinding:databinding-compiler:$gradle_plugin_version"
 
     //Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
