@@ -42,4 +42,8 @@ object Libraries {
     }
 
     val gson = "com.google.code.gson:gson:2.8.2"
+
+    object Stetho {
+        val stetho = "com.facebook.stetho:stetho:1.4.2"
+    }
 }

@@ -58,13 +58,12 @@ dependencies {
     implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
     implementation Libraries.AndroidX.NavigationComponent.uiKtx
     kapt Libraries.AndroidX.dataBinding
+    implementation Libraries.Stetho.stetho
 
     //Room
     implementation Libraries.AndroidX.Room.runtime
     annotationProcessor Libraries.AndroidX.Room.compiler
     kapt Libraries.AndroidX.Room.kaptCompiler
-
-    implementation 'com.facebook.stetho:stetho:1.4.2'
 
     //Dagger
     implementation Libraries.Dagger.core
