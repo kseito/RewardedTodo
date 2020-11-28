@@ -1,3 +1,5 @@
+import dependencies.Libraries
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
@@ -67,7 +69,7 @@ dependencies {
 
     //UI
     implementation "info.hoang8f:fbutton:$fbutton_version"
-    kapt "androidx.databinding:databinding-compiler:$gradle_plugin_version"
+    kapt Libraries.AndroidX.dataBinding
     implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
     implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
     implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
