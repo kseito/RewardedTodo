@@ -34,8 +34,8 @@ dependencies {
     implementation Libraries.AndroidX.constraintLayout
 
     //Test
-    testImplementation "junit:junit:$junit_version"
-    testImplementation 'androidx.test:core:1.2.0'
+    testImplementation Libraries.Test.junit
+    testImplementation Libraries.Test.androidXCore
     testImplementation "org.mockito:mockito-core:$mockito_version"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_version"

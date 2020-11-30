@@ -46,4 +46,10 @@ object Libraries {
     object Stetho {
         val stetho = "com.facebook.stetho:stetho:1.4.2"
     }
+
+    object Test {
+        val junit = "junit:junit:4.12"
+        val androidXCore = "androidx.test:core:1.2.0"
+
+    }
 }
