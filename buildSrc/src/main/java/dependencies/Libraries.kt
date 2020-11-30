@@ -15,9 +15,16 @@ object Libraries {
         val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
         val dataBinding = "androidx.databinding:databinding-compiler:${GradlePlugins.Android.version}"
 
+        object LifeCycle {
+            const val version = "2.2.0"
+            val extensions = "androidx.lifecycle:lifecycle-extensions:${version}"
+            val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${version}"
+        }
+
         object Room {
             const val version = "2.2.4"
             val runtime = "androidx.room:room-runtime:${version}"
+            val ktx = "androidx.room:room-ktx:${version}"
             val compiler = "androidx.room:room-compiler:${version}"
             val kaptCompiler = "androidx.room:room-compiler:${version}"
         }
