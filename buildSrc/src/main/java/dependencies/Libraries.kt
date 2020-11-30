@@ -60,5 +60,11 @@ object Libraries {
         val mockWebServer = "com.squareup.okhttp3:mockwebserver:3.11.0"
         val robolectric = "org.robolectric:robolectric:4.3.1"
         val assertJ = "org.assertj:assertj-core:3.12.2"
+
+        object AndroidX {
+            val coreTesting = "androidx.arch.core:core-testing:2.0.0"
+            val testRunner = "androidx.test:runner:1.1.0"
+            val espresso = "androidx.test.espresso:espresso-core:3.1.0"
+        }
     }
 }
