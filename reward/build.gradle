@@ -41,7 +41,7 @@ dependencies {
     testImplementation Libraries.Test.coroutinesTest
     testImplementation Libraries.Test.mockWebServer
     testImplementation Libraries.Test.robolectric
-    testImplementation "org.assertj:assertj-core:$assertj_version"
+    testImplementation Libraries.Test.assertJ
     testImplementation "androidx.arch.core:core-testing:$core_testing_version"
     androidTestImplementation "androidx.test:runner:$test_runner_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
