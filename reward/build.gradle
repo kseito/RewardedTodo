@@ -62,10 +62,10 @@ dependencies {
     annotationProcessor Libraries.Dagger.androidProcesser
     kapt Libraries.Dagger.androidProcesser
 
-    //API
-    implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
-    implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
-    implementation 'com.google.code.gson:gson:2.8.2'
+    //Retrofit
+    implementation Libraries.Retrofit.core
+    implementation Libraries.Retrofit.gsonConverter
+    implementation Libraries.gson
 
     //AAC
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycle_version"
