@@ -7,4 +7,7 @@ data class Reward(
         val probability: Probability,
         val description: RewardDescription,
         val needRepeat: Boolean
-)
+) {
+    fun getName() = name.value
+    fun getDescription() = description.value
+}
