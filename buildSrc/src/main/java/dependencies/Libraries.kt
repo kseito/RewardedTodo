@@ -3,6 +3,10 @@ package dependencies
 object Libraries {
     object Kotlin {
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72"
+
+        object Coroutines {
+            const val version = "1.3.9"
+        }
     }
 
     object AndroidX {
@@ -52,6 +56,8 @@ object Libraries {
         val androidXCore = "androidx.test:core:1.2.0"
         val mockito = "org.mockito:mockito-core:2.23.0"
         val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
-
+        val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Kotlin.Coroutines.version}"
+        val mockWebServer = "com.squareup.okhttp3:mockwebserver:3.11.0"
+        val robolectric = "org.robolectric:robolectric:4.3.1"
     }
 }
