@@ -6,6 +6,9 @@ object Libraries {
 
         object Coroutines {
             const val version = "1.3.9"
+            val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${version}"
+            val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${version}"
+            val adapter = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
         }
     }
 
