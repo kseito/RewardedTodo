@@ -6,30 +6,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'jacoco'
 
+apply from: rootProject.file('gradle/android_common.gradle')
+
 android {
-    compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 28
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
         buildConfigField "String", "TODOIST_URL", "\"https://todoist.com\""
         buildConfigField "String", "REWARD_LIST_SERVER_URL", "\"https://rewardlist.herokuapp.com\""
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    dataBinding {
-        enabled = true
     }
 
     testOptions {
