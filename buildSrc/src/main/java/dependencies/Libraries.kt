@@ -56,6 +56,8 @@ object Libraries {
     }
 
     val gson = "com.google.code.gson:gson:2.8.2"
+    val fbutton = "info.hoang8f:fbutton:1.0.5"
+    val bottomNavigation = "com.aurelhubert:ahbottomnavigation:2.1.0"
 
     object Stetho {
         val stetho = "com.facebook.stetho:stetho:1.4.2"

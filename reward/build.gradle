@@ -55,9 +55,9 @@ dependencies {
     androidTestImplementation Libraries.Test.AndroidX.espresso
 
     //UI
-    implementation "info.hoang8f:fbutton:$fbutton_version"
+    implementation Libraries.fbutton
     kapt Libraries.AndroidX.dataBinding
-    implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
+    implementation Libraries.bottomNavigation
     implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
     implementation Libraries.AndroidX.NavigationComponent.uiKtx
 
