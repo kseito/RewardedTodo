@@ -58,8 +58,8 @@ dependencies {
     implementation "info.hoang8f:fbutton:$fbutton_version"
     kapt Libraries.AndroidX.dataBinding
     implementation 'com.aurelhubert:ahbottomnavigation:2.1.0'
-    implementation "androidx.navigation:navigation-fragment-ktx:$navigation_version"
-    implementation "androidx.navigation:navigation-ui-ktx:$navigation_version"
+    implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
+    implementation Libraries.AndroidX.NavigationComponent.uiKtx
 
     //Dagger
     implementation Libraries.Dagger.core
