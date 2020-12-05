@@ -17,9 +17,6 @@ dependencies {
     testImplementation "org.robolectric:robolectric:$robolectric_version"
     testImplementation 'com.google.truth:truth:1.0'
 
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-
     //Dagger
     implementation "com.google.dagger:dagger:$dagger_version"
     annotationProcessor "com.google.dagger:dagger-compiler:$dagger_version"
