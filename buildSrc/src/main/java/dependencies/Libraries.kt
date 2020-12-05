@@ -40,6 +40,10 @@ object Libraries {
         }
     }
 
+    object Google {
+        val truth = "com.google.truth:truth:1.0"
+    }
+
     object Dagger {
         const val version = "2.20"
         val core = "com.google.dagger:dagger:${version}"

@@ -12,10 +12,10 @@ dependencies {
     implementation Libraries.AndroidX.coreKtx
     implementation Libraries.AndroidX.appCompat
 
-    testImplementation 'junit:junit:4.12'
-    testImplementation 'androidx.test:core:1.2.0'
-    testImplementation "org.robolectric:robolectric:$robolectric_version"
-    testImplementation 'com.google.truth:truth:1.0'
+    testImplementation Libraries.Test.junit
+    testImplementation Libraries.Test.androidXCore
+    testImplementation Libraries.Test.robolectric
+    testImplementation Libraries.Google.truth
 
     //Dagger
     implementation "com.google.dagger:dagger:$dagger_version"
