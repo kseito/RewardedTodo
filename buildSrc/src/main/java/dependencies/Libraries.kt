@@ -71,7 +71,7 @@ object Libraries {
     }
 
     object Test {
-        val junit = "junit:junit:4.12"
+        val junit = "junit:junit:4.13.1"
         val androidXCore = "androidx.test:core:1.2.0"
         val mockito = "org.mockito:mockito-core:2.23.0"
         val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
