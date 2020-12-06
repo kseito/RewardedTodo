@@ -1,7 +1,7 @@
 @Suppress("unused")
 object Versions {
-    const val androidTargetSdkVersion = 28
-    const val androidCompileSdkVersion = 28
+    const val androidTargetSdkVersion = 30
+    const val androidCompileSdkVersion = 30
     const val androidMinSdkVersion = 21
 
     const val versionCode = 1
