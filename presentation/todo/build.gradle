@@ -11,25 +11,25 @@ dependencies {
     implementation project(path: ':screen_transition')
     implementation project(path: ':feature:todo')
 
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.3.1'
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
-    implementation "androidx.constraintlayout:constraintlayout:$constraintlayout_version"
+    implementation Libraries.Kotlin.stdlib
+    implementation Libraries.AndroidX.coreKtx
+    implementation Libraries.AndroidX.appCompat
+    implementation Libraries.AndroidX.constraintLayout
+    implementation Libraries.AndroidX.recyclerView
     kapt Libraries.AndroidX.dataBinding
-    implementation "androidx.recyclerview:recyclerview:1.1.0"
-    implementation 'com.google.android.material:material:1.2.1'
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0"
-    implementation 'androidx.lifecycle:lifecycle-viewmodel:2.2.0'
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
-    implementation "info.hoang8f:fbutton:$fbutton_version"
+    implementation Libraries.AndroidX.design
+
+    testImplementation Libraries.Test.junit
+    androidTestImplementation Libraries.Test.AndroidX.junit
+    androidTestImplementation Libraries.Test.AndroidX.espresso
+    implementation Libraries.AndroidX.LifeCycle.livedataKtx
+    implementation Libraries.AndroidX.LifeCycle.viewModelKtx
+    implementation Libraries.fbutton
 
     //Dagger
-    implementation "com.google.dagger:dagger:$dagger_version"
-    kapt "com.google.dagger:dagger-compiler:$dagger_version"
-    implementation "com.google.dagger:dagger-android:$dagger_version"
-    implementation "com.google.dagger:dagger-android-support:$dagger_version"
-    kapt "com.google.dagger:dagger-android-processor:$dagger_version"
+    implementation Libraries.Dagger.core
+    kapt Libraries.Dagger.compiler
+    implementation Libraries.Dagger.android
+    implementation Libraries.Dagger.androidSupport
+    kapt Libraries.Dagger.androidProcesser
 }

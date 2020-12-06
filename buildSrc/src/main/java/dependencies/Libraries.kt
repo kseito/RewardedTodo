@@ -18,10 +18,12 @@ object Libraries {
         val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
         val dataBinding = "androidx.databinding:databinding-compiler:${GradlePlugins.Android.version}"
         val coreKtx = "androidx.core:core-ktx:1.3.2"
+        val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
 
         object LifeCycle {
             const val version = "2.2.0"
             val extensions = "androidx.lifecycle:lifecycle-extensions:${version}"
+            val livedataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${version}"
             val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${version}"
         }
 
@@ -79,6 +81,7 @@ object Libraries {
         val assertJ = "org.assertj:assertj-core:3.12.2"
 
         object AndroidX {
+            val junit = "androidx.test.ext:junit:1.1.2"
             val coreTesting = "androidx.arch.core:core-testing:2.0.0"
             val testRunner = "androidx.test:runner:1.1.0"
             val espresso = "androidx.test.espresso:espresso-core:3.1.0"
