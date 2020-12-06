@@ -1,5 +1,6 @@
 package dependencies
 
+@Suppress("MayBeConstant")
 object Libraries {
     object Kotlin {
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${GradlePlugins.Kotlin.version}"
@@ -21,14 +22,14 @@ object Libraries {
         val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
 
         object LifeCycle {
-            const val version = "2.2.0"
+            private val version = "2.2.0"
             val extensions = "androidx.lifecycle:lifecycle-extensions:${version}"
             val livedataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${version}"
             val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${version}"
         }
 
         object Room {
-            const val version = "2.2.5"
+            private const val version = "2.2.5"
             val runtime = "androidx.room:room-runtime:${version}"
             val ktx = "androidx.room:room-ktx:${version}"
             val compiler = "androidx.room:room-compiler:${version}"
@@ -47,16 +48,16 @@ object Libraries {
     }
 
     object Dagger {
-        const val version = "2.20"
+        private val version = "2.20"
         val core = "com.google.dagger:dagger:${version}"
         val compiler = "com.google.dagger:dagger-compiler:${version}"
         val android = "com.google.dagger:dagger-android:${version}"
-        val androidSupport =  "com.google.dagger:dagger-android-support:${version}"
+        val androidSupport = "com.google.dagger:dagger-android-support:${version}"
         val androidProcesser = "com.google.dagger:dagger-android-processor:${version}"
     }
 
     object Retrofit {
-        const val version = "2.4.0"
+        private val version = "2.4.0"
         val core = "com.squareup.retrofit2:retrofit:${version}"
         val gsonConverter = "com.squareup.retrofit2:converter-gson:${version}"
         val coroutinesAdapter = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
