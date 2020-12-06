@@ -43,6 +43,7 @@ dependencies {
     testImplementation Libraries.Test.mockWebServer
     testImplementation Libraries.Test.robolectric
     testImplementation Libraries.Test.assertJ
+    testImplementation Libraries.Test.androidXCore
     testImplementation Libraries.Test.AndroidX.coreTesting
     androidTestImplementation Libraries.Test.AndroidX.testRunner
     androidTestImplementation Libraries.Test.AndroidX.espresso
