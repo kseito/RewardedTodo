@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import dagger.android.support.AndroidSupportInjection
 import project.seito.auth.R
 import project.seito.auth.databinding.FragmentAuthBinding
@@ -29,7 +28,7 @@ class AuthFragment : Fragment(), AuthViewModel.Callback {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(AuthViewModel::class.java)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(AuthViewModel::class.java)
         viewModel.setCallback(this)
     }
 

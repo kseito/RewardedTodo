@@ -1,6 +1,7 @@
 package kztproject.jp.splacounter.auth.repository
 
 
+import androidx.test.core.app.ApplicationProvider
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.GlobalScope
@@ -18,7 +19,6 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 import project.seito.screen_transition.preference.PrefsWrapper
 
 @RunWith(RobolectricTestRunner::class)
@@ -26,7 +26,7 @@ class AuthRepositoryTest {
 
     private val mockClient = mock<TodoistService>()
     private val mockRewardListLoginService = mock<RewardListLoginService>()
-    private val prefsWrapper = PrefsWrapper(RuntimeEnvironment.application)
+    private val prefsWrapper = PrefsWrapper(ApplicationProvider.getApplicationContext())
 
     private lateinit var repository: AuthRepository
 
