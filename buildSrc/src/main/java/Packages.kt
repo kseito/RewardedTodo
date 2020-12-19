@@ -1,4 +1,4 @@
 @Suppress("unused")
 object Packages {
-    const val name = "kztproject.jp.splacounter"
+    const val name = "jp.kztproject.rewardedtodo"
 }
