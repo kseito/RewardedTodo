@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="kztproject.jp.splacounter.common.database">
+    package="jp.kztproject.rewardedtodo.common.database">
 
     /
 </manifest>

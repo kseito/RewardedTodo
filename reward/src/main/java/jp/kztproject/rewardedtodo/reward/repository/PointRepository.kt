@@ -1,0 +1,21 @@
+package jp.kztproject.rewardedtodo.reward.repository
+
+import jp.kztproject.rewardedtodo.reward.application.repository.IPointRepository
+import jp.kztproject.rewardedtodo.reward.infrastructure.api.RewardPointService
+import jp.kztproject.rewardedtodo.reward.infrastructure.api.model.RewardUser
+import jp.kztproject.rewardedtodo.reward.infrastructure.database.model.NumberOfTicket
+import project.seito.screen_transition.preference.PrefsWrapper
+import javax.inject.Inject
+
+class PointRepository @Inject constructor(
+        private val rewardPointClient: RewardPointService,
+        private val preferences: PrefsWrapper
+) : IPointRepository {
+
+    override suspend fun loadPoint(): NumberOfTicket {
+        return rewardPointClient.getPoint(preferences.userId).await()
+    }
+
+    override suspend fun consumePoint(additionalPoint: Int): RewardUser =
+            rewardPointClient.updatePoint(preferences.userId, -additionalPoint).await()
+}

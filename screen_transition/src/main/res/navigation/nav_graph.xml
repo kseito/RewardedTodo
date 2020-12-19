@@ -6,7 +6,7 @@
 
     <fragment
         android:id="@+id/auth_fragment"
-        android:name="kztproject.jp.splacounter.auth.ui.AuthFragment"
+        android:name="jp.kztproject.rewardedtodo.auth.ui.AuthFragment"
         android:label="AuthFragment">
 
         <action
@@ -18,13 +18,13 @@
 
     <fragment
         android:id="@+id/todo_list_fragment"
-        android:name="kztproject.jp.splacounter.presentation.todo.TodoListFragment"
+        android:name="jp.kztproject.rewardedtodo.presentation.todo.TodoListFragment"
         android:label="TodoListFragment"
         />
 
     <dialog
         android:id="@+id/reward_detail_fragment"
-        android:name="kztproject.jp.splacounter.reward.presentation.detail.RewardDetailFragment"
+        android:name="jp.kztproject.rewardedtodo.reward.presentation.detail.RewardDetailFragment"
         android:label="RewardDetailFragment">
 
         <argument
@@ -35,7 +35,7 @@
 
     <fragment
         android:id="@+id/reward_list_fragment"
-        android:name="kztproject.jp.splacounter.reward.presentation.list.RewardListFragment"
+        android:name="jp.kztproject.rewardedtodo.reward.presentation.list.RewardListFragment"
         android:label="RewardListFragment">
 
         <action
@@ -53,7 +53,7 @@
 
     <fragment
         android:id="@+id/splash_fragment"
-        android:name="kztproject.jp.splacounter.presentation.SplashFragment"
+        android:name="jp.kztproject.rewardedtodo.presentation.SplashFragment"
         android:label="SplashFragment">
 
         <action

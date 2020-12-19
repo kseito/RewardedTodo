@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="kztproject.jp.splacounter.reward.presentation.list.RewardListViewModel" />
+            type="jp.kztproject.rewardedtodo.reward.presentation.list.RewardListViewModel" />
     </data>
 
     <RelativeLayout
