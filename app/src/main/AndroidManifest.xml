@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           xmlns:tools="http://schemas.android.com/tools"
-          package="kztproject.jp.splacounter">
+          package="jp.kztproject.rewardedtodo">
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:name=".MyApplication"
+        android:name="jp.kztproject.rewardedtodo.MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         tools:node="replace"
         android:theme="@style/AppTheme">
-        <activity android:name=".presentation.HomeActivity">
+        <activity android:name="jp.kztproject.rewardedtodo.presentation.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -4,13 +4,13 @@
 
     <data>
 
-        <import type="kztproject.jp.splacounter.ui_common.BindingUtils" />
+        <import type="jp.kztproject.rewardedtodo.ui_common.BindingUtils" />
 
         <import type="android.view.View" />
 
         <variable
             name="viewModel"
-            type="kztproject.jp.splacounter.reward.presentation.detail.RewardDetailViewModel" />
+            type="jp.kztproject.rewardedtodo.reward.presentation.detail.RewardDetailViewModel" />
     </data>
 
     <FrameLayout
