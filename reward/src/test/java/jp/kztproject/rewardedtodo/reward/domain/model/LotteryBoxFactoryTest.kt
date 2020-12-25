@@ -1,5 +1,7 @@
 package jp.kztproject.rewardedtodo.reward.domain.model
 
+import jp.kztproject.rewardedtodo.domain.reward.RewardId
+import jp.kztproject.rewardedtodo.domain.reward.Ticket
 import jp.kztproject.rewardedtodo.reward.TestRewardCreator
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test

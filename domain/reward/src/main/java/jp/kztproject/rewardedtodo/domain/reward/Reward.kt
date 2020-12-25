@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.domain.model
+package jp.kztproject.rewardedtodo.domain.reward
 
 data class Reward(
         val rewardId: RewardId,

@@ -1,7 +1,7 @@
 package jp.kztproject.rewardedtodo.reward.application.usecase
 
 import kotlinx.coroutines.flow.Flow
-import jp.kztproject.rewardedtodo.reward.domain.model.Reward
+import jp.kztproject.rewardedtodo.domain.reward.Reward
 
 interface GetRewardsUseCase {
     suspend fun execute(): List<Reward>

@@ -1,7 +1,7 @@
 package jp.kztproject.rewardedtodo.reward.application.usecase
 
 import jp.kztproject.rewardedtodo.reward.application.repository.IPointRepository
-import jp.kztproject.rewardedtodo.reward.domain.model.Reward
+import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.reward.infrastructure.api.model.RewardUser
 import javax.inject.Inject
 

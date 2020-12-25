@@ -12,9 +12,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.navArgs
 import dagger.android.support.AndroidSupportInjection
-import jp.kztproject.rewardedtodo.reward.domain.model.Reward
-import jp.kztproject.rewardedtodo.reward.domain.model.RewardId
-import jp.kztproject.rewardedtodo.reward.domain.model.RewardName
+import jp.kztproject.rewardedtodo.domain.reward.Reward
+import jp.kztproject.rewardedtodo.domain.reward.RewardId
+import jp.kztproject.rewardedtodo.domain.reward.RewardName
 import project.seito.reward.R
 import project.seito.reward.databinding.FragmentRewardDetailBinding
 import project.seito.screen_transition.IFragmentsTransitionManager

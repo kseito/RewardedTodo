@@ -14,7 +14,7 @@ import jp.kztproject.rewardedtodo.reward.application.model.Success
 import jp.kztproject.rewardedtodo.reward.application.usecase.DeleteRewardUseCase
 import jp.kztproject.rewardedtodo.reward.application.usecase.GetRewardUseCase
 import jp.kztproject.rewardedtodo.reward.application.usecase.SaveRewardUseCase
-import jp.kztproject.rewardedtodo.reward.domain.model.RewardId
+import jp.kztproject.rewardedtodo.domain.reward.RewardId
 import jp.kztproject.rewardedtodo.reward.presentation.detail.RewardDetailViewModel
 import jp.kztproject.rewardedtodo.reward.presentation.detail.RewardDetailViewModelCallback
 import org.junit.After

@@ -3,7 +3,7 @@ package jp.kztproject.rewardedtodo.reward.infrastructure.database.model
 import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
-import jp.kztproject.rewardedtodo.reward.domain.model.*
+import jp.kztproject.rewardedtodo.domain.reward.*
 import jp.kztproject.rewardedtodo.reward.domain.model.RewardInput
 
 @Entity
