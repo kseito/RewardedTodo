@@ -1,3 +1,4 @@
+include ':domain:reward'
 include ':data:ticket'
 include ':common:database'
 include ':data:todo'
