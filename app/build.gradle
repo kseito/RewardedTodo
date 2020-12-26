@@ -38,6 +38,7 @@ android {
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/todo_debug.kotlin_module'
+        exclude 'META-INF/reward_debug.kotlin_module'
     }
 
     buildFeatures {
@@ -90,6 +91,7 @@ dependencies {
     implementation project(path: ':data:todo')
     implementation project(path: ':data:ticket')
     implementation project(path: ':common:database')
+    implementation project(path: ':domain:reward')
 }
 
 kapt {
