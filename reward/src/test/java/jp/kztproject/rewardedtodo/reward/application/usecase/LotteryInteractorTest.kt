@@ -6,7 +6,6 @@ import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
 import jp.kztproject.rewardedtodo.data.ticket.ITicketRepository
 import jp.kztproject.rewardedtodo.domain.reward.*
-import jp.kztproject.rewardedtodo.reward.domain.model.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 

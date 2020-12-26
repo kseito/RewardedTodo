@@ -9,7 +9,7 @@ import jp.kztproject.rewardedtodo.reward.application.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.reward.application.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.reward.application.usecase.LotteryUseCase
 import jp.kztproject.rewardedtodo.domain.reward.Reward
-import jp.kztproject.rewardedtodo.reward.domain.model.RewardCollection
+import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import javax.inject.Inject
 
 class RewardListViewModel @Inject constructor(

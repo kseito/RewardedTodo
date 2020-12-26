@@ -1,9 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.domain.model
-
-import jp.kztproject.rewardedtodo.domain.reward.Reward
-import jp.kztproject.rewardedtodo.domain.reward.RewardId
-import jp.kztproject.rewardedtodo.domain.reward.Ticket
-import jp.kztproject.rewardedtodo.reward.infrastructure.database.model.RewardEntity
+package jp.kztproject.rewardedtodo.domain.reward
 
 class RewardCollection(private val rewards: List<Reward>) {
 

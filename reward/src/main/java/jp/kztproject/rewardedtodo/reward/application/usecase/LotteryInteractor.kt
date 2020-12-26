@@ -3,7 +3,7 @@ package jp.kztproject.rewardedtodo.reward.application.usecase
 import jp.kztproject.rewardedtodo.data.ticket.ITicketRepository
 import jp.kztproject.rewardedtodo.reward.domain.model.LotteryBoxFactory
 import jp.kztproject.rewardedtodo.domain.reward.Reward
-import jp.kztproject.rewardedtodo.reward.domain.model.RewardCollection
+import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import jp.kztproject.rewardedtodo.domain.reward.Ticket
 import javax.inject.Inject
 import kotlin.random.Random
