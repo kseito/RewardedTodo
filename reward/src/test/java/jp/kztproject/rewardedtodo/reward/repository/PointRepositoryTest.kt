@@ -1,14 +1,13 @@
 package jp.kztproject.rewardedtodo.reward.repository
 
 import androidx.test.core.app.ApplicationProvider
-import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import jp.kztproject.rewardedtodo.DummyCreator
-import jp.kztproject.rewardedtodo.reward.infrastructure.api.RewardPointService
+import jp.kztproject.rewardedtodo.data.reward.api.RewardPointService
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.junit.runner.RunWith

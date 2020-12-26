@@ -1,10 +1,10 @@
 @file:Suppress("DeferredIsResult")
 
-package jp.kztproject.rewardedtodo.reward.infrastructure.api
+package jp.kztproject.rewardedtodo.data.reward.api
 
+import jp.kztproject.rewardedtodo.domain.reward.NumberOfTicket
 import kotlinx.coroutines.Deferred
 import jp.kztproject.rewardedtodo.domain.reward.RewardUser
-import jp.kztproject.rewardedtodo.reward.infrastructure.database.model.NumberOfTicket
 import retrofit2.http.*
 
 interface RewardPointService {

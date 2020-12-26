@@ -38,6 +38,16 @@ dependencies {
 
     implementation Libraries.Kotlin.stdlib
 
+    //Retrofit
+    implementation Libraries.Retrofit.core
+    implementation Libraries.Retrofit.gsonConverter
+    implementation Libraries.gson
+
+    //Coroutines
+    implementation Libraries.Kotlin.Coroutines.core
+
     testImplementation Libraries.Test.junit
     testImplementation Libraries.Test.assertJ
+
+    implementation project(path: ':domain:reward')
 }

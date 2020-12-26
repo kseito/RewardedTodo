@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.infrastructure.database.model
+package jp.kztproject.rewardedtodo.data.reward.api.model
 
 import com.google.gson.annotations.SerializedName
 import jp.kztproject.rewardedtodo.domain.reward.NumberOfTicket
