@@ -2,7 +2,7 @@ package jp.kztproject.rewardedtodo.reward.application.repository
 
 import kotlinx.coroutines.flow.Flow
 import jp.kztproject.rewardedtodo.domain.reward.Reward
-import jp.kztproject.rewardedtodo.reward.domain.model.RewardInput
+import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 
 interface IRewardRepository {
 

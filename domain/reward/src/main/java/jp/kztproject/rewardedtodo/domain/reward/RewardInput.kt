@@ -1,6 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.domain.model
-
-import jp.kztproject.rewardedtodo.domain.reward.Reward
+package jp.kztproject.rewardedtodo.domain.reward
 
 data class RewardInput(
         var id: Int? = null,

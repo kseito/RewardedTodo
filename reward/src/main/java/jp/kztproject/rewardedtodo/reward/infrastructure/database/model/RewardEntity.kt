@@ -4,7 +4,7 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import jp.kztproject.rewardedtodo.domain.reward.*
-import jp.kztproject.rewardedtodo.reward.domain.model.RewardInput
+import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 
 @Entity
 data class RewardEntity(@PrimaryKey(autoGenerate = true) var id: Int,
