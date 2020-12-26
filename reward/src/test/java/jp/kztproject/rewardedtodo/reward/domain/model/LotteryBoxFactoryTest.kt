@@ -1,5 +1,6 @@
 package jp.kztproject.rewardedtodo.reward.domain.model
 
+import jp.kztproject.rewardedtodo.domain.reward.LotteryBoxFactory
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import jp.kztproject.rewardedtodo.domain.reward.RewardId
 import jp.kztproject.rewardedtodo.domain.reward.Ticket

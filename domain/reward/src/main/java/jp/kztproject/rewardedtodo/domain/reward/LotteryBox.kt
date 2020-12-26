@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.domain.model
+package jp.kztproject.rewardedtodo.domain.reward
 
 import jp.kztproject.rewardedtodo.domain.reward.Ticket
 

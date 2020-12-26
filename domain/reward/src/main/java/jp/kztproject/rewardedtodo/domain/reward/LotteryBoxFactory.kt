@@ -1,6 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.domain.model
-
-import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
+package jp.kztproject.rewardedtodo.domain.reward
 
 object LotteryBoxFactory {
 
