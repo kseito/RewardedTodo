@@ -3,7 +3,7 @@ package jp.kztproject.rewardedtodo.reward.repository
 import jp.kztproject.rewardedtodo.domain.reward.NumberOfTicket
 import jp.kztproject.rewardedtodo.reward.application.repository.IPointRepository
 import jp.kztproject.rewardedtodo.reward.infrastructure.api.RewardPointService
-import jp.kztproject.rewardedtodo.reward.infrastructure.api.model.RewardUser
+import jp.kztproject.rewardedtodo.domain.reward.RewardUser
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 

@@ -2,7 +2,7 @@ package jp.kztproject.rewardedtodo.reward.application.usecase
 
 import jp.kztproject.rewardedtodo.reward.application.repository.IPointRepository
 import jp.kztproject.rewardedtodo.domain.reward.Reward
-import jp.kztproject.rewardedtodo.reward.infrastructure.api.model.RewardUser
+import jp.kztproject.rewardedtodo.domain.reward.RewardUser
 import javax.inject.Inject
 
 class UsePointInteractor @Inject constructor(

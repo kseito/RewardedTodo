@@ -1,7 +1,7 @@
 package jp.kztproject.rewardedtodo
 
 import jp.kztproject.rewardedtodo.domain.reward.*
-import jp.kztproject.rewardedtodo.reward.infrastructure.api.model.RewardUser
+import jp.kztproject.rewardedtodo.domain.reward.RewardUser
 import jp.kztproject.rewardedtodo.reward.infrastructure.database.model.NumberOfTicket
 
 object DummyCreator {
