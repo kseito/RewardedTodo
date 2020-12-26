@@ -23,11 +23,4 @@ class RewardCollection(private val rewards: List<Reward>) {
     fun findBy(id: RewardId): Reward {
         return rewards.first { it.rewardId == id }
     }
-
-    companion object {
-        fun convertFrom(rewardEntities: List<RewardEntity>): RewardCollection {
-            val rewards = rewardEntities.map { it.convert() }
-            return RewardCollection(rewards)
-        }
-    }
 }
