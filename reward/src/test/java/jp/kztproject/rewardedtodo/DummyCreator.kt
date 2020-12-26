@@ -1,14 +1,8 @@
 package jp.kztproject.rewardedtodo
 
 import jp.kztproject.rewardedtodo.domain.reward.*
-import jp.kztproject.rewardedtodo.domain.reward.RewardUser
-import jp.kztproject.rewardedtodo.data.reward.api.model.NumberOfTicket
 
 object DummyCreator {
-
-    fun createDummyRewardUser(): RewardUser {
-        return RewardUser(10, 123, 0)
-    }
 
     fun createDummyRewardInput(): RewardInput {
         return RewardInput(1, "Test", 5, 10F, "Test description", true)
