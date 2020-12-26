@@ -1,7 +1,7 @@
 package jp.kztproject.rewardedtodo.reward.application.usecase
 
-import jp.kztproject.rewardedtodo.data.reward.api.model.NumberOfTicket
+import jp.kztproject.rewardedtodo.domain.reward.NumberOfTicket
 
 interface GetPointUseCase {
-    suspend fun execute(): jp.kztproject.rewardedtodo.data.reward.api.model.NumberOfTicket
+    suspend fun execute(): NumberOfTicket
 }

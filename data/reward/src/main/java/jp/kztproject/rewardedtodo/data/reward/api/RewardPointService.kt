@@ -2,7 +2,7 @@
 
 package jp.kztproject.rewardedtodo.data.reward.api
 
-import jp.kztproject.rewardedtodo.domain.reward.NumberOfTicket
+import jp.kztproject.rewardedtodo.data.reward.api.model.NumberOfTicket
 import kotlinx.coroutines.Deferred
 import jp.kztproject.rewardedtodo.domain.reward.RewardUser
 import retrofit2.http.*

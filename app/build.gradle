@@ -92,6 +92,7 @@ dependencies {
     implementation project(path: ':data:ticket')
     implementation project(path: ':common:database')
     implementation project(path: ':domain:reward')
+    implementation project(path: ':data:reward')
 }
 
 kapt {
