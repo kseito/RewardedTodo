@@ -1,6 +1,10 @@
 package jp.kztproject.rewardedtodo.reward.infrastructure.database.model
 
 import com.google.gson.annotations.SerializedName
+import jp.kztproject.rewardedtodo.domain.reward.NumberOfTicket
 
-@Suppress("EXPERIMENTAL_FEATURE_WARNING")
-inline class NumberOfTicket(@SerializedName("point") val value: Int)
+data class NumberOfTicket(@SerializedName("point") val value: Int) {
+    fun convert(): NumberOfTicket {
+        return NumberOfTicket(value)
+    }
+}
