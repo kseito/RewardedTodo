@@ -16,6 +16,7 @@
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/common/database" />
             <option value="$PROJECT_DIR$/data" />
+            <option value="$PROJECT_DIR$/data/reward" />
             <option value="$PROJECT_DIR$/data/ticket" />
             <option value="$PROJECT_DIR$/data/todo" />
             <option value="$PROJECT_DIR$/domain" />
