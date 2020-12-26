@@ -5,7 +5,7 @@ import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
 import jp.kztproject.rewardedtodo.DummyCreator
-import jp.kztproject.rewardedtodo.reward.application.repository.IPointRepository
+import jp.kztproject.rewardedtodo.domain.reward.repository.IPointRepository
 import org.junit.Test
 
 class UsePointInteractorTest {
