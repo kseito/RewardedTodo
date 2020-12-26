@@ -12,4 +12,5 @@ dependencies {
     implementation Libraries.Kotlin.stdlib
 
     testImplementation Libraries.Test.junit
+    testImplementation Libraries.Test.assertJ
 }
