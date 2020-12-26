@@ -5,8 +5,8 @@ import dagger.Module
 import dagger.Provides
 import jp.kztproject.rewardedtodo.common.database.DatabaseInitializer
 import jp.kztproject.rewardedtodo.di.scope.ActivityScope
-import jp.kztproject.rewardedtodo.reward.infrastructure.database.AppDatabase
-import jp.kztproject.rewardedtodo.reward.infrastructure.database.RewardDao
+import jp.kztproject.rewardedtodo.data.reward.database.AppDatabase
+import jp.kztproject.rewardedtodo.data.reward.database.RewardDao
 
 @Module
 class RewardDatabaseModule {

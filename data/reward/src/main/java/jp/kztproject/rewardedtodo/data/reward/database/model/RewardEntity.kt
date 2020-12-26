@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.infrastructure.database.model
+package jp.kztproject.rewardedtodo.data.reward.database.model
 
 import androidx.room.Entity
 import androidx.room.Ignore

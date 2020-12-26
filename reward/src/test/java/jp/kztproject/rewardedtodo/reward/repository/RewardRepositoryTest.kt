@@ -6,8 +6,8 @@ import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
 import jp.kztproject.rewardedtodo.DummyCreator
-import jp.kztproject.rewardedtodo.reward.infrastructure.database.RewardDao
-import jp.kztproject.rewardedtodo.reward.infrastructure.database.model.RewardEntity
+import jp.kztproject.rewardedtodo.data.reward.database.RewardDao
+import jp.kztproject.rewardedtodo.data.reward.database.model.RewardEntity
 import org.junit.Test
 
 class RewardRepositoryTest {

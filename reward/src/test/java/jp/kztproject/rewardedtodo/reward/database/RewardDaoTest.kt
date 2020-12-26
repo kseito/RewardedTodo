@@ -7,15 +7,14 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
-import jp.kztproject.rewardedtodo.reward.infrastructure.database.AppDatabase
-import jp.kztproject.rewardedtodo.reward.infrastructure.database.model.RewardEntity
+import jp.kztproject.rewardedtodo.data.reward.database.AppDatabase
+import jp.kztproject.rewardedtodo.data.reward.database.model.RewardEntity
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import org.robolectric.RuntimeEnvironment
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)

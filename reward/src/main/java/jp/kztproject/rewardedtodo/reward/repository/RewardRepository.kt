@@ -7,8 +7,8 @@ import kotlinx.coroutines.withContext
 import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
-import jp.kztproject.rewardedtodo.reward.infrastructure.database.RewardDao
-import jp.kztproject.rewardedtodo.reward.infrastructure.database.model.RewardEntity
+import jp.kztproject.rewardedtodo.data.reward.database.RewardDao
+import jp.kztproject.rewardedtodo.data.reward.database.model.RewardEntity
 import javax.inject.Inject
 
 class RewardRepository @Inject constructor(private val rewardDao: RewardDao) : IRewardRepository {

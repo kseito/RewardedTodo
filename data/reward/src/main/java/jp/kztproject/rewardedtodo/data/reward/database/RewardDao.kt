@@ -1,8 +1,8 @@
-package jp.kztproject.rewardedtodo.reward.infrastructure.database
+package jp.kztproject.rewardedtodo.data.reward.database
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
-import jp.kztproject.rewardedtodo.reward.infrastructure.database.model.RewardEntity
+import jp.kztproject.rewardedtodo.data.reward.database.model.RewardEntity
 
 @Dao
 interface RewardDao {
