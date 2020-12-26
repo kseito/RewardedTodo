@@ -1,6 +1,8 @@
 package jp.kztproject.rewardedtodo.reward.database
 
+import android.content.Context
 import androidx.room.Room
+import androidx.test.core.app.ApplicationProvider
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
@@ -19,6 +21,7 @@ import org.robolectric.RuntimeEnvironment
 @RunWith(RobolectricTestRunner::class)
 class RewardDaoTest {
 
+    private val context = ApplicationProvider.getApplicationContext<Context>()
     private lateinit var database: AppDatabase
     private val testRewards = arrayListOf(
             RewardEntity(1, "nintendo switch", 100, 10F, "this is really I want", false),
@@ -28,7 +31,7 @@ class RewardDaoTest {
 
     @Before
     fun setUp() {
-        database = Room.inMemoryDatabaseBuilder(RuntimeEnvironment.application, AppDatabase::class.java)
+        database = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java)
                 .allowMainThreadQueries()
                 .build()
     }
