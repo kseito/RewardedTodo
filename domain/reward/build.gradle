@@ -10,6 +10,7 @@ apply from: rootProject.file('gradle/android_common.gradle')
 dependencies {
 
     implementation Libraries.Kotlin.stdlib
+    implementation Libraries.Kotlin.Coroutines.core
 
     testImplementation Libraries.Test.junit
     testImplementation Libraries.Test.assertJ

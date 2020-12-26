@@ -4,7 +4,7 @@ import jp.kztproject.rewardedtodo.reward.application.CommonException
 import jp.kztproject.rewardedtodo.reward.application.model.Failure
 import jp.kztproject.rewardedtodo.reward.application.model.Result
 import jp.kztproject.rewardedtodo.reward.application.model.Success
-import jp.kztproject.rewardedtodo.reward.application.repository.IRewardRepository
+import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import project.seito.reward.R
 import javax.inject.Inject

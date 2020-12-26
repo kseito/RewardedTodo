@@ -1,7 +1,7 @@
 package jp.kztproject.rewardedtodo.reward.application.usecase
 
 import kotlinx.coroutines.flow.Flow
-import jp.kztproject.rewardedtodo.reward.application.repository.IRewardRepository
+import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import javax.inject.Inject
 

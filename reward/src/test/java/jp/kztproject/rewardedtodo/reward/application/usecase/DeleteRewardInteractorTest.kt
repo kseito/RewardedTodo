@@ -6,7 +6,7 @@ import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
 import jp.kztproject.rewardedtodo.DummyCreator
-import jp.kztproject.rewardedtodo.reward.application.repository.IRewardRepository
+import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository
 import org.junit.Test
 
 class DeleteRewardInteractorTest {

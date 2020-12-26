@@ -2,7 +2,7 @@ package jp.kztproject.rewardedtodo.di.reward
 
 import dagger.Binds
 import dagger.Module
-import jp.kztproject.rewardedtodo.reward.application.repository.IRewardRepository
+import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository
 import jp.kztproject.rewardedtodo.reward.repository.RewardRepository
 
 @Module
