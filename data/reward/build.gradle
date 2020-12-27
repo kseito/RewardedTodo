@@ -39,6 +39,9 @@ dependencies {
 
     implementation Libraries.Kotlin.stdlib
 
+    //Dagger
+    implementation Libraries.Dagger.core
+
     //Room
     implementation Libraries.AndroidX.Room.runtime
     implementation Libraries.AndroidX.Room.ktx

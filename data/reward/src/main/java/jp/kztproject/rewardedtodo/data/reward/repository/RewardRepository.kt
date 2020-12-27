@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.repository
+package jp.kztproject.rewardedtodo.data.reward.repository
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow

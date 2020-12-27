@@ -8,6 +8,7 @@ import kotlinx.coroutines.runBlocking
 import jp.kztproject.rewardedtodo.DummyCreator
 import jp.kztproject.rewardedtodo.data.reward.database.RewardDao
 import jp.kztproject.rewardedtodo.data.reward.database.model.RewardEntity
+import jp.kztproject.rewardedtodo.data.reward.repository.RewardRepository
 import org.junit.Test
 
 class RewardRepositoryTest {
