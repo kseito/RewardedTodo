@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.database
+package jp.kztproject.rewardedtodo.data.reward.database
 
 import android.content.Context
 import androidx.room.Room
@@ -7,7 +7,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
-import jp.kztproject.rewardedtodo.data.reward.database.AppDatabase
 import jp.kztproject.rewardedtodo.data.reward.database.model.RewardEntity
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
