@@ -35,6 +35,9 @@ dependencies {
     testImplementation Libraries.Test.mockWebServer
     testImplementation Libraries.Test.robolectric
     testImplementation Libraries.Test.androidXCore
+    testImplementation Libraries.Test.mockito
+    testImplementation Libraries.Test.mockitoKotlin
+    testImplementation project(path: ':test:reward')
 
     implementation project(path: ':domain:reward')
     implementation project(path: ':screen_transition')

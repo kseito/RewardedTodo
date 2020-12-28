@@ -1,14 +1,13 @@
-package jp.kztproject.rewardedtodo.reward.repository
+package jp.kztproject.rewardedtodo.data.reward.repository
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
 import kotlinx.coroutines.runBlocking
-import jp.kztproject.rewardedtodo.DummyCreator
 import jp.kztproject.rewardedtodo.data.reward.database.RewardDao
 import jp.kztproject.rewardedtodo.data.reward.database.model.RewardEntity
-import jp.kztproject.rewardedtodo.data.reward.repository.RewardRepository
+import jp.kztproject.rewardedtodo.test.reward.DummyCreator
 import org.junit.Test
 
 class RewardRepositoryTest {

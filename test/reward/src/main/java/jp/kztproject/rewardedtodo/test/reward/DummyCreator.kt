@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo
+package jp.kztproject.rewardedtodo.test.reward
 
 import jp.kztproject.rewardedtodo.domain.reward.*
 

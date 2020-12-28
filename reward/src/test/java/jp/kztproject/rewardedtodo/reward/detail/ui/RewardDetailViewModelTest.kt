@@ -9,7 +9,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
-import jp.kztproject.rewardedtodo.DummyCreator
+import jp.kztproject.rewardedtodo.test.reward.DummyCreator
 import jp.kztproject.rewardedtodo.reward.application.model.Success
 import jp.kztproject.rewardedtodo.reward.application.usecase.DeleteRewardUseCase
 import jp.kztproject.rewardedtodo.reward.application.usecase.GetRewardUseCase

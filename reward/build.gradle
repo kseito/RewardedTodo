@@ -51,6 +51,8 @@ dependencies {
     testImplementation Libraries.Test.robolectric
     testImplementation Libraries.Test.assertJ
     testImplementation Libraries.Test.AndroidX.coreTesting
+    testImplementation project(path: ':test:reward')
+
     androidTestImplementation Libraries.Test.AndroidX.testRunner
     androidTestImplementation Libraries.Test.AndroidX.espresso
 
