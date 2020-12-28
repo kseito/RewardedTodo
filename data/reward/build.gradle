@@ -6,34 +6,7 @@ plugins {
     id 'kotlin-kapt'
 }
 
-android {
-    compileSdkVersion 30
-    buildToolsVersion "30.0.2"
-
-    defaultConfig {
-        minSdkVersion 21
-        targetSdkVersion 30
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles "consumer-rules.pro"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = '1.8'
-    }
-}
+apply from: rootProject.file('gradle/android_common.gradle')
 
 dependencies {
 
@@ -55,9 +28,12 @@ dependencies {
 
     //Coroutines
     implementation Libraries.Kotlin.Coroutines.core
+    implementation Libraries.Kotlin.Coroutines.adapter
 
     testImplementation Libraries.Test.junit
     testImplementation Libraries.Test.assertJ
+    testImplementation Libraries.Test.mockWebServer
 
     implementation project(path: ':domain:reward')
+    implementation project(path: ':screen_transition')
 }

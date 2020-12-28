@@ -1,8 +1,7 @@
-package jp.kztproject.rewardedtodo.reward.api
+package jp.kztproject.rewardedtodo.data.reward.api
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.runBlocking
-import jp.kztproject.rewardedtodo.data.reward.api.RewardPointService
 import okhttp3.mockwebserver.Dispatcher
 import okhttp3.mockwebserver.MockResponse
 import okhttp3.mockwebserver.MockWebServer
