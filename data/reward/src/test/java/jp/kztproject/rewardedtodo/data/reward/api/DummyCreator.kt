@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.repository
+package jp.kztproject.rewardedtodo.data.reward.api
 
 import jp.kztproject.rewardedtodo.data.reward.api.model.NumberOfTicket
 import jp.kztproject.rewardedtodo.domain.reward.RewardUser

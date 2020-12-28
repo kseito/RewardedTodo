@@ -4,6 +4,7 @@ import androidx.test.core.app.ApplicationProvider
 import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
+import jp.kztproject.rewardedtodo.data.reward.api.DummyCreator
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
