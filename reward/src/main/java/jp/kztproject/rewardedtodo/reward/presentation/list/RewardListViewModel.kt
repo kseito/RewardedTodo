@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import jp.kztproject.rewardedtodo.reward.application.usecase.GetPointUseCase
-import jp.kztproject.rewardedtodo.reward.application.usecase.GetRewardsUseCase
+import jp.kztproject.rewardedtodo.application.reward.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.LotteryUseCase
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection

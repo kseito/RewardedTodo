@@ -13,6 +13,11 @@ dependencies {
 
     implementation Libraries.Dagger.core
 
+    //Coroutines
+    implementation Libraries.Kotlin.Coroutines.core
+    implementation Libraries.Kotlin.Coroutines.android
+    implementation Libraries.Kotlin.Coroutines.adapter
+
     testImplementation Libraries.Test.junit
     testImplementation Libraries.Test.assertJ
 
