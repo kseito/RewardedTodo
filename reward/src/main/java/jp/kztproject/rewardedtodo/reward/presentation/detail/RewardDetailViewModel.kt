@@ -5,20 +5,20 @@ import androidx.annotation.StringRes
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import jp.kztproject.rewardedtodo.application.reward.DeleteRewardUseCase
+import jp.kztproject.rewardedtodo.application.reward.GetRewardUseCase
+import jp.kztproject.rewardedtodo.domain.reward.Reward
+import jp.kztproject.rewardedtodo.domain.reward.RewardId
+import jp.kztproject.rewardedtodo.domain.reward.RewardInput
+import jp.kztproject.rewardedtodo.domain.reward.RewardName
+import jp.kztproject.rewardedtodo.reward.application.model.Failure
+import jp.kztproject.rewardedtodo.reward.application.model.Success
+import jp.kztproject.rewardedtodo.reward.application.usecase.SaveRewardUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import jp.kztproject.rewardedtodo.reward.application.model.Failure
-import jp.kztproject.rewardedtodo.reward.application.model.Success
-import jp.kztproject.rewardedtodo.application.reward.DeleteRewardUseCase
-import jp.kztproject.rewardedtodo.application.reward.GetRewardUseCase
-import jp.kztproject.rewardedtodo.reward.application.usecase.SaveRewardUseCase
-import jp.kztproject.rewardedtodo.domain.reward.Reward
-import jp.kztproject.rewardedtodo.domain.reward.RewardId
-import jp.kztproject.rewardedtodo.domain.reward.RewardInput
-import jp.kztproject.rewardedtodo.domain.reward.RewardName
 import project.seito.reward.R
 import javax.inject.Inject
 
@@ -68,7 +68,10 @@ class RewardDetailViewModel @Inject constructor(
             val result = saveRewardUseCase.execute(reward)
             when (result) {
                 is Success -> callback.onSaveCompleted(reward.name!!)
-                is Failure -> callback.onError(result.reason.messageId)
+                is Failure -> {
+                    val errorMessageId = ErrorMessageClassifier(result.reason).messageId
+                    callback.onError(errorMessageId)
+                }
             }
         }
     }
