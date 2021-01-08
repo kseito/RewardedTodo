@@ -5,9 +5,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import jp.kztproject.rewardedtodo.application.reward.GetPointUseCase
-import jp.kztproject.rewardedtodo.application.reward.GetRewardsUseCase
-import jp.kztproject.rewardedtodo.application.reward.LotteryUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import javax.inject.Inject

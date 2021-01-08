@@ -4,7 +4,7 @@ import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
-import jp.kztproject.rewardedtodo.application.reward.DeleteRewardInteractor
+import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardInteractor
 import kotlinx.coroutines.runBlocking
 import jp.kztproject.rewardedtodo.test.reward.DummyCreator
 import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository

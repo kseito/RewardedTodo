@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.application.reward
+package jp.kztproject.rewardedtodo.application.reward.usecase
 
 import jp.kztproject.rewardedtodo.application.reward.model.Error
 import jp.kztproject.rewardedtodo.application.reward.model.Failure

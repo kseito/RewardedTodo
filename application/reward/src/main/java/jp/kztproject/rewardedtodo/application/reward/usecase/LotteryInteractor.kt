@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.application.reward
+package jp.kztproject.rewardedtodo.application.reward.usecase
 
 import jp.kztproject.rewardedtodo.data.ticket.ITicketRepository
 import jp.kztproject.rewardedtodo.domain.reward.LotteryBoxFactory

@@ -8,9 +8,9 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import jp.kztproject.rewardedtodo.test.reward.DummyCreator
-import jp.kztproject.rewardedtodo.application.reward.GetPointUseCase
-import jp.kztproject.rewardedtodo.application.reward.GetRewardsUseCase
-import jp.kztproject.rewardedtodo.application.reward.LotteryUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
 import jp.kztproject.rewardedtodo.reward.presentation.list.RewardListViewModel
 import jp.kztproject.rewardedtodo.reward.presentation.list.RewardViewModelCallback
 import org.assertj.core.api.Assertions.assertThat

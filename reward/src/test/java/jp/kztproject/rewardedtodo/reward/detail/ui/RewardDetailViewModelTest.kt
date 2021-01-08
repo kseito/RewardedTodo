@@ -4,11 +4,11 @@ package jp.kztproject.rewardedtodo.reward.detail.ui
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import jp.kztproject.rewardedtodo.application.reward.DeleteRewardUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardUseCase
 import jp.kztproject.rewardedtodo.domain.reward.RewardId
 import jp.kztproject.rewardedtodo.application.reward.model.Success
-import jp.kztproject.rewardedtodo.application.reward.GetRewardUseCase
-import jp.kztproject.rewardedtodo.application.reward.SaveRewardUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
 import jp.kztproject.rewardedtodo.reward.presentation.detail.RewardDetailViewModel
 import jp.kztproject.rewardedtodo.reward.presentation.detail.RewardDetailViewModelCallback
 import jp.kztproject.rewardedtodo.test.reward.DummyCreator
