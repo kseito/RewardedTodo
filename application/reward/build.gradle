@@ -17,4 +17,5 @@ dependencies {
     testImplementation Libraries.Test.assertJ
 
     implementation project(path: ':domain:reward')
+    implementation project(path: ':data:ticket')
 }

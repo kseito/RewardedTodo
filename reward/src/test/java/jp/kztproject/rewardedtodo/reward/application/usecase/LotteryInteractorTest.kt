@@ -3,6 +3,7 @@ package jp.kztproject.rewardedtodo.reward.application.usecase
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.times
 import com.nhaarman.mockitokotlin2.verify
+import jp.kztproject.rewardedtodo.application.reward.LotteryInteractor
 import kotlinx.coroutines.runBlocking
 import jp.kztproject.rewardedtodo.data.ticket.ITicketRepository
 import jp.kztproject.rewardedtodo.domain.reward.*

@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.application.usecase
+package jp.kztproject.rewardedtodo.application.reward
 
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
