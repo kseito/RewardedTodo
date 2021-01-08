@@ -1,11 +1,11 @@
-package jp.kztproject.rewardedtodo.reward.application.usecase
+package jp.kztproject.rewardedtodo.application.reward
 
+import jp.kztproject.rewardedtodo.application.reward.model.Error
+import jp.kztproject.rewardedtodo.application.reward.model.Failure
+import jp.kztproject.rewardedtodo.application.reward.model.Result
+import jp.kztproject.rewardedtodo.application.reward.model.Success
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository
-import jp.kztproject.rewardedtodo.reward.application.model.Error
-import jp.kztproject.rewardedtodo.reward.application.model.Failure
-import jp.kztproject.rewardedtodo.reward.application.model.Result
-import jp.kztproject.rewardedtodo.reward.application.model.Success
 import javax.inject.Inject
 
 class SaveRewardInteractor @Inject constructor(

@@ -1,6 +1,6 @@
 package jp.kztproject.rewardedtodo.reward.presentation.detail
 
-import jp.kztproject.rewardedtodo.reward.application.model.Error
+import jp.kztproject.rewardedtodo.application.reward.model.Error
 import project.seito.reward.R
 
 class ErrorMessageClassifier(error: Error) {

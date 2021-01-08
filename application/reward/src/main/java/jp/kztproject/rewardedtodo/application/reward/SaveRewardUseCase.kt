@@ -1,6 +1,6 @@
-package jp.kztproject.rewardedtodo.reward.application.usecase
+package jp.kztproject.rewardedtodo.application.reward
 
-import jp.kztproject.rewardedtodo.reward.application.model.Result
+import jp.kztproject.rewardedtodo.application.reward.model.Result
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 
 interface SaveRewardUseCase {

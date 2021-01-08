@@ -11,9 +11,9 @@ import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardId
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import jp.kztproject.rewardedtodo.domain.reward.RewardName
-import jp.kztproject.rewardedtodo.reward.application.model.Failure
-import jp.kztproject.rewardedtodo.reward.application.model.Success
-import jp.kztproject.rewardedtodo.reward.application.usecase.SaveRewardUseCase
+import jp.kztproject.rewardedtodo.application.reward.model.Failure
+import jp.kztproject.rewardedtodo.application.reward.model.Success
+import jp.kztproject.rewardedtodo.application.reward.SaveRewardUseCase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job

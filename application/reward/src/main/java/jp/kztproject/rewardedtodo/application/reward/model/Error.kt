@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.application.model
+package jp.kztproject.rewardedtodo.application.reward.model
 
 sealed class Error {
     object EmptyTitle: Error()
