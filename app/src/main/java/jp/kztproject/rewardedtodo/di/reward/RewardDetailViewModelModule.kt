@@ -6,6 +6,8 @@ import dagger.Module
 import dagger.multibindings.IntoMap
 import jp.kztproject.rewardedtodo.application.reward.DeleteRewardInteractor
 import jp.kztproject.rewardedtodo.application.reward.DeleteRewardUseCase
+import jp.kztproject.rewardedtodo.application.reward.GetRewardInteractor
+import jp.kztproject.rewardedtodo.application.reward.GetRewardUseCase
 import jp.kztproject.rewardedtodo.reward.application.usecase.*
 import jp.kztproject.rewardedtodo.reward.presentation.detail.RewardDetailViewModel
 import project.seito.screen_transition.di.ViewModelKey

@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import jp.kztproject.rewardedtodo.reward.application.model.Failure
 import jp.kztproject.rewardedtodo.reward.application.model.Success
 import jp.kztproject.rewardedtodo.application.reward.DeleteRewardUseCase
-import jp.kztproject.rewardedtodo.reward.application.usecase.GetRewardUseCase
+import jp.kztproject.rewardedtodo.application.reward.GetRewardUseCase
 import jp.kztproject.rewardedtodo.reward.application.usecase.SaveRewardUseCase
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardId
