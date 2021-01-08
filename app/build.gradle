@@ -93,6 +93,7 @@ dependencies {
     implementation project(path: ':common:database')
     implementation project(path: ':domain:reward')
     implementation project(path: ':data:reward')
+    implementation project(path: ':application:reward')
 }
 
 kapt {
