@@ -20,6 +20,9 @@ dependencies {
 
     testImplementation Libraries.Test.junit
     testImplementation Libraries.Test.assertJ
+    testImplementation Libraries.Test.mockito
+    testImplementation Libraries.Test.mockitoKotlin
+    testImplementation project(path: ':test:reward')
 
     implementation project(path: ':domain:reward')
     implementation project(path: ':data:ticket')

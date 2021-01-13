@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.application.usecase
+package jp.kztproject.rewardedtodo.application.reward.usecase
 
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
