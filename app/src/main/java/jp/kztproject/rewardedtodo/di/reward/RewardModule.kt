@@ -3,7 +3,7 @@ package jp.kztproject.rewardedtodo.di.reward
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import jp.kztproject.rewardedtodo.presentation.reward.list.RewardListFragment
-import jp.kztproject.rewardedtodo.presentation.reward.RewardDetailFragment
+import jp.kztproject.rewardedtodo.presentation.reward.detail.RewardDetailFragment
 
 @Module
 abstract class RewardModule {

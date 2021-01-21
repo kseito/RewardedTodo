@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.presentation.reward
+package jp.kztproject.rewardedtodo.presentation.reward.detail
 
 import android.content.Context
 import android.os.Bundle
