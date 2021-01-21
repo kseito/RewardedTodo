@@ -17,8 +17,23 @@ dependencies {
     implementation Libraries.AndroidX.recyclerView
     kapt Libraries.AndroidX.dataBinding
     implementation Libraries.AndroidX.design
+    implementation Libraries.AndroidX.LifeCycle.extensions
+    implementation Libraries.AndroidX.LifeCycle.viewModelKtx
+
+    //Dagger
+    implementation Libraries.Dagger.core
+    annotationProcessor Libraries.Dagger.compiler
+    kapt Libraries.Dagger.compiler
+    implementation Libraries.Dagger.android
+    implementation Libraries.Dagger.androidSupport
+    annotationProcessor Libraries.Dagger.androidProcesser
+    kapt Libraries.Dagger.androidProcesser
 
     testImplementation Libraries.Test.junit
     androidTestImplementation Libraries.Test.AndroidX.junit
     androidTestImplementation Libraries.Test.AndroidX.espresso
+
+    implementation project(path: ':reward')
+    implementation project(path: ':domain:reward')
+    implementation project(path: ':screen_transition')
 }

@@ -35,7 +35,7 @@
 
     <fragment
         android:id="@+id/reward_list_fragment"
-        android:name="jp.kztproject.rewardedtodo.reward.presentation.list.RewardListFragment"
+        android:name="jp.kztproject.rewardedtodo.presentation.reward.list.RewardListFragment"
         android:label="RewardListFragment">
 
         <action

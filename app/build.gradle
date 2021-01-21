@@ -85,6 +85,7 @@ dependencies {
     implementation project(path: ':reward')
     implementation project(path: ':screen_transition')
     implementation project(path: ':presentation:todo')
+    implementation project(path: ':presentation:reward')
 
     //TODO I don`t know why this module is needed
     implementation project(path: ':feature:todo')
