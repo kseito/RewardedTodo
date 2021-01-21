@@ -1,15 +1,15 @@
-package jp.kztproject.rewardedtodo.reward.presentation.list
+package jp.kztproject.rewardedtodo.presentation.reward.list
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 class RewardListViewModel @Inject constructor(

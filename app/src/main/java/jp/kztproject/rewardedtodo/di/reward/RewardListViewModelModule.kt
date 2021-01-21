@@ -5,7 +5,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
 import jp.kztproject.rewardedtodo.application.reward.usecase.*
-import jp.kztproject.rewardedtodo.reward.presentation.list.RewardListViewModel
+import jp.kztproject.rewardedtodo.presentation.reward.list.RewardListViewModel
 import project.seito.screen_transition.di.ViewModelKey
 
 @Module
