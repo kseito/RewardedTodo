@@ -19,6 +19,8 @@ dependencies {
     implementation Libraries.AndroidX.design
     implementation Libraries.AndroidX.LifeCycle.extensions
     implementation Libraries.AndroidX.LifeCycle.viewModelKtx
+    implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
+    implementation Libraries.fbutton
 
     //Dagger
     implementation Libraries.Dagger.core

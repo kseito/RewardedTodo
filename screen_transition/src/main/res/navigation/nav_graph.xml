@@ -24,7 +24,7 @@
 
     <dialog
         android:id="@+id/reward_detail_fragment"
-        android:name="jp.kztproject.rewardedtodo.reward.presentation.detail.RewardDetailFragment"
+        android:name="jp.kztproject.rewardedtodo.presentation.reward.RewardDetailFragment"
         android:label="RewardDetailFragment">
 
         <argument
