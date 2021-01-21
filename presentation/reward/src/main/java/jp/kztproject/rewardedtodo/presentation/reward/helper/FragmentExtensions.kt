@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.presentation.list
+package jp.kztproject.rewardedtodo.presentation.reward.helper
 
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
