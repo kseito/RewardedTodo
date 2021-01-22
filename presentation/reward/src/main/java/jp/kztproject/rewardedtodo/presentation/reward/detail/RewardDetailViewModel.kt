@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.presentation.detail
+package jp.kztproject.rewardedtodo.presentation.reward.detail
 
 import android.content.res.Resources
 import androidx.annotation.StringRes
@@ -14,6 +14,7 @@ import jp.kztproject.rewardedtodo.domain.reward.RewardName
 import jp.kztproject.rewardedtodo.application.reward.model.Failure
 import jp.kztproject.rewardedtodo.application.reward.model.Success
 import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
+import jp.kztproject.rewardedtodo.reward.presentation.detail.ErrorMessageClassifier
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job

@@ -10,7 +10,7 @@
 
         <variable
             name="viewModel"
-            type="jp.kztproject.rewardedtodo.reward.presentation.detail.RewardDetailViewModel" />
+            type="jp.kztproject.rewardedtodo.presentation.reward.detail.RewardDetailViewModel" />
     </data>
 
     <FrameLayout

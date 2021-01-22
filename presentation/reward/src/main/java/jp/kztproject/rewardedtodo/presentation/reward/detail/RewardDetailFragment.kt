@@ -16,8 +16,6 @@ import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardId
 import jp.kztproject.rewardedtodo.domain.reward.RewardName
 import jp.kztproject.rewardedtodo.presentation.reward.databinding.FragmentRewardDetailBinding
-import jp.kztproject.rewardedtodo.reward.presentation.detail.RewardDetailViewModel
-import jp.kztproject.rewardedtodo.reward.presentation.detail.RewardDetailViewModelCallback
 import project.seito.reward.R
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
