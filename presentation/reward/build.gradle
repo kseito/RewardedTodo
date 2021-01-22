@@ -36,7 +36,17 @@ dependencies {
     implementation Libraries.Kotlin.Coroutines.android
     implementation Libraries.Kotlin.Coroutines.adapter
 
+    //Test
     testImplementation Libraries.Test.junit
+    testImplementation Libraries.Test.androidXCore
+    testImplementation Libraries.Test.mockito
+    testImplementation Libraries.Test.mockitoKotlin
+    testImplementation Libraries.Test.coroutinesTest
+    testImplementation Libraries.Test.mockWebServer
+    testImplementation Libraries.Test.robolectric
+    testImplementation Libraries.Test.assertJ
+    testImplementation Libraries.Test.AndroidX.coreTesting
+    testImplementation project(path: ':test:reward')
     androidTestImplementation Libraries.Test.AndroidX.junit
     androidTestImplementation Libraries.Test.AndroidX.espresso
 

@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.list.ui
+package jp.kztproject.rewardedtodo.presentation.reward.list
 
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.Dispatchers
@@ -11,8 +11,6 @@ import jp.kztproject.rewardedtodo.test.reward.DummyCreator
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
-import jp.kztproject.rewardedtodo.reward.presentation.list.RewardListViewModel
-import jp.kztproject.rewardedtodo.reward.presentation.list.RewardViewModelCallback
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
