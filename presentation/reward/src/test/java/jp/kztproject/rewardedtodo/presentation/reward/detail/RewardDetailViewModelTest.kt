@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.detail.ui
+package jp.kztproject.rewardedtodo.presentation.reward.detail
 
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
@@ -9,8 +9,6 @@ import jp.kztproject.rewardedtodo.domain.reward.RewardId
 import jp.kztproject.rewardedtodo.application.reward.model.Success
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
-import jp.kztproject.rewardedtodo.reward.presentation.detail.RewardDetailViewModel
-import jp.kztproject.rewardedtodo.reward.presentation.detail.RewardDetailViewModelCallback
 import jp.kztproject.rewardedtodo.test.reward.DummyCreator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
