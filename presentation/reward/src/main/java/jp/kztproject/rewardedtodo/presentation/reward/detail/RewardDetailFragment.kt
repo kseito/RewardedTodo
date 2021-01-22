@@ -15,8 +15,8 @@ import dagger.android.support.AndroidSupportInjection
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardId
 import jp.kztproject.rewardedtodo.domain.reward.RewardName
+import jp.kztproject.rewardedtodo.presentation.reward.R
 import jp.kztproject.rewardedtodo.presentation.reward.databinding.FragmentRewardDetailBinding
-import project.seito.reward.R
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 

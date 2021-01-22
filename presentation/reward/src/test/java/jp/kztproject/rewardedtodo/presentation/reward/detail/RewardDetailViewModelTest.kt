@@ -9,6 +9,7 @@ import jp.kztproject.rewardedtodo.domain.reward.RewardId
 import jp.kztproject.rewardedtodo.application.reward.model.Success
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
+import jp.kztproject.rewardedtodo.presentation.reward.R
 import jp.kztproject.rewardedtodo.test.reward.DummyCreator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,7 +23,6 @@ import org.junit.Test
 import org.mockito.ArgumentMatchers.anyInt
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.Mockito
-import project.seito.reward.R
 
 @ExperimentalCoroutinesApi
 class RewardDetailViewModelTest {

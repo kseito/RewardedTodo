@@ -1,7 +1,7 @@
 package jp.kztproject.rewardedtodo.presentation.reward.detail
 
 import jp.kztproject.rewardedtodo.application.reward.model.Error
-import project.seito.reward.R
+import jp.kztproject.rewardedtodo.presentation.reward.R
 
 class ErrorMessageClassifier(error: Error) {
     val messageId = when(error) {

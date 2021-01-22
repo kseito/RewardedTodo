@@ -14,11 +14,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.AndroidSupportInjection
 import jp.kztproject.rewardedtodo.domain.reward.Reward
+import jp.kztproject.rewardedtodo.presentation.reward.R
 import jp.kztproject.rewardedtodo.presentation.reward.databinding.FragmentRewardBinding
+import jp.kztproject.rewardedtodo.presentation.reward.databinding.ItemRewardBinding
 import jp.kztproject.rewardedtodo.presentation.reward.helper.showDialog
 import project.seito.reward.BR
-import project.seito.reward.R
-import project.seito.reward.databinding.ItemRewardBinding
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 

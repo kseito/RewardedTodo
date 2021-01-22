@@ -14,12 +14,12 @@ import jp.kztproject.rewardedtodo.domain.reward.RewardName
 import jp.kztproject.rewardedtodo.application.reward.model.Failure
 import jp.kztproject.rewardedtodo.application.reward.model.Success
 import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
+import jp.kztproject.rewardedtodo.presentation.reward.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers.Main
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import project.seito.reward.R
 import javax.inject.Inject
 
 class RewardDetailViewModel @Inject constructor(

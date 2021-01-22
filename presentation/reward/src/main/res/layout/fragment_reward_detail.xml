@@ -4,7 +4,7 @@
 
     <data>
 
-        <import type="jp.kztproject.rewardedtodo.ui_common.BindingUtils" />
+        <import type="jp.kztproject.rewardedtodo.presentation.reward.helper.BindingUtils" />
 
         <import type="android.view.View" />
 
