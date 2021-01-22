@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.reward.presentation.detail
+package jp.kztproject.rewardedtodo.presentation.reward.detail
 
 import jp.kztproject.rewardedtodo.application.reward.model.Error
 import project.seito.reward.R
