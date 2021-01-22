@@ -4,7 +4,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import jp.kztproject.rewardedtodo.R
 import jp.kztproject.rewardedtodo.auth.ui.AuthFragmentDirections
-import jp.kztproject.rewardedtodo.reward.presentation.list.RewardListFragmentDirections
+import jp.kztproject.rewardedtodo.presentation.reward.list.RewardListFragmentDirections
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 

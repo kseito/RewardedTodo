@@ -1,0 +1,57 @@
+import dependencies.Libraries
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+apply from: rootProject.file('gradle/android_common.gradle')
+
+dependencies {
+
+    implementation Libraries.Kotlin.stdlib
+    implementation Libraries.AndroidX.coreKtx
+    implementation Libraries.AndroidX.appCompat
+    implementation Libraries.AndroidX.constraintLayout
+    implementation Libraries.AndroidX.recyclerView
+    kapt Libraries.AndroidX.dataBinding
+    implementation Libraries.AndroidX.design
+    implementation Libraries.AndroidX.LifeCycle.extensions
+    implementation Libraries.AndroidX.LifeCycle.viewModelKtx
+    implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
+    implementation Libraries.fbutton
+
+    //Dagger
+    implementation Libraries.Dagger.core
+    annotationProcessor Libraries.Dagger.compiler
+    kapt Libraries.Dagger.compiler
+    implementation Libraries.Dagger.android
+    implementation Libraries.Dagger.androidSupport
+    annotationProcessor Libraries.Dagger.androidProcesser
+    kapt Libraries.Dagger.androidProcesser
+
+    //Coroutines
+    implementation Libraries.Kotlin.Coroutines.core
+    implementation Libraries.Kotlin.Coroutines.android
+    implementation Libraries.Kotlin.Coroutines.adapter
+
+    //Test
+    testImplementation Libraries.Test.junit
+    testImplementation Libraries.Test.androidXCore
+    testImplementation Libraries.Test.mockito
+    testImplementation Libraries.Test.mockitoKotlin
+    testImplementation Libraries.Test.coroutinesTest
+    testImplementation Libraries.Test.mockWebServer
+    testImplementation Libraries.Test.robolectric
+    testImplementation Libraries.Test.assertJ
+    testImplementation Libraries.Test.AndroidX.coreTesting
+    testImplementation project(path: ':test:reward')
+    androidTestImplementation Libraries.Test.AndroidX.junit
+    androidTestImplementation Libraries.Test.AndroidX.espresso
+
+    implementation project(path: ':reward')
+    implementation project(path: ':application:reward')
+    implementation project(path: ':domain:reward')
+    implementation project(path: ':screen_transition')
+}

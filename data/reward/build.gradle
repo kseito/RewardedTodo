@@ -1,0 +1,44 @@
+import dependencies.Libraries
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+    id 'kotlin-kapt'
+}
+
+apply from: rootProject.file('gradle/android_common.gradle')
+
+dependencies {
+
+    implementation Libraries.Kotlin.stdlib
+
+    //Dagger
+    implementation Libraries.Dagger.core
+
+    //Room
+    implementation Libraries.AndroidX.Room.runtime
+    implementation Libraries.AndroidX.Room.ktx
+    annotationProcessor Libraries.AndroidX.Room.compiler
+    kapt Libraries.AndroidX.Room.kaptCompiler
+
+    //Retrofit
+    implementation Libraries.Retrofit.core
+    implementation Libraries.Retrofit.gsonConverter
+    implementation Libraries.gson
+
+    //Coroutines
+    implementation Libraries.Kotlin.Coroutines.core
+    implementation Libraries.Kotlin.Coroutines.adapter
+
+    testImplementation Libraries.Test.junit
+    testImplementation Libraries.Test.assertJ
+    testImplementation Libraries.Test.mockWebServer
+    testImplementation Libraries.Test.robolectric
+    testImplementation Libraries.Test.androidXCore
+    testImplementation Libraries.Test.mockito
+    testImplementation Libraries.Test.mockitoKotlin
+    testImplementation project(path: ':test:reward')
+
+    implementation project(path: ':domain:reward')
+    implementation project(path: ':screen_transition')
+}

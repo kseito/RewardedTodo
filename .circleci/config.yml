@@ -23,6 +23,6 @@ jobs:
       - run:
           name: Run Tests
           command: |
-            ./gradlew test jacocoTestReports
+            ./gradlew testDebugUnitTest jacocoTestReports
 #            TODO cannot pass
 #            bash <(curl -s https://codecov.io/bash)

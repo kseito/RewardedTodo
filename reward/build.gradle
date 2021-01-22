@@ -51,6 +51,8 @@ dependencies {
     testImplementation Libraries.Test.robolectric
     testImplementation Libraries.Test.assertJ
     testImplementation Libraries.Test.AndroidX.coreTesting
+    testImplementation project(path: ':test:reward')
+
     androidTestImplementation Libraries.Test.AndroidX.testRunner
     androidTestImplementation Libraries.Test.AndroidX.espresso
 
@@ -83,6 +85,9 @@ dependencies {
     implementation project(path: ':screen_transition')
     implementation project(path: ':common:database')
     implementation project(path: ':data:ticket')
+    implementation project(path: ':domain:reward')
+    implementation project(path: ':data:reward')
+    implementation project(path: ':application:reward')
 }
 repositories {
     mavenCentral()

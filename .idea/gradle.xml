@@ -11,19 +11,27 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/application" />
+            <option value="$PROJECT_DIR$/application/reward" />
             <option value="$PROJECT_DIR$/auth" />
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/common/database" />
             <option value="$PROJECT_DIR$/data" />
+            <option value="$PROJECT_DIR$/data/reward" />
             <option value="$PROJECT_DIR$/data/ticket" />
             <option value="$PROJECT_DIR$/data/todo" />
+            <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/domain/reward" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/todo" />
             <option value="$PROJECT_DIR$/presentation" />
+            <option value="$PROJECT_DIR$/presentation/reward" />
             <option value="$PROJECT_DIR$/presentation/todo" />
             <option value="$PROJECT_DIR$/reward" />
             <option value="$PROJECT_DIR$/screen_transition" />
+            <option value="$PROJECT_DIR$/test" />
+            <option value="$PROJECT_DIR$/test/reward" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

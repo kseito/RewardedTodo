@@ -1,3 +1,8 @@
+include ':presentation:reward'
+include ':application:reward'
+include ':test:reward'
+include ':data:reward'
+include ':domain:reward'
 include ':data:ticket'
 include ':common:database'
 include ':data:todo'
