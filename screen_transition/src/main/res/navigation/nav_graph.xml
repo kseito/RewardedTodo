@@ -2,25 +2,17 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/nav_graph"
-            app:startDestination="@id/splash_fragment">
-
-    <fragment
-        android:id="@+id/auth_fragment"
-        android:name="jp.kztproject.rewardedtodo.auth.ui.AuthFragment"
-        android:label="AuthFragment">
-
-        <action
-            android:id="@+id/to_reward_list_fragment"
-            app:destination="@id/reward_list_fragment"
-            app:popUpTo="@id/nav_graph"
-            app:popUpToInclusive="true"/>
-    </fragment>
+            app:startDestination="@id/todo_list_fragment">
 
     <fragment
         android:id="@+id/todo_list_fragment"
         android:name="jp.kztproject.rewardedtodo.presentation.todo.TodoListFragment"
         android:label="TodoListFragment"
-        />
+        >
+        <action
+            android:id="@+id/to_todoist_auth_fragment"
+            app:destination="@id/todoist_auth_fragment" />
+    </fragment>
 
     <dialog
         android:id="@+id/reward_detail_fragment"
@@ -41,38 +33,16 @@
         <action
             android:id="@+id/to_rewardDetailFragment"
             app:destination="@id/reward_detail_fragment"/>
-
         <action
-            android:id="@+id/to_auth_fragment"
-            app:destination="@id/auth_fragment"
-            app:popUpTo="@id/nav_graph"
-            app:popUpToInclusive="true"/>
+            android:id="@+id/action_reward_list_fragment_to_todoist_auth_fragment"
+            app:destination="@id/todoist_auth_fragment" />
 
     </fragment>
 
-
     <fragment
-        android:id="@+id/splash_fragment"
-        android:name="jp.kztproject.rewardedtodo.presentation.SplashFragment"
-        android:label="SplashFragment">
-
-        <action
-            android:id="@+id/to_rewardListFragment"
-            app:destination="@id/reward_list_fragment"
-            app:popUpTo="@id/nav_graph"
-            app:popUpToInclusive="true"/>
-
-        <action
-            android:id="@+id/to_authFragment"
-            app:destination="@id/auth_fragment"
-            app:popUpTo="@id/nav_graph"
-            app:popUpToInclusive="true"/>
-
-        <action
-            android:id="@+id/to_TodoListFragment"
-            app:destination="@id/todo_list_fragment"
-            app:popUpTo="@id/nav_graph"
-            app:popUpToInclusive="true"/>
+        android:id="@+id/todoist_auth_fragment"
+        android:name="jp.kztproject.rewardedtodo.presentation.auth.todoist.TodoistAuthFragment"
+        android:label="TodoistAuthFragment">
 
     </fragment>
 </navigation>
