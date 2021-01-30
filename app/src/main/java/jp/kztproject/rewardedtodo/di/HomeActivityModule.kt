@@ -5,13 +5,12 @@ import dagger.Binds
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 import dagger.multibindings.IntoMap
-import jp.kztproject.rewardedtodo.auth.di.AuthModule
-import jp.kztproject.rewardedtodo.presentation.HomeActivity
-import jp.kztproject.rewardedtodo.presentation.HomeViewModel
-import jp.kztproject.rewardedtodo.di.scope.ActivityScope
 import jp.kztproject.rewardedtodo.di.reward.RewardDatabaseModule
 import jp.kztproject.rewardedtodo.di.reward.RewardModule
+import jp.kztproject.rewardedtodo.di.scope.ActivityScope
 import jp.kztproject.rewardedtodo.di.todo.TodoDatabaseModule
+import jp.kztproject.rewardedtodo.presentation.HomeActivity
+import jp.kztproject.rewardedtodo.presentation.HomeViewModel
 import project.seito.screen_transition.di.ViewModelKey
 
 @Module
@@ -20,7 +19,6 @@ internal abstract class HomeActivityModule {
     @ActivityScope
     @ContributesAndroidInjector(modules = [
         RewardModule::class,
-        AuthModule::class,
         TodoModule::class,
         RewardDatabaseModule::class,
         TodoDatabaseModule::class])
