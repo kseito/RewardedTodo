@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
+import androidx.navigation.NavDestination
 import androidx.navigation.Navigation
 import androidx.navigation.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -38,15 +40,8 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasSupportFrag
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
         viewModel.initialize(this)
 
-        binding.navigationView.setNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.menu_logout -> viewModel.logout()
-                R.id.todoist_auth_fragment -> NavigationUI.onNavDestinationSelected(item, findNavController(R.id.nav_host_fragment))
-            }
-            false
-        }
         val navController = Navigation.findNavController(this@HomeActivity, R.id.nav_host_fragment)
-        binding.bottomNavigation.setupWithNavController(navController)
+        binding.navigationView.setupWithNavController(navController)
     }
 
     override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
