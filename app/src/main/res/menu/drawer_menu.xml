@@ -4,7 +4,7 @@
         android:title="@string/section_association">
         <menu android:checkableBehavior="single">
             <item
-                android:id="@+id/menu_todoist"
+                android:id="@+id/todoist_auth_fragment"
                 android:title="@string/menu_todoist" />
         </menu>
     </item>

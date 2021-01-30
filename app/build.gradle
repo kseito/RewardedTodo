@@ -39,6 +39,7 @@ android {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/todo_debug.kotlin_module'
         exclude 'META-INF/reward_debug.kotlin_module'
+        exclude 'META-INF/auth_debug.kotlin_module'
     }
 
     buildFeatures {
@@ -86,6 +87,7 @@ dependencies {
     implementation project(path: ':screen_transition')
     implementation project(path: ':presentation:todo')
     implementation project(path: ':presentation:reward')
+    implementation project(path: ':presentation:auth')
 
     //TODO I don`t know why this module is needed
     implementation project(path: ':feature:todo')
