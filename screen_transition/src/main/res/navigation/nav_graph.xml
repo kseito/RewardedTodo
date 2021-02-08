@@ -41,8 +41,8 @@
 
     <fragment
         android:id="@+id/todoist_auth_fragment"
-        android:name="jp.kztproject.rewardedtodo.presentation.auth.todoist.TodoistAuthFragment"
-        android:label="TodoistAuthFragment">
+        android:name="jp.kztproject.rewardedtodo.presentation.auth.todoist.TodoistAssociationFragment"
+        android:label="TodoistAssociationFragment">
 
     </fragment>
 </navigation>

@@ -5,14 +5,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import jp.kztproject.rewardedtodo.presentation.auth.databinding.FragmentTodoistAuthBinding
+import jp.kztproject.rewardedtodo.presentation.auth.databinding.FragmentTodoistAssociationBinding
 
-class TodoistAuthFragment : Fragment() {
+class TodoistAssociationFragment : Fragment() {
 
-    private lateinit var binding: FragmentTodoistAuthBinding
+    private lateinit var binding: FragmentTodoistAssociationBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentTodoistAuthBinding.inflate(inflater, container, false)
+        binding = FragmentTodoistAssociationBinding.inflate(inflater, container, false)
         return binding.root
     }
 }
