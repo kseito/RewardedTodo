@@ -15,4 +15,10 @@ class TodoistAssociationFragment : Fragment() {
         binding = FragmentTodoistAssociationBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        binding.startAuthButton.setOnClickListener {
+            //TODO execute authorization
+        }
+    }
 }
