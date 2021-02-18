@@ -1,5 +1,6 @@
 package jp.kztproject.rewardedtodo.presentation.auth.todoist
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +19,7 @@ class TodoistAssociationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.startAuthButton.setOnClickListener {
-            //TODO execute authorization
+            startActivity(Intent(context, TodoistAuthActivity::class.java))
         }
     }
 }
