@@ -35,3 +35,4 @@ captures/
 *.iml
 .idea/*
 
+presentation/auth/src/main/res/values/secrets.xml
