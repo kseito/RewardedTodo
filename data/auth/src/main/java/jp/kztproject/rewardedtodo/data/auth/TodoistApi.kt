@@ -8,5 +8,5 @@ interface TodoistApi {
     fun fetchAccessToken(
             @Field("client_id") clientId: String,
             @Field("client_secret") clientSecret: String,
-            @Field("code") code: String)
+            @Field("code") code: String): String
 }

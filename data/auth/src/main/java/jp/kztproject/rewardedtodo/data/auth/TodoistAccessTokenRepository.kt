@@ -1,8 +1,7 @@
 package jp.kztproject.rewardedtodo.data.auth
 
-class TodoistAccessTokenRepository {
+class TodoistAccessTokenRepository(private val api: TodoistApi) {
     fun fetch(clientId: String, clientToken: String, code: String): String {
-        //TODO get access token from Todoist
-        return ""
+        return api.fetchAccessToken(clientId, clientToken, code)
     }
 }
