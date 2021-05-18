@@ -1,7 +1,7 @@
 package jp.kztproject.rewardedtodo.presentation.auth.todoist
 
 import android.os.Bundle
-import android.webkit.WebViewClient
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import jp.kztproject.rewardedtodo.presentation.auth.R
@@ -21,8 +21,12 @@ class TodoistAuthActivity: AppCompatActivity(), TodoistAuthWebViewClient.AuthRes
         binding.webView.webViewClient = TodoistAuthWebViewClient(this)
     }
 
-    override fun onAuthSuccess() {
+    override fun onAuthSuccess(code: String) {
         //TODO notify auth success
         finish()
+    }
+
+    override fun onAuthFailure() {
+        Toast.makeText(this, "Authorization failed", Toast.LENGTH_LONG).show()
     }
 }
