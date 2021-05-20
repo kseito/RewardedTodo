@@ -13,6 +13,7 @@ import javax.inject.Singleton
     AndroidInjectionModule::class,
     AppModule::class,
     HomeActivityModule::class,
+    TodoistAuthActivityModule::class,
     ViewModelModule::class,
     RepositoriesModule::class])
 interface AppComponent {

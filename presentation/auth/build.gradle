@@ -9,6 +9,7 @@ plugins {
 apply from: rootProject.file('gradle/android_common.gradle')
 
 dependencies {
+    implementation project(path: ':data:auth')
 
     implementation Libraries.Kotlin.stdlib
     implementation Libraries.AndroidX.coreKtx
@@ -19,4 +20,13 @@ dependencies {
     implementation Libraries.AndroidX.LifeCycle.extensions
     implementation Libraries.AndroidX.LifeCycle.viewModelKtx
     implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
+
+    //Dagger
+    implementation Libraries.Dagger.core
+    annotationProcessor Libraries.Dagger.compiler
+    kapt Libraries.Dagger.compiler
+    implementation Libraries.Dagger.android
+    implementation Libraries.Dagger.androidSupport
+    annotationProcessor Libraries.Dagger.androidProcesser
+    kapt Libraries.Dagger.androidProcesser
 }
