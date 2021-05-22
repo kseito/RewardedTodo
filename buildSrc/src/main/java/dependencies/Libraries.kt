@@ -57,10 +57,18 @@ object Libraries {
     }
 
     object Retrofit {
-        private val version = "2.4.0"
+        private val version = "2.9.0"
         val core = "com.squareup.retrofit2:retrofit:${version}"
         val gsonConverter = "com.squareup.retrofit2:converter-gson:${version}"
+        val moshiConverter = "com.squareup.retrofit2:converter-moshi:${version}"
         val coroutinesAdapter = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
+    }
+
+    object Moshi {
+        private val version = "1.12.0"
+        val moshi = "com.squareup.moshi:moshi-kotlin:${version}"
+        val adapters =  "com.squareup.moshi:moshi-adapters:${version}"
+        val codegen =  "com.squareup.moshi:moshi-kotlin-codegen:${version}"
     }
 
     val gson = "com.google.code.gson:gson:2.8.2"

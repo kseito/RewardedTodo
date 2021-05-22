@@ -6,7 +6,7 @@ class TodoistAccessTokenRepository @Inject constructor(
         private val api: TodoistApi
 ) : ITodoistAccessTokenRepository {
 
-    override fun fetch(clientId: String, clientToken: String, code: String): String {
-        return api.fetchAccessToken(clientId, clientToken, code)
+    override suspend fun fetch(clientId: String, clientToken: String, code: String): String {
+        return api.fetchAccessToken(clientId, clientToken, code).accessToken
     }
 }
