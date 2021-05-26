@@ -8,6 +8,13 @@ plugins {
 
 apply from: rootProject.file('gradle/android_common.gradle')
 
+android {
+    defaultConfig {
+        buildConfigField "String", "TODOIST_CLIENT_ID", "\"${System.getenv("TODOIST_CLIENT_ID")}\""
+        buildConfigField "String", "TODOIST_CLIENT_SECRET", "\"${System.getenv("TODOIST_CLIENT_SECRET")}\""
+    }
+}
+
 dependencies {
     implementation project(path: ':data:auth')
 

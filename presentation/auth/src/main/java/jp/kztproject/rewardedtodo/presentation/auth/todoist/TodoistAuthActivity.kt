@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import dagger.android.AndroidInjection
+import jp.kztproject.rewardedtodo.presentation.auth.BuildConfig
 import jp.kztproject.rewardedtodo.presentation.auth.R
 import jp.kztproject.rewardedtodo.presentation.auth.databinding.ActivityTodoistAuthBinding
 import javax.inject.Inject
@@ -19,10 +20,10 @@ class TodoistAuthActivity : AppCompatActivity(), TodoistAuthWebViewClient.AuthRe
     private lateinit var viewModel: TodoistAuthViewModel
 
     private val clientId by lazy {
-        getString(R.string.todoist_client_id)
+        BuildConfig.TODOIST_CLIENT_ID
     }
     private val clientSecret by lazy {
-        getString(R.string.todoist_client_secret)
+        BuildConfig.TODOIST_CLIENT_SECRET
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
