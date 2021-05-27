@@ -41,6 +41,10 @@ object Libraries {
             val fragmentKtx = "androidx.navigation:navigation-fragment-ktx:${version}"
             val uiKtx = "androidx.navigation:navigation-ui-ktx:${version}"
         }
+
+        object Security {
+            val crypto = "androidx.security:security-crypto:1.0.0"
+        }
     }
 
     object Google {
