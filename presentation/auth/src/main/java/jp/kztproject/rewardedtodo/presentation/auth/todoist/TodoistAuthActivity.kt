@@ -4,20 +4,29 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import dagger.android.AndroidInjection
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.support.HasSupportFragmentInjector
 import jp.kztproject.rewardedtodo.presentation.auth.BuildConfig
 import jp.kztproject.rewardedtodo.presentation.auth.R
 import jp.kztproject.rewardedtodo.presentation.auth.databinding.ActivityTodoistAuthBinding
 import javax.inject.Inject
 
-class TodoistAuthActivity : AppCompatActivity(), TodoistAuthWebViewClient.AuthResultListener, TodoistAuthViewModel.Callback {
+class TodoistAuthActivity : AppCompatActivity(),
+        HasSupportFragmentInjector,
+        TodoistAuthWebViewClient.AuthResultListener,
+        TodoistAuthViewModel.Callback {
 
     private lateinit var binding: ActivityTodoistAuthBinding
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
     private lateinit var viewModel: TodoistAuthViewModel
+
+    @Inject
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
 
     private val clientId by lazy {
         BuildConfig.TODOIST_CLIENT_ID
@@ -53,4 +62,6 @@ class TodoistAuthActivity : AppCompatActivity(), TodoistAuthWebViewClient.AuthRe
     override fun onRequireAccessTokenFailed() {
         Toast.makeText(this, "Authorization failed", Toast.LENGTH_LONG).show()
     }
+
+    override fun supportFragmentInjector() = dispatchingAndroidInjector
 }
