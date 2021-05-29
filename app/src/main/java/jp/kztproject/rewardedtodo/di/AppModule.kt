@@ -7,6 +7,7 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import dagger.Module
 import dagger.Provides
+import jp.kztproject.rewardedtodo.common.kvs.EncryptedStore
 import project.seito.screen_transition.IFragmentsTransitionManager
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Named
@@ -33,7 +34,7 @@ internal class AppModule {
         val masterKey = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
 
         return EncryptedSharedPreferences.create(
-                "encrypted_prefs",   //TODO need to avoid hardcoding
+                EncryptedStore.FILE_NAME,
                 masterKey,
                 application.applicationContext,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
