@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import jp.kztproject.rewardedtodo.data.auth.ITodoistAccessTokenRepository
 import kotlinx.coroutines.launch
-import java.lang.Exception
 import javax.inject.Inject
 
 class TodoistAuthViewModel @Inject constructor(
@@ -12,18 +11,18 @@ class TodoistAuthViewModel @Inject constructor(
 ) : ViewModel() {
 
     interface Callback {
-        fun onRequireAccessTokenSuccess(accessToken: String)
+        fun onRequireAccessTokenSuccess()
 
         fun onRequireAccessTokenFailed()
     }
+
     lateinit var callback: Callback
 
     fun requireAccessToken(clientId: String, clientSecret: String, code: String) {
         viewModelScope.launch {
             try {
                 todoistAccessTokenRepository.refresh(clientId, clientSecret, code)
-                val accessToken = todoistAccessTokenRepository.get()
-                callback.onRequireAccessTokenSuccess(accessToken)
+                callback.onRequireAccessTokenSuccess()
             } catch (e: Exception) {
                 e.printStackTrace()
                 callback.onRequireAccessTokenFailed()

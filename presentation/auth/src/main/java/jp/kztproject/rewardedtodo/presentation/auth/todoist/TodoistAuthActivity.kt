@@ -46,8 +46,8 @@ class TodoistAuthActivity : AppCompatActivity(), TodoistAuthWebViewClient.AuthRe
         Toast.makeText(this, "Authorization failed", Toast.LENGTH_LONG).show()
     }
 
-    override fun onRequireAccessTokenSuccess(accessToken: String) {
-        Toast.makeText(this, "My token is $accessToken", Toast.LENGTH_LONG).show()
+    override fun onRequireAccessTokenSuccess() {
+        finish()
     }
 
     override fun onRequireAccessTokenFailed() {
