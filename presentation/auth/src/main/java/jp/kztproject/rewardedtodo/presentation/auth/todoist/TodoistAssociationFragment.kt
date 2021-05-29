@@ -38,12 +38,8 @@ class TodoistAssociationFragment : Fragment() {
         }
 
         viewModel.hasAccessToken.observe(viewLifecycleOwner) {
-            //TODO apply UI
-            if (it) {
-                Toast.makeText(requireContext(), "I have a token", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(requireContext(), "I don't have any token", Toast.LENGTH_LONG).show()
-            }
+            binding.startAuthButton.visibility = if (it) View.INVISIBLE else View.VISIBLE
+            binding.stopAssociationButton.visibility = if (it) View.VISIBLE else View.INVISIBLE
         }
     }
 
