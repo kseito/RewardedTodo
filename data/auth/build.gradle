@@ -9,6 +9,7 @@ plugins {
 apply from: rootProject.file('gradle/android_common.gradle')
 
 dependencies {
+    implementation project(path: ':common:kvs')
 
     implementation Libraries.Kotlin.stdlib
 
