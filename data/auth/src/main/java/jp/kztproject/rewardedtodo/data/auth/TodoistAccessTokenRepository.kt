@@ -12,11 +12,14 @@ class TodoistAccessTokenRepository @Inject constructor(
 ) : ITodoistAccessTokenRepository {
 
     @SuppressLint("ApplySharedPref")
-    override suspend fun fetch(clientId: String, clientToken: String, code: String): String {
+    override suspend fun refresh(clientId: String, clientToken: String, code: String) {
         val accessToken = api.fetchAccessToken(clientId, clientToken, code).accessToken
         preferences.edit()
                 .putString(EncryptedStore.TODOIST_ACCESS_TOKEN, accessToken)
                 .commit()
-        return accessToken
+    }
+
+    override suspend fun get(): String {
+        return preferences.getString(EncryptedStore.TODOIST_ACCESS_TOKEN, "")!!
     }
 }

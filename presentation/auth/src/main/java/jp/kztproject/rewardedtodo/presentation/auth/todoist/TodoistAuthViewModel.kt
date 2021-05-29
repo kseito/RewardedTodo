@@ -21,7 +21,8 @@ class TodoistAuthViewModel @Inject constructor(
     fun requireAccessToken(clientId: String, clientSecret: String, code: String) {
         viewModelScope.launch {
             try {
-                val accessToken = todoistAccessTokenRepository.fetch(clientId, clientSecret, code)
+                todoistAccessTokenRepository.refresh(clientId, clientSecret, code)
+                val accessToken = todoistAccessTokenRepository.get()
                 callback.onRequireAccessTokenSuccess(accessToken)
             } catch (e: Exception) {
                 e.printStackTrace()
