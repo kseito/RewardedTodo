@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import dagger.android.support.AndroidSupportInjection
@@ -35,6 +34,9 @@ class TodoistAssociationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding.startAuthButton.setOnClickListener {
             startActivity(Intent(context, TodoistAuthActivity::class.java))
+        }
+        binding.stopAssociationButton.setOnClickListener {
+            viewModel.clearAccessToken()
         }
 
         viewModel.hasAccessToken.observe(viewLifecycleOwner) {

@@ -4,4 +4,6 @@ interface ITodoistAccessTokenRepository {
     suspend fun refresh(clientId: String, clientToken: String, code: String)
 
     suspend fun get(): String
+
+    suspend fun clear()
 }

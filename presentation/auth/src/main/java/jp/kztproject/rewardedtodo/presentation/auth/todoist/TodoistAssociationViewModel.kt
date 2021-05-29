@@ -10,12 +10,17 @@ import javax.inject.Inject
 
 class TodoistAssociationViewModel @Inject constructor(
         private val todoistAuthRepository: ITodoistAccessTokenRepository
-): ViewModel() {
+) : ViewModel() {
 
     private val mutableHasAccessToken = MutableLiveData<Boolean>()
-    val hasAccessToken : LiveData<Boolean> = mutableHasAccessToken
+    val hasAccessToken: LiveData<Boolean> = mutableHasAccessToken
 
     fun loadAccessToken() = viewModelScope.launch {
         mutableHasAccessToken.value = todoistAuthRepository.get().isNotEmpty()
+    }
+
+    fun clearAccessToken() = viewModelScope.launch {
+        todoistAuthRepository.clear()
+        loadAccessToken()
     }
 }
