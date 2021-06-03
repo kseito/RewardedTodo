@@ -35,10 +35,22 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+
     packagingOptions {
         exclude 'META-INF/LICENSE.txt'
         exclude 'META-INF/todo_debug.kotlin_module'
         exclude 'META-INF/reward_debug.kotlin_module'
+        exclude 'META-INF/auth_debug.kotlin_module'
+        exclude 'META-INF/metadata.kotlin_module'
+        exclude 'META-INF/metadata.jvm.kotlin_module'
+        exclude 'META-INF/kotlinx-metadata-jvm.kotlin_module'
+        exclude 'META-INF/elements.kotlin_module'
+        exclude 'META-INF/kotlinx-metadata.kotlin_module'
+        exclude 'META-INF/core.kotlin_module'
+        exclude 'META-INF/specs.kotlin_module'
     }
 
     buildFeatures {
@@ -58,6 +70,7 @@ dependencies {
     implementation Libraries.AndroidX.constraintLayout
     implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
     implementation Libraries.AndroidX.NavigationComponent.uiKtx
+    implementation Libraries.AndroidX.Security.crypto
     kapt Libraries.AndroidX.dataBinding
     implementation Libraries.Stetho.stetho
 
@@ -80,12 +93,17 @@ dependencies {
     implementation Libraries.Retrofit.gsonConverter
     implementation Libraries.Retrofit.coroutinesAdapter
     implementation Libraries.gson
+    implementation Libraries.Retrofit.moshiConverter
+
+    implementation Libraries.Moshi.moshi
 
     implementation project(path: ':auth')
     implementation project(path: ':reward')
     implementation project(path: ':screen_transition')
     implementation project(path: ':presentation:todo')
     implementation project(path: ':presentation:reward')
+    implementation project(path: ':presentation:auth')
+    implementation project(path: ':common:kvs')
 
     //TODO I don`t know why this module is needed
     implementation project(path: ':feature:todo')
@@ -94,6 +112,7 @@ dependencies {
     implementation project(path: ':common:database')
     implementation project(path: ':domain:reward')
     implementation project(path: ':data:reward')
+    implementation project(path: ':data:auth')
     implementation project(path: ':application:reward')
 }
 

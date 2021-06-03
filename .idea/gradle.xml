@@ -17,7 +17,9 @@
             <option value="$PROJECT_DIR$/buildSrc" />
             <option value="$PROJECT_DIR$/common" />
             <option value="$PROJECT_DIR$/common/database" />
+            <option value="$PROJECT_DIR$/common/kvs" />
             <option value="$PROJECT_DIR$/data" />
+            <option value="$PROJECT_DIR$/data/auth" />
             <option value="$PROJECT_DIR$/data/reward" />
             <option value="$PROJECT_DIR$/data/ticket" />
             <option value="$PROJECT_DIR$/data/todo" />
@@ -26,6 +28,7 @@
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/todo" />
             <option value="$PROJECT_DIR$/presentation" />
+            <option value="$PROJECT_DIR$/presentation/auth" />
             <option value="$PROJECT_DIR$/presentation/reward" />
             <option value="$PROJECT_DIR$/presentation/todo" />
             <option value="$PROJECT_DIR$/reward" />

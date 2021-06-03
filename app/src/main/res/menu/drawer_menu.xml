@@ -9,4 +9,12 @@
         android:id="@+id/reward_list_fragment"
         android:icon="@drawable/lottery_button"
         android:title="@string/menu_reward"/>
+    <item
+        android:title="@string/section_association">
+        <menu android:checkableBehavior="single">
+            <item
+                android:id="@+id/todoist_auth_fragment"
+                android:title="@string/menu_todoist" />
+        </menu>
+    </item>
 </menu>

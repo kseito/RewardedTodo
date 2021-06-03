@@ -2,8 +2,11 @@ package jp.kztproject.rewardedtodo.data.ticket
 
 import android.content.SharedPreferences
 import javax.inject.Inject
+import javax.inject.Named
 
-class TicketRepository @Inject constructor(private val preferences: SharedPreferences) : ITicketRepository {
+class TicketRepository @Inject constructor(
+        @Named("default") private val preferences: SharedPreferences
+) : ITicketRepository {
 
     companion object {
         private const val NUMBER_OF_TICKET = "number_of_ticket"

@@ -3,18 +3,14 @@ package jp.kztproject.rewardedtodo.di
 import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import jp.kztproject.rewardedtodo.R
-import jp.kztproject.rewardedtodo.auth.ui.AuthFragmentDirections
 import jp.kztproject.rewardedtodo.presentation.reward.list.RewardListFragmentDirections
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
 class FragmentsTransitionManager @Inject constructor() : IFragmentsTransitionManager {
     override fun transitionToAuthFragment(activity: FragmentActivity?) {
-        activity?.findNavController(R.id.nav_host_fragment)?.navigate(RewardListFragmentDirections.toAuthFragment())
+        activity?.findNavController(R.id.nav_host_fragment)?.navigate(RewardListFragmentDirections.actionRewardListFragmentToTodoistAuthFragment())
     }
-
-    override fun transitionToRewardFragment(activity: FragmentActivity) =
-            activity.findNavController(R.id.nav_host_fragment).navigate(AuthFragmentDirections.toRewardListFragment())
 
     override fun transitionToRewardDetailFragment(activity: FragmentActivity?) {
         activity?.findNavController(R.id.nav_host_fragment)?.navigate(RewardListFragmentDirections.toRewardDetailFragment())

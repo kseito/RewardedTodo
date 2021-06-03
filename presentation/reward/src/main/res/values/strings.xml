@@ -28,6 +28,8 @@
     <string name="menu_reward">Reward</string>
 
     <!-- Drawer Menu -->
+    <string name="section_association">Association</string>
+    <string name="menu_todoist">Todoist</string>
     <string name="section_other">Other</string>
     <string name="menu_logout">Logout</string>
 </resources>
