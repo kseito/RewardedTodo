@@ -3,6 +3,7 @@ import dependencies.Libraries
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion Versions.androidCompileSdkVersion
@@ -87,6 +88,8 @@ dependencies {
     implementation Libraries.Dagger.androidSupport
     annotationProcessor Libraries.Dagger.androidProcesser
     kapt Libraries.Dagger.androidProcesser
+    implementation Libraries.Dagger.hilt
+    kapt Libraries.Dagger.hiltCompiler
 
     //Retrofit
     implementation Libraries.Retrofit.core

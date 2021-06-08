@@ -58,6 +58,8 @@ object Libraries {
         val android = "com.google.dagger:dagger-android:${version}"
         val androidSupport = "com.google.dagger:dagger-android-support:${version}"
         val androidProcesser = "com.google.dagger:dagger-android-processor:${version}"
+        val hilt = "com.google.dagger:hilt-android:${GradlePlugins.Hilt.version}"
+        val hiltCompiler = "com.google.dagger:hilt-android-compiler:${GradlePlugins.Hilt.version}"
     }
 
     object Retrofit {
