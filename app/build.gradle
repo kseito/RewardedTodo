@@ -18,6 +18,12 @@ android {
 
         buildConfigField "String", "TODOIST_URL", "\"https://todoist.com\""
         buildConfigField "String", "REWARD_LIST_SERVER_URL", "\"https://rewardlist.herokuapp.com\""
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["dagger.hilt.disableModulesHaveInstallInCheck" : "true"]
+            }
+        }
     }
 
     buildTypes {
