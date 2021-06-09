@@ -1,12 +1,13 @@
 package jp.kztproject.rewardedtodo.di
 
-import android.app.Application
+import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.android.qualifiers.ApplicationContext
 import jp.kztproject.rewardedtodo.common.kvs.EncryptedStore
 import project.seito.screen_transition.IFragmentsTransitionManager
 import project.seito.screen_transition.preference.PrefsWrapper
@@ -18,25 +19,25 @@ internal class AppModule {
 
     @Provides
     @Singleton
-    fun providesPrefsWrapper(application: Application): PrefsWrapper = PrefsWrapper(application.applicationContext)
+    fun providesPrefsWrapper(@ApplicationContext context: Context): PrefsWrapper = PrefsWrapper(context)
 
     @Provides
     @Singleton
     @Named("default")
-    fun provideSharedPreferences(application: Application): SharedPreferences {
-        return PreferenceManager.getDefaultSharedPreferences(application.applicationContext)
+    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
+        return PreferenceManager.getDefaultSharedPreferences(context)
     }
 
     @Provides
     @Singleton
     @Named("encrypted")
-    fun provideEncryptedSharedPreferences(application: Application): SharedPreferences {
+    fun provideEncryptedSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
         val masterKey = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
 
         return EncryptedSharedPreferences.create(
                 EncryptedStore.FILE_NAME,
                 masterKey,
-                application.applicationContext,
+                context,
                 EncryptedSharedPreferences.PrefKeyEncryptionScheme.AES256_SIV,
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
