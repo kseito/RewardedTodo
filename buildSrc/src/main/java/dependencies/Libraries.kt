@@ -16,6 +16,7 @@ object Libraries {
     object AndroidX {
         val appCompat = "androidx.appcompat:appcompat:1.2.0"
         val design = "com.google.android.material:material:1.0.0"
+        val fragment = "androidx.fragment:fragment-ktx:1.3.0"
         val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
         val dataBinding = "androidx.databinding:databinding-compiler:${GradlePlugins.Android.version}"
         val coreKtx = "androidx.core:core-ktx:1.3.2"
