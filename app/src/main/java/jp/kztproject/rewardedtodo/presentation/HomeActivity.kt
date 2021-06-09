@@ -3,7 +3,6 @@ package jp.kztproject.rewardedtodo.presentation
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
@@ -14,16 +13,16 @@ import androidx.navigation.ui.setupWithNavController
 import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.android.HasAndroidInjector
 import jp.kztproject.rewardedtodo.R
 import jp.kztproject.rewardedtodo.databinding.ActivityHomeBinding
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
-class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasSupportFragmentInjector {
+class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasAndroidInjector {
 
     @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -57,12 +56,10 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasSupportFrag
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
-    override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
-        return dispatchingAndroidInjector
-    }
-
     override fun onLogout() {
         binding.drawerLayout.closeDrawers()
         fragmentTransitionManager.transitionToAuthFragment(this)
     }
+
+    override fun androidInjector(): AndroidInjector<Any> = dispatchingAndroidInjector
 }

@@ -52,7 +52,7 @@ object Libraries {
     }
 
     object Dagger {
-        private val version = "2.20"
+        private val version = "2.35"
         val core = "com.google.dagger:dagger:${version}"
         val compiler = "com.google.dagger:dagger-compiler:${version}"
         val android = "com.google.dagger:dagger-android:${version}"

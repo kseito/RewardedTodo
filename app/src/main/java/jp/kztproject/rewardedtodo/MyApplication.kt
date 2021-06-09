@@ -1,40 +1,34 @@
 package jp.kztproject.rewardedtodo
 
-import android.app.Activity
 import android.app.Application
 import com.facebook.stetho.Stetho
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasActivityInjector
+import dagger.android.HasAndroidInjector
+import dagger.hilt.EntryPoints
+import dagger.hilt.android.HiltAndroidApp
 import jp.kztproject.rewardedtodo.di.AppComponent
-import jp.kztproject.rewardedtodo.di.DaggerAppComponent
 import javax.inject.Inject
 
-class MyApplication : Application(), HasActivityInjector {
+@HiltAndroidApp
+class MyApplication : Application(), HasAndroidInjector {
 
     @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Activity>
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
-    private lateinit var appComponent: AppComponent
+    private val appComponent: AppComponent by lazy {
+        EntryPoints.get(this, AppComponent::class.java)
+    }
 
     override fun onCreate() {
         super.onCreate()
-
-        DaggerAppComponent.builder()
-                .application(this)
-                .build()
-                .inject(this)
 
         if (BuildConfig.DEBUG) {
             Stetho.initializeWithDefaults(this)
         }
     }
 
-    override fun activityInjector(): AndroidInjector<Activity> {
+    override fun androidInjector(): AndroidInjector<Any> {
         return dispatchingAndroidInjector
-    }
-
-    fun component(): AppComponent {
-        return appComponent
     }
 }
