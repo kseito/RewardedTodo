@@ -3,6 +3,7 @@ import dependencies.Libraries
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 
 apply from: rootProject.file('gradle/android_common.gradle')
 
@@ -13,6 +14,7 @@ dependencies {
     implementation Libraries.Kotlin.stdlib
     implementation Libraries.AndroidX.coreKtx
     implementation Libraries.AndroidX.appCompat
+    implementation Libraries.AndroidX.fragment
     implementation Libraries.AndroidX.constraintLayout
     implementation Libraries.AndroidX.recyclerView
     kapt Libraries.AndroidX.dataBinding
@@ -31,4 +33,6 @@ dependencies {
     implementation Libraries.Dagger.android
     implementation Libraries.Dagger.androidSupport
     kapt Libraries.Dagger.androidProcesser
+    implementation Libraries.Dagger.hilt
+    implementation Libraries.Dagger.hiltCompiler
 }

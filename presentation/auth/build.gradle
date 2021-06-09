@@ -36,4 +36,5 @@ dependencies {
     implementation Libraries.Dagger.androidSupport
     annotationProcessor Libraries.Dagger.androidProcesser
     kapt Libraries.Dagger.androidProcesser
+    implementation Libraries.Dagger.hilt
 }
