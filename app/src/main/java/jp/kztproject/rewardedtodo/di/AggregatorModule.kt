@@ -4,12 +4,10 @@ import dagger.Module
 import dagger.android.AndroidInjectionModule
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import project.seito.screen_transition.di.ViewModelModule
 
 @InstallIn(SingletonComponent::class)
 @Module(includes = [
     AndroidInjectionModule::class,
     AppModule::class,
-    ViewModelModule::class,
     RepositoriesModule::class])
 interface AggregatorModule
