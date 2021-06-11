@@ -4,7 +4,6 @@ import dagger.Module
 import dagger.android.AndroidInjectionModule
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import jp.kztproject.rewardedtodo.di.auth.TodoistAuthModule
 import project.seito.screen_transition.di.ViewModelModule
 
 @InstallIn(SingletonComponent::class)
@@ -14,6 +13,5 @@ import project.seito.screen_transition.di.ViewModelModule
     HomeActivityModule::class,
     TodoistAuthActivityModule::class,
     ViewModelModule::class,
-    RepositoriesModule::class,
-    TodoistAuthModule::class])
+    RepositoriesModule::class])
 interface AggregatorModule
