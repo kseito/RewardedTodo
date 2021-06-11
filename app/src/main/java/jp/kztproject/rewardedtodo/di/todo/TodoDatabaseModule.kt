@@ -12,7 +12,6 @@ import jp.kztproject.rewardedtodo.di.scope.ActivityScope
 class TodoDatabaseModule {
 
     @Provides
-    @ActivityScope
     fun providesAppDatabase(application: Application): AppDatabase {
         return DatabaseInitializer.init(application, AppDatabase::class.java, "todo")
     }

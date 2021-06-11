@@ -12,7 +12,6 @@ import jp.kztproject.rewardedtodo.data.reward.database.RewardDao
 class RewardDatabaseModule {
 
     @Provides
-    @ActivityScope
     fun providesAppDatabase(application: Application): AppDatabase {
         return DatabaseInitializer.init(application, AppDatabase::class.java, "reward")
     }
