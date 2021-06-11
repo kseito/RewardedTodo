@@ -10,8 +10,6 @@ import project.seito.screen_transition.di.ViewModelModule
 @Module(includes = [
     AndroidInjectionModule::class,
     AppModule::class,
-    HomeActivityModule::class,
-    TodoistAuthActivityModule::class,
     ViewModelModule::class,
     RepositoriesModule::class])
 interface AggregatorModule

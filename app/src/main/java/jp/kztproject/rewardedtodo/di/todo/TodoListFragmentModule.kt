@@ -2,8 +2,11 @@ package jp.kztproject.rewardedtodo.di.todo
 
 import dagger.Binds
 import dagger.Module
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.ActivityRetainedComponent
 import jp.kztproject.rewardedtodo.todo.application.*
 
+@InstallIn(ActivityRetainedComponent::class)
 @Module
 interface TodoListFragmentModule {
 
