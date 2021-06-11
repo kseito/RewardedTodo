@@ -9,10 +9,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.RecyclerView
 import dagger.android.support.AndroidSupportInjection
+import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.presentation.reward.R
 import jp.kztproject.rewardedtodo.presentation.reward.databinding.FragmentRewardBinding
@@ -22,10 +24,10 @@ import project.seito.reward.BR
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    lateinit var viewModel: RewardListViewModel
+
+    private val viewModel: RewardListViewModel by viewModels()
 
     @Inject
     lateinit var fragmentTransitionManager: IFragmentsTransitionManager
@@ -33,14 +35,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     private lateinit var binding: FragmentRewardBinding
 
     private var animation: Animator? = null
-
-    override fun onAttach(context: Context) {
-        AndroidSupportInjection.inject(this)
-        super.onAttach(context)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(RewardListViewModel::class.java)
-        viewModel.setCallback(this)
-
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentRewardBinding.inflate(inflater, container, false)
@@ -51,6 +45,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.setCallback(this)
         if (savedInstanceState == null) {
             viewModel.loadRewards()
             viewModel.loadPoint()
