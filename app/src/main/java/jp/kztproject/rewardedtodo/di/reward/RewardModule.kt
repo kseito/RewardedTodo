@@ -8,7 +8,8 @@ import jp.kztproject.rewardedtodo.presentation.reward.detail.RewardDetailFragmen
 @Module(includes = [PointRepositoryModule::class,
     RewardListViewModelModule::class,
     RewardRepositoryModule::class,
-    PointApiModule::class])
+    PointApiModule::class,
+    RewardDetailViewModelModule::class])
 abstract class RewardModule {
 
 //    @ContributesAndroidInjector(modules = [

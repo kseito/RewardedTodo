@@ -8,10 +8,9 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
-import dagger.android.support.AndroidSupportInjection
+import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardId
 import jp.kztproject.rewardedtodo.domain.reward.RewardName
@@ -20,6 +19,7 @@ import jp.kztproject.rewardedtodo.presentation.reward.databinding.FragmentReward
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class RewardDetailFragment : DialogFragment(), RewardDetailViewModelCallback {
 
     private lateinit var binding: FragmentRewardDetailBinding
@@ -29,14 +29,10 @@ class RewardDetailFragment : DialogFragment(), RewardDetailViewModelCallback {
     @Inject
     lateinit var transitionManager: IFragmentsTransitionManager
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    lateinit var viewModel: RewardDetailViewModel
+    private val viewModel: RewardDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(RewardDetailViewModel::class.java)
         viewModel.setCallback(this)
         setStyle(STYLE_NORMAL, R.style.FullScreenDialogStyle)
     }
