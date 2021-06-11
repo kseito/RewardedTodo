@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import jp.kztproject.rewardedtodo.presentation.todo.model.EditingTodo
@@ -14,6 +15,7 @@ import jp.kztproject.rewardedtodo.todo.application.UpdateTodoUseCase
 import jp.kztproject.rewardedtodo.todo.domain.Todo
 import javax.inject.Inject
 
+@HiltViewModel
 class TodoListViewModel @Inject constructor(
         private val getTodoListUseCase: GetTodoListUseCase,
         private val updateTodoUseCase: UpdateTodoUseCase,
