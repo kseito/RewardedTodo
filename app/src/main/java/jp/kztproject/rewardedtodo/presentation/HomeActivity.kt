@@ -14,11 +14,13 @@ import dagger.android.AndroidInjection
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector
+import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.R
 import jp.kztproject.rewardedtodo.databinding.ActivityHomeBinding
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasAndroidInjector {
 
     @Inject
@@ -34,7 +36,6 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasAndroidInje
     lateinit var fragmentTransitionManager: IFragmentsTransitionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
         viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
