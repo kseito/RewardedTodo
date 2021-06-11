@@ -1,9 +1,11 @@
 package jp.kztproject.rewardedtodo.presentation
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Inject
 
+@HiltViewModel
 class HomeViewModel @Inject constructor(
         private val prefsWrapper: PrefsWrapper
 ) : ViewModel() {

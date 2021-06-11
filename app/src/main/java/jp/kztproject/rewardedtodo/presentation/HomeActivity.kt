@@ -1,19 +1,15 @@
 package jp.kztproject.rewardedtodo.presentation
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import dagger.android.AndroidInjection
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
 import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.R
 import jp.kztproject.rewardedtodo.databinding.ActivityHomeBinding
@@ -21,14 +17,9 @@ import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasAndroidInjector {
+class HomeActivity : AppCompatActivity(), HomeViewModel.Callback {
 
-    @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var viewModel: HomeViewModel
+    private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: ActivityHomeBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -38,7 +29,6 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasAndroidInje
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
         viewModel.initialize(this)
 
         setSupportActionBar(binding.toolbar)
@@ -61,6 +51,4 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasAndroidInje
         binding.drawerLayout.closeDrawers()
         fragmentTransitionManager.transitionToAuthFragment(this)
     }
-
-    override fun androidInjector(): AndroidInjector<Any> = dispatchingAndroidInjector
 }
