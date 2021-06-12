@@ -3,16 +3,17 @@ package jp.kztproject.rewardedtodo.di.todo
 import android.app.Application
 import dagger.Module
 import dagger.Provides
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 import jp.kztproject.rewardedtodo.common.database.DatabaseInitializer
 import jp.kztproject.rewardedtodo.data.todo.AppDatabase
 import jp.kztproject.rewardedtodo.data.todo.TodoDao
-import jp.kztproject.rewardedtodo.di.scope.ActivityScope
 
+@InstallIn(SingletonComponent::class)
 @Module
 class TodoDatabaseModule {
 
     @Provides
-    @ActivityScope
     fun providesAppDatabase(application: Application): AppDatabase {
         return DatabaseInitializer.init(application, AppDatabase::class.java, "todo")
     }

@@ -1,23 +1,13 @@
 package jp.kztproject.rewardedtodo.di.reward
 
 import dagger.Module
-import dagger.android.ContributesAndroidInjector
-import jp.kztproject.rewardedtodo.presentation.reward.list.RewardListFragment
-import jp.kztproject.rewardedtodo.presentation.reward.detail.RewardDetailFragment
+import dagger.hilt.InstallIn
+import dagger.hilt.components.SingletonComponent
 
-@Module
-abstract class RewardModule {
-
-    @ContributesAndroidInjector(modules = [
-        PointRepositoryModule::class,
-        jp.kztproject.rewardedtodo.di.reward.RewardListViewModelModule::class,
-        RewardRepositoryModule::class,
-        PointApiModule::class])
-    internal abstract fun contributeRewardFragment(): RewardListFragment
-
-    @ContributesAndroidInjector(modules = [
-        jp.kztproject.rewardedtodo.di.reward.RewardDetailViewModelModule::class,
-        PointRepositoryModule::class,
-        RewardRepositoryModule::class])
-    internal abstract fun contributeRewardAddFragment(): RewardDetailFragment
-}
+@InstallIn(SingletonComponent::class)
+@Module(includes = [PointRepositoryModule::class,
+    RewardListViewModelModule::class,
+    RewardRepositoryModule::class,
+    PointApiModule::class,
+    RewardDetailViewModelModule::class])
+abstract class RewardModule

@@ -3,6 +3,7 @@ import dependencies.Libraries
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'dagger.hilt.android.plugin'
 
 android {
     compileSdkVersion Versions.androidCompileSdkVersion
@@ -51,6 +52,7 @@ android {
         exclude 'META-INF/kotlinx-metadata.kotlin_module'
         exclude 'META-INF/core.kotlin_module'
         exclude 'META-INF/specs.kotlin_module'
+        exclude 'META-INF/gradle/incremental.annotation.processors'
     }
 
     buildFeatures {
@@ -66,6 +68,7 @@ dependencies {
     implementation Libraries.Kotlin.stdlib
 
     implementation Libraries.AndroidX.appCompat
+    implementation Libraries.AndroidX.fragment
     implementation Libraries.AndroidX.design
     implementation Libraries.AndroidX.constraintLayout
     implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
@@ -87,6 +90,8 @@ dependencies {
     implementation Libraries.Dagger.androidSupport
     annotationProcessor Libraries.Dagger.androidProcesser
     kapt Libraries.Dagger.androidProcesser
+    implementation Libraries.Dagger.hilt
+    kapt Libraries.Dagger.hiltCompiler
 
     //Retrofit
     implementation Libraries.Retrofit.core

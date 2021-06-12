@@ -1,20 +1,14 @@
 package jp.kztproject.rewardedtodo.di.reward
 
-import androidx.lifecycle.ViewModel
 import dagger.Binds
 import dagger.Module
-import dagger.multibindings.IntoMap
+import dagger.hilt.InstallIn
+import dagger.hilt.android.components.FragmentComponent
 import jp.kztproject.rewardedtodo.application.reward.usecase.*
-import jp.kztproject.rewardedtodo.presentation.reward.list.RewardListViewModel
-import project.seito.screen_transition.di.ViewModelKey
 
+@InstallIn(FragmentComponent::class)
 @Module
 interface RewardListViewModelModule {
-
-    @Binds
-    @IntoMap
-    @ViewModelKey(RewardListViewModel::class)
-    fun bindVideoTrimMuteViewModel(viewModel: RewardListViewModel): ViewModel
 
     @Binds
     fun bindLotteryUseCase(useCase: LotteryInteractor): LotteryUseCase

@@ -1,33 +1,25 @@
 package jp.kztproject.rewardedtodo.presentation
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import dagger.android.AndroidInjection
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.support.HasSupportFragmentInjector
+import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.R
 import jp.kztproject.rewardedtodo.databinding.ActivityHomeBinding
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
-class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasSupportFragmentInjector {
+@AndroidEntryPoint
+class HomeActivity : AppCompatActivity(), HomeViewModel.Callback {
 
-    @Inject
-    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Fragment>
-
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var viewModel: HomeViewModel
+    private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: ActivityHomeBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -35,10 +27,8 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasSupportFrag
     lateinit var fragmentTransitionManager: IFragmentsTransitionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(HomeViewModel::class.java)
         viewModel.initialize(this)
 
         setSupportActionBar(binding.toolbar)
@@ -55,10 +45,6 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback, HasSupportFrag
     override fun onSupportNavigateUp(): Boolean {
         val navController = findNavController(R.id.nav_host_fragment)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-    }
-
-    override fun supportFragmentInjector(): AndroidInjector<Fragment>? {
-        return dispatchingAndroidInjector
     }
 
     override fun onLogout() {

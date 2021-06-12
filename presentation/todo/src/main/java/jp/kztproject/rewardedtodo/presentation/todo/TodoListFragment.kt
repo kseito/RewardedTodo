@@ -6,25 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import dagger.android.support.AndroidSupportInjection
+import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.presentation.todo.databinding.FragmentTodoListBinding
 import jp.kztproject.rewardedtodo.presentation.todo.databinding.ViewTodoDetailBinding
 import jp.kztproject.rewardedtodo.presentation.todo.model.EditingTodo
 import jp.kztproject.rewardedtodo.todo.domain.Todo
 import javax.inject.Inject
 
+@AndroidEntryPoint
 class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, TodoListViewModel.Callback {
 
     private lateinit var binding: FragmentTodoListBinding
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-    private lateinit var viewModel: TodoListViewModel
+    private val viewModel: TodoListViewModel by viewModels()
 
     @Inject
     lateinit var adapter: TodoListViewAdapter
@@ -32,9 +31,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
     private var todoDetailDialog: BottomSheetDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        AndroidSupportInjection.inject(this)
         super.onCreate(savedInstanceState)
-        viewModel = ViewModelProvider(this, viewModelFactory).get(TodoListViewModel::class.java)
         viewModel.initialize(this)
     }
 
