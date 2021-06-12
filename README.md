@@ -14,6 +14,6 @@ This app is composed with MVVM Architecture and separate each layer by multi mod
 This app use folloing libraries.
 - DataBinding
 - Retrofit2
-- Dagger2
+- Dagger Hilt
 - Android Architecture Component(Room, Navigation)
 - Coroutines
