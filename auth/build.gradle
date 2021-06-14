@@ -52,10 +52,6 @@ dependencies {
     implementation Libraries.Dagger.core
     annotationProcessor Libraries.Dagger.compiler
     kapt Libraries.Dagger.compiler
-    implementation Libraries.Dagger.android
-    implementation Libraries.Dagger.androidSupport
-    annotationProcessor Libraries.Dagger.androidProcesser
-    kapt Libraries.Dagger.androidProcesser
 
     //DataBinding
     kapt Libraries.AndroidX.dataBinding
