@@ -89,11 +89,11 @@ object Libraries {
     object Test {
         val junit = "junit:junit:4.13.1"
         val androidXCore = "androidx.test:core:1.2.0"
-        val mockito = "org.mockito:mockito-core:2.23.0"
-        val mockitoKotlin = "com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0"
+        val mockito = "org.mockito:mockito-core:3.11.1"
+        val mockitoKotlin = "org.mockito.kotlin:mockito-kotlin:3.2.0"
         val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Kotlin.Coroutines.version}"
         val mockWebServer = "com.squareup.okhttp3:mockwebserver:3.10.0"
-        val robolectric = "org.robolectric:robolectric:4.3.1"
+        val robolectric = "org.robolectric:robolectric:4.5.1"
         val assertJ = "org.assertj:assertj-core:3.12.2"
 
         object AndroidX {
