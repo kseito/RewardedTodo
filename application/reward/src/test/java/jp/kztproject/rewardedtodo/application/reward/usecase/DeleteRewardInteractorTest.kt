@@ -1,9 +1,9 @@
 package jp.kztproject.rewardedtodo.application.reward.usecase
 
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.times
-import com.nhaarman.mockitokotlin2.verify
+import org.mockito.kotlin.any
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
 import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardInteractor
 import kotlinx.coroutines.runBlocking
 import jp.kztproject.rewardedtodo.test.reward.DummyCreator

@@ -2,8 +2,8 @@ package jp.kztproject.rewardedtodo.auth.repository
 
 
 import androidx.test.core.app.ApplicationProvider
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
