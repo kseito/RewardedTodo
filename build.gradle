@@ -1,9 +1,6 @@
 import dependencies.GradlePlugins
 
 buildscript {
-    ext {
-        kotlin_version = '1.4.20'
-    }
     repositories {
         jcenter()
         google()
