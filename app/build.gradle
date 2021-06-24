@@ -120,7 +120,3 @@ dependencies {
     implementation project(path: ':data:auth')
     implementation project(path: ':application:reward')
 }
-
-kapt {
-    generateStubs = true
-}
