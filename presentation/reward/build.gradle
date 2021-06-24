@@ -9,6 +9,12 @@ plugins {
 
 apply from: rootProject.file('gradle/android_common.gradle')
 
+android {
+    buildFeatures {
+        dataBinding = true
+    }
+}
+
 dependencies {
 
     implementation Libraries.Kotlin.stdlib

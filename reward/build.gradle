@@ -23,6 +23,10 @@ android {
             systemProperty "javax.net.ssl.trustStoreType", "JKS"
         }
     }
+
+    buildFeatures {
+        dataBinding = true
+    }
 }
 
 dependencies {
