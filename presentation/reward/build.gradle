@@ -33,10 +33,6 @@ dependencies {
     implementation Libraries.Dagger.core
     annotationProcessor Libraries.Dagger.compiler
     kapt Libraries.Dagger.compiler
-    implementation Libraries.Dagger.android
-    implementation Libraries.Dagger.androidSupport
-    annotationProcessor Libraries.Dagger.androidProcesser
-    kapt Libraries.Dagger.androidProcesser
     implementation Libraries.Dagger.hilt
     kapt Libraries.Dagger.hiltCompiler
 
