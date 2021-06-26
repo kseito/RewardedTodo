@@ -1,9 +1,9 @@
 package jp.kztproject.rewardedtodo.reward.repository
 
 import androidx.test.core.app.ApplicationProvider
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verify
+import org.mockito.kotlin.doReturn
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.verify
 import jp.kztproject.rewardedtodo.test.reward.api.DummyCreator
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async

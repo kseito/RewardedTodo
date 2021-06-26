@@ -2,8 +2,8 @@ package jp.kztproject.rewardedtodo.presentation.reward.detail
 
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.whenever
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardUseCase
 import jp.kztproject.rewardedtodo.domain.reward.RewardId
 import jp.kztproject.rewardedtodo.application.reward.model.Success

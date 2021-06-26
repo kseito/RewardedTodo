@@ -74,7 +74,6 @@ dependencies {
     implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
     implementation Libraries.AndroidX.NavigationComponent.uiKtx
     implementation Libraries.AndroidX.Security.crypto
-    kapt Libraries.AndroidX.dataBinding
     implementation Libraries.Stetho.stetho
 
     //Room
@@ -114,8 +113,4 @@ dependencies {
     implementation project(path: ':data:reward')
     implementation project(path: ':data:auth')
     implementation project(path: ':application:reward')
-}
-
-kapt {
-    generateStubs = true
 }

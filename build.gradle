@@ -1,9 +1,6 @@
 import dependencies.GradlePlugins
 
 buildscript {
-    ext {
-        kotlin_version = '1.4.20'
-    }
     repositories {
         jcenter()
         google()
@@ -13,7 +10,6 @@ buildscript {
         classpath GradlePlugins.kotlin
         classpath GradlePlugins.navigation_safe_args
         classpath GradlePlugins.dagger_hilt
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 

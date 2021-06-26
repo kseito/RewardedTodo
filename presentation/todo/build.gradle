@@ -7,6 +7,12 @@ apply plugin: 'dagger.hilt.android.plugin'
 
 apply from: rootProject.file('gradle/android_common.gradle')
 
+android {
+    buildFeatures {
+        dataBinding = true
+    }
+}
+
 dependencies {
     implementation project(path: ':screen_transition')
     implementation project(path: ':feature:todo')
@@ -17,7 +23,6 @@ dependencies {
     implementation Libraries.AndroidX.fragment
     implementation Libraries.AndroidX.constraintLayout
     implementation Libraries.AndroidX.recyclerView
-    kapt Libraries.AndroidX.dataBinding
     implementation Libraries.AndroidX.design
 
     testImplementation Libraries.Test.junit
