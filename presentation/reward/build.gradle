@@ -22,7 +22,6 @@ dependencies {
     implementation Libraries.AndroidX.appCompat
     implementation Libraries.AndroidX.constraintLayout
     implementation Libraries.AndroidX.recyclerView
-    kapt Libraries.AndroidX.dataBinding
     implementation Libraries.AndroidX.design
     implementation Libraries.AndroidX.LifeCycle.extensions
     implementation Libraries.AndroidX.LifeCycle.viewModelKtx

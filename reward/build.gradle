@@ -62,7 +62,6 @@ dependencies {
 
     //UI
     implementation Libraries.fbutton
-    kapt Libraries.AndroidX.dataBinding
     implementation Libraries.bottomNavigation
     implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
     implementation Libraries.AndroidX.NavigationComponent.uiKtx
