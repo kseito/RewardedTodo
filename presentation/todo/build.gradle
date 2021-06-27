@@ -36,5 +36,5 @@ dependencies {
     implementation Libraries.Dagger.core
     kapt Libraries.Dagger.compiler
     implementation Libraries.Dagger.hilt
-    implementation Libraries.Dagger.hiltCompiler
+    kapt Libraries.Dagger.hiltCompiler
 }
