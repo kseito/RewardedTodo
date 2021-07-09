@@ -33,5 +33,3 @@ dependencies {
     testImplementation Libraries.Test.junit
 
 }
-
-kapt.includeCompileClasspath = false
