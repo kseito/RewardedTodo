@@ -2,7 +2,7 @@ package project.seito.screen_transition.preference
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 
 class PrefsWrapper(context: Context) {
     private var prefs: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)

@@ -20,6 +20,7 @@ object Libraries {
         val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
         val coreKtx = "androidx.core:core-ktx:1.3.2"
         val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
+        val preference = "androidx.preference:preference-ktx:1.1.1"
 
         object LifeCycle {
             private val version = "2.2.0"

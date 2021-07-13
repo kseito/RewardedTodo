@@ -2,7 +2,7 @@ package dependencies
 
 object GradlePlugins {
     object Android {
-        const val version = "4.2.1"
+        const val version = "4.2.2"
     }
     object Kotlin {
         const val version = "1.5.10"
