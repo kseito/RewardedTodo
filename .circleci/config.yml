@@ -24,5 +24,3 @@ jobs:
           name: Run Tests
           command: |
             ./gradlew testDebugUnitTest jacocoTestReports
-#            TODO cannot pass
-#            bash <(curl -s https://codecov.io/bash)
