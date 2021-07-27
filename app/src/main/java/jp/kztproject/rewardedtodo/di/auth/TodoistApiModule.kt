@@ -7,7 +7,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import jp.kztproject.rewardedtodo.data.auth.TodoistApi
+import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 

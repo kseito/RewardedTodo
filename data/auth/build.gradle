@@ -10,6 +10,7 @@ apply from: rootProject.file('gradle/android_common.gradle')
 
 dependencies {
     implementation project(path: ':common:kvs')
+    implementation project(path: ':data:todoist')
 
     implementation Libraries.Kotlin.stdlib
 
