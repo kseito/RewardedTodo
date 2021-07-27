@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.data.auth.model
+package jp.kztproject.rewardedtodo.data.todoist.model
 
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
