@@ -1,0 +1,19 @@
+import dependencies.Libraries
+
+plugins {
+    id 'com.android.library'
+    id 'kotlin-android'
+}
+
+apply from: rootProject.file('gradle/android_common.gradle')
+
+dependencies {
+
+    implementation Libraries.Kotlin.stdlib
+
+    //Retrofit
+    implementation Libraries.Retrofit.core
+    implementation Libraries.Retrofit.gsonConverter
+    implementation Libraries.Retrofit.coroutinesAdapter
+    implementation Libraries.Retrofit.moshiConverter
+}
