@@ -1,9 +1,8 @@
 package jp.kztproject.rewardedtodo.data.todoist
 
+import jp.kztproject.rewardedtodo.data.todoist.model.Task
 import jp.kztproject.rewardedtodo.data.todoist.model.TodoistAuthentication
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface TodoistApi {
     @FormUrlEncoded
@@ -13,4 +12,7 @@ interface TodoistApi {
         @Field("client_secret") clientSecret: String,
         @Field("code") code: String
     ): TodoistAuthentication
+
+    @GET("rest/v1/tasks")
+    suspend fun fetchTasks(@Query("filter") filter: String): Task
 }

@@ -32,4 +32,5 @@ dependencies {
 
     implementation project(path: ':feature:todo')
     implementation project(path: ':common:database')
+    implementation project(path: ':data:todoist')
 }
