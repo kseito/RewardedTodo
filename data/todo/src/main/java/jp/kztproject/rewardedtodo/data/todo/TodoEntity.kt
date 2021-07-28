@@ -5,8 +5,13 @@ import androidx.room.PrimaryKey
 
 @Entity
 data class TodoEntity(
-        @PrimaryKey(autoGenerate = true) val id: Long,
-        val name: String,
-        val numberOfTicketsObtained: Float,
-        val isRepeat: Boolean
-)
+    @PrimaryKey(autoGenerate = true) val id: Long,
+    val todoistId: Long?,
+    val name: String,
+    val numberOfTicketsObtained: Float,
+    val isRepeat: Boolean
+) {
+    companion object {
+
+    }
+}
