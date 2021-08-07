@@ -13,7 +13,8 @@
         android:supportsRtl="true"
         tools:node="replace"
         android:theme="@style/AppTheme">
-        <activity android:name="jp.kztproject.rewardedtodo.presentation.HomeActivity">
+        <activity
+            android:name="jp.kztproject.rewardedtodo.presentation.HomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

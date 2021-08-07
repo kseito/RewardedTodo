@@ -1,7 +1,6 @@
 package jp.kztproject.rewardedtodo.presentation.auth.todoist
 
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
