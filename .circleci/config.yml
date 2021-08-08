@@ -27,6 +27,5 @@ jobs:
       - run:
           name: Static Code Analytics
           command: |
-            ./gradlew lintDebug
             bundle install --path vendor/bundle
             bundle exec danger
