@@ -68,6 +68,11 @@ object Libraries {
         val coroutinesAdapter = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
     }
 
+    object OkHttp {
+        private val version = "3.14.9"
+        val interceptor = "com.squareup.okhttp3:logging-interceptor:${version}"
+    }
+
     object Moshi {
         private val version = "1.12.0"
         val moshi = "com.squareup.moshi:moshi-kotlin:${version}"

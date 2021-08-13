@@ -95,6 +95,7 @@ dependencies {
     implementation Libraries.Retrofit.coroutinesAdapter
     implementation Libraries.gson
     implementation Libraries.Retrofit.moshiConverter
+    implementation Libraries.OkHttp.interceptor
 
     implementation Libraries.Moshi.moshi
 
