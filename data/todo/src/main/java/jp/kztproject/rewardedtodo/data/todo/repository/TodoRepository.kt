@@ -9,6 +9,7 @@ import jp.kztproject.rewardedtodo.data.todoist.model.Task
 import jp.kztproject.rewardedtodo.data.todoist.model.Tasks
 import jp.kztproject.rewardedtodo.todo.domain.Todo
 import jp.kztproject.rewardedtodo.todo.domain.repository.ITodoRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import javax.inject.Inject
 import javax.inject.Named
@@ -27,10 +28,10 @@ class TodoRepository @Inject constructor(
         } else {
             // TODO need error handling
             flow { emit(todoistApi.fetchTasks("today|overdue")) }
-                    .combine(todoDao.findAll()) { a: Tasks, b: List<TodoEntity> ->
+                    .combine(todoDao.findAll()) { a: List<Task>, b: List<TodoEntity> ->
                         // TODO need existing task case
                         // support only new task case
-                        a.tasks.filter { task ->
+                        a.filter { task ->
                             !b.map { it.todoistId }.contains(task.id)
                         }.forEach {
                             todoDao.insertOrUpdate(it.convert())
@@ -40,6 +41,7 @@ class TodoRepository @Inject constructor(
                             list.map { todo -> todo.convert() }
                         }
                     }
+                    .flowOn(Dispatchers.Default)
         }
     }
 

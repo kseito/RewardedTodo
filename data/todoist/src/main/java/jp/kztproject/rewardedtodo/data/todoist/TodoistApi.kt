@@ -1,5 +1,6 @@
 package jp.kztproject.rewardedtodo.data.todoist
 
+import jp.kztproject.rewardedtodo.data.todoist.model.Task
 import jp.kztproject.rewardedtodo.data.todoist.model.Tasks
 import jp.kztproject.rewardedtodo.data.todoist.model.TodoistAuthentication
 import retrofit2.http.*
@@ -14,5 +15,5 @@ interface TodoistApi {
     ): TodoistAuthentication
 
     @GET("rest/v1/tasks")
-    suspend fun fetchTasks(@Query("filter") filter: String): Tasks
+    suspend fun fetchTasks(@Query("filter") filter: String): List<Task>
 }
