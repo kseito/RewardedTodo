@@ -8,6 +8,7 @@ object Libraries {
         object Coroutines {
             const val version = "1.3.9"
             val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${version}"
+            val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${version}"
             val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${version}"
             val adapter = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
         }
@@ -91,6 +92,7 @@ object Libraries {
     object Test {
         val junit = "junit:junit:4.13.1"
         val androidXCore = "androidx.test:core:1.2.0"
+        val androidArchCore = "androidx.arch.core:core-testing:2.1.0"
         val mockito = "org.mockito:mockito-core:3.11.1"
         val mockitoKotlin = "org.mockito.kotlin:mockito-kotlin:3.2.0"
         val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Kotlin.Coroutines.version}"

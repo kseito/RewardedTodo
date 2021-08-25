@@ -13,8 +13,12 @@ dependencies {
 
     testImplementation Libraries.Test.junit
     testImplementation Libraries.Test.androidXCore
+    testImplementation Libraries.Test.androidArchCore
     testImplementation Libraries.Test.robolectric
     testImplementation Libraries.Google.truth
+    testImplementation Libraries.Test.mockito
+    testImplementation Libraries.Test.mockitoKotlin
+    testImplementation Libraries.Kotlin.Coroutines.test
 
     //Dagger
     implementation Libraries.Dagger.core
