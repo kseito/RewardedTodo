@@ -16,10 +16,10 @@ import org.robolectric.RobolectricTestRunner
 class TodoDaoTest {
 
     private lateinit var database: AppDatabase
-    private val dummyTodoList = listOf<TodoEntity>(
-            TodoEntity(1, "test 1", 1.0f, true),
-            TodoEntity(2, "test 2", 2.0f, true),
-            TodoEntity(3, "test 3", 1.2f, true)
+    private val dummyTodoList = listOf(
+            TodoEntity(1, 101, "test 1", 1.0f, true),
+            TodoEntity(2, 102, "test 2", 2.0f, true),
+            TodoEntity(3, 103, "test 3", 1.2f, true)
     )
 
     @Before
