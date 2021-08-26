@@ -21,6 +21,12 @@ class TodoRepository @Inject constructor(
 ) : ITodoRepository {
 
     override fun findAll(): Flow<List<Todo>> {
+        return todoDao.findAll().map { list ->
+            list.map { todo -> todo.convert() }
+        }
+    }
+
+    override fun sync(): Flow<List<Todo>> {
         return if (preferences.getString(EncryptedStore.TODOIST_ACCESS_TOKEN, null).isNullOrEmpty()) {
             todoDao.findAll().map { list ->
                 list.map { todo -> todo.convert() }
