@@ -1,7 +1,6 @@
 package jp.kztproject.rewardedtodo.di.todo
 
 import android.app.Application
-import android.view.View
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
