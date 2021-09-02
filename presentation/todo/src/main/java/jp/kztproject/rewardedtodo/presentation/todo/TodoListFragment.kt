@@ -71,7 +71,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
     }
 
     private fun showTodoDetail(item: EditingTodo) {
-        val bottomSheet = BottomSheetDialog(context!!)
+        val bottomSheet = BottomSheetDialog(requireContext())
         val binding = DataBindingUtil.inflate<ViewTodoDetailBinding>(
                 LayoutInflater.from(context), R.layout.view_todo_detail, this.binding.root as ViewGroup, false
         )
