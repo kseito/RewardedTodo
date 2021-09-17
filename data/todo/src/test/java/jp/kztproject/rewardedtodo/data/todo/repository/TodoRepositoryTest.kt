@@ -65,20 +65,22 @@ class TodoRepositoryTest {
             )
             whenever(api.fetchTasks(anyString())).thenReturn(tasks)
 
-            val actual = repository.sync().first()
-
-            assertThat(actual.size).isEqualTo(3)
-            actual[0].run {
-                assertThat(this.id).isEqualTo(1)
-                assertThat(this.todoistId).isEqualTo(101)
-            }
-            actual[1].run {
-                assertThat(this.id).isEqualTo(2)
-                assertThat(this.todoistId).isEqualTo(102)
-            }
-            actual[2].run {
-                assertThat(this.id).isEqualTo(3)
-                assertThat(this.todoistId).isEqualTo(103)
+            withContext(Dispatchers.IO) {
+                repository.sync()
+                val actual = repository.findAll().first()
+                assertThat(actual.size).isEqualTo(3)
+                actual[0].run {
+                    assertThat(this.id).isEqualTo(1)
+                    assertThat(this.todoistId).isEqualTo(101)
+                }
+                actual[1].run {
+                    assertThat(this.id).isEqualTo(2)
+                    assertThat(this.todoistId).isEqualTo(102)
+                }
+                actual[2].run {
+                    assertThat(this.id).isEqualTo(3)
+                    assertThat(this.todoistId).isEqualTo(103)
+                }
             }
         }
     }
@@ -89,8 +91,8 @@ class TodoRepositoryTest {
 
         runBlocking {
             withContext(Dispatchers.IO) {
-                dao.insertOrUpdate(TodoEntity(1, 101, "test_name", 1f, true))
-                dao.insertOrUpdate(TodoEntity(2, 102, "test_name", 1f, true))
+                dao.insertOrUpdate(TodoEntity(1, 101, "test_name", 1f, isRepeat = true, isDone = false))
+                dao.insertOrUpdate(TodoEntity(2, 102, "test_name", 1f, isRepeat = true, isDone = false))
             }
             val tasks = listOf(
                     Task(101, "test_content", Due(true)),
@@ -98,12 +100,15 @@ class TodoRepositoryTest {
             )
             whenever(api.fetchTasks(anyString())).thenReturn(tasks)
 
-            val actual = repository.sync().first()
+            withContext(Dispatchers.IO) {
+                repository.sync()
+                val actual = repository.findAll().first()
 
-            assertThat(actual.size).isEqualTo(2)
-            actual[0].run {
-                assertThat(this.id).isEqualTo(1)
-                assertThat(this.todoistId).isEqualTo(101)
+                assertThat(actual.size).isEqualTo(2)
+                actual[0].run {
+                    assertThat(this.id).isEqualTo(1)
+                    assertThat(this.todoistId).isEqualTo(101)
+                }
             }
         }
     }
