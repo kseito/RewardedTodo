@@ -1,15 +1,9 @@
 package jp.kztproject.rewardedtodo.presentation.todo
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.kztproject.rewardedtodo.presentation.todo.model.EditingTodo
-import jp.kztproject.rewardedtodo.todo.application.CompleteTodoUseCase
-import jp.kztproject.rewardedtodo.todo.application.DeleteTodoUseCase
-import jp.kztproject.rewardedtodo.todo.application.GetTodoListUseCase
-import jp.kztproject.rewardedtodo.todo.application.UpdateTodoUseCase
+import jp.kztproject.rewardedtodo.todo.application.*
 import jp.kztproject.rewardedtodo.todo.domain.Todo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -19,6 +13,7 @@ import javax.inject.Inject
 @HiltViewModel
 class TodoListViewModel @Inject constructor(
         private val getTodoListUseCase: GetTodoListUseCase,
+        private val fetchTodoListUseCase: FetchTodoListUseCase,
         private val updateTodoUseCase: UpdateTodoUseCase,
         private val deleteTodoUseCase: DeleteTodoUseCase,
         private val completeTodoUseCase: CompleteTodoUseCase
@@ -34,6 +29,10 @@ class TodoListViewModel @Inject constructor(
 
     fun initialize(callback: Callback) {
         this.callback = callback
+
+        viewModelScope.launch(Dispatchers.Default) {
+            fetchTodoListUseCase.execute()
+        }
     }
 
     fun updateTodo(todo: EditingTodo) {

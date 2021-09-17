@@ -9,7 +9,8 @@ data class TodoEntity(
     val todoistId: Long?,
     val name: String,
     val numberOfTicketsObtained: Float,
-    val isRepeat: Boolean
+    val isRepeat: Boolean,
+    val isDone: Boolean
 ) {
     companion object {
 

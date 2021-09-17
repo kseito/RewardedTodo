@@ -31,6 +31,9 @@ dependencies {
     annotationProcessor Libraries.AndroidX.Room.compiler
     kapt Libraries.AndroidX.Room.kaptCompiler
 
+    //Retrofit
+    implementation Libraries.Retrofit.core
+
     //Coroutines
     implementation Libraries.Kotlin.Coroutines.core
 

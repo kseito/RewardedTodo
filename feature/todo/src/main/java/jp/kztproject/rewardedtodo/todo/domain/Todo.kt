@@ -6,4 +6,8 @@ data class Todo(
         var name: String,   //TODO divide model
         val numberOfTicketsObtained: Float,
         val isRepeat: Boolean
-)
+) {
+    fun hasTodoistId(): Boolean {
+        return todoistId != null
+    }
+}

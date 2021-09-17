@@ -14,6 +14,9 @@ interface TodoListFragmentModule {
     fun bindGetTodoListUseCase(useCase: GetTodoListInteractor): GetTodoListUseCase
 
     @Binds
+    fun bindFetchTodoListUseCase(useCase: FetchTodoListInteractor): FetchTodoListUseCase
+
+    @Binds
     fun bindUpdateTodoListUseCase(useCase: UpdateTodoInteractor): UpdateTodoUseCase
 
     @Binds

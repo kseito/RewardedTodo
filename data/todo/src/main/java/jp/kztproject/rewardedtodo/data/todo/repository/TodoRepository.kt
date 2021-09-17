@@ -6,11 +6,10 @@ import jp.kztproject.rewardedtodo.data.todo.TodoDao
 import jp.kztproject.rewardedtodo.data.todo.TodoEntity
 import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
 import jp.kztproject.rewardedtodo.data.todoist.model.Task
-import jp.kztproject.rewardedtodo.data.todoist.model.Tasks
 import jp.kztproject.rewardedtodo.todo.domain.Todo
 import jp.kztproject.rewardedtodo.todo.domain.repository.ITodoRepository
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -21,38 +20,36 @@ class TodoRepository @Inject constructor(
 ) : ITodoRepository {
 
     override fun findAll(): Flow<List<Todo>> {
-        return todoDao.findAll().map { list ->
+        return todoDao.findAllAsFlow().map { list ->
             list.map { todo -> todo.convert() }
         }
     }
 
-    override fun sync(): Flow<List<Todo>> {
-        return if (preferences.getString(EncryptedStore.TODOIST_ACCESS_TOKEN, null).isNullOrEmpty()) {
-            todoDao.findAll().map { list ->
-                list.map { todo -> todo.convert() }
+    override suspend fun sync() {
+        if (!preferences.getString(EncryptedStore.TODOIST_ACCESS_TOKEN, null).isNullOrEmpty()) {
+            val latestTasks = todoistApi.fetchTasks("today|overdue")
+            val localTasks = todoDao.findAll()
+            // TODO need existing task case
+            latestTasks.filter { task ->
+                !localTasks.map { it.todoistId }.contains(task.id)
+            }.forEach {
+                todoDao.insertOrUpdate(it.convert(false))
             }
-        } else {
-            // TODO need error handling
-            flow { emit(todoistApi.fetchTasks("today|overdue")) }
-                    .combine(todoDao.findAll()) { a: List<Task>, b: List<TodoEntity> ->
-                        // TODO need existing task case
-                        // support only new task case
-                        a.filter { task ->
-                            !b.map { it.todoistId }.contains(task.id)
-                        }.forEach {
-                            todoDao.insertOrUpdate(it.convert())
-                        }
-                    }.flatMapLatest {
-                        todoDao.findAll().map { list ->
-                            list.map { todo -> todo.convert() }
-                        }
-                    }
-                    .flowOn(Dispatchers.Default)
         }
     }
 
     override suspend fun update(todo: Todo) {
         todoDao.insertOrUpdate(todo.convert())
+    }
+
+    override suspend fun complete(todo: Todo) {
+        if (!todo.isRepeat) {
+            todoDao.delete(todo.convert())
+        }
+        todo.todoistId?.let {
+            todoistApi.completeTask(it)
+            todoDao.completeTask(it)
+        }
     }
 
     override suspend fun delete(todo: Todo) {
@@ -75,17 +72,19 @@ class TodoRepository @Inject constructor(
                 this.todoistId,
                 this.name,
                 this.numberOfTicketsObtained,
-                this.isRepeat
+                this.isRepeat,
+                false
         )
     }
 
-    private fun Task.convert(): TodoEntity {
+    private fun Task.convert(isDone: Boolean): TodoEntity {
         return TodoEntity(
                 0,
                 this.id,
                 this.content,
                 0.5F,
-                this.due.recurring
+                this.due.recurring,
+                isDone
         )
     }
 }
