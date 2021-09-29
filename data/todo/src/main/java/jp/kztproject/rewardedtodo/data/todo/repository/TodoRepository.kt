@@ -35,6 +35,11 @@ class TodoRepository @Inject constructor(
             }.forEach {
                 todoDao.insertOrUpdate(it.convert(false))
             }
+            localTasks.filter { entity ->
+                !latestTasks.map { it.id }.contains(entity.todoistId)
+            }.forEach {
+                todoDao.completeTaskById(it.id)
+            }
         }
     }
 
@@ -48,7 +53,7 @@ class TodoRepository @Inject constructor(
         }
         todo.todoistId?.let {
             todoistApi.completeTask(it)
-            todoDao.completeTask(it)
+            todoDao.completeTaskByTodoistId(it)
         }
     }
 

@@ -15,8 +15,11 @@ interface TodoDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrUpdate(todoEntity: TodoEntity)
 
+    @Query("UPDATE TodoEntity SET isDone=1 WHERE id=:id ")
+    fun completeTaskById(id: Long)
+
     @Query("UPDATE TodoEntity SET isDone=1 WHERE todoistId=:id ")
-    fun completeTask(id: Long)
+    fun completeTaskByTodoistId(id: Long)
 
     @Delete
     fun delete(todoEntity: TodoEntity)
