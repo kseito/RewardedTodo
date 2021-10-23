@@ -12,6 +12,9 @@ interface TodoDao {
     @Query("SELECT * FROM TodoEntity WHERE isDone=0")
     fun findAllAsFlow(): Flow<List<TodoEntity>>
 
+    @Query("SELECT * FROM TodoEntity WHERE todoistId=:todoistId")
+    fun findBy(todoistId: Long): TodoEntity
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertOrUpdate(todoEntity: TodoEntity)
 

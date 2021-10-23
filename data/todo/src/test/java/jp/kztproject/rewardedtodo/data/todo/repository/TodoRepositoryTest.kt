@@ -61,7 +61,7 @@ class TodoRepositoryTest {
             val tasks = listOf(
                     Task(101, "test_content", Due(true)),
                     Task(102, "test_content", Due(true)),
-                    Task(103, "test_content", Due(true)),
+                    Task(103, "test_content", Due(false)),
             )
             whenever(api.fetchTasks(anyString())).thenReturn(tasks)
 
@@ -72,14 +72,17 @@ class TodoRepositoryTest {
                 actual[0].run {
                     assertThat(this.id).isEqualTo(1)
                     assertThat(this.todoistId).isEqualTo(101)
+                    assertThat(this.isRepeat).isTrue()
                 }
                 actual[1].run {
                     assertThat(this.id).isEqualTo(2)
                     assertThat(this.todoistId).isEqualTo(102)
+                    assertThat(this.isRepeat).isTrue()
                 }
                 actual[2].run {
                     assertThat(this.id).isEqualTo(3)
                     assertThat(this.todoistId).isEqualTo(103)
+                    assertThat(this.isRepeat).isFalse()
                 }
             }
         }
@@ -92,7 +95,8 @@ class TodoRepositoryTest {
         runBlocking {
             withContext(Dispatchers.IO) {
                 dao.insertOrUpdate(TodoEntity(1, 101, "test_name", 1f, isRepeat = true, isDone = false))
-                dao.insertOrUpdate(TodoEntity(2, 102, "test_name", 1f, isRepeat = true, isDone = false))
+                dao.insertOrUpdate(TodoEntity(2, 102, "test_name", 1f, isRepeat = true, isDone = true))
+                dao.insertOrUpdate(TodoEntity(3, 103, "test_name", 1f, isRepeat = true, isDone = false))
             }
             val tasks = listOf(
                     Task(101, "test_content", Due(true)),
@@ -108,6 +112,10 @@ class TodoRepositoryTest {
                 actual[0].run {
                     assertThat(this.id).isEqualTo(1)
                     assertThat(this.todoistId).isEqualTo(101)
+                }
+                actual[1].run {
+                    assertThat(this.id).isEqualTo(2)
+                    assertThat(this.todoistId).isEqualTo(102)
                 }
             }
         }

@@ -29,11 +29,17 @@ class TodoRepository @Inject constructor(
         if (!preferences.getString(EncryptedStore.TODOIST_ACCESS_TOKEN, null).isNullOrEmpty()) {
             val latestTasks = todoistApi.fetchTasks("today|overdue")
             val localTasks = todoDao.findAll()
-            // TODO need existing task case
-            latestTasks.filter { task ->
-                !localTasks.map { it.todoistId }.contains(task.id)
-            }.forEach {
-                todoDao.insertOrUpdate(it.convert(false))
+
+            val localTaskIds = localTasks.map { it.todoistId }
+            latestTasks.forEach { task ->
+                if (localTaskIds.contains(task.id)) {
+                    //Update if both
+                    val todoEntity = todoDao.findBy(task.id)
+                    todoDao.insertOrUpdate(todoEntity.resetIsDone())
+                } else {
+                    //Insert if only in Todoist
+                    todoDao.insertOrUpdate(task.convert(false))
+                }
             }
             localTasks.filter { entity ->
                 !latestTasks.map { it.id }.contains(entity.todoistId)
@@ -91,5 +97,9 @@ class TodoRepository @Inject constructor(
                 this.due.recurring,
                 isDone
         )
+    }
+
+    private fun TodoEntity.resetIsDone(): TodoEntity {
+        return copy(isDone = false)
     }
 }
