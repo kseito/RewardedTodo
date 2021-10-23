@@ -11,10 +11,7 @@ class CompleteTodoInteractor @Inject constructor(
 ) : CompleteTodoUseCase {
 
     override suspend fun execute(todo: Todo) {
-        if (!todo.isRepeat) {
-            todoRepository.delete(todo)
-        }
-
+        todoRepository.complete(todo)
         ticketRepository.addTicket(todo.numberOfTicketsObtained)
     }
 }

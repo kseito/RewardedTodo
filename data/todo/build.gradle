@@ -13,8 +13,12 @@ dependencies {
 
     testImplementation Libraries.Test.junit
     testImplementation Libraries.Test.androidXCore
+    testImplementation Libraries.Test.androidArchCore
     testImplementation Libraries.Test.robolectric
     testImplementation Libraries.Google.truth
+    testImplementation Libraries.Test.mockito
+    testImplementation Libraries.Test.mockitoKotlin
+    testImplementation Libraries.Kotlin.Coroutines.test
 
     //Dagger
     implementation Libraries.Dagger.core
@@ -27,9 +31,14 @@ dependencies {
     annotationProcessor Libraries.AndroidX.Room.compiler
     kapt Libraries.AndroidX.Room.kaptCompiler
 
+    //Retrofit
+    implementation Libraries.Retrofit.core
+
     //Coroutines
     implementation Libraries.Kotlin.Coroutines.core
 
     implementation project(path: ':feature:todo')
     implementation project(path: ':common:database')
+    implementation project(path: ':common:kvs')
+    implementation project(path: ':data:todoist')
 }

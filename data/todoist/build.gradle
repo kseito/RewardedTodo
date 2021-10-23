@@ -3,14 +3,11 @@ import dependencies.Libraries
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
-    id 'kotlin-kapt'
 }
 
 apply from: rootProject.file('gradle/android_common.gradle')
 
 dependencies {
-    implementation project(path: ':common:kvs')
-    implementation project(path: ':data:todoist')
 
     implementation Libraries.Kotlin.stdlib
 
@@ -19,18 +16,4 @@ dependencies {
     implementation Libraries.Retrofit.gsonConverter
     implementation Libraries.Retrofit.coroutinesAdapter
     implementation Libraries.Retrofit.moshiConverter
-
-    //Moshi
-    implementation Libraries.Moshi.moshi
-    implementation Libraries.Moshi.adapters
-    implementation Libraries.Moshi.codegen
-
-    //Coroutines
-    implementation Libraries.Kotlin.Coroutines.core
-
-    //Dagger
-    implementation Libraries.Dagger.core
-
-    testImplementation Libraries.Test.junit
-
 }

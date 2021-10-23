@@ -16,10 +16,10 @@ import org.robolectric.RobolectricTestRunner
 class TodoDaoTest {
 
     private lateinit var database: AppDatabase
-    private val dummyTodoList = listOf<TodoEntity>(
-            TodoEntity(1, "test 1", 1.0f, true),
-            TodoEntity(2, "test 2", 2.0f, true),
-            TodoEntity(3, "test 3", 1.2f, true)
+    private val dummyTodoList = listOf(
+            TodoEntity(1, 101, "test 1", 1.0f, isRepeat = true, isDone = false),
+            TodoEntity(2, 102, "test 2", 2.0f, isRepeat = true, isDone = false),
+            TodoEntity(3, 103, "test 3", 1.2f, isRepeat = true, isDone = false)
     )
 
     @Before
@@ -39,7 +39,7 @@ class TodoDaoTest {
         val dao = database.todoDao()
         dummyTodoList.forEach { dao.insertOrUpdate(it) }
 
-        val actual = dao.findAll().take(1).first()
+        val actual = dao.findAllAsFlow().take(1).first()
         assertThat(actual.size).isEqualTo(3)
         actual[0].run {
             assertThat(id).isEqualTo(1)
@@ -56,7 +56,7 @@ class TodoDaoTest {
 
         dao.delete(dummyTodoList[0])
 
-        val todoList = dao.findAll().take(1).first()
+        val todoList = dao.findAll()
         assertThat(todoList.size).isEqualTo(2)
         assertThat(todoList[0].id).isEqualTo(2)
         assertThat(todoList[1].id).isEqualTo(3)
@@ -67,9 +67,7 @@ class TodoDaoTest {
         val dao = database.todoDao()
         dao.insertOrUpdate(dummyTodoList[0])
         dao.insertOrUpdate(dummyTodoList[0].copy(name = "test 1 Copy"))
-        val actual = dao.findAll().take(1).first()[0]
+        val actual = dao.findAll()[0]
         assertThat(actual).isEqualTo(dummyTodoList[0].copy(name = "test 1 Copy"))
-
-
     }
 }

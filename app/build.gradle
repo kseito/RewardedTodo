@@ -96,6 +96,7 @@ dependencies {
     implementation Libraries.Retrofit.coroutinesAdapter
     implementation Libraries.gson
     implementation Libraries.Retrofit.moshiConverter
+    implementation Libraries.OkHttp.interceptor
 
     implementation Libraries.Moshi.moshi
 
@@ -114,6 +115,7 @@ dependencies {
     implementation project(path: ':domain:reward')
     implementation project(path: ':data:reward')
     implementation project(path: ':data:auth')
+    implementation project(path: ':data:todoist')
     implementation project(path: ':application:reward')
 }
 

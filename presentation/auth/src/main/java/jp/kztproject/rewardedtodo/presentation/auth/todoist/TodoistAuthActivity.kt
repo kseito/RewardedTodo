@@ -32,7 +32,7 @@ class TodoistAuthActivity : AppCompatActivity(),
         viewModel.callback = this
         binding = DataBindingUtil.setContentView(this, R.layout.activity_todoist_auth)
 
-        binding.webView.loadUrl("https://todoist.com/oauth/authorize?client_id=$clientId&scope=data:read&state=$clientSecret")
+        binding.webView.loadUrl("https://todoist.com/oauth/authorize?client_id=$clientId&scope=data:read_write&state=$clientSecret")
         binding.webView.webViewClient = TodoistAuthWebViewClient(this)
     }
 

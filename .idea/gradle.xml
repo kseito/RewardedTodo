@@ -22,6 +22,7 @@
             <option value="$PROJECT_DIR$/data/reward" />
             <option value="$PROJECT_DIR$/data/ticket" />
             <option value="$PROJECT_DIR$/data/todo" />
+            <option value="$PROJECT_DIR$/data/todoist" />
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/domain/reward" />
             <option value="$PROJECT_DIR$/feature" />
