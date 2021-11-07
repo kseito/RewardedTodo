@@ -67,15 +67,12 @@ class RewardListViewModel @Inject constructor(
     fun loadPoint() {
         viewModelScope.launch {
             try {
-                callback.onStartLoadingPoint()
                 val point = getPointUseCase.execute()
                 mutableRewardPoint.value = point.value
             } catch (e: Exception) {
                 if (isActive) {
                     callback.onPointLoadFailed()
                 }
-            } finally {
-                callback.onTerminateLoadingPoint()
             }
         }
     }

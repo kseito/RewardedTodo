@@ -7,11 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -25,7 +23,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,7 +48,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
     private var animation: Animator? = null
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
@@ -62,8 +62,36 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
     @Composable
     private fun RewardListScreen(viewModel: RewardListViewModel) {
+        val ticket by viewModel.rewardPoint.observeAsState()
         val rewards by viewModel.rewardListLiveData.observeAsState()
-        RewardList(rewards)
+
+        Column {
+            Header(ticket)
+            RewardList(rewards)
+        }
+    }
+
+    @Composable
+    private fun Header(ticket: Int?) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colors.primary)
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.End
+        ) {
+            Text(
+                text =  "$ticket tickets",
+                fontSize = 18.sp,
+                color = MaterialTheme.colors.onPrimary
+            )
+        }
+    }
+
+    @Preview
+    @Composable
+    private fun HeaderPreview() {
+        Header(1)
     }
 
     @Composable
@@ -154,6 +182,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         viewModel.setCallback(this)
         if (savedInstanceState == null) {
             viewModel.loadRewards()
+            viewModel.loadPoint()
         }
     }
 
