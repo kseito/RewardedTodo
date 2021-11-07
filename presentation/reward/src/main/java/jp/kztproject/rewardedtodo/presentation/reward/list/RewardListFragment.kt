@@ -7,16 +7,32 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material.Divider
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.recyclerview.widget.RecyclerView
 import dagger.hilt.android.AndroidEntryPoint
-import jp.kztproject.rewardedtodo.domain.reward.Reward
+import jp.kztproject.rewardedtodo.domain.reward.*
 import jp.kztproject.rewardedtodo.presentation.reward.R
 import jp.kztproject.rewardedtodo.presentation.reward.databinding.FragmentRewardBinding
-import jp.kztproject.rewardedtodo.presentation.reward.databinding.ItemRewardBinding
 import jp.kztproject.rewardedtodo.presentation.reward.helper.showDialog
-import project.seito.reward.BR
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
@@ -33,10 +49,104 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     private var animation: Animator? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentRewardBinding.inflate(inflater, container, false)
-        binding.lifecycleOwner = this
-        binding.viewModel = viewModel
-        return binding.root
+        return ComposeView(requireContext()).apply {
+            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
+            setContent {
+                MaterialTheme {
+                    RewardListScreen(viewModel)
+                }
+            }
+        }
+    }
+
+
+    @Composable
+    private fun RewardListScreen(viewModel: RewardListViewModel) {
+        val rewards by viewModel.rewardListLiveData.observeAsState()
+        RewardList(rewards)
+    }
+
+    @Composable
+    private fun RewardList(rewards: List<Reward>?) {
+        Column {
+            rewards?.forEachIndexed { index, reward ->
+                RewardItem(reward)
+                if (index < rewards.lastIndex) {
+                    Divider()
+                }
+            }
+        }
+    }
+
+    @Preview
+    @Composable
+    private fun RewardListPreview() {
+        RewardList(
+            rewards = listOf(
+                Reward(
+                    RewardId(1),
+                    RewardName("PS5"),
+                    1,
+                    Probability(1f),
+                    RewardDescription("this is very rare"),
+                    true
+                ),
+                Reward(
+                    RewardId(1),
+                    RewardName("New Macbook Pro"),
+                    1,
+                    Probability(1f),
+                    RewardDescription("M1 Max is great"),
+                    true
+                )
+            )
+        )
+    }
+
+    @Composable
+    private fun RewardItem(reward: Reward) {
+        Surface {
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onItemClick(reward) }
+                    .padding(16.dp)
+            ) {
+                Column(
+                    modifier = Modifier.weight(8f)
+                ) {
+                    Text(
+                        text = reward.name.value,
+                        style = MaterialTheme.typography.h4
+                    )
+                    Text(
+                        text = reward.description.value ?: "",
+                        color = Color.Gray
+                    )
+                }
+                Text(
+                    text = "${reward.probability.value} %",
+                    modifier = Modifier
+                        .weight(2f)
+                        .align(Alignment.CenterVertically),
+                    style = MaterialTheme.typography.h5
+                )
+            }
+        }
+    }
+
+    @Preview
+    @Composable
+    private fun RewardItemPreview() {
+        val reward = Reward(
+            RewardId(1),
+            RewardName("PS5"),
+            1,
+            Probability(1f),
+            RewardDescription("this is very rare"),
+            true
+        )
+        RewardItem(reward)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -44,10 +154,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         viewModel.setCallback(this)
         if (savedInstanceState == null) {
             viewModel.loadRewards()
-            viewModel.loadPoint()
         }
-
-        binding.rewardListView.adapter = RewardListAdapter(viewModel.rewardList, this)
     }
 
     override fun onItemClick(rewardEntity: Reward) {
@@ -56,10 +163,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
     override fun showRewardDetail() {
         fragmentTransitionManager.transitionToRewardDetailFragment(activity)
-    }
-
-    override fun showRewards(rewardList: MutableList<Reward>) {
-        binding.rewardListView.adapter = RewardListAdapter(rewardList, this)
     }
 
     override fun showError() {
@@ -89,43 +192,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     override fun onMissLottery() {
         val message = "You missed the lottery"
         showDialog(message)
-    }
-}
-
-class RewardListAdapter(private val rewardEntityList: MutableList<Reward>, private val clickListener: ClickListener)
-    : RecyclerView.Adapter<ViewHolder>() {
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_reward, parent, false)
-        return ViewHolder(view)
-    }
-
-    override fun getItemCount(): Int = rewardEntityList.size
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val reward = rewardEntityList[position]
-        holder.getBinding().setVariable(BR.reward, reward)
-        holder.getBinding().executePendingBindings()
-        holder.itemView.setOnClickListener { clickListener.onItemClick(reward) }
-    }
-
-    fun remove(deleteRewardEntity: Reward) {
-        rewardEntityList.forEachIndexed { index, reward ->
-            if (deleteRewardEntity == reward) {
-                rewardEntityList.remove(reward)
-                notifyItemRemoved(index)
-                return
-            }
-        }
-    }
-}
-
-class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-    private var binding: ItemRewardBinding = ItemRewardBinding.bind(itemView)
-
-    fun getBinding(): ItemRewardBinding {
-        return binding
     }
 }
 

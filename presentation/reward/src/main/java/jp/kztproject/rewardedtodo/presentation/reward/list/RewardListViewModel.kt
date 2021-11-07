@@ -22,6 +22,7 @@ class RewardListViewModel @Inject constructor(
 
     private lateinit var callback: RewardViewModelCallback
     var rewardList: MutableList<Reward> = mutableListOf()
+    val rewardListLiveData = MutableLiveData<List<Reward>>()
     var hasSelectReward: MutableLiveData<Boolean> = MutableLiveData()
     private var mutableRewardPoint = MutableLiveData<Int>()
     var rewardPoint: LiveData<Int> = mutableRewardPoint
@@ -58,7 +59,7 @@ class RewardListViewModel @Inject constructor(
 
                 rewardList.clear()
                 rewardList.addAll(newRewardList)
-                callback.showRewards(rewardList)
+                rewardListLiveData.value = rewardList
             }
         }
     }
@@ -88,8 +89,6 @@ class RewardListViewModel @Inject constructor(
 interface RewardViewModelCallback {
 
     fun showRewardDetail()
-
-    fun showRewards(rewardList: MutableList<Reward>)
 
     fun showError()
 
