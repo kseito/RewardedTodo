@@ -10,10 +10,9 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Divider
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
@@ -23,16 +22,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
 import jp.kztproject.rewardedtodo.domain.reward.*
 import jp.kztproject.rewardedtodo.presentation.reward.R
 import jp.kztproject.rewardedtodo.presentation.reward.databinding.FragmentRewardBinding
 import jp.kztproject.rewardedtodo.presentation.reward.helper.showDialog
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
@@ -65,10 +68,56 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         val ticket by viewModel.rewardPoint.observeAsState()
         val rewards by viewModel.rewardListLiveData.observeAsState()
 
-        Column {
-            Header(ticket)
-            RewardList(rewards)
+        Box(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Column {
+                Header(ticket)
+                RewardList(rewards)
+            }
+
+            FloatingActionButton(
+                onClick = {
+                    viewModel.startLottery()
+                },
+                modifier = Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(24.dp)
+            ) {
+                Icon(Icons.Filled.Done, contentDescription = "Done")
+            }
         }
+    }
+
+    @Preview
+    @Composable
+    private fun RewardListScreenPreview() {
+        val viewModel = RewardListViewModel(object : LotteryUseCase {
+            override suspend fun execute(rewards: RewardCollection): Reward? = null
+        }, object : GetRewardsUseCase {
+            private val reward = Reward(
+                RewardId(1),
+                RewardName("PS5"),
+                10,
+                Probability(0.5f),
+                RewardDescription(""),
+                false
+            )
+
+            override suspend fun execute(): List<Reward> {
+                return listOf(reward)
+            }
+
+            override suspend fun executeAsFlow(): Flow<List<Reward>> {
+                return flowOf(listOf(reward))
+            }
+        }, object : GetPointUseCase {
+            override suspend fun execute(): NumberOfTicket {
+                return NumberOfTicket(123)
+            }
+        })
+
+        RewardListScreen(viewModel = viewModel)
     }
 
     @Composable
@@ -81,7 +130,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             horizontalArrangement = Arrangement.End
         ) {
             Text(
-                text =  "$ticket tickets",
+                text = "$ticket tickets",
                 fontSize = 18.sp,
                 color = MaterialTheme.colors.onPrimary
             )
