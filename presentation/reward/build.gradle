@@ -33,13 +33,14 @@ dependencies {
     implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
     implementation Libraries.fbutton
 
-    implementation 'androidx.activity:activity-compose:1.3.1'
-    implementation("androidx.compose.foundation:foundation:1.0.4")
-    implementation("androidx.compose.material:material:1.0.4")
-    implementation("androidx.compose.ui:ui:1.0.4")
-    implementation("androidx.compose.ui:ui-tooling:1.0.4")
-    implementation "androidx.compose.runtime:runtime-livedata:1.0.4"
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.0-rc01")
+    // Jetpack Compose
+    implementation Libraries.AndroidX.activityCompose
+    implementation Libraries.AndroidX.Compose.foundation
+    implementation Libraries.AndroidX.Compose.material
+    implementation Libraries.AndroidX.Compose.ui
+    implementation Libraries.AndroidX.Compose.uiTooling
+    implementation Libraries.AndroidX.Compose.liveData
+    implementation Libraries.AndroidX.Compose.constraintLayout
 
     //Dagger
     implementation Libraries.Dagger.core

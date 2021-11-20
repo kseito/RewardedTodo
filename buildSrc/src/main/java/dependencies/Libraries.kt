@@ -7,104 +7,114 @@ object Libraries {
 
         object Coroutines {
             const val version = "1.3.9"
-            val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${version}"
-            val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${version}"
-            val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${version}"
-            val adapter = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
+            const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${version}"
+            const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${version}"
+            const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${version}"
+            const val adapter = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
         }
     }
 
     object AndroidX {
-        val appCompat = "androidx.appcompat:appcompat:1.3.1"
-        val design = "com.google.android.material:material:1.0.0"
-        val fragment = "androidx.fragment:fragment-ktx:1.3.0"
-        val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
-        val coreKtx = "androidx.core:core-ktx:1.3.2"
-        val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
-        val preference = "androidx.preference:preference-ktx:1.1.1"
+        const val appCompat = "androidx.appcompat:appcompat:1.3.1"
+        const val activityCompose = "androidx.activity:activity-compose:1.3.1"
+        const val design = "com.google.android.material:material:1.0.0"
+        const val fragment = "androidx.fragment:fragment-ktx:1.3.0"
+        const val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
+        const val coreKtx = "androidx.core:core-ktx:1.3.2"
+        const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
+        const val preference = "androidx.preference:preference-ktx:1.1.1"
+
+        object Compose {
+            const val foundation = "androidx.compose.foundation:foundation:1.0.4"
+            const val material = "androidx.compose.material:material:1.0.4"
+            const val ui = "androidx.compose.ui:ui:1.0.4"
+            const val uiTooling = "androidx.compose.ui:ui-tooling:1.0.4"
+            const val liveData = "androidx.compose.runtime:runtime-livedata:1.0.4"
+            const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc01"
+        }
 
         object LifeCycle {
-            private val version = "2.2.0"
-            val extensions = "androidx.lifecycle:lifecycle-extensions:${version}"
-            val livedataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${version}"
-            val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${version}"
+            private const val version = "2.2.0"
+            const val extensions = "androidx.lifecycle:lifecycle-extensions:${version}"
+            const val livedataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${version}"
+            const val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${version}"
         }
 
         object Room {
             private const val version = "2.2.5"
-            val runtime = "androidx.room:room-runtime:${version}"
-            val ktx = "androidx.room:room-ktx:${version}"
-            val compiler = "androidx.room:room-compiler:${version}"
-            val kaptCompiler = "androidx.room:room-compiler:${version}"
+            const val runtime = "androidx.room:room-runtime:${version}"
+            const val ktx = "androidx.room:room-ktx:${version}"
+            const val compiler = "androidx.room:room-compiler:${version}"
+            const val kaptCompiler = "androidx.room:room-compiler:${version}"
         }
 
         object NavigationComponent {
             const val version = "2.3.2"
-            val fragmentKtx = "androidx.navigation:navigation-fragment-ktx:${version}"
-            val uiKtx = "androidx.navigation:navigation-ui-ktx:${version}"
+            const val fragmentKtx = "androidx.navigation:navigation-fragment-ktx:${version}"
+            const val uiKtx = "androidx.navigation:navigation-ui-ktx:${version}"
         }
 
         object Security {
-            val crypto = "androidx.security:security-crypto:1.0.0"
+            const val crypto = "androidx.security:security-crypto:1.0.0"
         }
     }
 
     object Google {
-        val truth = "com.google.truth:truth:1.0"
+        const val truth = "com.google.truth:truth:1.0"
     }
 
     object Dagger {
-        private val version = "2.35"
-        val core = "com.google.dagger:dagger:${version}"
-        val compiler = "com.google.dagger:dagger-compiler:${version}"
-        val hilt = "com.google.dagger:hilt-android:${GradlePlugins.Hilt.version}"
-        val hiltCompiler = "com.google.dagger:hilt-android-compiler:${GradlePlugins.Hilt.version}"
+        private const val version = "2.35"
+        const val core = "com.google.dagger:dagger:${version}"
+        const val compiler = "com.google.dagger:dagger-compiler:${version}"
+        const val hilt = "com.google.dagger:hilt-android:${GradlePlugins.Hilt.version}"
+        const val hiltCompiler = "com.google.dagger:hilt-android-compiler:${GradlePlugins.Hilt.version}"
     }
 
     object Retrofit {
-        private val version = "2.9.0"
-        val core = "com.squareup.retrofit2:retrofit:${version}"
-        val gsonConverter = "com.squareup.retrofit2:converter-gson:${version}"
-        val moshiConverter = "com.squareup.retrofit2:converter-moshi:${version}"
-        val coroutinesAdapter = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
+        private const val version = "2.9.0"
+        const val core = "com.squareup.retrofit2:retrofit:${version}"
+        const val gsonConverter = "com.squareup.retrofit2:converter-gson:${version}"
+        const val moshiConverter = "com.squareup.retrofit2:converter-moshi:${version}"
+        const val coroutinesAdapter = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
     }
 
     object OkHttp {
-        private val version = "3.14.9"
-        val interceptor = "com.squareup.okhttp3:logging-interceptor:${version}"
+        private const val version = "3.14.9"
+        const val interceptor = "com.squareup.okhttp3:logging-interceptor:${version}"
     }
 
     object Moshi {
-        private val version = "1.12.0"
-        val moshi = "com.squareup.moshi:moshi-kotlin:${version}"
-        val adapters =  "com.squareup.moshi:moshi-adapters:${version}"
-        val codegen =  "com.squareup.moshi:moshi-kotlin-codegen:${version}"
+        private const val version = "1.12.0"
+        const val moshi = "com.squareup.moshi:moshi-kotlin:${version}"
+        const val adapters = "com.squareup.moshi:moshi-adapters:${version}"
+        const val codegen = "com.squareup.moshi:moshi-kotlin-codegen:${version}"
     }
 
-    val gson = "com.google.code.gson:gson:2.8.2"
-    val fbutton = "info.hoang8f:fbutton:1.0.5"
-    val bottomNavigation = "com.aurelhubert:ahbottomnavigation:2.1.0"
+    const val gson = "com.google.code.gson:gson:2.8.2"
+    const val fbutton = "info.hoang8f:fbutton:1.0.5"
+    const val bottomNavigation = "com.aurelhubert:ahbottomnavigation:2.1.0"
 
     object Stetho {
-        val stetho = "com.facebook.stetho:stetho:1.4.2"
+        const val stetho = "com.facebook.stetho:stetho:1.4.2"
     }
 
     object Test {
-        val junit = "junit:junit:4.13.1"
-        val androidXCore = "androidx.test:core:1.2.0"
-        val androidArchCore = "androidx.arch.core:core-testing:2.1.0"
-        val mockito = "org.mockito:mockito-core:3.11.1"
-        val mockitoKotlin = "org.mockito.kotlin:mockito-kotlin:3.2.0"
-        val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Kotlin.Coroutines.version}"
-        val mockWebServer = "com.squareup.okhttp3:mockwebserver:3.10.0"
-        val robolectric = "org.robolectric:robolectric:4.5.1"
-        val assertJ = "org.assertj:assertj-core:3.12.2"
+        const val junit = "junit:junit:4.13.1"
+        const val androidXCore = "androidx.test:core:1.2.0"
+        const val androidArchCore = "androidx.arch.core:core-testing:2.1.0"
+        const val mockito = "org.mockito:mockito-core:3.11.1"
+        const val mockitoKotlin = "org.mockito.kotlin:mockito-kotlin:3.2.0"
+        const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Kotlin.Coroutines.version}"
+        const val mockWebServer = "com.squareup.okhttp3:mockwebserver:3.10.0"
+        const val robolectric = "org.robolectric:robolectric:4.5.1"
+        const val assertJ = "org.assertj:assertj-core:3.12.2"
 
         object AndroidX {
-            val junit = "androidx.test.ext:junit:1.1.2"
-            val coreTesting = "androidx.arch.core:core-testing:2.0.0"
-            val testRunner = "androidx.test:runner:1.1.0"
-            val espresso = "androidx.test.espresso:espresso-core:3.1.0"
+            const val junit = "androidx.test.ext:junit:1.1.2"
+            const val coreTesting = "androidx.arch.core:core-testing:2.0.0"
+            const val testRunner = "androidx.test:runner:1.1.0"
+            const val espresso = "androidx.test.espresso:espresso-core:3.1.0"
         }
     }
 }
