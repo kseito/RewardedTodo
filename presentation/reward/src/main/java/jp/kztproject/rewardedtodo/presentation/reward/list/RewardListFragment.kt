@@ -54,13 +54,16 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return ComposeView(requireContext()).apply {
+            val onDetailClick = {
+                fragmentTransitionManager.transitionToRewardDetailFragment(activity)
+            }
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 val isDarkTheme = isSystemInDarkTheme()
                 MaterialTheme(
                     colors = if (isDarkTheme) DarkColorScheme else LightColorScheme
                 ) {
-                    RewardListScreen(viewModel)
+                    RewardListScreen(viewModel, onDetailClick)
                 }
             }
         }
@@ -68,7 +71,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
 
     @Composable
-    private fun RewardListScreen(viewModel: RewardListViewModel) {
+    private fun RewardListScreen(viewModel: RewardListViewModel, onDetailClick: () -> Unit) {
         val ticket by viewModel.rewardPoint.observeAsState()
         val rewards by viewModel.rewardListLiveData.observeAsState()
 
@@ -85,7 +88,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             val (createRewardButton, lotteryRewardButton) = createRefs()
 
             FloatingActionButton(
-                onClick = { viewModel.showRewardDetail() },
+                onClick = onDetailClick,
                 shape = RoundedCornerShape(8.dp),
                 backgroundColor = MaterialTheme.colors.primary,
                 modifier = Modifier
@@ -143,7 +146,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             }
         })
 
-        RewardListScreen(viewModel = viewModel)
+        RewardListScreen(viewModel = viewModel, onDetailClick = {})
     }
 
     @Composable
@@ -263,10 +266,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
     override fun onItemClick(rewardEntity: Reward) {
         fragmentTransitionManager.transitionToRewardDetailFragment(activity, rewardEntity.rewardId.value)
-    }
-
-    override fun showRewardDetail() {
-        fragmentTransitionManager.transitionToRewardDetailFragment(activity)
     }
 
     override fun showError() {

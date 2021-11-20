@@ -31,10 +31,6 @@ class RewardListViewModel @Inject constructor(
         this.callback = callback
     }
 
-    fun showRewardDetail() {
-        callback.showRewardDetail()
-    }
-
     fun startLottery() {
         viewModelScope.launch {
             val rewards = RewardCollection(rewardListLiveData.value!!)
@@ -79,8 +75,6 @@ class RewardListViewModel @Inject constructor(
 }
 
 interface RewardViewModelCallback {
-
-    fun showRewardDetail()
 
     fun showError()
 
