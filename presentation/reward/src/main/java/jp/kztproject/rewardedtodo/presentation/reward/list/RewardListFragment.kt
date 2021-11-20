@@ -71,7 +71,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     @Composable
     private fun RewardListScreen(viewModel: RewardListViewModel, onDetailClick: () -> Unit) {
         val ticket by viewModel.rewardPoint.observeAsState()
-        val rewards by viewModel.rewardListLiveData.observeAsState()
+        val rewards by viewModel.rewardList.observeAsState()
 
         ConstraintLayout(
             modifier = Modifier
