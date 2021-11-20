@@ -9,8 +9,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CornerBasedShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -22,8 +22,6 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,7 +59,10 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                MaterialTheme {
+                val isDarkTheme = isSystemInDarkTheme()
+                MaterialTheme(
+                    colors = if (isDarkTheme) DarkColorScheme else LightColorScheme
+                ) {
                     RewardListScreen(viewModel)
                 }
             }
@@ -76,6 +77,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
         ConstraintLayout(
             modifier = Modifier.fillMaxSize()
+                .background(MaterialTheme.colors.background)
         ) {
             Column {
                 Header(ticket)
