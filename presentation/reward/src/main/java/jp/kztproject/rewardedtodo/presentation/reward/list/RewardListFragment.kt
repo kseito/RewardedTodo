@@ -36,7 +36,6 @@ import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
 import jp.kztproject.rewardedtodo.domain.reward.*
 import jp.kztproject.rewardedtodo.presentation.reward.R
-import jp.kztproject.rewardedtodo.presentation.reward.databinding.FragmentRewardBinding
 import jp.kztproject.rewardedtodo.presentation.reward.helper.showDialog
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -50,8 +49,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
     @Inject
     lateinit var fragmentTransitionManager: IFragmentsTransitionManager
-
-    private lateinit var binding: FragmentRewardBinding
 
     private var animation: Animator? = null
 
@@ -76,7 +73,8 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         val rewards by viewModel.rewardListLiveData.observeAsState()
 
         ConstraintLayout(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .background(MaterialTheme.colors.background)
         ) {
             Column {
@@ -281,7 +279,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
     override fun onStartLoadingPoint() {
         animation = AnimatorInflater.loadAnimator(context, R.animator.rotate_animation).apply {
-            setTarget(binding.syncButton)
             start()
         }
     }
