@@ -10,8 +10,11 @@ import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CornerBasedShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,11 +22,14 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
@@ -68,7 +74,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         val ticket by viewModel.rewardPoint.observeAsState()
         val rewards by viewModel.rewardListLiveData.observeAsState()
 
-        Box(
+        ConstraintLayout(
             modifier = Modifier.fillMaxSize()
         ) {
             Column {
@@ -76,12 +82,32 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
                 RewardList(rewards)
             }
 
+            val (createRewardButton, lotteryRewardButton) = createRefs()
+
+            FloatingActionButton(
+                onClick = { viewModel.showRewardDetail() },
+                shape = RoundedCornerShape(8.dp),
+                backgroundColor = MaterialTheme.colors.primary,
+                modifier = Modifier
+                    .constrainAs(createRewardButton) {
+                        bottom.linkTo(parent.bottom)
+                        centerHorizontallyTo(parent)
+                    }
+                    .padding(24.dp)
+            ) {
+                Icon(Icons.Filled.Add, contentDescription = "Add")
+            }
+
             FloatingActionButton(
                 onClick = {
                     viewModel.startLottery()
                 },
+                backgroundColor = MaterialTheme.colors.primary,
                 modifier = Modifier
-                    .align(Alignment.BottomEnd)
+                    .constrainAs(lotteryRewardButton) {
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                    }
                     .padding(24.dp)
             ) {
                 Icon(Icons.Filled.Done, contentDescription = "Done")
