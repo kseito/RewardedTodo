@@ -55,7 +55,7 @@ class RewardListViewModelTest {
         runBlocking { whenever(mockGetRewardsUseCase.executeAsFlow()).thenReturn(flowOf(listOf(DummyCreator.createDummyReward()))) }
         viewModel.loadRewards()
 
-        assertThat(viewModel.rewardListLiveData.value!!.size).isEqualTo(1)
+        assertThat(viewModel.rewardList.value!!.size).isEqualTo(1)
     }
 
     @Test
