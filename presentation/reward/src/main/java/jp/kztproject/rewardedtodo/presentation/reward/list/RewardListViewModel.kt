@@ -25,7 +25,6 @@ class RewardListViewModel @Inject constructor(
     val rewardListLiveData = MutableLiveData<List<Reward>>()
     private var mutableRewardPoint = MutableLiveData<Int>()
     var rewardPoint: LiveData<Int> = mutableRewardPoint
-    var isEmpty: MutableLiveData<Boolean> = MutableLiveData()
 
     fun setCallback(callback: RewardViewModelCallback) {
         this.callback = callback
@@ -45,11 +44,6 @@ class RewardListViewModel @Inject constructor(
     fun loadRewards() {
         viewModelScope.launch {
             getRewardsUseCase.executeAsFlow().collect { newRewardList ->
-                isEmpty.value = newRewardList.isNullOrEmpty()
-                if (isEmpty.value == true) {
-                    return@collect
-                }
-
                 rewardListLiveData.value = newRewardList
             }
         }
