@@ -50,8 +50,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     @Inject
     lateinit var fragmentTransitionManager: IFragmentsTransitionManager
 
-    private var animation: Animator? = null
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return ComposeView(requireContext()).apply {
             val onDetailClick = {
@@ -268,22 +266,8 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         fragmentTransitionManager.transitionToRewardDetailFragment(activity, rewardEntity.rewardId.value)
     }
 
-    override fun showError() {
-        Toast.makeText(context, R.string.error_acquire_reward, Toast.LENGTH_SHORT).show()
-    }
-
     override fun onPointLoadFailed() {
         Toast.makeText(context, "Point load failed", Toast.LENGTH_SHORT).show()
-    }
-
-    override fun onStartLoadingPoint() {
-        animation = AnimatorInflater.loadAnimator(context, R.animator.rotate_animation).apply {
-            start()
-        }
-    }
-
-    override fun onTerminateLoadingPoint() {
-        animation?.cancel()
     }
 
     override fun onHitLottery(reward: Reward) {

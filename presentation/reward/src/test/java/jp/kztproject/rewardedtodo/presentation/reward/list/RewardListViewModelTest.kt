@@ -51,19 +51,12 @@ class RewardListViewModelTest {
     }
 
     @Test
-    fun testShowRewardAdd() {
-        viewModel.showRewardDetail()
-
-        verify(mockCallback, times(1)).showRewardDetail()
-    }
-
-    @Test
     fun testGetRewards() {
         runBlocking { whenever(mockGetRewardsUseCase.executeAsFlow()).thenReturn(flowOf(listOf(DummyCreator.createDummyReward()))) }
         viewModel.loadRewards()
 
         assertThat(viewModel.isEmpty.value).isFalse()
-        verify(mockCallback, times(1)).showRewards(any())
+        a
     }
 
     @Test

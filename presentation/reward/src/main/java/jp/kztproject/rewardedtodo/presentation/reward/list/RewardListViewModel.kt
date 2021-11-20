@@ -76,13 +76,7 @@ class RewardListViewModel @Inject constructor(
 
 interface RewardViewModelCallback {
 
-    fun showError()
-
     fun onPointLoadFailed()
-
-    fun onStartLoadingPoint()
-
-    fun onTerminateLoadingPoint()
 
     fun onHitLottery(reward: Reward)
 
