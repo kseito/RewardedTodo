@@ -3,6 +3,7 @@ package jp.kztproject.rewardedtodo.presentation.reward.list
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
@@ -27,8 +28,6 @@ class RewardListViewModel @Inject constructor(
     private var mutableRewardPoint = MutableLiveData<Int>()
     var rewardPoint: LiveData<Int> = mutableRewardPoint
     var isEmpty: MutableLiveData<Boolean> = MutableLiveData()
-    private val viewModelJob = Job()
-    private val viewModelScope = CoroutineScope(Dispatchers.Main + viewModelJob)
 
     fun setCallback(callback: RewardViewModelCallback) {
         this.callback = callback
