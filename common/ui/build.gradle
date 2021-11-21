@@ -12,6 +12,10 @@ dependencies {
     implementation Libraries.AndroidX.appCompat
     implementation Libraries.AndroidX.coreKtx
 
+    // Jetpack Compose
+    implementation Libraries.AndroidX.Compose.foundation
+    implementation Libraries.AndroidX.Compose.material
+
     testImplementation Libraries.Test.junit
 
     implementation Libraries.AndroidX.Room.runtime
