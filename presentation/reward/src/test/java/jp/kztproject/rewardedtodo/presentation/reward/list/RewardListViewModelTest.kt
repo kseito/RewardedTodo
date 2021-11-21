@@ -51,27 +51,11 @@ class RewardListViewModelTest {
     }
 
     @Test
-    fun testShowRewardAdd() {
-        viewModel.showRewardDetail()
-
-        verify(mockCallback, times(1)).showRewardDetail()
-    }
-
-    @Test
     fun testGetRewards() {
         runBlocking { whenever(mockGetRewardsUseCase.executeAsFlow()).thenReturn(flowOf(listOf(DummyCreator.createDummyReward()))) }
         viewModel.loadRewards()
 
-        assertThat(viewModel.isEmpty.value).isFalse()
-        verify(mockCallback, times(1)).showRewards(any())
-    }
-
-    @Test
-    fun testGetRewards_Empty() {
-        runBlocking { whenever(mockGetRewardsUseCase.executeAsFlow()).thenReturn(flowOf(emptyList())) }
-        viewModel.loadRewards()
-
-        assertThat(viewModel.isEmpty.value).isTrue()
+        assertThat(viewModel.rewardList.value!!.size).isEqualTo(1)
     }
 
     @Test
@@ -81,8 +65,6 @@ class RewardListViewModelTest {
         viewModel.loadPoint()
 
         assertThat(viewModel.rewardPoint.value).isEqualTo(10)
-        verify(mockCallback).onStartLoadingPoint()
-        verify(mockCallback).onTerminateLoadingPoint()
     }
 
     @Test
@@ -90,8 +72,6 @@ class RewardListViewModelTest {
         runBlocking { whenever(mockGetPointUseCase.execute()).thenAnswer { throw SocketTimeoutException() } }
         viewModel.loadPoint()
 
-        verify(mockCallback).onStartLoadingPoint()
-        verify(mockCallback).onTerminateLoadingPoint()
         verify(mockCallback).onPointLoadFailed()
     }
 }

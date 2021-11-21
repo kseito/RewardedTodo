@@ -15,7 +15,7 @@
         tools:node="replace"
         android:theme="@style/AppTheme">
         <activity android:name="jp.kztproject.rewardedtodo.presentation.HomeActivity"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
