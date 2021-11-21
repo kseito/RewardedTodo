@@ -25,6 +25,15 @@ dependencies {
     implementation Libraries.AndroidX.recyclerView
     implementation Libraries.AndroidX.design
 
+    // Jetpack Compose
+    implementation Libraries.AndroidX.activityCompose
+    implementation Libraries.AndroidX.Compose.foundation
+    implementation Libraries.AndroidX.Compose.material
+    implementation Libraries.AndroidX.Compose.ui
+    implementation Libraries.AndroidX.Compose.uiTooling
+    implementation Libraries.AndroidX.Compose.liveData
+    implementation Libraries.AndroidX.Compose.constraintLayout
+
     testImplementation Libraries.Test.junit
     androidTestImplementation Libraries.Test.AndroidX.junit
     androidTestImplementation Libraries.Test.AndroidX.espresso

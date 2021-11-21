@@ -1,0 +1,18 @@
+import dependencies.Libraries
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+
+apply from: rootProject.file('gradle/android_common.gradle')
+
+dependencies {
+    implementation Libraries.Kotlin.stdlib
+
+    implementation Libraries.AndroidX.appCompat
+    implementation Libraries.AndroidX.coreKtx
+
+    testImplementation Libraries.Test.junit
+
+    implementation Libraries.AndroidX.Room.runtime
+}
