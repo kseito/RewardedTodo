@@ -10,12 +10,18 @@ apply from: rootProject.file('gradle/android_common.gradle')
 android {
     buildFeatures {
         dataBinding = true
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.0.4'
     }
 }
 
 dependencies {
     implementation project(path: ':screen_transition')
     implementation project(path: ':feature:todo')
+    implementation project(path: ':common:ui')
 
     implementation Libraries.Kotlin.stdlib
     implementation Libraries.AndroidX.coreKtx
