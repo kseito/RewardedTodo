@@ -1,7 +1,5 @@
 package jp.kztproject.rewardedtodo.presentation.reward.list
 
-import android.animation.Animator
-import android.animation.AnimatorInflater
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,7 +33,6 @@ import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
 import jp.kztproject.rewardedtodo.domain.reward.*
-import jp.kztproject.rewardedtodo.presentation.reward.R
 import jp.kztproject.rewardedtodo.presentation.reward.helper.showDialog
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -57,9 +54,8 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             }
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                val isDarkTheme = isSystemInDarkTheme()
                 MaterialTheme(
-                    colors = if (isDarkTheme) DarkColorScheme else LightColorScheme
+                    colors = RewardedTodoScheme(isSystemInDarkTheme())
                 ) {
                     RewardListScreen(viewModel, onDetailClick)
                 }

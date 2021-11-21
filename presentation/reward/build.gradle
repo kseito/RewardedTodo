@@ -72,4 +72,5 @@ dependencies {
     implementation project(path: ':application:reward')
     implementation project(path: ':domain:reward')
     implementation project(path: ':screen_transition')
+    implementation project(path: ':common:ui')
 }
