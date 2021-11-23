@@ -5,10 +5,25 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.Checkbox
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -44,12 +59,82 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
                 MaterialTheme(
                     colors = RewardedTodoScheme(isSystemInDarkTheme())
                 ) {
-                    Text(
-                        text = "Hello Todo List"
-                    )
+                    TodoListScreen(viewModel)
                 }
             }
         }
+    }
+
+    @Composable
+    private fun TodoListScreen(viewModel: TodoListViewModel) {
+        val todoList by viewModel.todoList.observeAsState()
+        Column {
+            todoList?.forEach { todo ->
+                TodoListItem(todo)
+            }
+        }
+    }
+
+    @Composable
+    private fun TodoListItem(todo: Todo) {
+        var isDone by remember { mutableStateOf(false) }
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp)
+        ) {
+            val (checkbox, title, ticketImage, ticketCount) = createRefs()
+
+            Checkbox(
+                checked = isDone,
+                onCheckedChange = {
+                    //Done task
+                },
+                modifier = Modifier
+                    .constrainAs(checkbox) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .padding(0.dp, 0.dp, 16.dp, 0.dp)
+            )
+            Text(
+                text = todo.name,
+                style = MaterialTheme.typography.h5,
+                modifier = Modifier
+                    .constrainAs(title) {
+                        start.linkTo(checkbox.end)
+                    }
+            )
+            Image(
+                painter = painterResource(id = R.drawable.ic_ticket),
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .size(36.dp)
+                    .constrainAs(ticketImage) {
+                        top.linkTo(title.bottom)
+                        start.linkTo(title.start)
+                    }
+            )
+            Text(
+                text = "${todo.numberOfTicketsObtained}",
+                fontSize = 20.sp,
+                modifier = Modifier
+                    .constrainAs(ticketCount) {
+                        top.linkTo(ticketImage.top)
+                        start.linkTo(ticketImage.end, 16.dp)
+                        bottom.linkTo(ticketImage.bottom)
+                    }
+            )
+        }
+    }
+
+    @Preview
+    @Composable
+    private fun TodoListItemPreview() {
+        val todo = Todo(1, 1, "Buy ingredients for dinner", 1f, false)
+        TodoListItem(todo)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
