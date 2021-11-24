@@ -5,9 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -168,7 +166,10 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
     @Composable
     private fun RewardList(rewards: List<Reward>?) {
-        Column {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+        ) {
             rewards?.forEachIndexed { index, reward ->
                 RewardItem(reward)
                 if (index < rewards.lastIndex) {
