@@ -5,8 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -30,7 +29,6 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.presentation.reward.list.RewardedTodoScheme
-import jp.kztproject.rewardedtodo.presentation.todo.databinding.FragmentTodoListBinding
 import jp.kztproject.rewardedtodo.presentation.todo.databinding.ViewTodoDetailBinding
 import jp.kztproject.rewardedtodo.presentation.todo.model.EditingTodo
 import jp.kztproject.rewardedtodo.todo.domain.Todo
@@ -38,8 +36,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, TodoListViewModel.Callback {
-
-    private lateinit var binding: FragmentTodoListBinding
 
     private val viewModel: TodoListViewModel by viewModels()
 
@@ -68,28 +64,39 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
     @Composable
     private fun TodoListScreen(viewModel: TodoListViewModel) {
         val todoList by viewModel.todoList.observeAsState()
-        Column {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .background(MaterialTheme.colors.background)
+        ) {
             todoList?.forEach { todo ->
-                TodoListItem(todo)
+                TodoListItem(
+                    todo = todo,
+                    onItemClicked = {
+                        val editingTodo = EditingTodo.from(todo)
+                        showTodoDetail(editingTodo)
+                    },
+                    onTodoDone = {
+                        viewModel.completeTodo(it)
+                    })
             }
         }
     }
 
     @Composable
-    private fun TodoListItem(todo: Todo) {
+    private fun TodoListItem(todo: Todo, onItemClicked: () -> Unit, onTodoDone: (Todo) -> Unit) {
         var isDone by remember { mutableStateOf(false) }
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp)
+                .clickable(onClick = onItemClicked)
         ) {
             val (checkbox, title, ticketImage, ticketCount) = createRefs()
 
             Checkbox(
                 checked = isDone,
-                onCheckedChange = {
-                    //Done task
-                },
+                onCheckedChange = { onTodoDone.invoke(todo) },
                 modifier = Modifier
                     .constrainAs(checkbox) {
                         top.linkTo(parent.top)
@@ -101,6 +108,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
             Text(
                 text = todo.name,
                 style = MaterialTheme.typography.h5,
+                color = MaterialTheme.colors.onBackground,
                 modifier = Modifier
                     .constrainAs(title) {
                         start.linkTo(checkbox.end)
@@ -134,29 +142,8 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
     @Composable
     private fun TodoListItemPreview() {
         val todo = Todo(1, 1, "Buy ingredients for dinner", 1f, false)
-        TodoListItem(todo)
+        TodoListItem(todo, {}) {}
     }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//        initTodoListViewAdapter()
-//
-//        binding.addButton.setOnClickListener {
-//            showTodoDetail(EditingTodo())
-//        }
-    }
-
-//    private fun initTodoListViewAdapter() {
-//        val layoutManager = LinearLayoutManager(context)
-//        adapter.setListener(this)
-//        binding.todoListView.apply {
-//            this.layoutManager = layoutManager
-//            addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
-//            this.adapter = this@TodoListFragment.adapter
-//        }
-//        viewModel.todoList.observe(viewLifecycleOwner, Observer { todoList ->
-//            adapter.setTodo(todoList)
-//        })
-//    }
 
     override fun onClick(item: Todo) {
         val editingTodo = EditingTodo.from(item)
@@ -170,7 +157,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
     private fun showTodoDetail(item: EditingTodo) {
         val bottomSheet = BottomSheetDialog(requireContext())
         val binding = DataBindingUtil.inflate<ViewTodoDetailBinding>(
-            LayoutInflater.from(context), R.layout.view_todo_detail, this.binding.root as ViewGroup, false
+            LayoutInflater.from(context), R.layout.view_todo_detail, view as ViewGroup, false
         )
         bottomSheet.setContentView(binding.root)
         binding.todo = item
