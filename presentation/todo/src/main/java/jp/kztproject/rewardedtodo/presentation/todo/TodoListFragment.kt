@@ -10,9 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Checkbox
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -28,6 +26,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
+import jp.kztproject.rewardedtodo.presentation.reward.list.DarkColorScheme
 import jp.kztproject.rewardedtodo.presentation.reward.list.RewardedTodoScheme
 import jp.kztproject.rewardedtodo.presentation.todo.databinding.ViewTodoDetailBinding
 import jp.kztproject.rewardedtodo.presentation.todo.model.EditingTodo
@@ -69,7 +68,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
                 .verticalScroll(rememberScrollState())
                 .background(MaterialTheme.colors.background)
         ) {
-            todoList?.forEach { todo ->
+            todoList?.forEachIndexed { index, todo ->
                 TodoListItem(
                     todo = todo,
                     onItemClicked = {
@@ -79,6 +78,9 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
                     onTodoDone = {
                         viewModel.completeTodo(it)
                     })
+                if (index < todoList!!.lastIndex) {
+                    Divider()
+                }
             }
         }
     }
@@ -128,6 +130,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
             Text(
                 text = "${todo.numberOfTicketsObtained}",
                 fontSize = 20.sp,
+                color = MaterialTheme.colors.onBackground,
                 modifier = Modifier
                     .constrainAs(ticketCount) {
                         top.linkTo(ticketImage.top)
@@ -141,8 +144,21 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
     @Preview
     @Composable
     private fun TodoListItemPreview() {
-        val todo = Todo(1, 1, "Buy ingredients for dinner", 1f, false)
-        TodoListItem(todo, {}) {}
+        Surface {
+            val todo = Todo(1, 1, "Buy ingredients for dinner", 1f, false)
+            TodoListItem(todo, {}) {}
+        }
+    }
+
+    @Preview
+    @Composable
+    private fun DarkModeTodoListItemPreview() {
+        MaterialTheme(
+            colors = DarkColorScheme
+        ) {
+            val todo = Todo(1, 1, "Buy ingredients for dinner", 1f, false)
+            TodoListItem(todo, {}) {}
+        }
     }
 
     override fun onClick(item: Todo) {
