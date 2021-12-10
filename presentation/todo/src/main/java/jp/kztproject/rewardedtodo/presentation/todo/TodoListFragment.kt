@@ -91,8 +91,8 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
         ConstraintLayout(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
                 .clickable(onClick = onItemClicked)
+                .padding(16.dp)
         ) {
             val (checkbox, title, ticketImage, ticketCount) = createRefs()
 
