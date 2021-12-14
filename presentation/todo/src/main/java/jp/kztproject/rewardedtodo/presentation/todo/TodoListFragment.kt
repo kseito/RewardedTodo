@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -114,6 +115,8 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
                 modifier = Modifier
                     .constrainAs(title) {
                         start.linkTo(checkbox.end)
+                        end.linkTo(parent.end)
+                        width = Dimension.fillToConstraints
                     }
             )
             Image(
