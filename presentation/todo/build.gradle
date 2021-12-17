@@ -10,12 +10,18 @@ apply from: rootProject.file('gradle/android_common.gradle')
 android {
     buildFeatures {
         dataBinding = true
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.0.4'
     }
 }
 
 dependencies {
     implementation project(path: ':screen_transition')
     implementation project(path: ':feature:todo')
+    implementation project(path: ':common:ui')
 
     implementation Libraries.Kotlin.stdlib
     implementation Libraries.AndroidX.coreKtx
@@ -24,6 +30,15 @@ dependencies {
     implementation Libraries.AndroidX.constraintLayout
     implementation Libraries.AndroidX.recyclerView
     implementation Libraries.AndroidX.design
+
+    // Jetpack Compose
+    implementation Libraries.AndroidX.activityCompose
+    implementation Libraries.AndroidX.Compose.foundation
+    implementation Libraries.AndroidX.Compose.material
+    implementation Libraries.AndroidX.Compose.ui
+    implementation Libraries.AndroidX.Compose.uiTooling
+    implementation Libraries.AndroidX.Compose.liveData
+    implementation Libraries.AndroidX.Compose.constraintLayout
 
     testImplementation Libraries.Test.junit
     androidTestImplementation Libraries.Test.AndroidX.junit

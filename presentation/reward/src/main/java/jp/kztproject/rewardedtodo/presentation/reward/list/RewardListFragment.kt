@@ -1,15 +1,11 @@
 package jp.kztproject.rewardedtodo.presentation.reward.list
 
-import android.animation.Animator
-import android.animation.AnimatorInflater
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -35,7 +31,6 @@ import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
 import jp.kztproject.rewardedtodo.domain.reward.*
-import jp.kztproject.rewardedtodo.presentation.reward.R
 import jp.kztproject.rewardedtodo.presentation.reward.helper.showDialog
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -57,9 +52,8 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             }
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                val isDarkTheme = isSystemInDarkTheme()
                 MaterialTheme(
-                    colors = if (isDarkTheme) DarkColorScheme else LightColorScheme
+                    colors = RewardedTodoScheme(isSystemInDarkTheme())
                 ) {
                     RewardListScreen(viewModel, onDetailClick)
                 }
@@ -172,7 +166,10 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
     @Composable
     private fun RewardList(rewards: List<Reward>?) {
-        Column {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+        ) {
             rewards?.forEachIndexed { index, reward ->
                 RewardItem(reward)
                 if (index < rewards.lastIndex) {

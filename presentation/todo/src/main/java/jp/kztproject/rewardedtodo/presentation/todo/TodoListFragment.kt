@@ -5,15 +5,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.*
+import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.DividerItemDecoration
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
-import jp.kztproject.rewardedtodo.presentation.todo.databinding.FragmentTodoListBinding
+import jp.kztproject.rewardedtodo.presentation.reward.list.DarkColorScheme
+import jp.kztproject.rewardedtodo.presentation.reward.list.RewardedTodoScheme
 import jp.kztproject.rewardedtodo.presentation.todo.databinding.ViewTodoDetailBinding
 import jp.kztproject.rewardedtodo.presentation.todo.model.EditingTodo
 import jp.kztproject.rewardedtodo.todo.domain.Todo
@@ -21,8 +36,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, TodoListViewModel.Callback {
-
-    private lateinit var binding: FragmentTodoListBinding
 
     private val viewModel: TodoListViewModel by viewModels()
 
@@ -36,30 +49,119 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
         viewModel.initialize(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentTodoListBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        initTodoListViewAdapter()
-
-        binding.addButton.setOnClickListener {
-            showTodoDetail(EditingTodo())
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+        return ComposeView(requireContext()).apply {
+            setContent {
+                MaterialTheme(
+                    colors = RewardedTodoScheme(isSystemInDarkTheme())
+                ) {
+                    TodoListScreen(viewModel)
+                }
+            }
         }
     }
 
-    private fun initTodoListViewAdapter() {
-        val layoutManager = LinearLayoutManager(context)
-        adapter.setListener(this)
-        binding.todoListView.apply {
-            this.layoutManager = layoutManager
-            addItemDecoration(DividerItemDecoration(context, layoutManager.orientation))
-            this.adapter = this@TodoListFragment.adapter
+    @Composable
+    private fun TodoListScreen(viewModel: TodoListViewModel) {
+        val todoList by viewModel.todoList.observeAsState()
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .background(MaterialTheme.colors.background)
+        ) {
+            todoList?.forEachIndexed { index, todo ->
+                TodoListItem(
+                    todo = todo,
+                    onItemClicked = {
+                        val editingTodo = EditingTodo.from(todo)
+                        showTodoDetail(editingTodo)
+                    },
+                    onTodoDone = {
+                        viewModel.completeTodo(it)
+                    })
+                if (index < todoList!!.lastIndex) {
+                    Divider()
+                }
+            }
         }
-        viewModel.todoList.observe(viewLifecycleOwner, Observer { todoList ->
-            adapter.setTodo(todoList)
-        })
+    }
+
+    @Composable
+    private fun TodoListItem(todo: Todo, onItemClicked: () -> Unit, onTodoDone: (Todo) -> Unit) {
+        var isDone by remember { mutableStateOf(false) }
+        ConstraintLayout(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = onItemClicked)
+                .padding(16.dp)
+        ) {
+            val (checkbox, title, ticketImage, ticketCount) = createRefs()
+
+            Checkbox(
+                checked = isDone,
+                onCheckedChange = { onTodoDone.invoke(todo) },
+                modifier = Modifier
+                    .constrainAs(checkbox) {
+                        top.linkTo(parent.top)
+                        start.linkTo(parent.start)
+                        bottom.linkTo(parent.bottom)
+                    }
+                    .padding(0.dp, 0.dp, 16.dp, 0.dp)
+            )
+            Text(
+                text = todo.name,
+                style = MaterialTheme.typography.h5,
+                color = MaterialTheme.colors.onBackground,
+                modifier = Modifier
+                    .constrainAs(title) {
+                        start.linkTo(checkbox.end)
+                        end.linkTo(parent.end)
+                        width = Dimension.fillToConstraints
+                    }
+            )
+            Image(
+                painter = painterResource(id = R.drawable.ic_ticket),
+                contentDescription = null,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .size(36.dp)
+                    .constrainAs(ticketImage) {
+                        top.linkTo(title.bottom)
+                        start.linkTo(title.start)
+                    }
+            )
+            Text(
+                text = "${todo.numberOfTicketsObtained}",
+                fontSize = 20.sp,
+                color = MaterialTheme.colors.onBackground,
+                modifier = Modifier
+                    .constrainAs(ticketCount) {
+                        top.linkTo(ticketImage.top)
+                        start.linkTo(ticketImage.end, 16.dp)
+                        bottom.linkTo(ticketImage.bottom)
+                    }
+            )
+        }
+    }
+
+    @Preview
+    @Composable
+    private fun TodoListItemPreview() {
+        Surface {
+            val todo = Todo(1, 1, "Buy ingredients for dinner", 1f, false)
+            TodoListItem(todo, {}) {}
+        }
+    }
+
+    @Preview
+    @Composable
+    private fun DarkModeTodoListItemPreview() {
+        MaterialTheme(
+            colors = DarkColorScheme
+        ) {
+            val todo = Todo(1, 1, "Buy ingredients for dinner", 1f, false)
+            TodoListItem(todo, {}) {}
+        }
     }
 
     override fun onClick(item: Todo) {
@@ -74,7 +176,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
     private fun showTodoDetail(item: EditingTodo) {
         val bottomSheet = BottomSheetDialog(requireContext())
         val binding = DataBindingUtil.inflate<ViewTodoDetailBinding>(
-                LayoutInflater.from(context), R.layout.view_todo_detail, this.binding.root as ViewGroup, false
+            LayoutInflater.from(context), R.layout.view_todo_detail, view as ViewGroup, false
         )
         bottomSheet.setContentView(binding.root)
         binding.todo = item
