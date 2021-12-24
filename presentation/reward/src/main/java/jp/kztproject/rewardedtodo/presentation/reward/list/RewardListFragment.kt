@@ -15,6 +15,7 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,9 +35,11 @@ import jp.kztproject.rewardedtodo.domain.reward.*
 import jp.kztproject.rewardedtodo.presentation.reward.helper.showDialog
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
+@ExperimentalMaterialApi
 @AndroidEntryPoint
 class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
@@ -47,25 +50,39 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         return ComposeView(requireContext()).apply {
-            val onDetailClick = {
-                fragmentTransitionManager.transitionToRewardDetailFragment(activity)
-            }
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MaterialTheme(
                     colors = RewardedTodoScheme(isSystemInDarkTheme())
                 ) {
-                    RewardListScreen(viewModel, onDetailClick)
+                    RewardListScreenWithBottomSheet(viewModel)
                 }
             }
         }
     }
 
+    @Composable
+    private fun RewardListScreenWithBottomSheet(viewModel: RewardListViewModel) {
+        val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+
+        RewardDetailBottomSheet(
+            bottomSheetState = bottomSheetState
+        ) {
+            RewardListScreen(
+                viewModel = viewModel,
+                bottomSheetState = bottomSheetState
+            )
+        }
+    }
 
     @Composable
-    private fun RewardListScreen(viewModel: RewardListViewModel, onDetailClick: () -> Unit) {
+    private fun RewardListScreen(
+        viewModel: RewardListViewModel,
+        bottomSheetState: ModalBottomSheetState
+    ) {
         val ticket by viewModel.rewardPoint.observeAsState()
         val rewards by viewModel.rewardList.observeAsState()
+        val coroutineScope = rememberCoroutineScope()
 
         ConstraintLayout(
             modifier = Modifier
@@ -80,7 +97,11 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             val (createRewardButton, lotteryRewardButton) = createRefs()
 
             FloatingActionButton(
-                onClick = onDetailClick,
+                onClick = {
+                    coroutineScope.launch {
+                        bottomSheetState.show()
+                    }
+                },
                 shape = RoundedCornerShape(8.dp),
                 backgroundColor = MaterialTheme.colors.primary,
                 modifier = Modifier
@@ -138,7 +159,10 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             }
         })
 
-        RewardListScreen(viewModel = viewModel, onDetailClick = {})
+        RewardListScreen(
+            viewModel = viewModel,
+            bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        )
     }
 
     @Composable

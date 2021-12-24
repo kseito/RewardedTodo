@@ -25,12 +25,12 @@ object Libraries {
         const val preference = "androidx.preference:preference-ktx:1.1.1"
 
         object Compose {
-            const val foundation = "androidx.compose.foundation:foundation:1.0.4"
-            const val material = "androidx.compose.material:material:1.0.4"
-            const val ui = "androidx.compose.ui:ui:1.0.4"
-            const val uiTooling = "androidx.compose.ui:ui-tooling:1.0.4"
-            const val liveData = "androidx.compose.runtime:runtime-livedata:1.0.4"
-            const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc01"
+            const val foundation = "androidx.compose.foundation:foundation:1.0.5"
+            const val material = "androidx.compose.material:material:1.0.5"
+            const val ui = "androidx.compose.ui:ui:1.0.5"
+            const val uiTooling = "androidx.compose.ui:ui-tooling:1.0.5"
+            const val liveData = "androidx.compose.runtime:runtime-livedata:1.0.5"
+            const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.0-rc02"
         }
 
         object LifeCycle {
