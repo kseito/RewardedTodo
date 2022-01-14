@@ -6,7 +6,6 @@ import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import jp.kztproject.rewardedtodo.domain.reward.Ticket
 import javax.inject.Inject
-import kotlin.random.Random
 
 class LotteryInteractor @Inject constructor(
         private val ticketRepository: ITicketRepository
@@ -16,7 +15,7 @@ class LotteryInteractor @Inject constructor(
         ticketRepository.consumeTicket()
 
         val lotteryBox = LotteryBoxFactory.create(rewards)
-        val luckyNumber = Random.nextInt(Ticket.ISSUE_LIMIT)
+        val luckyNumber = (1..Ticket.ISSUE_LIMIT).random()
         val ticket = lotteryBox.draw(luckyNumber)
         if (ticket is Ticket.Prize) {
             return rewards.findBy(ticket.rewardId)
