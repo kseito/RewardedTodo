@@ -5,20 +5,25 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import jp.kztproject.rewardedtodo.application.reward.model.Failure
+import jp.kztproject.rewardedtodo.application.reward.model.Success
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
+import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 @HiltViewModel
 class RewardListViewModel @Inject constructor(
-        private val lotteryUseCase: LotteryUseCase,
-        private val getRewardsUseCase: GetRewardsUseCase,
-        private val getPointUseCase: GetPointUseCase
+    private val lotteryUseCase: LotteryUseCase,
+    private val getRewardsUseCase: GetRewardsUseCase,
+    private val getPointUseCase: GetPointUseCase,
+    private val saveRewardUseCase: SaveRewardUseCase
 ) : ViewModel() {
 
     private lateinit var callback: RewardViewModelCallback
@@ -26,6 +31,10 @@ class RewardListViewModel @Inject constructor(
     val rewardList: LiveData<List<Reward>> = mutableRewardList
     private var mutableRewardPoint = MutableLiveData<Int>()
     var rewardPoint: LiveData<Int> = mutableRewardPoint
+    private val mutableResult =
+        MutableLiveData<Result<Unit>>()
+    var result: LiveData<Result<Unit>> =
+        mutableResult
 
     fun setCallback(callback: RewardViewModelCallback) {
         this.callback = callback
@@ -58,6 +67,28 @@ class RewardListViewModel @Inject constructor(
             } catch (e: Exception) {
                 if (isActive) {
                     callback.onPointLoadFailed()
+                }
+            }
+        }
+    }
+
+    fun saveReward(reward: RewardInput) {
+//        if (reward.name.isNullOrEmpty()) {
+////            callback.onError(R.string.error_empty_title)
+//            return
+//        } else if (reward.consumePoint == 0) {
+////            callback.onError(R.string.error_empty_point)
+//            return
+//        }
+
+        viewModelScope.launch {
+            when (val result = saveRewardUseCase.execute(reward)) {
+
+                is Success -> {
+                    mutableResult.value = Result.success(Unit)
+                }
+                is Failure -> {
+                    mutableResult.value = Result.failure(result.reason)
                 }
             }
         }

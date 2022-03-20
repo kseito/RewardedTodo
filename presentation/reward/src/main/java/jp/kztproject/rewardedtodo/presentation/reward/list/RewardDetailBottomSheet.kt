@@ -15,21 +15,23 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun RewardDetailBottomSheet(
     bottomSheetState: ModalBottomSheetState,
-    content: @Composable () -> Unit
+    onRewardSaveSelected: (String, String, String, Boolean) -> Unit,
+    content: @Composable () -> Unit,
 ) {
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         sheetContent = {
-            RewardDetailBottomSheetContent()
+            RewardDetailBottomSheetContent(onRewardSaveSelected = onRewardSaveSelected)
         },
         content = content
     )
 }
 
-@Preview
 @ExperimentalMaterialApi
 @Composable
-private fun RewardDetailBottomSheetContent() {
+private fun RewardDetailBottomSheetContent(
+    onRewardSaveSelected: (String, String, String, Boolean) -> Unit
+) {
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var chanceOfWinning by remember { mutableStateOf("") }
@@ -45,7 +47,8 @@ private fun RewardDetailBottomSheetContent() {
         TextField(
             value = title,
             onValueChange = { title = it },
-            modifier = modifier
+            modifier = modifier,
+            singleLine = true
         )
         TextField(
             value = description,
@@ -75,7 +78,9 @@ private fun RewardDetailBottomSheetContent() {
             Button(
                 modifier = Modifier
                     .padding(end = 8.dp),
-                onClick = { /*TODO*/ }
+                onClick = {
+                    onRewardSaveSelected(title, description, chanceOfWinning, repeat)
+                }
             ) {
                 Text("Save")
             }

@@ -13,6 +13,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
@@ -28,9 +29,12 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
+import jp.kztproject.rewardedtodo.application.reward.model.Result
+import jp.kztproject.rewardedtodo.application.reward.model.Success
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
 import jp.kztproject.rewardedtodo.domain.reward.*
 import jp.kztproject.rewardedtodo.presentation.reward.helper.showDialog
 import kotlinx.coroutines.flow.Flow
@@ -48,7 +52,11 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     @Inject
     lateinit var fragmentTransitionManager: IFragmentsTransitionManager
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
@@ -64,13 +72,26 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     @Composable
     private fun RewardListScreenWithBottomSheet(viewModel: RewardListViewModel) {
         val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val onRewardSaveSelected: (String, String, String, Boolean) -> Unit =
+            { title, description, chanceOfWinning, repeat ->
+                // TODO use factory method
+                val reward = RewardInput(
+                    name = title,
+                    description = description,
+                    consumePoint = 1,
+                    probability = chanceOfWinning.toFloat(),
+                    needRepeat = repeat
+                )
+                viewModel.saveReward(reward)
+            }
 
         RewardDetailBottomSheet(
-            bottomSheetState = bottomSheetState
+            bottomSheetState = bottomSheetState,
+            onRewardSaveSelected = onRewardSaveSelected,
         ) {
             RewardListScreen(
                 viewModel = viewModel,
-                bottomSheetState = bottomSheetState
+                bottomSheetState = bottomSheetState,
             )
         }
     }
@@ -129,6 +150,19 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
                 Icon(Icons.Filled.Done, contentDescription = "Done")
             }
         }
+
+        LaunchedEffect(Unit) {
+            viewModel.result.observe(viewLifecycleOwner) {
+                if (it.isSuccess) {
+                    coroutineScope.launch {
+                        bottomSheetState.hide()
+                    }
+                    // TODO refresh reward list
+                } else {
+                    // TODO show error
+                }
+            }
+        }
     }
 
     @Preview
@@ -156,6 +190,10 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         }, object : GetPointUseCase {
             override suspend fun execute(): NumberOfTicket {
                 return NumberOfTicket(123)
+            }
+        }, object : SaveRewardUseCase {
+            override suspend fun execute(reward: RewardInput): Result<Unit> {
+                return Success(Unit)
             }
         })
 
@@ -284,7 +322,10 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun onItemClick(rewardEntity: Reward) {
-        fragmentTransitionManager.transitionToRewardDetailFragment(activity, rewardEntity.rewardId.value)
+        fragmentTransitionManager.transitionToRewardDetailFragment(
+            activity,
+            rewardEntity.rewardId.value
+        )
     }
 
     override fun onPointLoadFailed() {
