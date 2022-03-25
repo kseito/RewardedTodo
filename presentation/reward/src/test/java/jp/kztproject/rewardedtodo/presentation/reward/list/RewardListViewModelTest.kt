@@ -11,6 +11,7 @@ import jp.kztproject.rewardedtodo.test.reward.DummyCreator
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
@@ -33,12 +34,15 @@ class RewardListViewModelTest {
 
     private val mockGetPointUseCase: GetPointUseCase = mock()
 
+    private val mockSaveRewardUseCase: SaveRewardUseCase = mock()
+
     @Before
     fun setup() {
         viewModel = RewardListViewModel(
                 mockLotteryUseCase,
                 mockGetRewardsUseCase,
-                mockGetPointUseCase
+                mockGetPointUseCase,
+            mockSaveRewardUseCase
         )
         viewModel.setCallback(mockCallback)
 
