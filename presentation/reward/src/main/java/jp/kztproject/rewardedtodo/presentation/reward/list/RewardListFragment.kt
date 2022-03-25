@@ -105,6 +105,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     ) {
         val ticket by viewModel.rewardPoint.observeAsState()
         val rewards by viewModel.rewardList.observeAsState()
+        val result by viewModel.result.observeAsState()
         val coroutineScope = rememberCoroutineScope()
 
         ConstraintLayout(
@@ -153,14 +154,17 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             }
         }
 
-        LaunchedEffect(Unit) {
-            viewModel.result.observe(viewLifecycleOwner) {
-                if (it.isSuccess) {
-                    coroutineScope.launch {
-                        bottomSheetState.hide()
+        result?.let {
+            LaunchedEffect(it) {
+                when {
+                    it.isSuccess -> {
+                        coroutineScope.launch {
+                            bottomSheetState.hide()
+                        }
                     }
-                } else {
-                    // TODO show error
+                    else -> {
+                        // TODO show error
+                    }
                 }
             }
         }
