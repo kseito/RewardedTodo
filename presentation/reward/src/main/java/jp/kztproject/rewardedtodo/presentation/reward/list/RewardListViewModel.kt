@@ -73,6 +73,7 @@ class RewardListViewModel @Inject constructor(
     }
 
     fun saveReward(reward: RewardInput) {
+        // TODO revive validations
 //        if (reward.name.isNullOrEmpty()) {
 ////            callback.onError(R.string.error_empty_title)
 //            return

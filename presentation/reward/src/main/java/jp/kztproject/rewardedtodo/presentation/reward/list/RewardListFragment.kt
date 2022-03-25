@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -157,7 +159,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
                     coroutineScope.launch {
                         bottomSheetState.hide()
                     }
-                    // TODO refresh reward list
                 } else {
                     // TODO show error
                 }
@@ -228,14 +229,13 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
     @Composable
     private fun RewardList(rewards: List<Reward>?) {
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-        ) {
-            rewards?.forEachIndexed { index, reward ->
-                RewardItem(reward)
-                if (index < rewards.lastIndex) {
-                    Divider()
+        LazyColumn {
+            rewards?.let {
+                itemsIndexed(it) { index, reward ->
+                    RewardItem(reward)
+                    if (index < rewards.lastIndex) {
+                        Divider()
+                    }
                 }
             }
         }
