@@ -20,6 +20,8 @@ android {
                 jacoco.excludes = ['jdk.internal.*']
             }
 
+            includeAndroidResources = true
+
             systemProperty "javax.net.ssl.trustStoreType", "JKS"
         }
     }
