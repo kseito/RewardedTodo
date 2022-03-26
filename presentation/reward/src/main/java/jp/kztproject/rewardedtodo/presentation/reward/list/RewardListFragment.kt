@@ -79,10 +79,11 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
                 bottomSheetState.show()
             }
         }
-        val onRewardSaveSelected: (String, String, String, Boolean) -> Unit =
-            { title, description, chanceOfWinning, repeat ->
+        val onRewardSaveSelected: (Int?, String, String, String, Boolean) -> Unit =
+            {id, title, description, chanceOfWinning, repeat ->
                 // TODO use factory method
                 val reward = RewardInput(
+                    id = id,
                     name = title,
                     description = description,
                     consumePoint = 1,

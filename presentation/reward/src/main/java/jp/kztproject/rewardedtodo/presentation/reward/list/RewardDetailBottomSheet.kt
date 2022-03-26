@@ -17,7 +17,7 @@ import jp.kztproject.rewardedtodo.domain.reward.Reward
 fun RewardDetailBottomSheet(
     bottomSheetState: ModalBottomSheetState,
     reward: Reward?,
-    onRewardSaveSelected: (String, String, String, Boolean) -> Unit,
+    onRewardSaveSelected: (Int?, String, String, String, Boolean) -> Unit,
     content: @Composable () -> Unit,
 ) {
     ModalBottomSheetLayout(
@@ -36,8 +36,9 @@ fun RewardDetailBottomSheet(
 @Composable
 private fun RewardDetailBottomSheetContent(
     reward: Reward?,
-    onRewardSaveSelected: (String, String, String, Boolean) -> Unit
+    onRewardSaveSelected: (Int?, String, String, String, Boolean) -> Unit
 ) {
+    var id: Int? by remember { mutableStateOf(null) }
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var chanceOfWinning by remember { mutableStateOf("") }
@@ -45,6 +46,7 @@ private fun RewardDetailBottomSheetContent(
 
     LaunchedEffect(reward) {
         reward?.let {
+            id = it.rewardId.value
             title = it.name.value
             description = it.description.value ?: ""
             chanceOfWinning = it.probability.value.toString()
@@ -94,7 +96,7 @@ private fun RewardDetailBottomSheetContent(
                 modifier = Modifier
                     .padding(end = 8.dp),
                 onClick = {
-                    onRewardSaveSelected(title, description, chanceOfWinning, repeat)
+                    onRewardSaveSelected(id, title, description, chanceOfWinning, repeat)
                 }
             ) {
                 Text("Save")
