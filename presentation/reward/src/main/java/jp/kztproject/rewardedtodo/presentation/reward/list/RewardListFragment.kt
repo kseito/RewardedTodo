@@ -80,13 +80,12 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             }
         }
         val onRewardSaveSelected: (Int?, String, String, String, Boolean) -> Unit =
-            {id, title, description, chanceOfWinning, repeat ->
+            { id, title, description, chanceOfWinning, repeat ->
                 // TODO use factory method
                 val reward = RewardInput(
                     id = id,
                     name = title,
                     description = description,
-                    consumePoint = 1,
                     probability = chanceOfWinning.toFloat(),
                     needRepeat = repeat
                 )
@@ -163,8 +162,8 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             }
         }
 
-        result?.let {
-            LaunchedEffect(it) {
+        LaunchedEffect(result) {
+            result?.let {
                 when {
                     it.isSuccess -> {
                         coroutineScope.launch {
@@ -188,7 +187,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             private val reward = Reward(
                 RewardId(1),
                 RewardName("PS5"),
-                10,
                 Probability(0.5f),
                 RewardDescription(""),
                 false
@@ -266,7 +264,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
                 Reward(
                     RewardId(1),
                     RewardName("PS5"),
-                    1,
                     Probability(1f),
                     RewardDescription("this is very rare"),
                     true
@@ -274,7 +271,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
                 Reward(
                     RewardId(1),
                     RewardName("New Macbook Pro"),
-                    1,
                     Probability(1f),
                     RewardDescription("M1 Max is great"),
                     true
@@ -325,7 +321,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         val reward = Reward(
             RewardId(1),
             RewardName("PS5"),
-            1,
             Probability(1f),
             RewardDescription("this is very rare"),
             true

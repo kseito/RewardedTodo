@@ -14,7 +14,6 @@ class SaveRewardInteractor @Inject constructor(
     override suspend fun execute(reward: RewardInput): Result<Unit> {
         return when {
             reward.name.isNullOrEmpty() -> Failure(Error.EmptyTitle)
-            reward.consumePoint == null -> Failure(Error.EmptyPoint)
             reward.probability == null -> Failure(Error.EmptyProbability)
             else -> {
                 rewardRepository.createOrUpdate(reward)

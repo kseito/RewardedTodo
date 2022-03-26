@@ -21,7 +21,6 @@ class LotteryInteractorTest {
                 listOf(
                         Reward(RewardId(1),
                                 RewardName("reward1"),
-                                1,
                                 Probability(100F),
                                 RewardDescription(null),
                                 true
@@ -41,7 +40,6 @@ class LotteryInteractorTest {
                 listOf(
                         Reward(RewardId(1),
                                 RewardName("reward1"),
-                                1,
                                 Probability(0F),
                                 RewardDescription(null),
                                 true

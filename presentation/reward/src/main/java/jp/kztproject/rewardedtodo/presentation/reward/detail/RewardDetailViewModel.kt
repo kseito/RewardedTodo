@@ -61,9 +61,6 @@ class RewardDetailViewModel @Inject constructor(
         if (reward.name.isNullOrEmpty()) {
             callback.onError(R.string.error_empty_title)
             return
-        } else if (reward.consumePoint == 0) {
-            callback.onError(R.string.error_empty_point)
-            return
         }
 
         viewModelScope.launch {

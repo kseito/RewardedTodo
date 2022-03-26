@@ -32,8 +32,8 @@ class RewardListViewModel @Inject constructor(
     private var mutableRewardPoint = MutableLiveData<Int>()
     var rewardPoint: LiveData<Int> = mutableRewardPoint
     private val mutableResult =
-        MutableLiveData<Result<Unit>>()
-    var result: LiveData<Result<Unit>> =
+        MutableLiveData<Result<Unit>?>()
+    var result: LiveData<Result<Unit>?> =
         mutableResult
 
     fun setCallback(callback: RewardViewModelCallback) {
