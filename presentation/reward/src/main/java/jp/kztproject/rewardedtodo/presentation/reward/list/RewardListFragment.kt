@@ -14,11 +14,8 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -74,6 +71,14 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     @Composable
     private fun RewardListScreenWithBottomSheet(viewModel: RewardListViewModel) {
         val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val coroutineScope = rememberCoroutineScope()
+        var selectedReward: Reward? by remember { mutableStateOf(null) }
+        val onRewardItemClick: (Reward) -> Unit = { reward ->
+            coroutineScope.launch {
+                selectedReward = reward
+                bottomSheetState.show()
+            }
+        }
         val onRewardSaveSelected: (String, String, String, Boolean) -> Unit =
             { title, description, chanceOfWinning, repeat ->
                 // TODO use factory method
@@ -90,10 +95,12 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         RewardDetailBottomSheet(
             bottomSheetState = bottomSheetState,
             onRewardSaveSelected = onRewardSaveSelected,
+            reward = selectedReward
         ) {
             RewardListScreen(
                 viewModel = viewModel,
                 bottomSheetState = bottomSheetState,
+                onRewardItemClick = onRewardItemClick
             )
         }
     }
@@ -101,7 +108,8 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     @Composable
     private fun RewardListScreen(
         viewModel: RewardListViewModel,
-        bottomSheetState: ModalBottomSheetState
+        bottomSheetState: ModalBottomSheetState,
+        onRewardItemClick: (Reward) -> Unit
     ) {
         val ticket by viewModel.rewardPoint.observeAsState()
         val rewards by viewModel.rewardList.observeAsState()
@@ -115,7 +123,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         ) {
             Column {
                 Header(ticket)
-                RewardList(rewards)
+                RewardList(rewards, onRewardItemClick)
             }
 
             val (createRewardButton, lotteryRewardButton) = createRefs()
@@ -204,7 +212,8 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
         RewardListScreen(
             viewModel = viewModel,
-            bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+            bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
+            onRewardItemClick = {}
         )
     }
 
@@ -232,11 +241,14 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     @Composable
-    private fun RewardList(rewards: List<Reward>?) {
+    private fun RewardList(
+        rewards: List<Reward>?,
+        onRewardItemClick: (Reward) -> Unit
+    ) {
         LazyColumn {
             rewards?.let {
                 itemsIndexed(it) { index, reward ->
-                    RewardItem(reward)
+                    RewardItem(reward, onRewardItemClick)
                     if (index < rewards.lastIndex) {
                         Divider()
                     }
@@ -266,17 +278,21 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
                     RewardDescription("M1 Max is great"),
                     true
                 )
-            )
+            ),
+            onRewardItemClick = {}
         )
     }
 
     @Composable
-    private fun RewardItem(reward: Reward) {
+    private fun RewardItem(
+        reward: Reward,
+        onRewardItemClick: (Reward) -> Unit
+    ) {
         Surface {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onItemClick(reward) }
+                    .clickable(onClick = { onRewardItemClick(reward) })
                     .padding(16.dp)
             ) {
                 Column(
@@ -313,7 +329,10 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             RewardDescription("this is very rare"),
             true
         )
-        RewardItem(reward)
+        RewardItem(
+            reward = reward,
+            onRewardItemClick = {}
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

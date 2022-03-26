@@ -10,18 +10,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import jp.kztproject.rewardedtodo.domain.reward.Reward
 
 @ExperimentalMaterialApi
 @Composable
 fun RewardDetailBottomSheet(
     bottomSheetState: ModalBottomSheetState,
+    reward: Reward?,
     onRewardSaveSelected: (String, String, String, Boolean) -> Unit,
     content: @Composable () -> Unit,
 ) {
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         sheetContent = {
-            RewardDetailBottomSheetContent(onRewardSaveSelected = onRewardSaveSelected)
+            RewardDetailBottomSheetContent(
+                reward = reward,
+                onRewardSaveSelected = onRewardSaveSelected
+            )
         },
         content = content
     )
@@ -30,12 +35,22 @@ fun RewardDetailBottomSheet(
 @ExperimentalMaterialApi
 @Composable
 private fun RewardDetailBottomSheetContent(
+    reward: Reward?,
     onRewardSaveSelected: (String, String, String, Boolean) -> Unit
 ) {
     var title by remember { mutableStateOf("") }
     var description by remember { mutableStateOf("") }
     var chanceOfWinning by remember { mutableStateOf("") }
     var repeat by remember { mutableStateOf(false) }
+
+    LaunchedEffect(reward) {
+        reward?.let {
+            title = it.name.value
+            description = it.description.value ?: ""
+            chanceOfWinning = it.probability.value.toString()
+            repeat = it.needRepeat
+        }
+    }
 
     Column(
         modifier = Modifier
