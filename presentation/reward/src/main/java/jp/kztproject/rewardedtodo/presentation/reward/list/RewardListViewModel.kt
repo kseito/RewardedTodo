@@ -31,10 +31,7 @@ class RewardListViewModel @Inject constructor(
     val rewardList: LiveData<List<Reward>> = mutableRewardList
     private var mutableRewardPoint = MutableLiveData<Int>()
     var rewardPoint: LiveData<Int> = mutableRewardPoint
-    private val mutableResult =
-        MutableLiveData<Result<Unit>?>()
-    var result: LiveData<Result<Unit>?> =
-        mutableResult
+    val result = MutableLiveData<Result<Unit>?>()
 
     fun setCallback(callback: RewardViewModelCallback) {
         this.callback = callback
@@ -83,13 +80,13 @@ class RewardListViewModel @Inject constructor(
 //        }
 
         viewModelScope.launch {
-            when (val result = saveRewardUseCase.execute(reward)) {
+            when (val newResult = saveRewardUseCase.execute(reward)) {
 
                 is Success -> {
-                    mutableResult.value = Result.success(Unit)
+                    result.value = Result.success(Unit)
                 }
                 is Failure -> {
-                    mutableResult.value = Result.failure(result.reason)
+                    result.value = Result.failure(newResult.reason)
                 }
             }
         }

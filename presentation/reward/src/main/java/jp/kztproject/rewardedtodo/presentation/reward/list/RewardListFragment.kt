@@ -174,6 +174,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
                         // TODO show error
                     }
                 }
+                viewModel.result.value = null
             }
         }
     }
