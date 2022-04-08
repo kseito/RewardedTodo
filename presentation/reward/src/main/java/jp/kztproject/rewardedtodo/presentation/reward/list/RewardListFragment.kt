@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -28,13 +29,12 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import jp.kztproject.rewardedtodo.application.reward.model.Result
-import jp.kztproject.rewardedtodo.application.reward.model.Success
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
 import jp.kztproject.rewardedtodo.domain.reward.*
+import jp.kztproject.rewardedtodo.presentation.reward.detail.ErrorMessageClassifier
 import jp.kztproject.rewardedtodo.presentation.reward.helper.showDialog
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -79,14 +79,14 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
                 bottomSheetState.show()
             }
         }
-        val onRewardSaveSelected: (Int?, String, String, String, Boolean) -> Unit =
+        val onRewardSaveSelected: (Int?, String?, String?, String?, Boolean) -> Unit =
             { id, title, description, chanceOfWinning, repeat ->
                 // TODO use factory method
                 val reward = RewardInput(
                     id = id,
                     name = title,
                     description = description,
-                    probability = chanceOfWinning.toFloat(),
+                    probability = if (chanceOfWinning.isNullOrEmpty()) null else chanceOfWinning.toFloat(),
                     needRepeat = repeat
                 )
                 viewModel.saveReward(reward)
@@ -162,18 +162,18 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             }
         }
 
+        val context = LocalContext.current
         LaunchedEffect(result) {
             result?.let {
-                when {
-                    it.isSuccess -> {
+                it.fold(
+                    onSuccess = {
                         coroutineScope.launch {
                             bottomSheetState.hide()
                         }
-                    }
-                    else -> {
-                        // TODO show error
-                    }
-                }
+                    }, onFailure = { error ->
+                        val errorMessageId = ErrorMessageClassifier(error).messageId
+                        Toast.makeText(context, errorMessageId, Toast.LENGTH_LONG).show()
+                    })
                 viewModel.result.value = null
             }
         }
@@ -206,7 +206,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             }
         }, object : SaveRewardUseCase {
             override suspend fun execute(reward: RewardInput): Result<Unit> {
-                return Success(Unit)
+                return Result.success(Unit)
             }
         })
 

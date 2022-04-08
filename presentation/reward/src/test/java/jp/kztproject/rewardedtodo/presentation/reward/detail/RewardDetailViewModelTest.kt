@@ -6,7 +6,6 @@ import org.mockito.kotlin.mock
 import org.mockito.kotlin.whenever
 import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardUseCase
 import jp.kztproject.rewardedtodo.domain.reward.RewardId
-import jp.kztproject.rewardedtodo.application.reward.model.Success
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
 import jp.kztproject.rewardedtodo.presentation.reward.R
@@ -61,7 +60,7 @@ class RewardDetailViewModelTest {
             val reward = DummyCreator.createDummyReward()
             val rewardInput = DummyCreator.createDummyRewardInput()
             whenever(mockGetRewardUseCase.execute(RewardId(anyInt()))).thenReturn(reward)
-            whenever(mockSaveRewardUseCase.execute(rewardInput)).thenReturn(Success(Unit))
+            whenever(mockSaveRewardUseCase.execute(rewardInput)).thenReturn(Result.success(Unit))
             viewModel.initialize(RewardId(1))
 
             viewModel.saveReward()

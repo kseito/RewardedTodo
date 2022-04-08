@@ -80,15 +80,8 @@ class RewardListViewModel @Inject constructor(
 //        }
 
         viewModelScope.launch {
-            when (val newResult = saveRewardUseCase.execute(reward)) {
-
-                is Success -> {
-                    result.value = Result.success(Unit)
-                }
-                is Failure -> {
-                    result.value = Result.failure(newResult.reason)
-                }
-            }
+            val newResult = saveRewardUseCase.execute(reward)
+            result.value = newResult
         }
     }
 

@@ -1,12 +1,13 @@
 package jp.kztproject.rewardedtodo.presentation.reward.detail
 
-import jp.kztproject.rewardedtodo.application.reward.model.Error
+import jp.kztproject.rewardedtodo.application.reward.model.error.RewardProbabilityEmptyException
+import jp.kztproject.rewardedtodo.application.reward.model.error.RewardTitleEmptyException
 import jp.kztproject.rewardedtodo.presentation.reward.R
 
-class ErrorMessageClassifier(error: Error) {
-    val messageId = when(error) {
-        Error.EmptyTitle -> R.string.error_empty_title
-        Error.EmptyPoint -> R.string.error_empty_point
-        Error.EmptyProbability -> R.string.error_empty_probability
+class ErrorMessageClassifier(error: Throwable) {
+    val messageId = when (error) {
+        is RewardTitleEmptyException -> R.string.error_empty_title
+        is RewardProbabilityEmptyException -> R.string.error_empty_probability
+        else -> R.string.error_unexpected
     }
 }

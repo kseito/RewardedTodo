@@ -64,13 +64,13 @@ class RewardDetailViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            val result = saveRewardUseCase.execute(reward)
-            when (result) {
-                is Success -> callback.onSaveCompleted(reward.name!!)
-                is Failure -> {
-                    val errorMessageId = ErrorMessageClassifier(result.reason).messageId
-                    callback.onError(errorMessageId)
-                }
+            kotlin.runCatching {
+                saveRewardUseCase.execute(reward)
+            }.onSuccess {
+                callback.onSaveCompleted(reward.name!!)
+            }.onFailure {
+                val errorMessageId = ErrorMessageClassifier(it).messageId
+                callback.onError(errorMessageId)
             }
         }
     }
