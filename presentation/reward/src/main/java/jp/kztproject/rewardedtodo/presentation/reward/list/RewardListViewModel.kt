@@ -70,15 +70,6 @@ class RewardListViewModel @Inject constructor(
     }
 
     fun saveReward(reward: RewardInput) {
-        // TODO revive validations
-//        if (reward.name.isNullOrEmpty()) {
-////            callback.onError(R.string.error_empty_title)
-//            return
-//        } else if (reward.consumePoint == 0) {
-////            callback.onError(R.string.error_empty_point)
-//            return
-//        }
-
         viewModelScope.launch {
             val newResult = saveRewardUseCase.execute(reward)
             result.value = newResult
