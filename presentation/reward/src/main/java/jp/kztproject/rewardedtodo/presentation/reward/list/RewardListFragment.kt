@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -29,10 +31,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
-import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
-import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
-import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.*
 import jp.kztproject.rewardedtodo.domain.reward.*
 import jp.kztproject.rewardedtodo.presentation.reward.detail.ErrorMessageClassifier
 import jp.kztproject.rewardedtodo.presentation.reward.helper.showDialog
@@ -91,10 +90,14 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
                 )
                 viewModel.saveReward(reward)
             }
+        val onRewardDeleteSelected: (Reward) -> Unit = { reward ->
+            viewModel.deleteReward(reward)
+        }
 
         RewardDetailBottomSheet(
             bottomSheetState = bottomSheetState,
             onRewardSaveSelected = onRewardSaveSelected,
+            onRewardDeleteSelected = onRewardDeleteSelected,
             reward = selectedReward
         ) {
             RewardListScreen(
@@ -208,6 +211,8 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             override suspend fun execute(reward: RewardInput): Result<Unit> {
                 return Result.success(Unit)
             }
+        }, object : DeleteRewardUseCase {
+            override suspend fun execute(reward: Reward) {}
         })
 
         RewardListScreen(

@@ -5,17 +5,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jp.kztproject.rewardedtodo.application.reward.model.Failure
-import jp.kztproject.rewardedtodo.application.reward.model.Success
-import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
-import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
-import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
-import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.*
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
-import kotlinx.coroutines.*
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,7 +20,8 @@ class RewardListViewModel @Inject constructor(
     private val lotteryUseCase: LotteryUseCase,
     private val getRewardsUseCase: GetRewardsUseCase,
     private val getPointUseCase: GetPointUseCase,
-    private val saveRewardUseCase: SaveRewardUseCase
+    private val saveRewardUseCase: SaveRewardUseCase,
+    private val deleteRewardUseCase: DeleteRewardUseCase
 ) : ViewModel() {
 
     private lateinit var callback: RewardViewModelCallback
@@ -73,6 +71,14 @@ class RewardListViewModel @Inject constructor(
         viewModelScope.launch {
             val newResult = saveRewardUseCase.execute(reward)
             result.value = newResult
+        }
+    }
+
+    fun deleteReward(reward: Reward) {
+        // TODO show confirmation dialog
+        viewModelScope.launch {
+            deleteRewardUseCase.execute(reward)
+            result.value = Result.success(Unit)
         }
     }
 

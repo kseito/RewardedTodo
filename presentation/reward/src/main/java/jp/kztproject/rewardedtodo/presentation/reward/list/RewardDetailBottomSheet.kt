@@ -8,7 +8,6 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 
@@ -18,6 +17,7 @@ fun RewardDetailBottomSheet(
     bottomSheetState: ModalBottomSheetState,
     reward: Reward?,
     onRewardSaveSelected: (Int?, String, String, String, Boolean) -> Unit,
+    onRewardDeleteSelected: (Reward) -> Unit,
     content: @Composable () -> Unit,
 ) {
     ModalBottomSheetLayout(
@@ -25,7 +25,8 @@ fun RewardDetailBottomSheet(
         sheetContent = {
             RewardDetailBottomSheetContent(
                 reward = reward,
-                onRewardSaveSelected = onRewardSaveSelected
+                onRewardSaveSelected = onRewardSaveSelected,
+                onRewardDeleteSelected = onRewardDeleteSelected,
             )
         },
         content = content
@@ -36,7 +37,8 @@ fun RewardDetailBottomSheet(
 @Composable
 private fun RewardDetailBottomSheetContent(
     reward: Reward?,
-    onRewardSaveSelected: (Int?, String, String, String, Boolean) -> Unit
+    onRewardSaveSelected: (Int?, String, String, String, Boolean) -> Unit,
+    onRewardDeleteSelected: (Reward) -> Unit,
 ) {
     var id: Int? by remember { mutableStateOf(null) }
     var title by remember { mutableStateOf("") }
@@ -102,7 +104,11 @@ private fun RewardDetailBottomSheetContent(
                 Text("Save")
             }
             Button(
-                onClick = { /*TODO*/ }
+                onClick = {
+                    reward?.let {
+                        onRewardDeleteSelected(it)
+                    }
+                }
             ) {
                 Text("Delete")
             }
