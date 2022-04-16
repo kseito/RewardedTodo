@@ -5,7 +5,7 @@ import jp.kztproject.rewardedtodo.domain.reward.*
 object DummyCreator {
 
     fun createDummyRewardInput(): RewardInput {
-        return RewardInput(1, "Test", 5, 10F, "Test description", true)
+        return RewardInput(1, "Test", 10F, "Test description", true)
     }
 
     fun createDummyRewardPoint(): NumberOfTicket {
@@ -21,7 +21,6 @@ object DummyCreator {
     fun createDummyReward(): Reward {
         return Reward(RewardId(1),
                 RewardName("Test"),
-                5,
                 Probability(10F),
                 RewardDescription("Test description"),
                 true)
@@ -30,7 +29,6 @@ object DummyCreator {
     fun createDummyNoRepeatReward(): Reward {
         return Reward(RewardId(2),
                 RewardName("Test2"),
-                7,
                 Probability(20F),
                 RewardDescription("Test description"),
                 false)

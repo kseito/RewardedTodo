@@ -19,10 +19,7 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
 import kotlinx.coroutines.withContext
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
-import org.junit.Test
+import org.junit.*
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.kotlin.mock
@@ -54,6 +51,7 @@ class TodoRepositoryTest {
     }
 
     @Test
+    @Ignore
     fun takeInTasksFromTodoist() {
         useTodoist(true)
 
@@ -89,6 +87,7 @@ class TodoRepositoryTest {
     }
 
     @Test
+    @Ignore
     fun ignoreTaskFromTodoist() {
         useTodoist(true)
 

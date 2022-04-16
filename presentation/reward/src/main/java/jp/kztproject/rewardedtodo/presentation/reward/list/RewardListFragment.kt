@@ -5,20 +5,24 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.foundation.*
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,16 +31,17 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
-import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
-import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
-import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.*
 import jp.kztproject.rewardedtodo.domain.reward.*
+import jp.kztproject.rewardedtodo.presentation.reward.detail.ErrorMessageClassifier
 import jp.kztproject.rewardedtodo.presentation.reward.helper.showDialog
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
+@ExperimentalMaterialApi
 @AndroidEntryPoint
 class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
 
@@ -45,27 +50,74 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     @Inject
     lateinit var fragmentTransitionManager: IFragmentsTransitionManager
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return ComposeView(requireContext()).apply {
-            val onDetailClick = {
-                fragmentTransitionManager.transitionToRewardDetailFragment(activity)
-            }
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
                 MaterialTheme(
                     colors = RewardedTodoScheme(isSystemInDarkTheme())
                 ) {
-                    RewardListScreen(viewModel, onDetailClick)
+                    RewardListScreenWithBottomSheet(viewModel)
                 }
             }
         }
     }
 
+    @Composable
+    private fun RewardListScreenWithBottomSheet(viewModel: RewardListViewModel) {
+        val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        val coroutineScope = rememberCoroutineScope()
+        var selectedReward: Reward? by remember { mutableStateOf(null) }
+        val onRewardItemClick: (Reward) -> Unit = { reward ->
+            coroutineScope.launch {
+                selectedReward = reward
+                bottomSheetState.show()
+            }
+        }
+        val onRewardSaveSelected: (Int?, String?, String?, String?, Boolean) -> Unit =
+            { id, title, description, chanceOfWinning, repeat ->
+                // TODO use factory method
+                val reward = RewardInput(
+                    id = id,
+                    name = title,
+                    description = description,
+                    probability = if (chanceOfWinning.isNullOrEmpty()) null else chanceOfWinning.toFloat(),
+                    needRepeat = repeat
+                )
+                viewModel.saveReward(reward)
+            }
+        val onRewardDeleteSelected: (Reward) -> Unit = { reward ->
+            viewModel.deleteReward(reward)
+        }
+
+        RewardDetailBottomSheet(
+            bottomSheetState = bottomSheetState,
+            onRewardSaveSelected = onRewardSaveSelected,
+            onRewardDeleteSelected = onRewardDeleteSelected,
+            reward = selectedReward
+        ) {
+            RewardListScreen(
+                viewModel = viewModel,
+                bottomSheetState = bottomSheetState,
+                onRewardItemClick = onRewardItemClick
+            )
+        }
+    }
 
     @Composable
-    private fun RewardListScreen(viewModel: RewardListViewModel, onDetailClick: () -> Unit) {
+    private fun RewardListScreen(
+        viewModel: RewardListViewModel,
+        bottomSheetState: ModalBottomSheetState,
+        onRewardItemClick: (Reward) -> Unit
+    ) {
         val ticket by viewModel.rewardPoint.observeAsState()
         val rewards by viewModel.rewardList.observeAsState()
+        val result by viewModel.result.observeAsState()
+        val coroutineScope = rememberCoroutineScope()
 
         ConstraintLayout(
             modifier = Modifier
@@ -74,13 +126,17 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         ) {
             Column {
                 Header(ticket)
-                RewardList(rewards)
+                RewardList(rewards, onRewardItemClick)
             }
 
             val (createRewardButton, lotteryRewardButton) = createRefs()
 
             FloatingActionButton(
-                onClick = onDetailClick,
+                onClick = {
+                    coroutineScope.launch {
+                        bottomSheetState.show()
+                    }
+                },
                 shape = RoundedCornerShape(8.dp),
                 backgroundColor = MaterialTheme.colors.primary,
                 modifier = Modifier
@@ -108,6 +164,22 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
                 Icon(Icons.Filled.Done, contentDescription = "Done")
             }
         }
+
+        val context = LocalContext.current
+        LaunchedEffect(result) {
+            result?.let {
+                it.fold(
+                    onSuccess = {
+                        coroutineScope.launch {
+                            bottomSheetState.hide()
+                        }
+                    }, onFailure = { error ->
+                        val errorMessageId = ErrorMessageClassifier(error).messageId
+                        Toast.makeText(context, errorMessageId, Toast.LENGTH_LONG).show()
+                    })
+                viewModel.result.value = null
+            }
+        }
     }
 
     @Preview
@@ -119,7 +191,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             private val reward = Reward(
                 RewardId(1),
                 RewardName("PS5"),
-                10,
                 Probability(0.5f),
                 RewardDescription(""),
                 false
@@ -136,9 +207,19 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
             override suspend fun execute(): NumberOfTicket {
                 return NumberOfTicket(123)
             }
+        }, object : SaveRewardUseCase {
+            override suspend fun execute(reward: RewardInput): Result<Unit> {
+                return Result.success(Unit)
+            }
+        }, object : DeleteRewardUseCase {
+            override suspend fun execute(reward: Reward) {}
         })
 
-        RewardListScreen(viewModel = viewModel, onDetailClick = {})
+        RewardListScreen(
+            viewModel = viewModel,
+            bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
+            onRewardItemClick = {}
+        )
     }
 
     @Composable
@@ -165,15 +246,17 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     @Composable
-    private fun RewardList(rewards: List<Reward>?) {
-        Column(
-            modifier = Modifier
-                .verticalScroll(rememberScrollState())
-        ) {
-            rewards?.forEachIndexed { index, reward ->
-                RewardItem(reward)
-                if (index < rewards.lastIndex) {
-                    Divider()
+    private fun RewardList(
+        rewards: List<Reward>?,
+        onRewardItemClick: (Reward) -> Unit
+    ) {
+        LazyColumn {
+            rewards?.let {
+                itemsIndexed(it) { index, reward ->
+                    RewardItem(reward, onRewardItemClick)
+                    if (index < rewards.lastIndex) {
+                        Divider()
+                    }
                 }
             }
         }
@@ -187,7 +270,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
                 Reward(
                     RewardId(1),
                     RewardName("PS5"),
-                    1,
                     Probability(1f),
                     RewardDescription("this is very rare"),
                     true
@@ -195,22 +277,25 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
                 Reward(
                     RewardId(1),
                     RewardName("New Macbook Pro"),
-                    1,
                     Probability(1f),
                     RewardDescription("M1 Max is great"),
                     true
                 )
-            )
+            ),
+            onRewardItemClick = {}
         )
     }
 
     @Composable
-    private fun RewardItem(reward: Reward) {
+    private fun RewardItem(
+        reward: Reward,
+        onRewardItemClick: (Reward) -> Unit
+    ) {
         Surface {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .clickable { onItemClick(reward) }
+                    .clickable(onClick = { onRewardItemClick(reward) })
                     .padding(16.dp)
             ) {
                 Column(
@@ -242,12 +327,14 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         val reward = Reward(
             RewardId(1),
             RewardName("PS5"),
-            1,
             Probability(1f),
             RewardDescription("this is very rare"),
             true
         )
-        RewardItem(reward)
+        RewardItem(
+            reward = reward,
+            onRewardItemClick = {}
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -260,7 +347,10 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
     }
 
     override fun onItemClick(rewardEntity: Reward) {
-        fragmentTransitionManager.transitionToRewardDetailFragment(activity, rewardEntity.rewardId.value)
+        fragmentTransitionManager.transitionToRewardDetailFragment(
+            activity,
+            rewardEntity.rewardId.value
+        )
     }
 
     override fun onPointLoadFailed() {

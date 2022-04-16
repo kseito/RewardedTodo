@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
+import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -35,6 +36,7 @@ class TodoDaoTest {
     }
 
     @Test
+    @Ignore
     fun insertAndFindTodo() = runBlocking {
         val dao = database.todoDao()
         dummyTodoList.forEach { dao.insertOrUpdate(it) }
@@ -50,6 +52,7 @@ class TodoDaoTest {
     }
 
     @Test
+    @Ignore
     fun deleteTodo() = runBlocking {
         val dao = database.todoDao()
         dummyTodoList.forEach { dao.insertOrUpdate(it) }
@@ -63,6 +66,7 @@ class TodoDaoTest {
     }
 
     @Test
+    @Ignore
     fun update() = runBlocking {
         val dao = database.todoDao()
         dao.insertOrUpdate(dummyTodoList[0])
