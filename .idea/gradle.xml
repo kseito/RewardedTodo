@@ -31,6 +31,7 @@
             <option value="$PROJECT_DIR$/feature/todo" />
             <option value="$PROJECT_DIR$/presentation" />
             <option value="$PROJECT_DIR$/presentation/auth" />
+            <option value="$PROJECT_DIR$/presentation/common" />
             <option value="$PROJECT_DIR$/presentation/reward" />
             <option value="$PROJECT_DIR$/presentation/todo" />
             <option value="$PROJECT_DIR$/reward" />
