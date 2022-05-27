@@ -44,7 +44,11 @@ class TodoRepository @Inject constructor(
             localTasks.filter { entity ->
                 !latestTasks.map { it.id }.contains(entity.todoistId)
             }.forEach {
-                todoDao.completeTaskById(it.id)
+                if (it.isRepeat) {
+                    todoDao.completeTaskById(it.id)
+                } else {
+                    todoDao.delete(it)
+                }
             }
         }
     }
