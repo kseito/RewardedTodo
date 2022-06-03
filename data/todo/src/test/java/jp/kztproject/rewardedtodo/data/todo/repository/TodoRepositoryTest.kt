@@ -34,7 +34,8 @@ class TodoRepositoryTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     private val applicationContext = ApplicationProvider.getApplicationContext<Context>()
-    private val dao: TodoDao = DatabaseInitializer.init(applicationContext, AppDatabase::class.java, "todo").todoDao()
+    private val dao: TodoDao =
+        DatabaseInitializer.init(applicationContext, AppDatabase::class.java, "todo").todoDao()
     private val api: TodoistApi = mock()
     private val preferences = applicationContext.getSharedPreferences("test", Context.MODE_PRIVATE)
 
@@ -57,9 +58,9 @@ class TodoRepositoryTest {
 
         runBlocking {
             val tasks = listOf(
-                    Task(101, "test_content", Due(true)),
-                    Task(102, "test_content", Due(true)),
-                    Task(103, "test_content", Due(false)),
+                Task(101, "test_content", false, Due(true)),
+                Task(102, "test_content", false, Due(true)),
+                Task(103, "test_content", false, Due(false)),
             )
             whenever(api.fetchTasks(anyString())).thenReturn(tasks)
 
@@ -93,13 +94,40 @@ class TodoRepositoryTest {
 
         runBlocking {
             withContext(Dispatchers.IO) {
-                dao.insertOrUpdate(TodoEntity(1, 101, "test_name", 1f, isRepeat = true, isDone = false))
-                dao.insertOrUpdate(TodoEntity(2, 102, "test_name", 1f, isRepeat = true, isDone = true))
-                dao.insertOrUpdate(TodoEntity(3, 103, "test_name", 1f, isRepeat = true, isDone = false))
+                dao.insertOrUpdate(
+                    TodoEntity(
+                        1,
+                        101,
+                        "test_name",
+                        1f,
+                        isRepeat = true,
+                        isDone = false
+                    )
+                )
+                dao.insertOrUpdate(
+                    TodoEntity(
+                        2,
+                        102,
+                        "test_name",
+                        1f,
+                        isRepeat = true,
+                        isDone = true
+                    )
+                )
+                dao.insertOrUpdate(
+                    TodoEntity(
+                        3,
+                        103,
+                        "test_name",
+                        1f,
+                        isRepeat = true,
+                        isDone = false
+                    )
+                )
             }
             val tasks = listOf(
-                    Task(101, "test_content", Due(true)),
-                    Task(102, "test_content", Due(true)),
+                Task(101, "test_content", false, Due(true)),
+                Task(102, "test_content", false, Due(true)),
             )
             whenever(api.fetchTasks(anyString())).thenReturn(tasks)
 
