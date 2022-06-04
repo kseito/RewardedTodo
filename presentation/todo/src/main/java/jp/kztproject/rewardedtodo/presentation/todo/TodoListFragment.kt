@@ -64,12 +64,15 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
         val onRewardClicked = {
             fragmentTransitionManager.transitionToRewardListFragment(requireActivity())
         }
+        val onSettingClicked = {
+            fragmentTransitionManager.transitionToSettingFragmentFromTodoListFragment(requireActivity())
+        }
         return ComposeView(requireContext()).apply {
             setContent {
                 MaterialTheme(
                     colors = RewardedTodoScheme(isSystemInDarkTheme())
                 ) {
-                    TodoListScreen(viewModel, onTodoClicked, onRewardClicked)
+                    TodoListScreen(viewModel, onTodoClicked, onRewardClicked, onSettingClicked)
                 }
             }
         }
@@ -79,7 +82,8 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
     private fun TodoListScreen(
         viewModel: TodoListViewModel,
         onTodoClicked: () -> Unit,
-        onRewardClicked: () -> Unit
+        onRewardClicked: () -> Unit,
+        onSettingClicked: () -> Unit,
     ) {
         val todoList by viewModel.todoList.observeAsState()
         Column(
@@ -87,7 +91,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
                 .verticalScroll(rememberScrollState())
                 .background(MaterialTheme.colors.background)
         ) {
-            TopBar(onTodoClicked, onRewardClicked)
+            TopBar(onTodoClicked, onRewardClicked, onSettingClicked)
             todoList?.forEachIndexed { index, todo ->
                 TodoListItem(
                     todo = todo,

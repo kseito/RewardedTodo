@@ -14,7 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun TopBar(
     onTodoClicked: () -> Unit,
-    onRewardClicked: () -> Unit
+    onRewardClicked: () -> Unit,
+    onSettingClicked: () -> Unit,
 ) {
     TopAppBar(
         title = {
@@ -32,9 +33,7 @@ fun TopBar(
                 Icon(painterResource(id = R.drawable.lottery_button), contentDescription = null)
             }
             IconButton(
-                onClick = {
-                    println("設定画面を開く")
-                }
+                onClick = onSettingClicked
             ) {
                 Icon(Icons.Filled.Settings, contentDescription = null)
             }
@@ -45,5 +44,9 @@ fun TopBar(
 @Preview
 @Composable
 fun TopBarPreview() {
-    TopBar({}, {})
+    TopBar(
+        onTodoClicked = {},
+        onRewardClicked = {},
+        onSettingClicked = {},
+    )
 }

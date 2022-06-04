@@ -18,6 +18,14 @@ class FragmentsTransitionManager @Inject constructor() : IFragmentsTransitionMan
         activity.findNavController(R.id.nav_host_fragment).navigate(TodoListFragmentDirections.toRewardListFragment())
     }
 
+    override fun transitionToSettingFragmentFromTodoListFragment(activity: FragmentActivity) {
+        activity.findNavController(R.id.nav_host_fragment).navigate(TodoListFragmentDirections.toTodoistAuthFragment())
+    }
+
+    override fun transitionToSettingFragmentFromRewardListFragment(activity: FragmentActivity) {
+        activity.findNavController(R.id.nav_host_fragment).navigate(RewardListFragmentDirections.toTodoistAuthFragment())
+    }
+
     override fun popBackStack(activity: FragmentActivity?) {
         activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
     }
