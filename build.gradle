@@ -12,7 +12,6 @@ buildscript {
         classpath GradlePlugins.navigation_safe_args
         classpath GradlePlugins.dagger_hilt
         classpath GradlePlugins.ktlint
-        classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.21'
     }
 }
 

@@ -7,6 +7,17 @@ plugins {
 
 apply(from = rootProject.file("gradle/android_common.gradle"))
 
+android {
+    buildFeatures {
+        dataBinding = true
+        compose = true
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.1.0"
+    }
+}
+
 dependencies {
 
     // Jetpack Compose

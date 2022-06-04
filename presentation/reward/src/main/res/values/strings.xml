@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">reward</string>
-
     <!-- Reward -->
     <string name="reward_title">Reward</string>
     <string name="format_consume_point">%dP</string>

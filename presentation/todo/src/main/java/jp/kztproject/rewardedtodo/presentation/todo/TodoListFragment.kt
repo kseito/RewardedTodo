@@ -27,6 +27,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
+import jp.kztproject.rewardedtodo.presentation.common.TopBar
 import jp.kztproject.rewardedtodo.presentation.reward.list.DarkColorScheme
 import jp.kztproject.rewardedtodo.presentation.reward.list.RewardedTodoScheme
 import jp.kztproject.rewardedtodo.presentation.todo.databinding.ViewTodoDetailBinding
@@ -35,7 +36,8 @@ import jp.kztproject.rewardedtodo.todo.domain.Todo
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, TodoListViewModel.Callback {
+class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
+    TodoListViewModel.Callback {
 
     private val viewModel: TodoListViewModel by viewModels()
 
@@ -49,7 +51,11 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
         viewModel.initialize(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         return ComposeView(requireContext()).apply {
             setContent {
                 MaterialTheme(
@@ -69,6 +75,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
                 .verticalScroll(rememberScrollState())
                 .background(MaterialTheme.colors.background)
         ) {
+            TopBar()
             todoList?.forEachIndexed { index, todo ->
                 TodoListItem(
                     todo = todo,
