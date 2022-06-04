@@ -12,5 +12,7 @@ interface IFragmentsTransitionManager {
 
     fun transitionToTodoListFragment(activity: FragmentActivity?)
 
+    fun transitionToRewardListFragment(activity: FragmentActivity)
+
     fun popBackStack(activity: FragmentActivity?)
 }

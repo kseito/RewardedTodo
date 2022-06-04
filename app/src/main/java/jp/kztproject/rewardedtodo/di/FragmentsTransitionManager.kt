@@ -4,6 +4,7 @@ import androidx.fragment.app.FragmentActivity
 import androidx.navigation.findNavController
 import jp.kztproject.rewardedtodo.R
 import jp.kztproject.rewardedtodo.presentation.reward.list.RewardListFragmentDirections
+import jp.kztproject.rewardedtodo.presentation.todo.TodoListFragmentDirections
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
@@ -14,6 +15,10 @@ class FragmentsTransitionManager @Inject constructor() : IFragmentsTransitionMan
 
     override fun transitionToTodoListFragment(activity: FragmentActivity?) {
         activity?.findNavController(R.id.nav_host_fragment)?.navigate(RewardListFragmentDirections.toTodoListFragment())
+    }
+
+    override fun transitionToRewardListFragment(activity: FragmentActivity) {
+        activity.findNavController(R.id.nav_host_fragment).navigate(TodoListFragmentDirections.toRewardListFragment())
     }
 
     override fun transitionToRewardDetailFragment(activity: FragmentActivity?) {

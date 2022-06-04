@@ -33,6 +33,7 @@ import jp.kztproject.rewardedtodo.presentation.reward.list.RewardedTodoScheme
 import jp.kztproject.rewardedtodo.presentation.todo.databinding.ViewTodoDetailBinding
 import jp.kztproject.rewardedtodo.presentation.todo.model.EditingTodo
 import jp.kztproject.rewardedtodo.todo.domain.Todo
+import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -43,6 +44,9 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
 
     @Inject
     lateinit var adapter: TodoListViewAdapter
+
+    @Inject
+    lateinit var fragmentTransitionManager: IFragmentsTransitionManager
 
     private var todoDetailDialog: BottomSheetDialog? = null
 
@@ -57,7 +61,9 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
         savedInstanceState: Bundle?
     ): View {
         val onTodoClicked = {}
-        val onRewardClicked = { Toast.makeText(context, "大草原", Toast.LENGTH_LONG).show() }
+        val onRewardClicked = {
+            fragmentTransitionManager.transitionToRewardListFragment(requireActivity())
+        }
         return ComposeView(requireContext()).apply {
             setContent {
                 MaterialTheme(
