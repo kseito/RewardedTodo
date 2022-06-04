@@ -43,7 +43,7 @@ import javax.inject.Inject
 
 @ExperimentalMaterialApi
 @AndroidEntryPoint
-class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
+class RewardListFragment : Fragment(), RewardViewModelCallback {
 
     private val viewModel: RewardListViewModel by viewModels()
 
@@ -346,13 +346,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         }
     }
 
-    override fun onItemClick(rewardEntity: Reward) {
-        fragmentTransitionManager.transitionToRewardDetailFragment(
-            activity,
-            rewardEntity.rewardId.value
-        )
-    }
-
     override fun onPointLoadFailed() {
         Toast.makeText(context, "Point load failed", Toast.LENGTH_SHORT).show()
     }
@@ -366,8 +359,4 @@ class RewardListFragment : Fragment(), RewardViewModelCallback, ClickListener {
         val message = "You missed the lottery"
         showDialog(message)
     }
-}
-
-interface ClickListener {
-    fun onItemClick(rewardEntity: Reward)
 }

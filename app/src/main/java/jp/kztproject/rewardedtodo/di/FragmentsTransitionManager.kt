@@ -9,24 +9,13 @@ import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
 class FragmentsTransitionManager @Inject constructor() : IFragmentsTransitionManager {
-    override fun transitionToAuthFragment(activity: FragmentActivity?) {
-        activity?.findNavController(R.id.nav_host_fragment)?.navigate(RewardListFragmentDirections.actionRewardListFragmentToTodoistAuthFragment())
-    }
 
-    override fun transitionToTodoListFragment(activity: FragmentActivity?) {
-        activity?.findNavController(R.id.nav_host_fragment)?.navigate(RewardListFragmentDirections.toTodoListFragment())
+    override fun transitionToTodoListFragment(activity: FragmentActivity) {
+        activity.findNavController(R.id.nav_host_fragment).navigate(RewardListFragmentDirections.toTodoListFragment())
     }
 
     override fun transitionToRewardListFragment(activity: FragmentActivity) {
         activity.findNavController(R.id.nav_host_fragment).navigate(TodoListFragmentDirections.toRewardListFragment())
-    }
-
-    override fun transitionToRewardDetailFragment(activity: FragmentActivity?) {
-        activity?.findNavController(R.id.nav_host_fragment)?.navigate(RewardListFragmentDirections.toRewardDetailFragment())
-    }
-
-    override fun transitionToRewardDetailFragment(activity: FragmentActivity?, rewardId: Int) {
-        activity?.findNavController(R.id.nav_host_fragment)?.navigate(RewardListFragmentDirections.toRewardDetailFragment(rewardId))
     }
 
     override fun popBackStack(activity: FragmentActivity?) {
