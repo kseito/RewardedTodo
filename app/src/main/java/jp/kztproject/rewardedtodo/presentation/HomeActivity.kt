@@ -1,7 +1,6 @@
 package jp.kztproject.rewardedtodo.presentation
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.ui.AppBarConfiguration
@@ -12,9 +11,8 @@ import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeActivity : AppCompatActivity(), HomeViewModel.Callback {
+class HomeActivity : AppCompatActivity() {
 
-    private val viewModel: HomeViewModel by viewModels()
     private lateinit var binding: ActivityHomeBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
 
@@ -24,7 +22,6 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
-        viewModel.initialize(this)
 
 //        setSupportActionBar(binding.toolbar)
 //
@@ -41,9 +38,4 @@ class HomeActivity : AppCompatActivity(), HomeViewModel.Callback {
 //        val navController = findNavController(R.id.nav_host_fragment)
 //        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
 //    }
-
-    override fun onLogout() {
-        binding.drawerLayout.closeDrawers()
-        fragmentTransitionManager.transitionToAuthFragment(this)
-    }
 }
