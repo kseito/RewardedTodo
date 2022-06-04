@@ -56,26 +56,32 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        val onTodoClicked = {}
+        val onRewardClicked = { Toast.makeText(context, "大草原", Toast.LENGTH_LONG).show() }
         return ComposeView(requireContext()).apply {
             setContent {
                 MaterialTheme(
                     colors = RewardedTodoScheme(isSystemInDarkTheme())
                 ) {
-                    TodoListScreen(viewModel)
+                    TodoListScreen(viewModel, onTodoClicked, onRewardClicked)
                 }
             }
         }
     }
 
     @Composable
-    private fun TodoListScreen(viewModel: TodoListViewModel) {
+    private fun TodoListScreen(
+        viewModel: TodoListViewModel,
+        onTodoClicked: () -> Unit,
+        onRewardClicked: () -> Unit
+    ) {
         val todoList by viewModel.todoList.observeAsState()
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .background(MaterialTheme.colors.background)
         ) {
-            TopBar()
+            TopBar(onTodoClicked, onRewardClicked)
             todoList?.forEachIndexed { index, todo ->
                 TodoListItem(
                     todo = todo,

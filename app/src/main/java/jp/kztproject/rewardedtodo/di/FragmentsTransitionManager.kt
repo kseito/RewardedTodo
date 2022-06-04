@@ -12,6 +12,10 @@ class FragmentsTransitionManager @Inject constructor() : IFragmentsTransitionMan
         activity?.findNavController(R.id.nav_host_fragment)?.navigate(RewardListFragmentDirections.actionRewardListFragmentToTodoistAuthFragment())
     }
 
+    override fun transitionToTodoListFragment(activity: FragmentActivity?) {
+        activity?.findNavController(R.id.nav_host_fragment)?.navigate(RewardListFragmentDirections.toTodoListFragment())
+    }
+
     override fun transitionToRewardDetailFragment(activity: FragmentActivity?) {
         activity?.findNavController(R.id.nav_host_fragment)?.navigate(RewardListFragmentDirections.toRewardDetailFragment())
     }

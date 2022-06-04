@@ -12,6 +12,9 @@
         <action
             android:id="@+id/to_todoist_auth_fragment"
             app:destination="@id/todoist_auth_fragment" />
+        <action
+            android:id="@+id/to_reward_list_fragment"
+            app:destination="@id/reward_list_fragment" />
     </fragment>
 
     <dialog
@@ -36,6 +39,9 @@
         <action
             android:id="@+id/action_reward_list_fragment_to_todoist_auth_fragment"
             app:destination="@id/todoist_auth_fragment" />
+        <action
+            android:id="@+id/to_todo_list_fragment"
+            app:destination="@id/todo_list_fragment" />
 
     </fragment>
 
