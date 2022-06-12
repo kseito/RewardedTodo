@@ -11,22 +11,27 @@ import javax.inject.Inject
 class FragmentsTransitionManager @Inject constructor() : IFragmentsTransitionManager {
 
     override fun transitionToTodoListFragment(activity: FragmentActivity) {
-        activity.findNavController(R.id.nav_host_fragment).navigate(RewardListFragmentDirections.toTodoListFragment())
+        activity.findNavController(R.id.nav_host_fragment)
+            .navigate(RewardListFragmentDirections.toTodoListFragment())
     }
 
     override fun transitionToRewardListFragment(activity: FragmentActivity) {
-        activity.findNavController(R.id.nav_host_fragment).navigate(TodoListFragmentDirections.toRewardListFragment())
+        activity.findNavController(R.id.nav_host_fragment)
+            .navigate(TodoListFragmentDirections.toRewardListFragment())
     }
 
     override fun transitionToSettingFragmentFromTodoListFragment(activity: FragmentActivity) {
-        activity.findNavController(R.id.nav_host_fragment).navigate(TodoListFragmentDirections.toTodoistAuthFragment())
+        activity.findNavController(R.id.nav_host_fragment)
+            .navigate(TodoListFragmentDirections.toTodoistAuthFragment())
     }
 
     override fun transitionToSettingFragmentFromRewardListFragment(activity: FragmentActivity) {
-        activity.findNavController(R.id.nav_host_fragment).navigate(RewardListFragmentDirections.toTodoistAuthFragment())
+        activity.findNavController(R.id.nav_host_fragment)
+            .navigate(RewardListFragmentDirections.toTodoistAuthFragment())
     }
 
     override fun popBackStack(activity: FragmentActivity?) {
-        activity?.findNavController(R.id.nav_host_fragment)?.popBackStack()
+        activity?.findNavController(R.id.nav_host_fragment)
+            ?.popBackStack()
     }
 }
