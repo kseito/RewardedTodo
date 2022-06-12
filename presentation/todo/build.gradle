@@ -22,6 +22,7 @@ dependencies {
     implementation project(path: ':screen_transition')
     implementation project(path: ':feature:todo')
     implementation project(path: ':common:ui')
+    implementation project(path: ':presentation:common')
 
     implementation Libraries.Kotlin.stdlib
     implementation Libraries.AndroidX.coreKtx

@@ -4,11 +4,13 @@ import androidx.fragment.app.FragmentActivity
 
 interface IFragmentsTransitionManager {
 
-    fun transitionToRewardDetailFragment(activity: FragmentActivity?)
+    fun transitionToTodoListFragment(activity: FragmentActivity)
 
-    fun transitionToRewardDetailFragment(activity: FragmentActivity?, rewardId: Int)
+    fun transitionToRewardListFragment(activity: FragmentActivity)
 
-    fun transitionToAuthFragment(activity: FragmentActivity?)
+    fun transitionToSettingFragmentFromTodoListFragment(activity: FragmentActivity)
+
+    fun transitionToSettingFragmentFromRewardListFragment(activity: FragmentActivity)
 
     fun popBackStack(activity: FragmentActivity?)
 }

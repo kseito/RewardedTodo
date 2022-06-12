@@ -27,20 +27,26 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
+import jp.kztproject.rewardedtodo.presentation.common.TopBar
 import jp.kztproject.rewardedtodo.presentation.reward.list.DarkColorScheme
 import jp.kztproject.rewardedtodo.presentation.reward.list.RewardedTodoScheme
 import jp.kztproject.rewardedtodo.presentation.todo.databinding.ViewTodoDetailBinding
 import jp.kztproject.rewardedtodo.presentation.todo.model.EditingTodo
 import jp.kztproject.rewardedtodo.todo.domain.Todo
+import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, TodoListViewModel.Callback {
+class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
+    TodoListViewModel.Callback {
 
     private val viewModel: TodoListViewModel by viewModels()
 
     @Inject
     lateinit var adapter: TodoListViewAdapter
+
+    @Inject
+    lateinit var fragmentTransitionManager: IFragmentsTransitionManager
 
     private var todoDetailDialog: BottomSheetDialog? = null
 
@@ -49,26 +55,43 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener, To
         viewModel.initialize(this)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        val onTodoClicked = {}
+        val onRewardClicked = {
+            fragmentTransitionManager.transitionToRewardListFragment(requireActivity())
+        }
+        val onSettingClicked = {
+            fragmentTransitionManager.transitionToSettingFragmentFromTodoListFragment(requireActivity())
+        }
         return ComposeView(requireContext()).apply {
             setContent {
                 MaterialTheme(
                     colors = RewardedTodoScheme(isSystemInDarkTheme())
                 ) {
-                    TodoListScreen(viewModel)
+                    TodoListScreen(viewModel, onTodoClicked, onRewardClicked, onSettingClicked)
                 }
             }
         }
     }
 
     @Composable
-    private fun TodoListScreen(viewModel: TodoListViewModel) {
+    private fun TodoListScreen(
+        viewModel: TodoListViewModel,
+        onTodoClicked: () -> Unit,
+        onRewardClicked: () -> Unit,
+        onSettingClicked: () -> Unit,
+    ) {
         val todoList by viewModel.todoList.observeAsState()
         Column(
             modifier = Modifier
                 .verticalScroll(rememberScrollState())
                 .background(MaterialTheme.colors.background)
         ) {
+            TopBar(onTodoClicked, onRewardClicked, onSettingClicked)
             todoList?.forEachIndexed { index, todo ->
                 TodoListItem(
                     todo = todo,
