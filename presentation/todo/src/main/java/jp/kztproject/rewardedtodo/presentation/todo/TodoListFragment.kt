@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
@@ -88,26 +91,47 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
         onSettingClicked: () -> Unit,
     ) {
         val todoList by viewModel.todoList.observeAsState()
-        Column(
+
+        ConstraintLayout(
             modifier = Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .background(MaterialTheme.colors.background)
         ) {
-            TopBar(onTodoClicked, onRewardClicked, onSettingClicked)
-            todoList?.forEachIndexed { index, todo ->
-                TodoListItem(
-                    todo = todo,
-                    onItemClicked = {
-                        val editingTodo = EditingTodo.from(todo)
-                        showTodoDetail(editingTodo)
-                    },
-                    onTodoDone = {
-                        viewModel.completeTodo(it)
-                    })
-                if (index < todoList!!.lastIndex) {
-                    Divider()
+            Column {
+                TopBar(onTodoClicked, onRewardClicked, onSettingClicked)
+                todoList?.forEachIndexed { index, todo ->
+                    TodoListItem(
+                        todo = todo,
+                        onItemClicked = {
+                            val editingTodo = EditingTodo.from(todo)
+                            showTodoDetail(editingTodo)
+                        },
+                        onTodoDone = {
+                            viewModel.completeTodo(it)
+                        })
+                    if (index < todoList!!.lastIndex) {
+                        Divider()
+                    }
                 }
+            }
+
+            val (createTodoButton) = createRefs()
+
+            FloatingActionButton(
+                onClick = {
+                    println("test")
+                },
+                shape = RoundedCornerShape(8.dp),
+                backgroundColor = MaterialTheme.colors.primary,
+                modifier = Modifier
+                    .constrainAs(createTodoButton) {
+                        bottom.linkTo(parent.bottom)
+                        end.linkTo(parent.end)
+                    }
+                    .padding(24.dp)
+            ) {
+                Icon(Icons.Rounded.Add, contentDescription = "Add")
             }
         }
     }
