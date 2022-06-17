@@ -6,10 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.foundation.*
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -32,7 +29,10 @@ import jp.kztproject.rewardedtodo.presentation.reward.list.DarkColorScheme
 import jp.kztproject.rewardedtodo.presentation.reward.list.RewardedTodoScheme
 import jp.kztproject.rewardedtodo.presentation.todo.databinding.ViewTodoDetailBinding
 import jp.kztproject.rewardedtodo.presentation.todo.model.EditingTodo
+import jp.kztproject.rewardedtodo.todo.application.*
 import jp.kztproject.rewardedtodo.todo.domain.Todo
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
@@ -65,7 +65,9 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
             fragmentTransitionManager.transitionToRewardListFragment(requireActivity())
         }
         val onSettingClicked = {
-            fragmentTransitionManager.transitionToSettingFragmentFromTodoListFragment(requireActivity())
+            fragmentTransitionManager.transitionToSettingFragmentFromTodoListFragment(
+                requireActivity()
+            )
         }
         return ComposeView(requireContext()).apply {
             setContent {
@@ -88,6 +90,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
         val todoList by viewModel.todoList.observeAsState()
         Column(
             modifier = Modifier
+                .fillMaxSize()
                 .verticalScroll(rememberScrollState())
                 .background(MaterialTheme.colors.background)
         ) {
@@ -107,6 +110,41 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
                 }
             }
         }
+    }
+
+    @Preview
+    @Composable
+    fun TodoListScreenPreview() {
+        val viewModel = TodoListViewModel(
+            object : GetTodoListUseCase {
+                override fun execute(): Flow<List<Todo>> {
+                    // TODO cannot display
+                    return flowOf(
+                        listOf(
+                            Todo(1, 1001, "英語学習", 2f, true),
+                        )
+                    )
+                }
+            },
+            object : FetchTodoListUseCase {
+                override suspend fun execute() {}
+            },
+            object : UpdateTodoUseCase {
+                override suspend fun execute(todo: Todo) {}
+            },
+            object : DeleteTodoUseCase {
+                override suspend fun execute(todo: Todo) {}
+            },
+            object : CompleteTodoUseCase {
+                override suspend fun execute(todo: Todo) {}
+            }
+        )
+        TodoListScreen(
+            viewModel = viewModel,
+            onTodoClicked = {},
+            onRewardClicked = {},
+            onSettingClicked = {}
+        )
     }
 
     @Composable
