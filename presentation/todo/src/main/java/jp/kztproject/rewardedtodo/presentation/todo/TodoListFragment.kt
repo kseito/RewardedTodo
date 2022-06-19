@@ -36,9 +36,11 @@ import jp.kztproject.rewardedtodo.todo.application.*
 import jp.kztproject.rewardedtodo.todo.domain.Todo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import project.seito.screen_transition.IFragmentsTransitionManager
 import javax.inject.Inject
 
+@ExperimentalMaterialApi
 @AndroidEntryPoint
 class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
     TodoListViewModel.Callback {
@@ -77,20 +79,46 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
                 MaterialTheme(
                     colors = RewardedTodoScheme(isSystemInDarkTheme())
                 ) {
-                    TodoListScreen(viewModel, onTodoClicked, onRewardClicked, onSettingClicked)
+                    TodoListScreenWithBottomSheet(viewModel, onTodoClicked, onRewardClicked, onSettingClicked)
                 }
             }
         }
     }
 
+    @ExperimentalMaterialApi
     @Composable
-    private fun TodoListScreen(
+    fun TodoListScreenWithBottomSheet(
         viewModel: TodoListViewModel,
         onTodoClicked: () -> Unit,
         onRewardClicked: () -> Unit,
         onSettingClicked: () -> Unit,
     ) {
+        val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+
+        TodoDetailBottomSheet(
+            bottomSheetState = bottomSheetState
+        ) {
+            TodoListScreen(
+                viewModel = viewModel,
+                bottomSheetState = bottomSheetState,
+                onTodoClicked = onTodoClicked,
+                onRewardClicked = onRewardClicked,
+                onSettingClicked = onSettingClicked
+            )
+        }
+    }
+
+    @ExperimentalMaterialApi
+    @Composable
+    private fun TodoListScreen(
+        viewModel: TodoListViewModel,
+        bottomSheetState: ModalBottomSheetState,
+        onTodoClicked: () -> Unit,
+        onRewardClicked: () -> Unit,
+        onSettingClicked: () -> Unit,
+    ) {
         val todoList by viewModel.todoList.observeAsState()
+        val coroutineScope = rememberCoroutineScope()
 
         ConstraintLayout(
             modifier = Modifier
@@ -120,7 +148,9 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
 
             FloatingActionButton(
                 onClick = {
-                    println("test")
+                    coroutineScope.launch {
+                        bottomSheetState.show()
+                    }
                 },
                 shape = RoundedCornerShape(8.dp),
                 backgroundColor = MaterialTheme.colors.primary,
@@ -137,6 +167,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
     }
 
     @Preview
+    @ExperimentalMaterialApi
     @Composable
     fun TodoListScreenPreview() {
         val viewModel = TodoListViewModel(
@@ -165,6 +196,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
         )
         TodoListScreen(
             viewModel = viewModel,
+            bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
             onTodoClicked = {},
             onRewardClicked = {},
             onSettingClicked = {}
