@@ -111,10 +111,10 @@ object Libraries {
         const val assertJ = "org.assertj:assertj-core:3.12.2"
 
         object AndroidX {
-            const val junit = "androidx.test.ext:junit:1.1.2"
+            const val junit = "androidx.test.ext:junit:1.1.3"
             const val coreTesting = "androidx.arch.core:core-testing:2.0.0"
-            const val testRunner = "androidx.test:runner:1.1.0"
-            const val espresso = "androidx.test.espresso:espresso-core:3.1.0"
+            const val testRunner = "androidx.test:runner:1.4.0"
+            const val espresso = "androidx.test.espresso:espresso-core:3.4.0"
         }
     }
 }
