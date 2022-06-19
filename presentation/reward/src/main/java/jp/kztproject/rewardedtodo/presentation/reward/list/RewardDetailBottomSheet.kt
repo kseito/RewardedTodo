@@ -8,6 +8,7 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 
@@ -114,4 +115,15 @@ private fun RewardDetailBottomSheetContent(
             }
         }
     }
+}
+
+@Preview
+@ExperimentalMaterialApi
+@Composable
+fun RewardDetailBottomSheetContentPreview() {
+    RewardDetailBottomSheetContent(
+        reward = null,
+        onRewardSaveSelected = {_, _, _, _, _ ->},
+        onRewardDeleteSelected = {}
+    )
 }
