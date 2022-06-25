@@ -13,27 +13,38 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import jp.kztproject.rewardedtodo.presentation.todo.model.EditingTodo
+import jp.kztproject.rewardedtodo.todo.domain.Todo
 
 @ExperimentalMaterialApi
 @Composable
 fun TodoDetailBottomSheet(
     bottomSheetState: ModalBottomSheetState,
+    onTodoSaveSelected: (EditingTodo) -> Unit,
+    onTodoDeleteSelected: (Todo) -> Unit,
     content: @Composable () -> Unit,
 ) {
     ModalBottomSheetLayout(
         sheetState = bottomSheetState,
         content = content,
         sheetContent = {
-            TodoDetailBottomSheetContent()
+            TodoDetailBottomSheetContent(
+                todo = null,
+                onTodoSaveSelected = onTodoSaveSelected,
+                onTodoDeleteSelected = onTodoDeleteSelected
+            )
         },
     )
 }
 
-@Preview
 @Composable
-private fun TodoDetailBottomSheetContent() {
+private fun TodoDetailBottomSheetContent(
+    todo: Todo?,
+    onTodoSaveSelected: (EditingTodo) -> Unit, //TODO create new Domain
+    onTodoDeleteSelected: (Todo) -> Unit
+) {
     var title: String by remember { mutableStateOf("") }
-    var numberOfTicket: String by remember { mutableStateOf("") }
+    var numberOfTicket: Float by remember { mutableStateOf(0f) }
 
     ConstraintLayout(
         modifier = Modifier
@@ -80,6 +91,7 @@ private fun TodoDetailBottomSheetContent() {
         )
         NumberPicker(
             state = remember { mutableStateOf(1) },
+            onStateChanged = { numberOfTicket = it.toFloat() },
             range = 1..100,
             modifier = Modifier
                 .constrainAs(ticketInput) {
@@ -88,7 +100,13 @@ private fun TodoDetailBottomSheetContent() {
                 }
         )
         Button(
-            onClick = { /*TODO*/ },
+            onClick = {
+                val editingTodo = EditingTodo(
+                    name = title,
+                    numberOfTicketsObtained = numberOfTicket
+                )
+                onTodoSaveSelected(editingTodo)
+            },
             modifier = Modifier
                 .padding(end = 8.dp)
                 .constrainAs(saveButton) {
@@ -97,16 +115,27 @@ private fun TodoDetailBottomSheetContent() {
         ) {
             Text(text = "Save")
         }
-        Button(
-            onClick = { /*TODO*/ },
-            modifier = Modifier
-                .constrainAs(deleteButton) {
-                    top.linkTo(ticketLabelText.bottom)
-                    start.linkTo(saveButton.end)
-                }
-        ) {
-            Text(text = "Delete")
+        todo?.let {
+            Button(
+                onClick = { onTodoDeleteSelected(todo) },
+                modifier = Modifier
+                    .constrainAs(deleteButton) {
+                        top.linkTo(ticketLabelText.bottom)
+                        start.linkTo(saveButton.end)
+                    }
+            ) {
+                Text(text = "Delete")
+            }
         }
     }
+}
 
+@Preview
+@Composable
+fun TodoDetailBottomSheetContentPreview() {
+    TodoDetailBottomSheetContent(
+        todo = null,
+        onTodoSaveSelected = {},
+        onTodoDeleteSelected = {}
+    )
 }

@@ -74,12 +74,25 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
                 requireActivity()
             )
         }
+        val onTodoSaveSelected: (EditingTodo) -> Unit = {
+            viewModel.updateTodo(it)
+        }
+        val onTodoDeleteSelected: (Todo) -> Unit = {
+            // TODO call viewModel method
+        }
         return ComposeView(requireContext()).apply {
             setContent {
                 MaterialTheme(
                     colors = RewardedTodoScheme(isSystemInDarkTheme())
                 ) {
-                    TodoListScreenWithBottomSheet(viewModel, onTodoClicked, onRewardClicked, onSettingClicked)
+                    TodoListScreenWithBottomSheet(
+                        viewModel = viewModel,
+                        onTodoClicked = onTodoClicked,
+                        onRewardClicked = onRewardClicked,
+                        onSettingClicked = onSettingClicked,
+                        onTodoSaveSelected = onTodoSaveSelected,
+                        onTodoDeleteSelected = onTodoDeleteSelected
+                    )
                 }
             }
         }
@@ -92,11 +105,15 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
         onTodoClicked: () -> Unit,
         onRewardClicked: () -> Unit,
         onSettingClicked: () -> Unit,
+        onTodoSaveSelected: (EditingTodo) -> Unit,
+        onTodoDeleteSelected: (Todo) -> Unit,
     ) {
         val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
 
         TodoDetailBottomSheet(
-            bottomSheetState = bottomSheetState
+            bottomSheetState = bottomSheetState,
+            onTodoSaveSelected = onTodoSaveSelected,
+            onTodoDeleteSelected = onTodoDeleteSelected
         ) {
             TodoListScreen(
                 viewModel = viewModel,
