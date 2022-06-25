@@ -92,227 +92,223 @@ class TodoListFragment : Fragment(), TodoListViewModel.Callback {
         }
     }
 
-    @ExperimentalMaterialApi
-    @Composable
-    fun TodoListScreenWithBottomSheet(
-        viewModel: TodoListViewModel,
-        onTodoClicked: () -> Unit,
-        onRewardClicked: () -> Unit,
-        onSettingClicked: () -> Unit,
-        onTodoSaveSelected: (EditingTodo) -> Unit,
-        onTodoDeleteSelected: (EditingTodo) -> Unit,
-    ) {
-        val coroutineScope = rememberCoroutineScope()
-        val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-        var selectedTodo: Todo? by remember { mutableStateOf(null) }
-        val onTodoItemClicked: (Todo) -> Unit = {
-            coroutineScope.launch {
-                selectedTodo = it
-                bottomSheetState.show()
-            }
-        }
-        val onTodoAddClicked: () -> Unit = {
-            coroutineScope.launch {
-                selectedTodo = null
-                bottomSheetState.show()
-            }
-        }
-
-        TodoDetailBottomSheet(
-            todo = selectedTodo,
-            bottomSheetState = bottomSheetState,
-            onTodoSaveSelected = onTodoSaveSelected,
-            onTodoDeleteSelected = onTodoDeleteSelected
-        ) {
-            TodoListScreen(
-                viewModel = viewModel,
-                bottomSheetState = bottomSheetState,
-                onTodoClicked = onTodoClicked,
-                onRewardClicked = onRewardClicked,
-                onSettingClicked = onSettingClicked,
-                onTodoItemClicked = onTodoItemClicked,
-                onTodoAddClicked = onTodoAddClicked,
-            )
-        }
-    }
-
-    @ExperimentalMaterialApi
-    @Composable
-    private fun TodoListScreen(
-        viewModel: TodoListViewModel,
-        bottomSheetState: ModalBottomSheetState,
-        onTodoClicked: () -> Unit,
-        onRewardClicked: () -> Unit,
-        onSettingClicked: () -> Unit,
-        onTodoAddClicked: () -> Unit,
-        onTodoItemClicked: (Todo) -> Unit,
-    ) {
-        val todoList by viewModel.todoList.observeAsState()
-        val coroutineScope = rememberCoroutineScope()
-
-        ConstraintLayout(
-            modifier = Modifier
-                .fillMaxSize()
-                .verticalScroll(rememberScrollState())
-                .background(MaterialTheme.colors.background)
-        ) {
-            Column {
-                TopBar(onTodoClicked, onRewardClicked, onSettingClicked)
-                todoList?.forEachIndexed { index, todo ->
-                    TodoListItem(
-                        todo = todo,
-                        onItemClicked = {
-                            onTodoItemClicked(todo)
-                        },
-                        onTodoDone = {
-                            viewModel.completeTodo(it)
-                        })
-                    if (index < todoList!!.lastIndex) {
-                        Divider()
-                    }
-                }
-            }
-
-            val (createTodoButton) = createRefs()
-
-            FloatingActionButton(
-                onClick = onTodoAddClicked,
-                shape = RoundedCornerShape(8.dp),
-                backgroundColor = MaterialTheme.colors.primary,
-                modifier = Modifier
-                    .constrainAs(createTodoButton) {
-                        bottom.linkTo(parent.bottom)
-                        end.linkTo(parent.end)
-                    }
-                    .padding(24.dp)
-            ) {
-                Icon(Icons.Rounded.Add, contentDescription = "Add")
-            }
-        }
-    }
-
-    @Preview
-    @ExperimentalMaterialApi
-    @Composable
-    fun TodoListScreenPreview() {
-        val viewModel = TodoListViewModel(
-            object : GetTodoListUseCase {
-                override fun execute(): Flow<List<Todo>> {
-                    // TODO cannot display
-                    return flowOf(
-                        listOf(
-                            Todo(1, 1001, "英語学習", 2f, true),
-                        )
-                    )
-                }
-            },
-            object : FetchTodoListUseCase {
-                override suspend fun execute() {}
-            },
-            object : UpdateTodoUseCase {
-                override suspend fun execute(todo: Todo) {}
-            },
-            object : DeleteTodoUseCase {
-                override suspend fun execute(todo: Todo) {}
-            },
-            object : CompleteTodoUseCase {
-                override suspend fun execute(todo: Todo) {}
-            }
-        )
-        TodoListScreen(
-            viewModel = viewModel,
-            bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
-            onTodoClicked = {},
-            onRewardClicked = {},
-            onSettingClicked = {},
-            onTodoItemClicked = {},
-            onTodoAddClicked = {},
-        )
-    }
-
-    @Composable
-    private fun TodoListItem(todo: Todo, onItemClicked: () -> Unit, onTodoDone: (Todo) -> Unit) {
-        var isDone by remember { mutableStateOf(false) }
-        ConstraintLayout(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(onClick = onItemClicked)
-                .padding(16.dp)
-        ) {
-            val (checkbox, title, ticketImage, ticketCount) = createRefs()
-
-            Checkbox(
-                checked = isDone,
-                onCheckedChange = { onTodoDone.invoke(todo) },
-                modifier = Modifier
-                    .constrainAs(checkbox) {
-                        top.linkTo(parent.top)
-                        start.linkTo(parent.start)
-                        bottom.linkTo(parent.bottom)
-                    }
-                    .padding(0.dp, 0.dp, 16.dp, 0.dp)
-            )
-            Text(
-                text = todo.name,
-                style = MaterialTheme.typography.h5,
-                color = MaterialTheme.colors.onBackground,
-                modifier = Modifier
-                    .constrainAs(title) {
-                        start.linkTo(checkbox.end)
-                        end.linkTo(parent.end)
-                        width = Dimension.fillToConstraints
-                    }
-            )
-            Image(
-                painter = painterResource(id = R.drawable.ic_ticket),
-                contentDescription = null,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier
-                    .size(36.dp)
-                    .constrainAs(ticketImage) {
-                        top.linkTo(title.bottom)
-                        start.linkTo(title.start)
-                    }
-            )
-            Text(
-                text = "${todo.numberOfTicketsObtained}",
-                fontSize = 20.sp,
-                color = MaterialTheme.colors.onBackground,
-                modifier = Modifier
-                    .constrainAs(ticketCount) {
-                        top.linkTo(ticketImage.top)
-                        start.linkTo(ticketImage.end, 16.dp)
-                        bottom.linkTo(ticketImage.bottom)
-                    }
-            )
-        }
-    }
-
-    @Preview
-    @Composable
-    private fun TodoListItemPreview() {
-        Surface {
-            val todo = Todo(1, 1, "Buy ingredients for dinner", 1f, false)
-            TodoListItem(todo, {}) {}
-        }
-    }
-
-    @Preview
-    @Composable
-    private fun DarkModeTodoListItemPreview() {
-        MaterialTheme(
-            colors = DarkColorScheme
-        ) {
-            val todo = Todo(1, 1, "Buy ingredients for dinner", 1f, false)
-            TodoListItem(todo, {}) {}
-        }
-    }
-
     override fun afterTodoUpdate() {
         todoDetailDialog?.dismiss()
     }
 
     override fun onError(error: Throwable) {
         Toast.makeText(requireContext(), "Fail!", Toast.LENGTH_LONG).show()
+    }
+}
+
+@ExperimentalMaterialApi
+@Composable
+fun TodoListScreenWithBottomSheet(
+    viewModel: TodoListViewModel,
+    onTodoClicked: () -> Unit,
+    onRewardClicked: () -> Unit,
+    onSettingClicked: () -> Unit,
+    onTodoSaveSelected: (EditingTodo) -> Unit,
+    onTodoDeleteSelected: (EditingTodo) -> Unit,
+) {
+    val coroutineScope = rememberCoroutineScope()
+    val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+    var selectedTodo: Todo? by remember { mutableStateOf(null) }
+    val onTodoItemClicked: (Todo) -> Unit = {
+        coroutineScope.launch {
+            selectedTodo = it
+            bottomSheetState.show()
+        }
+    }
+    val onTodoAddClicked: () -> Unit = {
+        coroutineScope.launch {
+            selectedTodo = null
+            bottomSheetState.show()
+        }
+    }
+
+    TodoDetailBottomSheet(
+        todo = selectedTodo,
+        bottomSheetState = bottomSheetState,
+        onTodoSaveSelected = onTodoSaveSelected,
+        onTodoDeleteSelected = onTodoDeleteSelected
+    ) {
+        TodoListScreen(
+            viewModel = viewModel,
+            onTodoClicked = onTodoClicked,
+            onRewardClicked = onRewardClicked,
+            onSettingClicked = onSettingClicked,
+            onTodoItemClicked = onTodoItemClicked,
+            onTodoAddClicked = onTodoAddClicked,
+        )
+    }
+}
+
+@ExperimentalMaterialApi
+@Composable
+private fun TodoListScreen(
+    viewModel: TodoListViewModel,
+    onTodoClicked: () -> Unit,
+    onRewardClicked: () -> Unit,
+    onSettingClicked: () -> Unit,
+    onTodoAddClicked: () -> Unit,
+    onTodoItemClicked: (Todo) -> Unit,
+) {
+    val todoList by viewModel.todoList.observeAsState()
+
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .background(MaterialTheme.colors.background)
+    ) {
+        Column {
+            TopBar(onTodoClicked, onRewardClicked, onSettingClicked)
+            todoList?.forEachIndexed { index, todo ->
+                TodoListItem(
+                    todo = todo,
+                    onItemClicked = {
+                        onTodoItemClicked(todo)
+                    },
+                    onTodoDone = {
+                        viewModel.completeTodo(it)
+                    })
+                if (index < todoList!!.lastIndex) {
+                    Divider()
+                }
+            }
+        }
+
+        val (createTodoButton) = createRefs()
+
+        FloatingActionButton(
+            onClick = onTodoAddClicked,
+            shape = RoundedCornerShape(8.dp),
+            backgroundColor = MaterialTheme.colors.primary,
+            modifier = Modifier
+                .constrainAs(createTodoButton) {
+                    bottom.linkTo(parent.bottom)
+                    end.linkTo(parent.end)
+                }
+                .padding(24.dp)
+        ) {
+            Icon(Icons.Rounded.Add, contentDescription = "Add")
+        }
+    }
+}
+
+@Preview
+@ExperimentalMaterialApi
+@Composable
+fun TodoListScreenPreview() {
+    val viewModel = TodoListViewModel(
+        object : GetTodoListUseCase {
+            override fun execute(): Flow<List<Todo>> {
+                // TODO cannot display
+                return flowOf(
+                    listOf(
+                        Todo(1, 1001, "英語学習", 2f, true),
+                    )
+                )
+            }
+        },
+        object : FetchTodoListUseCase {
+            override suspend fun execute() {}
+        },
+        object : UpdateTodoUseCase {
+            override suspend fun execute(todo: Todo) {}
+        },
+        object : DeleteTodoUseCase {
+            override suspend fun execute(todo: Todo) {}
+        },
+        object : CompleteTodoUseCase {
+            override suspend fun execute(todo: Todo) {}
+        }
+    )
+    TodoListScreen(
+        viewModel = viewModel,
+        onTodoClicked = {},
+        onRewardClicked = {},
+        onSettingClicked = {},
+        onTodoItemClicked = {},
+        onTodoAddClicked = {},
+    )
+}
+
+@Composable
+private fun TodoListItem(todo: Todo, onItemClicked: () -> Unit, onTodoDone: (Todo) -> Unit) {
+    val isDone by remember { mutableStateOf(false) }
+    ConstraintLayout(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(onClick = onItemClicked)
+            .padding(16.dp)
+    ) {
+        val (checkbox, title, ticketImage, ticketCount) = createRefs()
+
+        Checkbox(
+            checked = isDone,
+            onCheckedChange = { onTodoDone.invoke(todo) },
+            modifier = Modifier
+                .constrainAs(checkbox) {
+                    top.linkTo(parent.top)
+                    start.linkTo(parent.start)
+                    bottom.linkTo(parent.bottom)
+                }
+                .padding(0.dp, 0.dp, 16.dp, 0.dp)
+        )
+        Text(
+            text = todo.name,
+            style = MaterialTheme.typography.h5,
+            color = MaterialTheme.colors.onBackground,
+            modifier = Modifier
+                .constrainAs(title) {
+                    start.linkTo(checkbox.end)
+                    end.linkTo(parent.end)
+                    width = Dimension.fillToConstraints
+                }
+        )
+        Image(
+            painter = painterResource(id = R.drawable.ic_ticket),
+            contentDescription = null,
+            contentScale = ContentScale.Fit,
+            modifier = Modifier
+                .size(36.dp)
+                .constrainAs(ticketImage) {
+                    top.linkTo(title.bottom)
+                    start.linkTo(title.start)
+                }
+        )
+        Text(
+            text = "${todo.numberOfTicketsObtained}",
+            fontSize = 20.sp,
+            color = MaterialTheme.colors.onBackground,
+            modifier = Modifier
+                .constrainAs(ticketCount) {
+                    top.linkTo(ticketImage.top)
+                    start.linkTo(ticketImage.end, 16.dp)
+                    bottom.linkTo(ticketImage.bottom)
+                }
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun TodoListItemPreview() {
+    Surface {
+        val todo = Todo(1, 1, "Buy ingredients for dinner", 1f, false)
+        TodoListItem(todo, {}) {}
+    }
+}
+
+@Preview
+@Composable
+private fun DarkModeTodoListItemPreview() {
+    MaterialTheme(
+        colors = DarkColorScheme
+    ) {
+        val todo = Todo(1, 1, "Buy ingredients for dinner", 1f, false)
+        TodoListItem(todo, {}) {}
     }
 }
