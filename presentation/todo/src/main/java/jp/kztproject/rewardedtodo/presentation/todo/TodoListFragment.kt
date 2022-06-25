@@ -22,7 +22,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -30,7 +29,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.presentation.common.TopBar
 import jp.kztproject.rewardedtodo.presentation.reward.list.DarkColorScheme
 import jp.kztproject.rewardedtodo.presentation.reward.list.RewardedTodoScheme
-import jp.kztproject.rewardedtodo.presentation.todo.databinding.ViewTodoDetailBinding
 import jp.kztproject.rewardedtodo.presentation.todo.model.EditingTodo
 import jp.kztproject.rewardedtodo.todo.application.*
 import jp.kztproject.rewardedtodo.todo.domain.Todo
@@ -42,13 +40,9 @@ import javax.inject.Inject
 
 @ExperimentalMaterialApi
 @AndroidEntryPoint
-class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
-    TodoListViewModel.Callback {
+class TodoListFragment : Fragment(), TodoListViewModel.Callback {
 
     private val viewModel: TodoListViewModel by viewModels()
-
-    @Inject
-    lateinit var adapter: TodoListViewAdapter
 
     @Inject
     lateinit var fragmentTransitionManager: IFragmentsTransitionManager
@@ -312,28 +306,6 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
             val todo = Todo(1, 1, "Buy ingredients for dinner", 1f, false)
             TodoListItem(todo, {}) {}
         }
-    }
-
-    override fun onClick(item: Todo) {
-        val editingTodo = EditingTodo.from(item)
-        showTodoDetail(editingTodo)
-    }
-
-    override fun onCompleted(item: Todo) {
-        viewModel.completeTodo(item)
-    }
-
-    private fun showTodoDetail(item: EditingTodo) {
-        val bottomSheet = BottomSheetDialog(requireContext())
-        val binding = DataBindingUtil.inflate<ViewTodoDetailBinding>(
-            LayoutInflater.from(context), R.layout.view_todo_detail, view as ViewGroup, false
-        )
-        bottomSheet.setContentView(binding.root)
-        binding.todo = item
-        binding.viewModel = viewModel
-        bottomSheet.show()
-
-        todoDetailDialog = bottomSheet
     }
 
     override fun afterTodoUpdate() {
