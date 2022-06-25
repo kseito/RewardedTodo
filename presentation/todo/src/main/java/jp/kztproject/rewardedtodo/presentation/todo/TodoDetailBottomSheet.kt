@@ -19,6 +19,7 @@ import jp.kztproject.rewardedtodo.todo.domain.Todo
 @ExperimentalMaterialApi
 @Composable
 fun TodoDetailBottomSheet(
+    todo: Todo?,
     bottomSheetState: ModalBottomSheetState,
     onTodoSaveSelected: (EditingTodo) -> Unit,
     onTodoDeleteSelected: (Todo) -> Unit,
@@ -29,7 +30,7 @@ fun TodoDetailBottomSheet(
         content = content,
         sheetContent = {
             TodoDetailBottomSheetContent(
-                todo = null,
+                todo = todo,
                 onTodoSaveSelected = onTodoSaveSelected,
                 onTodoDeleteSelected = onTodoDeleteSelected
             )
@@ -43,8 +44,21 @@ private fun TodoDetailBottomSheetContent(
     onTodoSaveSelected: (EditingTodo) -> Unit, //TODO create new Domain
     onTodoDeleteSelected: (Todo) -> Unit
 ) {
+    var id: Long? by remember { mutableStateOf(null) }
     var title: String by remember { mutableStateOf("") }
     var numberOfTicket: Float by remember { mutableStateOf(0f) }
+
+    LaunchedEffect(todo) {
+        if (todo != null) {
+            id = todo.id
+            title = todo.name
+            numberOfTicket = todo.numberOfTicketsObtained
+        } else {
+            id = null
+            title = ""
+            numberOfTicket = 0f
+        }
+    }
 
     ConstraintLayout(
         modifier = Modifier
@@ -102,6 +116,7 @@ private fun TodoDetailBottomSheetContent(
         Button(
             onClick = {
                 val editingTodo = EditingTodo(
+                    id = id,
                     name = title,
                     numberOfTicketsObtained = numberOfTicket
                 )

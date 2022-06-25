@@ -108,9 +108,24 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
         onTodoSaveSelected: (EditingTodo) -> Unit,
         onTodoDeleteSelected: (Todo) -> Unit,
     ) {
+        val coroutineScope = rememberCoroutineScope()
         val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
+        var selectedTodo: Todo? by remember { mutableStateOf(null) }
+        val onTodoItemClicked: (Todo) -> Unit = {
+            coroutineScope.launch {
+                selectedTodo = it
+                bottomSheetState.show()
+            }
+        }
+        val onTodoAddClicked: () -> Unit = {
+            coroutineScope.launch {
+                selectedTodo = null
+                bottomSheetState.show()
+            }
+        }
 
         TodoDetailBottomSheet(
+            todo = selectedTodo,
             bottomSheetState = bottomSheetState,
             onTodoSaveSelected = onTodoSaveSelected,
             onTodoDeleteSelected = onTodoDeleteSelected
@@ -120,7 +135,9 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
                 bottomSheetState = bottomSheetState,
                 onTodoClicked = onTodoClicked,
                 onRewardClicked = onRewardClicked,
-                onSettingClicked = onSettingClicked
+                onSettingClicked = onSettingClicked,
+                onTodoItemClicked = onTodoItemClicked,
+                onTodoAddClicked = onTodoAddClicked,
             )
         }
     }
@@ -133,6 +150,8 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
         onTodoClicked: () -> Unit,
         onRewardClicked: () -> Unit,
         onSettingClicked: () -> Unit,
+        onTodoAddClicked: () -> Unit,
+        onTodoItemClicked: (Todo) -> Unit,
     ) {
         val todoList by viewModel.todoList.observeAsState()
         val coroutineScope = rememberCoroutineScope()
@@ -149,8 +168,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
                     TodoListItem(
                         todo = todo,
                         onItemClicked = {
-                            val editingTodo = EditingTodo.from(todo)
-                            showTodoDetail(editingTodo)
+                            onTodoItemClicked(todo)
                         },
                         onTodoDone = {
                             viewModel.completeTodo(it)
@@ -164,11 +182,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
             val (createTodoButton) = createRefs()
 
             FloatingActionButton(
-                onClick = {
-                    coroutineScope.launch {
-                        bottomSheetState.show()
-                    }
-                },
+                onClick = onTodoAddClicked,
                 shape = RoundedCornerShape(8.dp),
                 backgroundColor = MaterialTheme.colors.primary,
                 modifier = Modifier
@@ -216,7 +230,9 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
             bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
             onTodoClicked = {},
             onRewardClicked = {},
-            onSettingClicked = {}
+            onSettingClicked = {},
+            onTodoItemClicked = {},
+            onTodoAddClicked = {},
         )
     }
 
