@@ -22,7 +22,7 @@ fun TodoDetailBottomSheet(
     todo: Todo?,
     bottomSheetState: ModalBottomSheetState,
     onTodoSaveSelected: (EditingTodo) -> Unit,
-    onTodoDeleteSelected: (Todo) -> Unit,
+    onTodoDeleteSelected: (EditingTodo) -> Unit,
     content: @Composable () -> Unit,
 ) {
     ModalBottomSheetLayout(
@@ -42,7 +42,7 @@ fun TodoDetailBottomSheet(
 private fun TodoDetailBottomSheetContent(
     todo: Todo?,
     onTodoSaveSelected: (EditingTodo) -> Unit, //TODO create new Domain
-    onTodoDeleteSelected: (Todo) -> Unit
+    onTodoDeleteSelected: (EditingTodo) -> Unit
 ) {
     var id: Long? by remember { mutableStateOf(null) }
     var title: String by remember { mutableStateOf("") }
@@ -132,7 +132,14 @@ private fun TodoDetailBottomSheetContent(
         }
         todo?.let {
             Button(
-                onClick = { onTodoDeleteSelected(todo) },
+                onClick = {
+                    val editingTodo = EditingTodo(
+                        id = id,
+                        name = title,
+                        numberOfTicketsObtained = numberOfTicket
+                    )
+                    onTodoDeleteSelected(editingTodo)
+                },
                 modifier = Modifier
                     .constrainAs(deleteButton) {
                         top.linkTo(ticketLabelText.bottom)

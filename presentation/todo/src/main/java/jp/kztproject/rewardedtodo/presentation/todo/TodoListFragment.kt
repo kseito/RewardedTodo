@@ -77,8 +77,8 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
         val onTodoSaveSelected: (EditingTodo) -> Unit = {
             viewModel.updateTodo(it)
         }
-        val onTodoDeleteSelected: (Todo) -> Unit = {
-            // TODO call viewModel method
+        val onTodoDeleteSelected: (EditingTodo) -> Unit = {
+            viewModel.deleteTodo(it)
         }
         return ComposeView(requireContext()).apply {
             setContent {
@@ -106,7 +106,7 @@ class TodoListFragment : Fragment(), TodoListViewAdapter.OnItemClickListener,
         onRewardClicked: () -> Unit,
         onSettingClicked: () -> Unit,
         onTodoSaveSelected: (EditingTodo) -> Unit,
-        onTodoDeleteSelected: (Todo) -> Unit,
+        onTodoDeleteSelected: (EditingTodo) -> Unit,
     ) {
         val coroutineScope = rememberCoroutineScope()
         val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
