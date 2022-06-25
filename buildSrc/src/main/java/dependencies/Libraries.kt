@@ -92,7 +92,6 @@ object Libraries {
     }
 
     const val gson = "com.google.code.gson:gson:2.8.2"
-    const val fbutton = "info.hoang8f:fbutton:1.0.5"
     const val bottomNavigation = "com.aurelhubert:ahbottomnavigation:2.1.0"
 
     object Stetho {

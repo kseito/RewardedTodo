@@ -31,7 +31,6 @@ dependencies {
     implementation Libraries.AndroidX.LifeCycle.extensions
     implementation Libraries.AndroidX.LifeCycle.viewModelKtx
     implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
-    implementation Libraries.fbutton
 
     // Jetpack Compose
     implementation Libraries.AndroidX.activityCompose

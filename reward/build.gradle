@@ -61,7 +61,6 @@ dependencies {
     androidTestImplementation Libraries.Test.AndroidX.espresso
 
     //UI
-    implementation Libraries.fbutton
     implementation Libraries.bottomNavigation
     implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
     implementation Libraries.AndroidX.NavigationComponent.uiKtx
