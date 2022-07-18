@@ -4,11 +4,13 @@ import jp.kztproject.rewardedtodo.application.reward.model.error.RewardProbabili
 import jp.kztproject.rewardedtodo.application.reward.model.error.RewardTitleEmptyException
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository
-import kotlinx.coroutines.test.runBlockingTest
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 import org.mockito.kotlin.mock
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class SaveRewardInteractorTest {
 
     private val mockIRewardRepository: IRewardRepository = mock()
@@ -22,13 +24,13 @@ class SaveRewardInteractorTest {
     )
 
     @Test
-    fun shouldSuccess_WhenSaveFilledReward() = runBlockingTest {
+    fun shouldSuccess_WhenSaveFilledReward() = runTest {
         val actual = interactor.execute(filledReward)
         assertThat(actual).isEqualTo(Result.success(Unit))
     }
 
     @Test
-    fun shouldFail_WhenSaveRewardWithEmptyTitle() = runBlockingTest {
+    fun shouldFail_WhenSaveRewardWithEmptyTitle() = runTest {
         val rewardInput = filledReward.copy(name = null)
 
         val actual = interactor.execute(rewardInput)
@@ -36,7 +38,7 @@ class SaveRewardInteractorTest {
     }
 
     @Test
-    fun shouldFail_WhenSaveRewardWithEmptyProbability() = runBlockingTest {
+    fun shouldFail_WhenSaveRewardWithEmptyProbability() = runTest {
         val rewardInput = filledReward.copy(probability = null)
 
         val actual = interactor.execute(rewardInput)

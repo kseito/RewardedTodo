@@ -5,8 +5,8 @@ import jp.kztproject.rewardedtodo.test.reward.DummyCreator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
@@ -57,33 +57,31 @@ class RewardListViewModelTest {
     }
 
     @Test
-    fun testGetRewards() {
-        runBlocking {
-            whenever(mockGetRewardsUseCase.executeAsFlow()).thenReturn(
-                flowOf(
-                    listOf(
-                        DummyCreator.createDummyReward()
-                    )
+    fun testGetRewards() = runTest {
+        whenever(mockGetRewardsUseCase.executeAsFlow()).thenReturn(
+            flowOf(
+                listOf(
+                    DummyCreator.createDummyReward()
                 )
             )
-        }
+        )
         viewModel.loadRewards()
 
         assertThat(viewModel.rewardList.value!!.size).isEqualTo(1)
     }
 
     @Test
-    fun testLoadPoint_Success() {
+    fun testLoadPoint_Success() = runTest {
         val dummyPoint = DummyCreator.createDummyRewardPoint()
-        runBlocking { whenever(mockGetPointUseCase.execute()).thenReturn(dummyPoint) }
+        whenever(mockGetPointUseCase.execute()).thenReturn(dummyPoint)
         viewModel.loadPoint()
 
         assertThat(viewModel.rewardPoint.value).isEqualTo(10)
     }
 
     @Test
-    fun testLoadPoint_Failure() {
-        runBlocking { whenever(mockGetPointUseCase.execute()).thenAnswer { throw SocketTimeoutException() } }
+    fun testLoadPoint_Failure() = runTest {
+        whenever(mockGetPointUseCase.execute()).thenAnswer { throw SocketTimeoutException() }
         viewModel.loadPoint()
 
         verify(mockCallback).onPointLoadFailed()
