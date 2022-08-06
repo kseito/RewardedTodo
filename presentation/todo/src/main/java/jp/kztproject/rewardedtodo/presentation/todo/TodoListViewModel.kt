@@ -2,7 +2,7 @@ package jp.kztproject.rewardedtodo.presentation.todo
 
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jp.kztproject.rewardedtodo.presentation.todo.model.EditingTodo
+import jp.kztproject.rewardedtodo.todo.domain.EditingTodo
 import jp.kztproject.rewardedtodo.todo.application.*
 import jp.kztproject.rewardedtodo.todo.domain.Todo
 import kotlinx.coroutines.Dispatchers
@@ -40,7 +40,7 @@ class TodoListViewModel @Inject constructor(
 
     fun updateTodo(todo: EditingTodo) {
         viewModelScope.launch(Dispatchers.Default) {
-            val result = updateTodoUseCase.execute(todo.toTodo())
+            val result = updateTodoUseCase.execute(todo)
 
             withContext(Dispatchers.Main) {
                 error.value = result

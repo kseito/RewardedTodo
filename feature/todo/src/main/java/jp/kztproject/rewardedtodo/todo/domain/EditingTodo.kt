@@ -1,6 +1,4 @@
-package jp.kztproject.rewardedtodo.presentation.todo.model
-
-import jp.kztproject.rewardedtodo.todo.domain.Todo
+package jp.kztproject.rewardedtodo.todo.domain
 
 data class EditingTodo(
     var id: Long? = null,

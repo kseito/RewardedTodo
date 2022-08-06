@@ -29,8 +29,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.presentation.common.TopBar
 import jp.kztproject.rewardedtodo.presentation.reward.list.DarkColorScheme
 import jp.kztproject.rewardedtodo.presentation.reward.list.RewardedTodoScheme
-import jp.kztproject.rewardedtodo.presentation.todo.model.EditingTodo
 import jp.kztproject.rewardedtodo.todo.application.*
+import jp.kztproject.rewardedtodo.todo.domain.EditingTodo
 import jp.kztproject.rewardedtodo.todo.domain.Todo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -238,7 +238,7 @@ fun TodoListScreenPreview() {
             override suspend fun execute() {}
         },
         object : UpdateTodoUseCase {
-            override suspend fun execute(todo: Todo): Result<Unit> {
+            override suspend fun execute(todo: EditingTodo): Result<Unit> {
                 return Result.success(Unit)
             }
         },
