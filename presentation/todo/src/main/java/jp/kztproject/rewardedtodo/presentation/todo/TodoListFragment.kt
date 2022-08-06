@@ -120,6 +120,11 @@ fun TodoListScreenWithBottomSheet(
             bottomSheetState.show()
         }
     }
+    val onTodoUpdateSucceed: () -> Unit = {
+        coroutineScope.launch {
+            bottomSheetState.hide()
+        }
+    }
     val onTodoAddClicked: () -> Unit = {
         coroutineScope.launch {
             selectedTodo = null
@@ -140,6 +145,7 @@ fun TodoListScreenWithBottomSheet(
             onSettingClicked = onSettingClicked,
             onTodoItemClicked = onTodoItemClicked,
             onTodoAddClicked = onTodoAddClicked,
+            onTodoUpdateSucceed = onTodoUpdateSucceed,
         )
     }
 }
@@ -153,8 +159,10 @@ private fun TodoListScreen(
     onSettingClicked: () -> Unit,
     onTodoAddClicked: () -> Unit,
     onTodoItemClicked: (Todo) -> Unit,
+    onTodoUpdateSucceed: () -> Unit,
 ) {
     val todoList by viewModel.todoList.observeAsState()
+    val error by viewModel.error.observeAsState()
 
     ConstraintLayout(
         modifier = Modifier
@@ -194,6 +202,20 @@ private fun TodoListScreen(
         ) {
             Icon(Icons.Rounded.Add, contentDescription = "Add")
         }
+
+        LaunchedEffect(error) {
+            error?.let {
+                it.fold(
+                    onSuccess = {
+                        onTodoUpdateSucceed()
+                    },
+                    onFailure = { error ->
+                        // TODO show error
+                        error.printStackTrace()
+                    }
+                )
+            }
+        }
     }
 }
 
@@ -216,7 +238,9 @@ fun TodoListScreenPreview() {
             override suspend fun execute() {}
         },
         object : UpdateTodoUseCase {
-            override suspend fun execute(todo: Todo) {}
+            override suspend fun execute(todo: Todo): Result<Unit> {
+                return Result.success(Unit)
+            }
         },
         object : DeleteTodoUseCase {
             override suspend fun execute(todo: Todo) {}
@@ -232,6 +256,7 @@ fun TodoListScreenPreview() {
         onSettingClicked = {},
         onTodoItemClicked = {},
         onTodoAddClicked = {},
+        onTodoUpdateSucceed = {}
     )
 }
 

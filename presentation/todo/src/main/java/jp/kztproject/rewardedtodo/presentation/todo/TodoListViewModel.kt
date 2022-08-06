@@ -1,9 +1,6 @@
 package jp.kztproject.rewardedtodo.presentation.todo
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.kztproject.rewardedtodo.presentation.todo.model.EditingTodo
 import jp.kztproject.rewardedtodo.todo.application.*
@@ -11,6 +8,7 @@ import jp.kztproject.rewardedtodo.todo.domain.Todo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -30,6 +28,8 @@ class TodoListViewModel @Inject constructor(
             }
             .asLiveData()
 
+    val error = MutableLiveData<Result<Unit>?>()
+
     fun initialize(callback: Callback) {
         this.callback = callback
 
@@ -40,9 +40,11 @@ class TodoListViewModel @Inject constructor(
 
     fun updateTodo(todo: EditingTodo) {
         viewModelScope.launch(Dispatchers.Default) {
-            updateTodoUseCase.execute(todo.toTodo())
+            val result = updateTodoUseCase.execute(todo.toTodo())
 
-            callback.afterTodoUpdate()
+            withContext(Dispatchers.Main) {
+                error.value = result
+            }
         }
     }
 

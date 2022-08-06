@@ -8,7 +8,12 @@ class UpdateTodoInteractor @Inject constructor(
         private val todoRepository: ITodoRepository
 ) : UpdateTodoUseCase {
 
-    override suspend fun execute(todo: Todo) {
-        todoRepository.update(todo)
+    override suspend fun execute(todo: Todo): Result<Unit> {
+        return try {
+            todoRepository.update(todo)
+            Result.success(Unit)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }
