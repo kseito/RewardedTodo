@@ -36,7 +36,6 @@ dependencies {
     implementation Libraries.AndroidX.appCompat
     implementation Libraries.AndroidX.design
     implementation Libraries.AndroidX.constraintLayout
-    implementation Libraries.AndroidX.LifeCycle.extensions
     implementation Libraries.AndroidX.LifeCycle.viewModelKtx
 
     //Room

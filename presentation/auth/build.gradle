@@ -29,7 +29,6 @@ dependencies {
     implementation Libraries.AndroidX.fragment
     implementation Libraries.AndroidX.constraintLayout
     implementation Libraries.AndroidX.design
-    implementation Libraries.AndroidX.LifeCycle.extensions
     implementation Libraries.AndroidX.LifeCycle.viewModelKtx
     implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
 
