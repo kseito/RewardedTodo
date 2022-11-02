@@ -2,8 +2,8 @@ package jp.kztproject.rewardedtodo.presentation.todo
 
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jp.kztproject.rewardedtodo.todo.domain.EditingTodo
 import jp.kztproject.rewardedtodo.todo.application.*
+import jp.kztproject.rewardedtodo.todo.domain.EditingTodo
 import jp.kztproject.rewardedtodo.todo.domain.Todo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
@@ -13,20 +13,20 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TodoListViewModel @Inject constructor(
-        private val getTodoListUseCase: GetTodoListUseCase,
-        private val fetchTodoListUseCase: FetchTodoListUseCase,
-        private val updateTodoUseCase: UpdateTodoUseCase,
-        private val deleteTodoUseCase: DeleteTodoUseCase,
-        private val completeTodoUseCase: CompleteTodoUseCase
+    private val getTodoListUseCase: GetTodoListUseCase,
+    private val fetchTodoListUseCase: FetchTodoListUseCase,
+    private val updateTodoUseCase: UpdateTodoUseCase,
+    private val deleteTodoUseCase: DeleteTodoUseCase,
+    private val completeTodoUseCase: CompleteTodoUseCase
 ) : ViewModel() {
 
     private lateinit var callback: Callback
     val todoList: LiveData<List<Todo>> = getTodoListUseCase.execute()
-            .catch {
-                it.printStackTrace()
-                callback.onError(it)
-            }
-            .asLiveData()
+        .catch {
+            it.printStackTrace()
+            callback.onError(it)
+        }
+        .asLiveData()
 
     val error = MutableLiveData<Result<Unit>?>()
 

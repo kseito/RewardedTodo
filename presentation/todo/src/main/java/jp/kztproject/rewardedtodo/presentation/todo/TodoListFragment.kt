@@ -203,18 +203,18 @@ private fun TodoListScreen(
             Icon(Icons.Rounded.Add, contentDescription = "Add")
         }
 
-        LaunchedEffect(error) {
-            error?.let {
-                it.fold(
-                    onSuccess = {
-                        onTodoUpdateSucceed()
-                    },
-                    onFailure = { error ->
-                        // TODO show error
-                        error.printStackTrace()
+        error?.let {
+            it.fold(
+                onSuccess = {
+                    onTodoUpdateSucceed()
+                },
+                onFailure = { error ->
+                    error.printStackTrace()
+                    ErrorAlertDialog {
+                        viewModel.error.value = null
                     }
-                )
-            }
+                }
+            )
         }
     }
 }
