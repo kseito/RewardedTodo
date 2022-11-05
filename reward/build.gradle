@@ -36,7 +36,6 @@ dependencies {
     implementation Libraries.AndroidX.appCompat
     implementation Libraries.AndroidX.design
     implementation Libraries.AndroidX.constraintLayout
-    implementation Libraries.AndroidX.LifeCycle.extensions
     implementation Libraries.AndroidX.LifeCycle.viewModelKtx
 
     //Room
@@ -61,7 +60,6 @@ dependencies {
     androidTestImplementation Libraries.Test.AndroidX.espresso
 
     //UI
-    implementation Libraries.fbutton
     implementation Libraries.bottomNavigation
     implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
     implementation Libraries.AndroidX.NavigationComponent.uiKtx

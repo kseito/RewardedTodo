@@ -6,7 +6,7 @@ object Libraries {
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${GradlePlugins.Kotlin.version}"
 
         object Coroutines {
-            const val version = "1.3.9"
+            const val version = "1.6.4"
             const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${version}"
             const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${version}"
             const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${version}"
@@ -34,8 +34,7 @@ object Libraries {
         }
 
         object LifeCycle {
-            private const val version = "2.2.0"
-            const val extensions = "androidx.lifecycle:lifecycle-extensions:${version}"
+            private const val version = "2.4.1"
             const val livedataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${version}"
             const val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${version}"
         }
@@ -64,7 +63,7 @@ object Libraries {
     }
 
     object Dagger {
-        private const val version = "2.35"
+        private const val version = "2.42"
         const val core = "com.google.dagger:dagger:${version}"
         const val compiler = "com.google.dagger:dagger-compiler:${version}"
         const val hilt = "com.google.dagger:hilt-android:${GradlePlugins.Hilt.version}"
@@ -92,7 +91,6 @@ object Libraries {
     }
 
     const val gson = "com.google.code.gson:gson:2.8.2"
-    const val fbutton = "info.hoang8f:fbutton:1.0.5"
     const val bottomNavigation = "com.aurelhubert:ahbottomnavigation:2.1.0"
 
     object Stetho {
@@ -111,10 +109,10 @@ object Libraries {
         const val assertJ = "org.assertj:assertj-core:3.12.2"
 
         object AndroidX {
-            const val junit = "androidx.test.ext:junit:1.1.2"
+            const val junit = "androidx.test.ext:junit:1.1.3"
             const val coreTesting = "androidx.arch.core:core-testing:2.0.0"
-            const val testRunner = "androidx.test:runner:1.1.0"
-            const val espresso = "androidx.test.espresso:espresso-core:3.1.0"
+            const val testRunner = "androidx.test:runner:1.4.0"
+            const val espresso = "androidx.test.espresso:espresso-core:3.4.0"
         }
     }
 }

@@ -2,30 +2,33 @@ package jp.kztproject.rewardedtodo.presentation.todo
 
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jp.kztproject.rewardedtodo.presentation.todo.model.EditingTodo
 import jp.kztproject.rewardedtodo.todo.application.*
+import jp.kztproject.rewardedtodo.todo.domain.EditingTodo
 import jp.kztproject.rewardedtodo.todo.domain.Todo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class TodoListViewModel @Inject constructor(
-        private val getTodoListUseCase: GetTodoListUseCase,
-        private val fetchTodoListUseCase: FetchTodoListUseCase,
-        private val updateTodoUseCase: UpdateTodoUseCase,
-        private val deleteTodoUseCase: DeleteTodoUseCase,
-        private val completeTodoUseCase: CompleteTodoUseCase
+    private val getTodoListUseCase: GetTodoListUseCase,
+    private val fetchTodoListUseCase: FetchTodoListUseCase,
+    private val updateTodoUseCase: UpdateTodoUseCase,
+    private val deleteTodoUseCase: DeleteTodoUseCase,
+    private val completeTodoUseCase: CompleteTodoUseCase
 ) : ViewModel() {
 
     private lateinit var callback: Callback
     val todoList: LiveData<List<Todo>> = getTodoListUseCase.execute()
-            .catch {
-                it.printStackTrace()
-                callback.onError(it)
-            }
-            .asLiveData()
+        .catch {
+            it.printStackTrace()
+            callback.onError(it)
+        }
+        .asLiveData()
+
+    val error = MutableLiveData<Result<Unit>?>()
 
     fun initialize(callback: Callback) {
         this.callback = callback
@@ -37,9 +40,11 @@ class TodoListViewModel @Inject constructor(
 
     fun updateTodo(todo: EditingTodo) {
         viewModelScope.launch(Dispatchers.Default) {
-            updateTodoUseCase.execute(todo.toTodo())
+            val result = updateTodoUseCase.execute(todo)
 
-            callback.afterTodoUpdate()
+            withContext(Dispatchers.Main) {
+                error.value = result
+            }
         }
     }
 

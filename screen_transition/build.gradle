@@ -27,6 +27,5 @@ dependencies {
     kapt Libraries.Dagger.compiler
 
     //AAC
-    implementation Libraries.AndroidX.LifeCycle.extensions
     implementation Libraries.AndroidX.LifeCycle.viewModelKtx
 }

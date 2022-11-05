@@ -3,11 +3,11 @@ package jp.kztproject.rewardedtodo.data.reward.database
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import jp.kztproject.rewardedtodo.data.reward.database.model.RewardEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.runBlocking
-import jp.kztproject.rewardedtodo.data.reward.database.model.RewardEntity
+import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
@@ -76,13 +76,12 @@ class RewardDaoTest {
 
     @Test
     @Ignore
-    fun findAllAsFlow() = runBlocking {
+    fun findAllAsFlow() = runTest {
         val dao = database.rewardDao()
         testRewards.forEach { dao.insertReward(it) }
 
         val rewards = dao.findAllAsFlow().take(1).first()
         assertThat(rewards.size).isEqualTo(3)
         assertThat(rewards[0].name).isEqualTo("nintendo switch")
-        Unit
     }
 }

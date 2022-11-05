@@ -15,8 +15,8 @@ import jp.kztproject.rewardedtodo.data.todoist.model.Task
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import kotlinx.coroutines.withContext
 import org.junit.*
@@ -53,97 +53,93 @@ class TodoRepositoryTest {
 
     @Test
     @Ignore
-    fun takeInTasksFromTodoist() {
+    fun takeInTasksFromTodoist() = runTest {
         useTodoist(true)
 
-        runBlocking {
-            val tasks = listOf(
-                Task(101, "test_content", false, Due(true)),
-                Task(102, "test_content", false, Due(true)),
-                Task(103, "test_content", false, Due(false)),
-            )
-            whenever(api.fetchTasks(anyString())).thenReturn(tasks)
+        val tasks = listOf(
+            Task(101, "test_content", false, Due(true)),
+            Task(102, "test_content", false, Due(true)),
+            Task(103, "test_content", false, Due(false)),
+        )
+        whenever(api.fetchTasks(anyString())).thenReturn(tasks)
 
-            withContext(Dispatchers.IO) {
-                repository.sync()
-                val actual = repository.findAll().first()
-                assertThat(actual.size).isEqualTo(3)
-                actual[0].run {
-                    assertThat(this.id).isEqualTo(1)
-                    assertThat(this.todoistId).isEqualTo(101)
-                    assertThat(this.isRepeat).isTrue()
-                }
-                actual[1].run {
-                    assertThat(this.id).isEqualTo(2)
-                    assertThat(this.todoistId).isEqualTo(102)
-                    assertThat(this.isRepeat).isTrue()
-                }
-                actual[2].run {
-                    assertThat(this.id).isEqualTo(3)
-                    assertThat(this.todoistId).isEqualTo(103)
-                    assertThat(this.isRepeat).isFalse()
-                }
+        withContext(Dispatchers.IO) {
+            repository.sync()
+            val actual = repository.findAll().first()
+            assertThat(actual.size).isEqualTo(3)
+            actual[0].run {
+                assertThat(this.id).isEqualTo(1)
+                assertThat(this.todoistId).isEqualTo(101)
+                assertThat(this.isRepeat).isTrue()
+            }
+            actual[1].run {
+                assertThat(this.id).isEqualTo(2)
+                assertThat(this.todoistId).isEqualTo(102)
+                assertThat(this.isRepeat).isTrue()
+            }
+            actual[2].run {
+                assertThat(this.id).isEqualTo(3)
+                assertThat(this.todoistId).isEqualTo(103)
+                assertThat(this.isRepeat).isFalse()
             }
         }
     }
 
     @Test
     @Ignore
-    fun ignoreTaskFromTodoist() {
+    fun ignoreTaskFromTodoist() = runTest {
         useTodoist(true)
 
-        runBlocking {
-            withContext(Dispatchers.IO) {
-                dao.insertOrUpdate(
-                    TodoEntity(
-                        1,
-                        101,
-                        "test_name",
-                        1f,
-                        isRepeat = true,
-                        isDone = false
-                    )
+        withContext(Dispatchers.IO) {
+            dao.insertOrUpdate(
+                TodoEntity(
+                    1,
+                    101,
+                    "test_name",
+                    1f,
+                    isRepeat = true,
+                    isDone = false
                 )
-                dao.insertOrUpdate(
-                    TodoEntity(
-                        2,
-                        102,
-                        "test_name",
-                        1f,
-                        isRepeat = true,
-                        isDone = true
-                    )
-                )
-                dao.insertOrUpdate(
-                    TodoEntity(
-                        3,
-                        103,
-                        "test_name",
-                        1f,
-                        isRepeat = true,
-                        isDone = false
-                    )
-                )
-            }
-            val tasks = listOf(
-                Task(101, "test_content", false, Due(true)),
-                Task(102, "test_content", false, Due(true)),
             )
-            whenever(api.fetchTasks(anyString())).thenReturn(tasks)
+            dao.insertOrUpdate(
+                TodoEntity(
+                    2,
+                    102,
+                    "test_name",
+                    1f,
+                    isRepeat = true,
+                    isDone = true
+                )
+            )
+            dao.insertOrUpdate(
+                TodoEntity(
+                    3,
+                    103,
+                    "test_name",
+                    1f,
+                    isRepeat = true,
+                    isDone = false
+                )
+            )
+        }
+        val tasks = listOf(
+            Task(101, "test_content", false, Due(true)),
+            Task(102, "test_content", false, Due(true)),
+        )
+        whenever(api.fetchTasks(anyString())).thenReturn(tasks)
 
-            withContext(Dispatchers.IO) {
-                repository.sync()
-                val actual = repository.findAll().first()
+        withContext(Dispatchers.IO) {
+            repository.sync()
+            val actual = repository.findAll().first()
 
-                assertThat(actual.size).isEqualTo(2)
-                actual[0].run {
-                    assertThat(this.id).isEqualTo(1)
-                    assertThat(this.todoistId).isEqualTo(101)
-                }
-                actual[1].run {
-                    assertThat(this.id).isEqualTo(2)
-                    assertThat(this.todoistId).isEqualTo(102)
-                }
+            assertThat(actual.size).isEqualTo(2)
+            actual[0].run {
+                assertThat(this.id).isEqualTo(1)
+                assertThat(this.todoistId).isEqualTo(101)
+            }
+            actual[1].run {
+                assertThat(this.id).isEqualTo(2)
+                assertThat(this.todoistId).isEqualTo(102)
             }
         }
     }
