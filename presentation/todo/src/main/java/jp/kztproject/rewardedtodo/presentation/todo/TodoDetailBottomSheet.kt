@@ -46,17 +46,17 @@ private fun TodoDetailBottomSheetContent(
 ) {
     var id: Long? by remember { mutableStateOf(null) }
     var title: String by remember { mutableStateOf("") }
-    var numberOfTicket: Float by remember { mutableStateOf(0f) }
+    var numberOfTicket = remember { mutableStateOf(0) }
 
     LaunchedEffect(todo) {
         if (todo != null) {
             id = todo.id
             title = todo.name
-            numberOfTicket = todo.numberOfTicketsObtained
+            numberOfTicket.value = todo.numberOfTicketsObtained.toInt()
         } else {
             id = null
             title = ""
-            numberOfTicket = 0f
+            numberOfTicket.value = 1
         }
     }
 
@@ -106,9 +106,10 @@ private fun TodoDetailBottomSheetContent(
                     start.linkTo(ticketLabelText.end)
                 }
         )
+        // TODO Sometimes weird actions occurred.
         NumberPicker(
-            state = remember { mutableStateOf(1) },
-            onStateChanged = { numberOfTicket = it.toFloat() },
+            state = numberOfTicket,
+            onStateChanged = { numberOfTicket.value = it },
             range = 1..100,
             modifier = Modifier
                 .constrainAs(ticketInput) {
@@ -121,7 +122,7 @@ private fun TodoDetailBottomSheetContent(
                 val editingTodo = EditingTodo(
                     id = id,
                     name = title,
-                    numberOfTicketsObtained = numberOfTicket
+                    numberOfTicketsObtained = numberOfTicket.value.toFloat()
                 )
                 onTodoSaveSelected(editingTodo)
             },
@@ -139,7 +140,7 @@ private fun TodoDetailBottomSheetContent(
                     val editingTodo = EditingTodo(
                         id = id,
                         name = title,
-                        numberOfTicketsObtained = numberOfTicket
+                        numberOfTicketsObtained = numberOfTicket.value.toFloat()
                     )
                     onTodoDeleteSelected(editingTodo)
                 },
