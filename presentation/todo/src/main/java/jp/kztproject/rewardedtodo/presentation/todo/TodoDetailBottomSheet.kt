@@ -74,9 +74,12 @@ private fun TodoDetailBottomSheetContent(
             deleteButton
         ) = createRefs()
 
-        TextField(
+        OutlinedTextField(
             value = title,
             onValueChange = { title = it },
+            label = {
+                Text(text = "Title")
+            },
             singleLine = true,
             modifier = Modifier
                 .fillMaxWidth()
