@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.test.runTest
 import org.junit.After
 import org.junit.Before
-import org.junit.Ignore
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -41,7 +40,6 @@ class TodoDaoTest {
     }
 
     @Test
-    @Ignore
     fun insertAndFindTodo() = runTest {
         val dao = database.todoDao()
         dummyTodoList.forEach { dao.insertOrUpdate(it) }
@@ -57,7 +55,6 @@ class TodoDaoTest {
     }
 
     @Test
-    @Ignore
     fun deleteTodo() = runTest {
         val dao = database.todoDao()
         dummyTodoList.forEach { dao.insertOrUpdate(it) }
@@ -71,7 +68,6 @@ class TodoDaoTest {
     }
 
     @Test
-    @Ignore
     fun update() = runTest {
         val dao = database.todoDao()
         dao.insertOrUpdate(dummyTodoList[0])

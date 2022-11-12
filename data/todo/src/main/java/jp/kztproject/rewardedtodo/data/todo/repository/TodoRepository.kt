@@ -36,6 +36,7 @@ class TodoRepository @Inject constructor(
                 if (localTaskIds.contains(task.id)) {
                     //Update if both
                     val todoEntity = todoDao.findBy(task.id)
+                        .copy(name = task.content)
                     todoDao.insertOrUpdate(todoEntity.resetIsDone())
                 } else {
                     //Insert if only in Todoist

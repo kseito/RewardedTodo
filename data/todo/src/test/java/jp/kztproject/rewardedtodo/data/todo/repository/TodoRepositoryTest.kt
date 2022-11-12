@@ -19,7 +19,10 @@ import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import kotlinx.coroutines.withContext
-import org.junit.*
+import org.junit.After
+import org.junit.Before
+import org.junit.Rule
+import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers.anyString
 import org.mockito.kotlin.mock
@@ -52,7 +55,6 @@ class TodoRepositoryTest {
     }
 
     @Test
-    @Ignore
     fun takeInTasksFromTodoist() = runTest {
         useTodoist(true)
 
@@ -86,7 +88,6 @@ class TodoRepositoryTest {
     }
 
     @Test
-    @Ignore
     fun ignoreTaskFromTodoist() = runTest {
         useTodoist(true)
 
@@ -95,7 +96,7 @@ class TodoRepositoryTest {
                 TodoEntity(
                     1,
                     101,
-                    "test_name",
+                    "test_name1",
                     1f,
                     isRepeat = true,
                     isDone = false
@@ -105,7 +106,7 @@ class TodoRepositoryTest {
                 TodoEntity(
                     2,
                     102,
-                    "test_name",
+                    "test_name2",
                     1f,
                     isRepeat = true,
                     isDone = true
@@ -115,7 +116,7 @@ class TodoRepositoryTest {
                 TodoEntity(
                     3,
                     103,
-                    "test_name",
+                    "test_name3",
                     1f,
                     isRepeat = true,
                     isDone = false
@@ -123,8 +124,8 @@ class TodoRepositoryTest {
             )
         }
         val tasks = listOf(
-            Task(101, "test_content", false, Due(true)),
-            Task(102, "test_content", false, Due(true)),
+            Task(101, "test_content1", false, Due(true)),
+            Task(102, "test_content2", false, Due(true)),
         )
         whenever(api.fetchTasks(anyString())).thenReturn(tasks)
 
@@ -136,10 +137,12 @@ class TodoRepositoryTest {
             actual[0].run {
                 assertThat(this.id).isEqualTo(1)
                 assertThat(this.todoistId).isEqualTo(101)
+                assertThat(this.name).isEqualTo("test_content1")
             }
             actual[1].run {
                 assertThat(this.id).isEqualTo(2)
                 assertThat(this.todoistId).isEqualTo(102)
+                assertThat(this.name).isEqualTo("test_content2")
             }
         }
     }
