@@ -1,4 +1,3 @@
-import Versions
 import dependencies.Libraries
 
 plugins {
