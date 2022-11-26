@@ -12,7 +12,3 @@ dependencies {
     implementation Libraries.Kotlin.stdlib
     testImplementation Libraries.Test.junit
 }
-
-android {
-    namespace 'jp.kztproject.rewardedtodo.common.kvs'
-}

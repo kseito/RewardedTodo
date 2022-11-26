@@ -43,7 +43,3 @@ dependencies {
     implementation project(path: ':domain:reward')
     implementation project(path: ':screen_transition')
 }
-
-android {
-    namespace 'jp.kztproject.rewardedtodo.data.reward'
-}

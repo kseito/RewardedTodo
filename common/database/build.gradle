@@ -16,7 +16,3 @@ dependencies {
 
     implementation Libraries.AndroidX.Room.runtime
 }
-
-android {
-    namespace 'jp.kztproject.rewardedtodo.common.database'
-}

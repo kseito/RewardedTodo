@@ -16,7 +16,6 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = Libraries.AndroidX.Compose.compilerVersion
     }
-    namespace = "jp.kztproject.rewardedtodo.presentation.common"
 }
 
 dependencies {

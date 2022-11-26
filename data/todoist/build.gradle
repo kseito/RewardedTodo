@@ -17,7 +17,3 @@ dependencies {
     implementation Libraries.Retrofit.coroutinesAdapter
     implementation Libraries.Retrofit.moshiConverter
 }
-
-android {
-    namespace 'jp.kztproject.rewardedtodo.data.todoist'
-}

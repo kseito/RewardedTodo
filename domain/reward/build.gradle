@@ -15,7 +15,3 @@ dependencies {
     testImplementation Libraries.Test.junit
     testImplementation Libraries.Test.assertJ
 }
-
-android {
-    namespace 'jp.kztproject.rewardedtodo.domain.reward'
-}

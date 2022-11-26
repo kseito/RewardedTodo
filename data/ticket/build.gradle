@@ -19,7 +19,3 @@ dependencies {
     //Dagger
     implementation Libraries.Dagger.core
 }
-
-android {
-    namespace 'jp.kztproject.rewardedtodo.data.ticket'
-}

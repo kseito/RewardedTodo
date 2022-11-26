@@ -27,7 +27,6 @@ android {
     buildFeatures {
         dataBinding = true
     }
-    namespace 'project.seito.reward'
 }
 
 dependencies {
