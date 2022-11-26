@@ -63,6 +63,7 @@ android {
     sourceSets {
         test.java.srcDirs += "src/test/kotlin"
     }
+    namespace 'jp.kztproject.rewardedtodo'
 }
 
 dependencies {

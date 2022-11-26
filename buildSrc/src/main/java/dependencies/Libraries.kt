@@ -49,7 +49,7 @@ object Libraries {
         }
 
         object NavigationComponent {
-            const val version = "2.3.2"
+            const val version = "2.5.3"
             const val fragmentKtx = "androidx.navigation:navigation-fragment-ktx:${version}"
             const val uiKtx = "androidx.navigation:navigation-ui-ktx:${version}"
         }
