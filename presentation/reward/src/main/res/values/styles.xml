@@ -9,11 +9,4 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="FullScreenDialogStyle" parent="AppTheme">
-        <item name="android:windowFullscreen">false</item>
-        <item name="android:windowBackground">@color/colorTransparentGray</item>
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
-
 </resources>

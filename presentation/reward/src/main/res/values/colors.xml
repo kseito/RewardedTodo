@@ -1,10 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- //TODO カラーリソースは共有でいい気がする -->
-    <color name="colorPrimary">#AC00C4</color>
-    <color name="colorPrimaryDark">#9CBB19</color>
-    <color name="colorAccent">#C5E53B</color>
-
-    <color name="colorGray">#AAA</color>
-    <color name="colorTransparentGray">#88000000</color>
 </resources>
