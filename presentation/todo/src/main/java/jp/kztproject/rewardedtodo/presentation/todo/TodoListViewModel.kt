@@ -34,7 +34,11 @@ class TodoListViewModel @Inject constructor(
         this.callback = callback
 
         viewModelScope.launch(Dispatchers.Default) {
-            fetchTodoListUseCase.execute()
+            try {
+                fetchTodoListUseCase.execute()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
