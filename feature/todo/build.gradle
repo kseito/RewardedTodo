@@ -24,3 +24,7 @@ dependencies {
     //Coroutines
     implementation Libraries.Kotlin.Coroutines.core
 }
+
+android {
+    namespace 'jp.kztproject.rewardedtodo'
+}

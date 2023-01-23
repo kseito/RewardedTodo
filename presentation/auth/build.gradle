@@ -18,6 +18,7 @@ android {
     buildFeatures {
         dataBinding = true
     }
+    namespace 'jp.kztproject.rewardedtodo.presentation.auth'
 }
 
 dependencies {
