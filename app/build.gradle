@@ -40,21 +40,25 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
-
     packagingOptions {
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/todo_debug.kotlin_module'
-        exclude 'META-INF/reward_debug.kotlin_module'
-        exclude 'META-INF/auth_debug.kotlin_module'
-        exclude 'META-INF/metadata.kotlin_module'
-        exclude 'META-INF/metadata.jvm.kotlin_module'
-        exclude 'META-INF/kotlinx-metadata-jvm.kotlin_module'
-        exclude 'META-INF/elements.kotlin_module'
-        exclude 'META-INF/kotlinx-metadata.kotlin_module'
-        exclude 'META-INF/core.kotlin_module'
-        exclude 'META-INF/specs.kotlin_module'
-        exclude 'META-INF/gradle/incremental.annotation.processors'
+        resources {
+            excludes += [
+                    'META-INF/LICENSE.txt',
+                    'META-INF/todo_debug.kotlin_module',
+                    'META-INF/reward_debug.kotlin_module',
+                    'META-INF/auth_debug.kotlin_module',
+                    'META-INF/metadata.kotlin_module',
+                    'META-INF/metadata.jvm.kotlin_module',
+                    'META-INF/kotlinx-metadata-jvm.kotlin_module',
+                    'META-INF/elements.kotlin_module',
+                    'META-INF/kotlinx-metadata.kotlin_module',
+                    'META-INF/core.kotlin_module',
+                    'META-INF/specs.kotlin_module',
+                    'META-INF/gradle/incremental.annotation.processors'
+            ]
+        }
     }
+
 
     buildFeatures {
         dataBinding = true
@@ -63,6 +67,7 @@ android {
     sourceSets {
         test.java.srcDirs += "src/test/kotlin"
     }
+    namespace 'jp.kztproject.rewardedtodo'
 }
 
 dependencies {
@@ -122,7 +127,7 @@ dependencies {
 ktlint {
     version = "0.38.0"
     android = true
-    reporters  {
+    reporters {
         reporter "checkstyle"
     }
     ignoreFailures = true

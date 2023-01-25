@@ -11,6 +11,7 @@ android {
     buildFeatures {
         dataBinding = true
     }
+    namespace 'project.seito.screen_transition'
 }
 
 dependencies {

@@ -34,3 +34,7 @@ dependencies {
     testImplementation Libraries.Test.junit
 
 }
+
+android {
+    namespace 'jp.kztproject.rewardedtodo.data.auth'
+}

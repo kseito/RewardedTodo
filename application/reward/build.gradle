@@ -28,3 +28,7 @@ dependencies {
     implementation project(path: ':domain:reward')
     implementation project(path: ':data:ticket')
 }
+
+android {
+    namespace 'jp.kztproject.rewardedtodo.application.reward'
+}
