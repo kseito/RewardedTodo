@@ -14,9 +14,9 @@ import javax.inject.Inject
 import javax.inject.Named
 
 class TodoRepository @Inject constructor(
-        private val todoDao: TodoDao,
-        private val todoistApi: TodoistApi,
-        @Named("encrypted") private val preferences: SharedPreferences
+    private val todoDao: TodoDao,
+    private val todoistApi: TodoistApi,
+    @Named("encrypted") private val preferences: SharedPreferences
 ) : ITodoRepository {
 
     override fun findAll(): Flow<List<Todo>> {
@@ -75,33 +75,33 @@ class TodoRepository @Inject constructor(
 
     private fun TodoEntity.convert(): Todo {
         return Todo(
-                this.id,
-                this.todoistId,
-                this.name,
-                this.numberOfTicketsObtained,
-                this.isRepeat
+            id = this.id,
+            todoistId = this.todoistId,
+            name = this.name,
+            numberOfTicketsObtained = this.numberOfTicketsObtained,
+            isRepeat = this.isRepeat
         )
     }
 
     private fun Todo.convert(): TodoEntity {
         return TodoEntity(
-                this.id ?: 0,
-                this.todoistId,
-                this.name,
-                this.numberOfTicketsObtained,
-                this.isRepeat,
-                false
+            id = this.id ?: 0,
+            todoistId = this.todoistId,
+            name = this.name,
+            numberOfTicketsObtained = this.numberOfTicketsObtained,
+            isRepeat = this.isRepeat,
+            isDone = false
         )
     }
 
     private fun Task.convert(isDone: Boolean): TodoEntity {
         return TodoEntity(
-                0,
-                this.id,
-                this.content,
-                0.5F,
-                this.due.recurring,
-                isDone
+            id = 0,
+            todoistId = this.id,
+            name = this.content,
+            numberOfTicketsObtained = Todo.DEFAULT_NUMBER_OF_TICHKET,
+            isRepeat = this.due.recurring,
+            isDone = isDone
         )
     }
 
