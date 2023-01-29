@@ -7,6 +7,9 @@ data class Todo(
         val numberOfTicketsObtained: Float,
         val isRepeat: Boolean
 ) {
+    companion object {
+        const val DEFAULT_NUMBER_OF_TICHKET = 1.0f
+    }
     fun hasTodoistId(): Boolean {
         return todoistId != null
     }
