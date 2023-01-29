@@ -8,9 +8,11 @@ import androidx.compose.material.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import jp.kztproject.rewardedtodo.domain.reward.Reward
+import jp.kztproject.rewardedtodo.presentation.reward.R
 
 @ExperimentalMaterialApi
 @Composable
@@ -64,20 +66,29 @@ private fun RewardDetailBottomSheetContent(
         val modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
-        TextField(
+        OutlinedTextField(
             value = title,
             onValueChange = { title = it },
+            label = {
+                Text(text = stringResource(id = R.string.hint_title))
+            },
             modifier = modifier,
             singleLine = true
         )
-        TextField(
+        OutlinedTextField(
             value = description,
             onValueChange = { description = it },
+            label = {
+                Text(text = stringResource(id = R.string.hint_description))
+            },
             modifier = modifier
         )
-        TextField(
+        OutlinedTextField(
             value = chanceOfWinning,
             onValueChange = { chanceOfWinning = it },
+            label = {
+                Text(text = stringResource(id = R.string.hint_point))
+            },
             modifier = modifier
         )
         Row(
@@ -123,7 +134,7 @@ private fun RewardDetailBottomSheetContent(
 fun RewardDetailBottomSheetContentPreview() {
     RewardDetailBottomSheetContent(
         reward = null,
-        onRewardSaveSelected = {_, _, _, _, _ ->},
+        onRewardSaveSelected = { _, _, _, _, _ -> },
         onRewardDeleteSelected = {}
     )
 }
