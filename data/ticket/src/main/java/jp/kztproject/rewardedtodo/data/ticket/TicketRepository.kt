@@ -1,6 +1,7 @@
 package jp.kztproject.rewardedtodo.data.ticket
 
 import android.content.SharedPreferences
+import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -23,6 +24,9 @@ class TicketRepository @Inject constructor(
 
     override fun consumeTicket() {
         val current = getNumberOfTicket()
+        if (current < NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY) {
+            throw LackOfTicketsException()
+        }
         preferences.edit()
                 .putFloat(NUMBER_OF_TICKET, current - NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY)
                 .apply()
