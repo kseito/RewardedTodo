@@ -71,19 +71,11 @@ class RewardListViewModelTest {
     }
 
     @Test
-    fun testLoadPoint_Success() = runTest {
+    fun testLoadPoint() = runTest {
         val dummyPoint = DummyCreator.createDummyRewardPoint()
         whenever(mockGetPointUseCase.execute()).thenReturn(dummyPoint)
         viewModel.loadPoint()
 
         assertThat(viewModel.rewardPoint.value).isEqualTo(10)
-    }
-
-    @Test
-    fun testLoadPoint_Failure() = runTest {
-        whenever(mockGetPointUseCase.execute()).thenAnswer { throw SocketTimeoutException() }
-        viewModel.loadPoint()
-
-        verify(mockCallback).onPointLoadFailed()
     }
 }

@@ -95,10 +95,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback {
         }
     }
 
-    override fun onPointLoadFailed() {
-        Toast.makeText(context, "Point load failed", Toast.LENGTH_SHORT).show()
-    }
-
     override fun onHitLottery(reward: Reward) {
         // TODO rewrite in compose
         val message = "You won ${reward.name.value}!"
