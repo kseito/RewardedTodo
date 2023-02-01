@@ -14,16 +14,12 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.kotlin.mock
-import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
-import java.net.SocketTimeoutException
 
 @ExperimentalCoroutinesApi
 @RunWith(RobolectricTestRunner::class)
 class RewardListViewModelTest {
-
-    private val mockCallback: RewardViewModelCallback = mock()
 
     private val mockLotteryUseCase: LotteryUseCase = mock()
 
@@ -46,7 +42,6 @@ class RewardListViewModelTest {
             mockSaveRewardUseCase,
             mockDeleteRewardUseCase
         )
-        viewModel.setCallback(mockCallback)
 
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
