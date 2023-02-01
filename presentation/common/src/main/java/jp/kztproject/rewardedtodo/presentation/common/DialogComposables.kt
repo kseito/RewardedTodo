@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.presentation.todo
+package jp.kztproject.rewardedtodo.presentation.common
 
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Button
