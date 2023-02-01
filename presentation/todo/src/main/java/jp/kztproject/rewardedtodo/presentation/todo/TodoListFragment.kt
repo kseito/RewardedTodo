@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -212,8 +213,7 @@ private fun TodoListScreen(
                 onFailure = { error ->
                     error.printStackTrace()
                     CommonAlertDialog(
-                        // TODO don`t use hardcoding string
-                        message = "Error occurred",
+                        message = stringResource(id = R.string.error_message),
                         onOkClicked = {
                             viewModel.error.value = null
                         }

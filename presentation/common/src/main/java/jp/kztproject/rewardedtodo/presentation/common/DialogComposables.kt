@@ -10,16 +10,6 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun CommonAlertDialog(
-    @StringRes messageId: Int,
-    onOkClicked: () -> Unit,
-) {
-    CommonAlertDialog(
-        message = stringResource(id = messageId),
-        onOkClicked = onOkClicked
-    )
-}
-@Composable
-fun CommonAlertDialog(
     message: String,
     onOkClicked: () -> Unit,
 ) {

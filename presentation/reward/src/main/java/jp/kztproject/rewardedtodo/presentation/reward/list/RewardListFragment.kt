@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.ViewCompositionStrategy
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,6 +36,7 @@ import jp.kztproject.rewardedtodo.application.reward.usecase.*
 import jp.kztproject.rewardedtodo.domain.reward.*
 import jp.kztproject.rewardedtodo.presentation.common.CommonAlertDialog
 import jp.kztproject.rewardedtodo.presentation.common.TopBar
+import jp.kztproject.rewardedtodo.presentation.reward.R
 import jp.kztproject.rewardedtodo.presentation.reward.detail.ErrorMessageClassifier
 import jp.kztproject.rewardedtodo.presentation.reward.helper.showDialog
 import kotlinx.coroutines.flow.Flow
@@ -245,16 +247,14 @@ private fun RewardListScreen(
             val reward = it.getOrNull()
             if (reward == null) {
                 CommonAlertDialog(
-                    // TODO don`t use hardcoding string
-                    message = "You missed the lottery",
+                    message = stringResource(id = R.string.missed_reward),
                     onOkClicked = {
                         viewModel.resetObtainedReward()
                     }
                 )
             } else {
                 CommonAlertDialog(
-                    // TODO don`t use hardcoding string
-                    message = "You won ${reward.name.value}!",
+                    message = stringResource(R.string.won_reward, reward.name.value),
                     onOkClicked = {
                         viewModel.resetObtainedReward()
                     }
