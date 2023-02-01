@@ -5,5 +5,5 @@ import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 
 
 interface LotteryUseCase {
-    suspend fun execute(rewards: RewardCollection): Reward?
+    suspend fun execute(rewards: RewardCollection): Result<Reward?>
 }
