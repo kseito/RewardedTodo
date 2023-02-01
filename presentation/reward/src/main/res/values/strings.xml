@@ -21,6 +21,7 @@
     <string name="error_empty_point">Input point</string>
     <string name="error_unexpected">Unexpected error has occurred.</string>
     <string name="error_empty_probability">Input chance of Winning</string>
+    <string name="error_empty_tickets">No lottery tickets</string>
 
     <!-- Home Menu -->
     <string name="menu_todo">Todo</string>

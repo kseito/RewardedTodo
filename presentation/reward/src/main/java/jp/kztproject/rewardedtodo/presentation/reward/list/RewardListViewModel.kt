@@ -10,7 +10,6 @@ import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,6 +29,8 @@ class RewardListViewModel @Inject constructor(
     private var mutableRewardPoint = MutableLiveData<Int>()
     var rewardPoint: LiveData<Int> = mutableRewardPoint
     val result = MutableLiveData<Result<Unit>?>()
+    private val mutableObtainedReward = MutableLiveData<Result<Reward?>>()
+    val obtainedReward: LiveData<Result<Reward?>> = mutableObtainedReward
 
     fun setCallback(callback: RewardViewModelCallback) {
         this.callback = callback
@@ -38,10 +39,7 @@ class RewardListViewModel @Inject constructor(
     fun startLottery() {
         viewModelScope.launch {
             val rewards = RewardCollection(mutableRewardList.value!!)
-            val reward = lotteryUseCase.execute(rewards)
-            reward?.let {
-                callback.onHitLottery(it)
-            } ?: callback.onMissLottery()
+            mutableObtainedReward.value = lotteryUseCase.execute(rewards)
             loadPoint()
         }
     }

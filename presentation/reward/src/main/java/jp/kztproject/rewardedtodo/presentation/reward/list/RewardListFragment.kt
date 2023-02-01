@@ -63,6 +63,11 @@ class RewardListFragment : Fragment(), RewardViewModelCallback {
         val onSettingClicked = {
             fragmentTransitionManager.transitionToSettingFragmentFromRewardListFragment(requireActivity())
         }
+        val onLotteryFinished: (Reward?) -> Unit = { reward ->
+            reward?.let {
+                onHitLottery(it)
+            } ?: onMissLottery()
+        }
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
@@ -74,6 +79,7 @@ class RewardListFragment : Fragment(), RewardViewModelCallback {
                         onTodoClicked,
                         onRewardClicked,
                         onSettingClicked,
+                        onLotteryFinished,
                     )
                 }
             }
@@ -111,6 +117,7 @@ private fun RewardListScreenWithBottomSheet(
     onTodoClicked: () -> Unit,
     onRewardClicked: () -> Unit,
     onSettingClicked: () -> Unit,
+    onLotteryFinished: (Reward?) -> Unit,
 ) {
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -150,6 +157,7 @@ private fun RewardListScreenWithBottomSheet(
             onTodoClicked = onTodoClicked,
             onRewardClicked = onRewardClicked,
             onSettingClicked = onSettingClicked,
+            onLotteryFinished = onLotteryFinished,
         )
     }
 }
@@ -163,10 +171,12 @@ private fun RewardListScreen(
     onTodoClicked: () -> Unit,
     onRewardClicked: () -> Unit,
     onSettingClicked: () -> Unit,
+    onLotteryFinished: (Reward?) -> Unit,
 ) {
     val ticket by viewModel.rewardPoint.observeAsState()
     val rewards by viewModel.rewardList.observeAsState()
     val result by viewModel.result.observeAsState()
+    val obtainedReward by viewModel.obtainedReward.observeAsState()
     val coroutineScope = rememberCoroutineScope()
 
     ConstraintLayout(
@@ -231,6 +241,19 @@ private fun RewardListScreen(
             viewModel.result.value = null
         }
     }
+    LaunchedEffect(obtainedReward) {
+        obtainedReward?.let { it ->
+            it.fold(
+                onSuccess = { reward ->
+                    onLotteryFinished(reward)
+                },
+                onFailure = { error ->
+                    val errorMessageId = ErrorMessageClassifier(error).messageId
+                    Toast.makeText(context, errorMessageId, Toast.LENGTH_LONG).show()
+                }
+            )
+        }
+    }
 }
 
 @Preview
@@ -238,7 +261,7 @@ private fun RewardListScreen(
 @ExperimentalMaterialApi
 private fun RewardListScreenPreview() {
     val viewModel = RewardListViewModel(object : LotteryUseCase {
-        override suspend fun execute(rewards: RewardCollection): Reward? = null
+        override suspend fun execute(rewards: RewardCollection): Result<Reward?> = Result.success(null)
     }, object : GetRewardsUseCase {
         private val reward = Reward(
             RewardId(1),
@@ -274,6 +297,7 @@ private fun RewardListScreenPreview() {
         onTodoClicked = {},
         onRewardClicked = {},
         onSettingClicked = {},
+        onLotteryFinished = {},
     )
 }
 
