@@ -9,6 +9,8 @@ apply from: rootProject.file('gradle/android_common.gradle')
 
 dependencies {
 
+    implementation project(path: ':domain:reward')
+
     implementation Libraries.Kotlin.stdlib
     implementation Libraries.AndroidX.appCompat
     implementation Libraries.AndroidX.coreKtx
