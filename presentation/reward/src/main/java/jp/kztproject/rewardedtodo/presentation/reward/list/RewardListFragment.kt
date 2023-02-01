@@ -33,6 +33,7 @@ import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.application.reward.usecase.*
 import jp.kztproject.rewardedtodo.domain.reward.*
+import jp.kztproject.rewardedtodo.presentation.common.CommonAlertDialog
 import jp.kztproject.rewardedtodo.presentation.common.TopBar
 import jp.kztproject.rewardedtodo.presentation.reward.detail.ErrorMessageClassifier
 import jp.kztproject.rewardedtodo.presentation.reward.helper.showDialog
@@ -239,18 +240,44 @@ private fun RewardListScreen(
             viewModel.result.value = null
         }
     }
-    LaunchedEffect(obtainedReward) {
-        obtainedReward?.let { it ->
-            it.fold(
-                onSuccess = { reward ->
-                    onLotteryFinished(reward)
-                },
-                onFailure = { error ->
-                    val errorMessageId = ErrorMessageClassifier(error).messageId
-                    Toast.makeText(context, errorMessageId, Toast.LENGTH_LONG).show()
-                }
-            )
+    obtainedReward?.let { it ->
+        if (it.isSuccess) {
+            val reward = it.getOrNull()
+            if (reward == null) {
+                CommonAlertDialog(
+                    // TODO don`t use hardcoding string
+                    message = "You missed the lottery",
+                    onOkClicked = {
+                        viewModel.resetObtainedReward()
+                    }
+                )
+            } else {
+                CommonAlertDialog(
+                    // TODO don`t use hardcoding string
+                    message = "You won ${reward.name.value}!",
+                    onOkClicked = {
+                        viewModel.resetObtainedReward()
+                    }
+                )
+            }
+        } else {
+            // TODO handle error
         }
+
+//        it.fold(
+//            onSuccess = { reward ->
+//                ErrorAlertDialog {
+//
+//                }
+//                onLotteryFinished(reward)
+//            },
+//            onFailure = { error ->
+//                val errorMessageId = ErrorMessageClassifier(error).messageId
+//                Toast.makeText(context, errorMessageId, Toast.LENGTH_LONG).show()
+//            }
+//        )
+    }
+    LaunchedEffect(obtainedReward) {
     }
 }
 
