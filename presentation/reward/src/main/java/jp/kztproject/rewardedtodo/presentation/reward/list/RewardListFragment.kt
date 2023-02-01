@@ -100,11 +100,13 @@ class RewardListFragment : Fragment(), RewardViewModelCallback {
     }
 
     override fun onHitLottery(reward: Reward) {
+        // TODO rewrite in compose
         val message = "You won ${reward.name.value}!"
         showDialog(message)
     }
 
     override fun onMissLottery() {
+        // TODO rewrite in compose
         val message = "You missed the lottery"
         showDialog(message)
     }
