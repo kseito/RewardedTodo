@@ -38,7 +38,6 @@ import jp.kztproject.rewardedtodo.presentation.common.CommonAlertDialog
 import jp.kztproject.rewardedtodo.presentation.common.TopBar
 import jp.kztproject.rewardedtodo.presentation.reward.R
 import jp.kztproject.rewardedtodo.presentation.reward.detail.ErrorMessageClassifier
-import jp.kztproject.rewardedtodo.presentation.reward.helper.showDialog
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -47,7 +46,7 @@ import javax.inject.Inject
 
 @ExperimentalMaterialApi
 @AndroidEntryPoint
-class RewardListFragment : Fragment(), RewardViewModelCallback {
+class RewardListFragment : Fragment() {
 
     private val viewModel: RewardListViewModel by viewModels()
 
@@ -66,11 +65,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback {
         val onSettingClicked = {
             fragmentTransitionManager.transitionToSettingFragmentFromRewardListFragment(requireActivity())
         }
-        val onLotteryFinished: (Reward?) -> Unit = { reward ->
-            reward?.let {
-                onHitLottery(it)
-            } ?: onMissLottery()
-        }
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
@@ -82,7 +76,6 @@ class RewardListFragment : Fragment(), RewardViewModelCallback {
                         onTodoClicked,
                         onRewardClicked,
                         onSettingClicked,
-                        onLotteryFinished,
                     )
                 }
             }
@@ -91,23 +84,10 @@ class RewardListFragment : Fragment(), RewardViewModelCallback {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.setCallback(this)
         if (savedInstanceState == null) {
             viewModel.loadRewards()
             viewModel.loadPoint()
         }
-    }
-
-    override fun onHitLottery(reward: Reward) {
-        // TODO rewrite in compose
-        val message = "You won ${reward.name.value}!"
-        showDialog(message)
-    }
-
-    override fun onMissLottery() {
-        // TODO rewrite in compose
-        val message = "You missed the lottery"
-        showDialog(message)
     }
 }
 
@@ -118,7 +98,6 @@ private fun RewardListScreenWithBottomSheet(
     onTodoClicked: () -> Unit,
     onRewardClicked: () -> Unit,
     onSettingClicked: () -> Unit,
-    onLotteryFinished: (Reward?) -> Unit,
 ) {
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -158,7 +137,6 @@ private fun RewardListScreenWithBottomSheet(
             onTodoClicked = onTodoClicked,
             onRewardClicked = onRewardClicked,
             onSettingClicked = onSettingClicked,
-            onLotteryFinished = onLotteryFinished,
         )
     }
 }
@@ -172,7 +150,6 @@ private fun RewardListScreen(
     onTodoClicked: () -> Unit,
     onRewardClicked: () -> Unit,
     onSettingClicked: () -> Unit,
-    onLotteryFinished: (Reward?) -> Unit,
 ) {
     val ticket by viewModel.rewardPoint.observeAsState()
     val rewards by viewModel.rewardList.observeAsState()
@@ -262,22 +239,8 @@ private fun RewardListScreen(
             }
         } else {
             // TODO handle error
+            // TODO change SnackBar
         }
-
-//        it.fold(
-//            onSuccess = { reward ->
-//                ErrorAlertDialog {
-//
-//                }
-//                onLotteryFinished(reward)
-//            },
-//            onFailure = { error ->
-//                val errorMessageId = ErrorMessageClassifier(error).messageId
-//                Toast.makeText(context, errorMessageId, Toast.LENGTH_LONG).show()
-//            }
-//        )
-    }
-    LaunchedEffect(obtainedReward) {
     }
 }
 
@@ -322,7 +285,6 @@ private fun RewardListScreenPreview() {
         onTodoClicked = {},
         onRewardClicked = {},
         onSettingClicked = {},
-        onLotteryFinished = {},
     )
 }
 

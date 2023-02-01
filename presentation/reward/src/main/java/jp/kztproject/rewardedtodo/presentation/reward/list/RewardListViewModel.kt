@@ -22,7 +22,6 @@ class RewardListViewModel @Inject constructor(
     private val deleteRewardUseCase: DeleteRewardUseCase
 ) : ViewModel() {
 
-    private lateinit var callback: RewardViewModelCallback
     private val mutableRewardList = MutableLiveData<List<Reward>>()
     val rewardList: LiveData<List<Reward>> = mutableRewardList
     private var mutableRewardPoint = MutableLiveData<Int>()
@@ -30,10 +29,6 @@ class RewardListViewModel @Inject constructor(
     val result = MutableLiveData<Result<Unit>?>()
     private val mutableObtainedReward = MutableLiveData<Result<Reward?>?>()
     val obtainedReward: LiveData<Result<Reward?>?> = mutableObtainedReward
-
-    fun setCallback(callback: RewardViewModelCallback) {
-        this.callback = callback
-    }
 
     fun startLottery() {
         viewModelScope.launch {
@@ -81,11 +76,4 @@ class RewardListViewModel @Inject constructor(
         super.onCleared()
         viewModelScope.cancel()
     }
-}
-
-interface RewardViewModelCallback {
-
-    fun onHitLottery(reward: Reward)
-
-    fun onMissLottery()
 }
