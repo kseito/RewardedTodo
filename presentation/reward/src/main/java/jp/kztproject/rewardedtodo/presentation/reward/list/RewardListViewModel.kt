@@ -10,7 +10,6 @@ import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -54,14 +53,8 @@ class RewardListViewModel @Inject constructor(
 
     fun loadPoint() {
         viewModelScope.launch {
-            try {
-                val point = getPointUseCase.execute()
-                mutableRewardPoint.value = point.value
-            } catch (e: Exception) {
-                if (isActive) {
-                    callback.onPointLoadFailed()
-                }
-            }
+            val point = getPointUseCase.execute()
+            mutableRewardPoint.value = point.value
         }
     }
 
@@ -87,8 +80,6 @@ class RewardListViewModel @Inject constructor(
 }
 
 interface RewardViewModelCallback {
-
-    fun onPointLoadFailed()
 
     fun onHitLottery(reward: Reward)
 
