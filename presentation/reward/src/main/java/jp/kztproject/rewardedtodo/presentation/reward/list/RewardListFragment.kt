@@ -170,7 +170,16 @@ private fun RewardListScreen(
         Column {
             TopBar(onTodoClicked, onRewardClicked, onSettingClicked)
             Header(ticket)
-            RewardList(rewards, onRewardItemClick)
+
+            Box {
+                RewardList(rewards, onRewardItemClick)
+                SnackbarHost(
+                    hostState = snackbarHostState,
+                    snackbar = {
+                        ErrorSnackBar(it)
+                    }
+                )
+            }
         }
 
         val (createRewardButton, lotteryRewardButton) = createRefs()
@@ -253,12 +262,6 @@ private fun RewardListScreen(
                         duration = SnackbarDuration.Short
                     )
                 }
-                SnackbarHost(
-                    hostState = snackbarHostState,
-                    snackbar = {
-                        ErrorSnackBar(it)
-                    }
-                )
             }
         }
     }
