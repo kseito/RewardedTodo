@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -26,6 +27,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
+import jp.kztproject.rewardedtodo.presentation.common.CommonAlertDialog
 import jp.kztproject.rewardedtodo.presentation.common.TopBar
 import jp.kztproject.rewardedtodo.presentation.reward.list.DarkColorScheme
 import jp.kztproject.rewardedtodo.presentation.reward.list.RewardedTodoScheme
@@ -210,9 +212,12 @@ private fun TodoListScreen(
                 },
                 onFailure = { error ->
                     error.printStackTrace()
-                    ErrorAlertDialog {
-                        viewModel.error.value = null
-                    }
+                    CommonAlertDialog(
+                        message = stringResource(id = R.string.error_message),
+                        onOkClicked = {
+                            viewModel.error.value = null
+                        }
+                    )
                 }
             )
         }
