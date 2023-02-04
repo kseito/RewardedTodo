@@ -63,7 +63,9 @@ class RewardListFragment : Fragment() {
         }
         val onRewardClicked = {}
         val onSettingClicked = {
-            fragmentTransitionManager.transitionToSettingFragmentFromRewardListFragment(requireActivity())
+            fragmentTransitionManager.transitionToSettingFragmentFromRewardListFragment(
+                requireActivity()
+            )
         }
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
@@ -154,8 +156,11 @@ private fun RewardListScreen(
     val ticket by viewModel.rewardPoint.observeAsState()
     val rewards by viewModel.rewardList.observeAsState()
     val result by viewModel.result.observeAsState()
-    val obtainedReward by viewModel.obtainedReward.observeAsState()
+    // TODO can use collectAsStateWithLifecycle() if library update
+    // https://qiita.com/dosukoi_android/items/e8bbaa662c52b8e1cc20
+    val obtainedReward by viewModel.obtainedReward.collectAsState()
     val coroutineScope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     ConstraintLayout(
         modifier = Modifier
@@ -237,11 +242,58 @@ private fun RewardListScreen(
                     }
                 )
             }
-        } else {
-            // TODO handle error
-            // TODO change SnackBar
+        } else if (it.isFailure) {
+            it.exceptionOrNull()?.let { error ->
+                val errorMessageId = ErrorMessageClassifier(error).messageId
+                val errorMessage = stringResource(id = errorMessageId)
+                LaunchedEffect(error) {
+                    snackbarHostState.showSnackbar(
+                        message = errorMessage,
+                        actionLabel = null,
+                        duration = SnackbarDuration.Short
+                    )
+                }
+                SnackbarHost(
+                    hostState = snackbarHostState,
+                    snackbar = {
+                        ErrorSnackBar(it)
+                    }
+                )
+            }
         }
     }
+}
+
+@Composable
+private fun ErrorSnackBar(it: SnackbarData) {
+    Card(
+        modifier = Modifier
+            .padding(8.dp)
+            .fillMaxWidth()
+    ) {
+        Text(
+            text = it.message,
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun ErrorSnackBarPreview() {
+    ErrorSnackBar(it = object : SnackbarData {
+        override val actionLabel: String?
+            get() = null
+        override val duration: SnackbarDuration
+            get() = SnackbarDuration.Indefinite
+        override val message: String
+            get() = "Cannot connect Internet."
+
+        override fun dismiss() {}
+
+        override fun performAction() {}
+    })
 }
 
 @Preview
@@ -249,7 +301,8 @@ private fun RewardListScreen(
 @ExperimentalMaterialApi
 private fun RewardListScreenPreview() {
     val viewModel = RewardListViewModel(object : LotteryUseCase {
-        override suspend fun execute(rewards: RewardCollection): Result<Reward?> = Result.success(null)
+        override suspend fun execute(rewards: RewardCollection): Result<Reward?> =
+            Result.success(null)
     }, object : GetRewardsUseCase {
         private val reward = Reward(
             RewardId(1),
