@@ -28,7 +28,6 @@ import androidx.fragment.app.viewModels
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.presentation.common.CommonAlertDialog
-import jp.kztproject.rewardedtodo.presentation.common.TopBar
 import jp.kztproject.rewardedtodo.presentation.reward.list.DarkColorScheme
 import jp.kztproject.rewardedtodo.presentation.reward.list.RewardedTodoScheme
 import jp.kztproject.rewardedtodo.todo.application.*
@@ -61,7 +60,6 @@ class TodoListFragment : Fragment(), TodoListViewModel.Callback {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val onTodoClicked = {}
         val onRewardClicked = {
             fragmentTransitionManager.transitionToRewardListFragment(requireActivity())
         }
@@ -70,12 +68,7 @@ class TodoListFragment : Fragment(), TodoListViewModel.Callback {
                 requireActivity()
             )
         }
-        val onTodoSaveSelected: (EditingTodo) -> Unit = {
-            viewModel.updateTodo(it)
-        }
-        val onTodoDeleteSelected: (EditingTodo) -> Unit = {
-            viewModel.deleteTodo(it)
-        }
+
         return ComposeView(requireContext()).apply {
             setContent {
                 MaterialTheme(
@@ -83,11 +76,6 @@ class TodoListFragment : Fragment(), TodoListViewModel.Callback {
                 ) {
                     TodoListScreenWithBottomSheet(
                         viewModel = viewModel,
-                        onTodoClicked = onTodoClicked,
-                        onRewardClicked = onRewardClicked,
-                        onSettingClicked = onSettingClicked,
-                        onTodoSaveSelected = onTodoSaveSelected,
-                        onTodoDeleteSelected = onTodoDeleteSelected
                     )
                 }
             }
@@ -107,11 +95,6 @@ class TodoListFragment : Fragment(), TodoListViewModel.Callback {
 @Composable
 fun TodoListScreenWithBottomSheet(
     viewModel: TodoListViewModel,
-    onTodoClicked: () -> Unit,
-    onRewardClicked: () -> Unit,
-    onSettingClicked: () -> Unit,
-    onTodoSaveSelected: (EditingTodo) -> Unit,
-    onTodoDeleteSelected: (EditingTodo) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
@@ -133,6 +116,12 @@ fun TodoListScreenWithBottomSheet(
             bottomSheetState.show()
         }
     }
+    val onTodoSaveSelected: (EditingTodo) -> Unit = {
+        viewModel.updateTodo(it)
+    }
+    val onTodoDeleteSelected: (EditingTodo) -> Unit = {
+        viewModel.deleteTodo(it)
+    }
 
     TodoDetailBottomSheet(
         todo = selectedTodo,
@@ -142,9 +131,6 @@ fun TodoListScreenWithBottomSheet(
     ) {
         TodoListScreen(
             viewModel = viewModel,
-            onTodoClicked = onTodoClicked,
-            onRewardClicked = onRewardClicked,
-            onSettingClicked = onSettingClicked,
             onTodoItemClicked = onTodoItemClicked,
             onTodoAddClicked = onTodoAddClicked,
             onTodoUpdateSucceed = onTodoUpdateSucceed,
@@ -156,9 +142,6 @@ fun TodoListScreenWithBottomSheet(
 @Composable
 private fun TodoListScreen(
     viewModel: TodoListViewModel,
-    onTodoClicked: () -> Unit,
-    onRewardClicked: () -> Unit,
-    onSettingClicked: () -> Unit,
     onTodoAddClicked: () -> Unit,
     onTodoItemClicked: (Todo) -> Unit,
     onTodoUpdateSucceed: () -> Unit,
@@ -173,7 +156,7 @@ private fun TodoListScreen(
             .background(MaterialTheme.colors.background)
     ) {
         Column {
-            TopBar(onTodoClicked, onRewardClicked, onSettingClicked)
+//            TopBar(onTodoClicked, onRewardClicked, onSettingClicked)
             todoList?.forEachIndexed { index, todo ->
                 TodoListItem(
                     todo = todo,
@@ -256,9 +239,6 @@ fun TodoListScreenPreview() {
     )
     TodoListScreen(
         viewModel = viewModel,
-        onTodoClicked = {},
-        onRewardClicked = {},
-        onSettingClicked = {},
         onTodoItemClicked = {},
         onTodoAddClicked = {},
         onTodoUpdateSucceed = {}
