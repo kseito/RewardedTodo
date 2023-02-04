@@ -68,7 +68,6 @@ dependencies {
     androidTestImplementation Libraries.Test.AndroidX.junit
     androidTestImplementation Libraries.Test.AndroidX.espresso
 
-    implementation project(path: ':reward')
     implementation project(path: ':application:reward')
     implementation project(path: ':domain:reward')
     implementation project(path: ':screen_transition')

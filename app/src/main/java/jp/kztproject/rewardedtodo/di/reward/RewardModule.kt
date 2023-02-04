@@ -5,9 +5,11 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
 @InstallIn(SingletonComponent::class)
-@Module(includes = [PointRepositoryModule::class,
-    RewardListViewModelModule::class,
-    RewardRepositoryModule::class,
-    PointApiModule::class,
-    RewardDetailViewModelModule::class])
+@Module(
+    includes = [
+        RewardListViewModelModule::class,
+        RewardRepositoryModule::class,
+        RewardDetailViewModelModule::class
+    ]
+)
 abstract class RewardModule
