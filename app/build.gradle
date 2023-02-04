@@ -90,6 +90,7 @@ dependencies {
     // Jetpack Compose
     implementation Libraries.AndroidX.Compose.foundation
     implementation Libraries.AndroidX.Compose.material
+    implementation Libraries.AndroidX.Compose.material3
     implementation Libraries.AndroidX.NavigationComponent.navigationCompose
 
     //Room

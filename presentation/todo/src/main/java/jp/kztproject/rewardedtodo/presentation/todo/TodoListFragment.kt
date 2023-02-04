@@ -52,6 +52,7 @@ class TodoListFragment : Fragment(), TodoListViewModel.Callback {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // TODO move to compose
         viewModel.initialize(this)
     }
 
