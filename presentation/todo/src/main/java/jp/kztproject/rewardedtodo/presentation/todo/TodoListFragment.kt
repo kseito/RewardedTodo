@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -25,7 +24,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.google.android.material.bottomsheet.BottomSheetDialog
 import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.presentation.common.CommonAlertDialog
 import jp.kztproject.rewardedtodo.presentation.reward.list.DarkColorScheme
@@ -41,35 +39,18 @@ import javax.inject.Inject
 
 @ExperimentalMaterialApi
 @AndroidEntryPoint
-class TodoListFragment : Fragment(), TodoListViewModel.Callback {
+class TodoListFragment : Fragment() {
 
     private val viewModel: TodoListViewModel by viewModels()
 
     @Inject
     lateinit var fragmentTransitionManager: IFragmentsTransitionManager
 
-    private var todoDetailDialog: BottomSheetDialog? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // TODO move to compose
-        viewModel.initialize(this)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val onRewardClicked = {
-            fragmentTransitionManager.transitionToRewardListFragment(requireActivity())
-        }
-        val onSettingClicked = {
-            fragmentTransitionManager.transitionToSettingFragmentFromTodoListFragment(
-                requireActivity()
-            )
-        }
-
         return ComposeView(requireContext()).apply {
             setContent {
                 MaterialTheme(
@@ -81,14 +62,6 @@ class TodoListFragment : Fragment(), TodoListViewModel.Callback {
                 }
             }
         }
-    }
-
-    override fun afterTodoUpdate() {
-        todoDetailDialog?.dismiss()
-    }
-
-    override fun onError(error: Throwable) {
-        Toast.makeText(requireContext(), "Fail!", Toast.LENGTH_LONG).show()
     }
 }
 

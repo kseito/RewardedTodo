@@ -20,18 +20,16 @@ class TodoListViewModel @Inject constructor(
     private val completeTodoUseCase: CompleteTodoUseCase
 ) : ViewModel() {
 
-    private lateinit var callback: Callback
     val todoList: LiveData<List<Todo>> = getTodoListUseCase.execute()
         .catch {
             it.printStackTrace()
-            callback.onError(it)
+            error.value = Result.failure(it)
         }
         .asLiveData()
 
     val error = MutableLiveData<Result<Unit>?>()
 
-    fun initialize(callback: Callback) {
-        this.callback = callback
+    fun initialize() {
 
         viewModelScope.launch(Dispatchers.Default) {
             try {
@@ -55,8 +53,6 @@ class TodoListViewModel @Inject constructor(
     fun deleteTodo(todo: EditingTodo) {
         viewModelScope.launch(Dispatchers.Default) {
             deleteTodoUseCase.execute(todo.toTodo())
-
-            callback.afterTodoUpdate()
         }
     }
 
@@ -64,11 +60,5 @@ class TodoListViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.Default) {
             completeTodoUseCase.execute(todo)
         }
-    }
-
-    interface Callback {
-        fun afterTodoUpdate()
-
-        fun onError(error: Throwable)
     }
 }
