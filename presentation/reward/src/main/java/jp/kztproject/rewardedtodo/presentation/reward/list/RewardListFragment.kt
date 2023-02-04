@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.application.reward.usecase.*
 import jp.kztproject.rewardedtodo.domain.reward.*
@@ -40,17 +41,12 @@ import jp.kztproject.rewardedtodo.presentation.reward.detail.ErrorMessageClassif
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import project.seito.screen_transition.IFragmentsTransitionManager
-import javax.inject.Inject
 
 @ExperimentalMaterialApi
 @AndroidEntryPoint
 class RewardListFragment : Fragment() {
 
     private val viewModel: RewardListViewModel by viewModels()
-
-    @Inject
-    lateinit var fragmentTransitionManager: IFragmentsTransitionManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,7 +71,7 @@ class RewardListFragment : Fragment() {
 @ExperimentalMaterialApi
 @Composable
 fun RewardListScreenWithBottomSheet(
-    viewModel: RewardListViewModel,
+    viewModel: RewardListViewModel = hiltViewModel(),
 ) {
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()

@@ -24,6 +24,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.compose.hiltViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.presentation.common.CommonAlertDialog
 import jp.kztproject.rewardedtodo.presentation.reward.list.DarkColorScheme
@@ -34,17 +35,12 @@ import jp.kztproject.rewardedtodo.todo.domain.Todo
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import project.seito.screen_transition.IFragmentsTransitionManager
-import javax.inject.Inject
 
 @ExperimentalMaterialApi
 @AndroidEntryPoint
 class TodoListFragment : Fragment() {
 
     private val viewModel: TodoListViewModel by viewModels()
-
-    @Inject
-    lateinit var fragmentTransitionManager: IFragmentsTransitionManager
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,7 +64,7 @@ class TodoListFragment : Fragment() {
 @ExperimentalMaterialApi
 @Composable
 fun TodoListScreenWithBottomSheet(
-    viewModel: TodoListViewModel,
+    viewModel: TodoListViewModel = hiltViewModel(),
 ) {
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)

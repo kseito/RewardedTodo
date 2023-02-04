@@ -40,6 +40,7 @@ dependencies {
     implementation Libraries.AndroidX.Compose.uiTooling
     implementation Libraries.AndroidX.Compose.liveData
     implementation Libraries.AndroidX.Compose.constraintLayout
+    implementation Libraries.AndroidX.Compose.hiltNavigationCompose
 
     //Dagger
     implementation Libraries.Dagger.core
