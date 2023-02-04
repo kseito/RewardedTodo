@@ -32,6 +32,11 @@ class RewardListViewModel @Inject constructor(
     private val mutableObtainedReward = MutableStateFlow<Result<Reward?>?>(null)
     val obtainedReward = mutableObtainedReward.asStateFlow()
 
+    init {
+        loadRewards()
+        loadPoint()
+    }
+
     fun startLottery() {
         viewModelScope.launch {
             val rewards = RewardCollection(mutableRewardList.value!!)
