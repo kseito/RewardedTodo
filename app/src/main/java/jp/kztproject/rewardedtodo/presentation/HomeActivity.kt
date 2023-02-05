@@ -9,24 +9,21 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.RewardedTodoBottomBar
 import jp.kztproject.rewardedtodo.TopBar
 import jp.kztproject.rewardedtodo.TopLevelDestination
-import jp.kztproject.rewardedtodo.presentation.reward.list.RewardListScreenWithBottomSheet
-import jp.kztproject.rewardedtodo.presentation.todo.TodoListScreenWithBottomSheet
+import jp.kztproject.rewardedtodo.presentation.reward.REWARD_SCREEN
+import jp.kztproject.rewardedtodo.presentation.reward.rewardListScreen
+import jp.kztproject.rewardedtodo.presentation.todo.TODO_SCREEN
+import jp.kztproject.rewardedtodo.presentation.todo.todoListScreen
 
 @OptIn(ExperimentalMaterialApi::class)
 @AndroidEntryPoint
 class HomeActivity : ComponentActivity() {
-
-    companion object {
-        private const val TODO_SCREEN = "todo_screen"
-        private const val REWARD_SCREEN = "reward_screen"
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,27 +56,29 @@ class HomeActivity : ComponentActivity() {
                     RewardedTodoBottomBar(topLevelDestinations, onNavigateToDestination)
                 }
             ) { padding ->
-                // TODO write as another method
-                Row(
-                    Modifier
-                        .fillMaxSize()
-                        .padding(padding)
-                ) {
-                    // TODO apply Theme
-                    NavHost(
-                        navController = navController,
-                        startDestination = TODO_SCREEN
-                    ) {
-                        composable(route = TODO_SCREEN) {
-                            TodoListScreenWithBottomSheet()
-                        }
-
-                        composable(route = REWARD_SCREEN) {
-                            RewardListScreenWithBottomSheet()
-                        }
-                    }
-                }
+                RewardedTodoApp(padding, navController)
             }
+        }
+    }
+}
+
+@Composable
+private fun RewardedTodoApp(
+    padding: PaddingValues,
+    navController: NavHostController
+) {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .padding(padding)
+    ) {
+        // TODO apply Theme
+        NavHost(
+            navController = navController,
+            startDestination = TODO_SCREEN
+        ) {
+            todoListScreen()
+            rewardListScreen()
         }
     }
 }
