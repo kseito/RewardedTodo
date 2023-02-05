@@ -7,21 +7,13 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.Text
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import jp.kztproject.rewardedtodo.RewardedTodoBottomBar
 import jp.kztproject.rewardedtodo.TopBar
 import jp.kztproject.rewardedtodo.TopLevelDestination
 import jp.kztproject.rewardedtodo.presentation.reward.list.RewardListScreenWithBottomSheet
@@ -64,22 +56,7 @@ class HomeActivity : ComponentActivity() {
                     )
                 },
                 bottomBar = {
-                    // TODO write as another method
-                    NavigationBar() {
-                        topLevelDestinations.forEach { destination ->
-                            NavigationBarItem(
-                                selected = true,    // FIXME reference appropriate value
-                                onClick = { onNavigateToDestination(destination) },
-                                label = { Text(stringResource(destination.iconTextId)) },
-                                icon = {
-                                    Icon(
-                                        painter = painterResource(id = destination.iconImageId),
-                                        contentDescription = null,
-                                    )
-                                }
-                            )
-                        }
-                    }
+                    RewardedTodoBottomBar(topLevelDestinations, onNavigateToDestination)
                 }
             ) { padding ->
                 // TODO write as another method
