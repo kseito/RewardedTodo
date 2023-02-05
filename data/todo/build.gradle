@@ -3,6 +3,7 @@ import dependencies.Libraries
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'jacoco'
 
 apply from: rootProject.file('gradle/android_common.gradle')
 

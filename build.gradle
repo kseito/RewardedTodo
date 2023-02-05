@@ -28,7 +28,7 @@ task clean(type: Delete) {
 
 apply plugin: 'jacoco'
 jacoco {
-    toolVersion = "0.8.3"
+    toolVersion = "0.8.8"
 }
 task jacocoMergeReports(type: JacocoMerge) {
     group = 'Reporting'
