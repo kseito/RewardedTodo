@@ -16,7 +16,8 @@ fun RewardedTodoBottomBar(
     NavigationBar() {
         topLevelDestinations.forEach { destination ->
             NavigationBarItem(
-                selected = true,    // FIXME reference appropriate value
+                // FIXME reference appropriate value
+                selected = true,
                 onClick = { onNavigateToDestination(destination) },
                 label = { Text(stringResource(destination.iconTextId)) },
                 icon = {

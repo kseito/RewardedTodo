@@ -4,10 +4,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.* // ktlint-disable
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.* // ktlint-disable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -65,7 +65,7 @@ class HomeActivity : ComponentActivity() {
 @Composable
 private fun RewardedTodoApp(
     padding: PaddingValues,
-    navController: NavHostController
+    navController: NavHostController,
 ) {
     Box(
         Modifier

@@ -11,7 +11,7 @@ object GradlePlugins {
         const val version = "2.42"
     }
     object KtlintGradle {
-        const val version = "10.1.0"
+        const val version = "11.1.0"
     }
     const val android = "com.android.tools.build:gradle:${Android.version}"
     const val kotlin = "org.jetbrains.kotlin:kotlin-gradle-plugin:${Kotlin.version}"
