@@ -99,8 +99,6 @@ private fun RewardListScreen(
             .background(MaterialTheme.colors.background)
     ) {
         Column {
-            // TODO show setting in top bar
-//            TopBar(onTodoClicked, onRewardClicked, onSettingClicked)
             Header(ticket)
 
             Box {

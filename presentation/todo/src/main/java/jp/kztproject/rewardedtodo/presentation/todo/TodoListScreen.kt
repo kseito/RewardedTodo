@@ -92,8 +92,6 @@ private fun TodoListScreen(
             .background(MaterialTheme.colors.background)
     ) {
         Column {
-            // TODO show setting in top bar
-//            TopBar(onTodoClicked, onRewardClicked, onSettingClicked)
             todoList?.forEachIndexed { index, todo ->
                 TodoListItem(
                     todo = todo,
