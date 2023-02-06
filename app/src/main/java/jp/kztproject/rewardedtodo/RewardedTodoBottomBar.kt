@@ -23,7 +23,7 @@ fun RewardedTodoBottomBar(
                 icon = {
                     Icon(
                         painter = painterResource(id = destination.iconImageId),
-                        contentDescription = null,
+                        contentDescription = null
                     )
                 }
             )

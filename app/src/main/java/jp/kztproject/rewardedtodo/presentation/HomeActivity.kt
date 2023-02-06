@@ -65,7 +65,7 @@ class HomeActivity : ComponentActivity() {
 @Composable
 private fun RewardedTodoApp(
     padding: PaddingValues,
-    navController: NavHostController,
+    navController: NavHostController
 ) {
     Box(
         Modifier

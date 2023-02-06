@@ -14,7 +14,7 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun TopBar(
     @StringRes titleResourceId: Int,
-    onSettingClicked: () -> Unit,
+    onSettingClicked: () -> Unit
 ) {
     TopAppBar(
         title = {
@@ -36,6 +36,6 @@ fun TopBarPreview() {
     val destination = TopLevelDestination.TODO
     TopBar(
         titleResourceId = destination.iconTextId,
-        onSettingClicked = {},
+        onSettingClicked = {}
     )
 }
