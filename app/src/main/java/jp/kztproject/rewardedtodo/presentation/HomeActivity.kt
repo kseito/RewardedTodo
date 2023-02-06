@@ -28,7 +28,7 @@ class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val onSettingCLicked = {
+        val onSettingClicked = {
             // TODO show SettingScreen
             Toast.makeText(this, "Swho SettingScreen", Toast.LENGTH_LONG).show()
         }
@@ -49,7 +49,7 @@ class HomeActivity : ComponentActivity() {
                 topBar = {
                     TopBar(
                         currentDestination.iconTextId,
-                        onSettingClicked = onSettingCLicked,
+                        onSettingClicked = onSettingClicked
                     )
                 },
                 bottomBar = {
