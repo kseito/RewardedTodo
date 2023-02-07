@@ -32,6 +32,8 @@ object Libraries {
             const val uiTooling = "androidx.compose.ui:ui-tooling:1.3.0"
             const val liveData = "androidx.compose.runtime:runtime-livedata:1.3.0"
             const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
+            const val material3 = "androidx.compose.material3:material3:1.0.1"
+            const val hiltNavigationCompose = "androidx.hilt:hilt-navigation-compose:1.0.0"
         }
 
         object LifeCycle {
@@ -52,6 +54,7 @@ object Libraries {
             const val version = "2.5.3"
             const val fragmentKtx = "androidx.navigation:navigation-fragment-ktx:${version}"
             const val uiKtx = "androidx.navigation:navigation-ui-ktx:${version}"
+            const val navigationCompose = "androidx.navigation:navigation-compose:${version}"
         }
 
         object Security {

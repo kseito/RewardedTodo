@@ -1,41 +1,84 @@
 package jp.kztproject.rewardedtodo.presentation
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import androidx.navigation.ui.AppBarConfiguration
+import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.* // ktlint-disable
+import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Scaffold
+import androidx.compose.runtime.* // ktlint-disable
+import androidx.compose.ui.Modifier
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import jp.kztproject.rewardedtodo.R
-import jp.kztproject.rewardedtodo.databinding.ActivityHomeBinding
-import project.seito.screen_transition.IFragmentsTransitionManager
-import javax.inject.Inject
+import jp.kztproject.rewardedtodo.RewardedTodoBottomBar
+import jp.kztproject.rewardedtodo.TopBar
+import jp.kztproject.rewardedtodo.TopLevelDestination
+import jp.kztproject.rewardedtodo.presentation.reward.REWARD_SCREEN
+import jp.kztproject.rewardedtodo.presentation.reward.rewardListScreen
+import jp.kztproject.rewardedtodo.presentation.todo.TODO_SCREEN
+import jp.kztproject.rewardedtodo.presentation.todo.todoListScreen
 
+@OptIn(ExperimentalMaterialApi::class)
 @AndroidEntryPoint
-class HomeActivity : AppCompatActivity() {
-
-    private lateinit var binding: ActivityHomeBinding
-    private lateinit var appBarConfiguration: AppBarConfiguration
-
-    @Inject
-    lateinit var fragmentTransitionManager: IFragmentsTransitionManager
+class HomeActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_home)
 
-//        setSupportActionBar(binding.toolbar)
-//
-//        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-//        val navController = navHostFragment.navController
-//        appBarConfiguration = AppBarConfiguration(setOf(R.id.todo_list_fragment, R.id.reward_list_fragment), binding.drawerLayout)
-//
-//        //FIXME Navigation drawer menu not working
-//        setupActionBarWithNavController(navController, appBarConfiguration)
-//        binding.navigationView.setupWithNavController(navController)
+        val onSettingClicked = {
+            // TODO show SettingScreen
+            Toast.makeText(this, "Swho SettingScreen", Toast.LENGTH_LONG).show()
+        }
+
+        setContent {
+            val navController = rememberNavController()
+            val topLevelDestinations = TopLevelDestination.values().asList()
+            var currentDestination by remember { mutableStateOf(TopLevelDestination.TODO) }
+            val onNavigateToDestination: (TopLevelDestination) -> Unit = {
+                when (it) {
+                    TopLevelDestination.TODO -> navController.navigate(TODO_SCREEN)
+                    TopLevelDestination.REWARD -> navController.navigate(REWARD_SCREEN)
+                }
+                currentDestination = it
+            }
+
+            Scaffold(
+                topBar = {
+                    TopBar(
+                        currentDestination.iconTextId,
+                        onSettingClicked = onSettingClicked
+                    )
+                },
+                bottomBar = {
+                    RewardedTodoBottomBar(topLevelDestinations, onNavigateToDestination)
+                }
+            ) { padding ->
+                RewardedTodoApp(padding, navController)
+            }
+        }
     }
+}
 
-//    override fun onSupportNavigateUp(): Boolean {
-//        val navController = findNavController(R.id.nav_host_fragment)
-//        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
-//    }
+@Composable
+private fun RewardedTodoApp(
+    padding: PaddingValues,
+    navController: NavHostController
+) {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .padding(padding)
+    ) {
+        // TODO apply Theme
+        NavHost(
+            navController = navController,
+            startDestination = TODO_SCREEN
+        ) {
+            todoListScreen()
+            rewardListScreen()
+        }
+    }
 }

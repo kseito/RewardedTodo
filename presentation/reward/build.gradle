@@ -40,6 +40,7 @@ dependencies {
     implementation Libraries.AndroidX.Compose.uiTooling
     implementation Libraries.AndroidX.Compose.liveData
     implementation Libraries.AndroidX.Compose.constraintLayout
+    implementation Libraries.AndroidX.Compose.hiltNavigationCompose
 
     //Dagger
     implementation Libraries.Dagger.core
@@ -67,7 +68,6 @@ dependencies {
     androidTestImplementation Libraries.Test.AndroidX.junit
     androidTestImplementation Libraries.Test.AndroidX.espresso
 
-    implementation project(path: ':reward')
     implementation project(path: ':application:reward')
     implementation project(path: ':domain:reward')
     implementation project(path: ':screen_transition')

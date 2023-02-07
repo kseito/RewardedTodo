@@ -1,13 +1,8 @@
 package jp.kztproject.rewardedtodo.presentation.reward.list
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -21,85 +16,27 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import dagger.hilt.android.AndroidEntryPoint
+import androidx.hilt.navigation.compose.hiltViewModel
 import jp.kztproject.rewardedtodo.application.reward.usecase.*
 import jp.kztproject.rewardedtodo.domain.reward.*
 import jp.kztproject.rewardedtodo.presentation.common.CommonAlertDialog
-import jp.kztproject.rewardedtodo.presentation.common.TopBar
 import jp.kztproject.rewardedtodo.presentation.reward.R
 import jp.kztproject.rewardedtodo.presentation.reward.detail.ErrorMessageClassifier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
-import project.seito.screen_transition.IFragmentsTransitionManager
-import javax.inject.Inject
 
-@ExperimentalMaterialApi
-@AndroidEntryPoint
-class RewardListFragment : Fragment() {
-
-    private val viewModel: RewardListViewModel by viewModels()
-
-    @Inject
-    lateinit var fragmentTransitionManager: IFragmentsTransitionManager
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        val onTodoClicked = {
-            fragmentTransitionManager.transitionToTodoListFragment(requireActivity())
-        }
-        val onRewardClicked = {}
-        val onSettingClicked = {
-            fragmentTransitionManager.transitionToSettingFragmentFromRewardListFragment(
-                requireActivity()
-            )
-        }
-        return ComposeView(requireContext()).apply {
-            setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
-            setContent {
-                MaterialTheme(
-                    colors = RewardedTodoScheme(isSystemInDarkTheme())
-                ) {
-                    RewardListScreenWithBottomSheet(
-                        viewModel,
-                        onTodoClicked,
-                        onRewardClicked,
-                        onSettingClicked,
-                    )
-                }
-            }
-        }
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if (savedInstanceState == null) {
-            viewModel.loadRewards()
-            viewModel.loadPoint()
-        }
-    }
-}
 
 @ExperimentalMaterialApi
 @Composable
-private fun RewardListScreenWithBottomSheet(
-    viewModel: RewardListViewModel,
-    onTodoClicked: () -> Unit,
-    onRewardClicked: () -> Unit,
-    onSettingClicked: () -> Unit,
+fun RewardListScreenWithBottomSheet(
+    viewModel: RewardListViewModel = hiltViewModel(),
 ) {
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
@@ -136,9 +73,6 @@ private fun RewardListScreenWithBottomSheet(
             viewModel = viewModel,
             bottomSheetState = bottomSheetState,
             onRewardItemClick = onRewardItemClick,
-            onTodoClicked = onTodoClicked,
-            onRewardClicked = onRewardClicked,
-            onSettingClicked = onSettingClicked,
         )
     }
 }
@@ -149,9 +83,6 @@ private fun RewardListScreen(
     viewModel: RewardListViewModel,
     bottomSheetState: ModalBottomSheetState,
     onRewardItemClick: (Reward) -> Unit,
-    onTodoClicked: () -> Unit,
-    onRewardClicked: () -> Unit,
-    onSettingClicked: () -> Unit,
 ) {
     val ticket by viewModel.rewardPoint.observeAsState()
     val rewards by viewModel.rewardList.observeAsState()
@@ -168,7 +99,6 @@ private fun RewardListScreen(
             .background(MaterialTheme.colors.background)
     ) {
         Column {
-            TopBar(onTodoClicked, onRewardClicked, onSettingClicked)
             Header(ticket)
 
             Box {
@@ -338,9 +268,6 @@ private fun RewardListScreenPreview() {
         viewModel = viewModel,
         bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
         onRewardItemClick = {},
-        onTodoClicked = {},
-        onRewardClicked = {},
-        onSettingClicked = {},
     )
 }
 
