@@ -1,13 +1,12 @@
 package jp.kztproject.rewardedtodo.presentation
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.* // ktlint-disable
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.* // ktlint-disable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -16,6 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.RewardedTodoBottomBar
 import jp.kztproject.rewardedtodo.TopBar
 import jp.kztproject.rewardedtodo.TopLevelDestination
+import jp.kztproject.rewardedtodo.feature.setting.SettingDialog
 import jp.kztproject.rewardedtodo.presentation.reward.REWARD_SCREEN
 import jp.kztproject.rewardedtodo.presentation.reward.rewardListScreen
 import jp.kztproject.rewardedtodo.presentation.todo.TODO_SCREEN
@@ -28,10 +28,10 @@ class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val onSettingClicked = {
-            // TODO show SettingScreen
-            Toast.makeText(this, "Swho SettingScreen", Toast.LENGTH_LONG).show()
-        }
+//        val onSettingClicked = {
+//            // TODO show SettingScreen
+//            Toast.makeText(this, "Swho SettingScreen", Toast.LENGTH_LONG).show()
+//        }
 
         setContent {
             val navController = rememberNavController()
@@ -44,12 +44,15 @@ class HomeActivity : ComponentActivity() {
                 }
                 currentDestination = it
             }
+            var showSettingDialog by remember { mutableStateOf(false) }
 
             Scaffold(
                 topBar = {
                     TopBar(
                         currentDestination.iconTextId,
-                        onSettingClicked = onSettingClicked
+                        onSettingClicked = {
+                            showSettingDialog = true
+                        }
                     )
                 },
                 bottomBar = {
@@ -57,6 +60,15 @@ class HomeActivity : ComponentActivity() {
                 }
             ) { padding ->
                 RewardedTodoApp(padding, navController)
+            }
+
+            if (showSettingDialog) {
+                SettingDialog(
+                    onDismiss = {
+                        showSettingDialog = false
+                    },
+                    onTodoistClicked = {}
+                )
             }
         }
     }
