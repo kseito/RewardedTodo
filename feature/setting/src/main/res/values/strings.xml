@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">Setting</string>
+    <string name="extensions_section">Extensions</string>
+    <string name="todoist_extension_title">Todoist</string>
+</resources>
