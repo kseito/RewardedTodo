@@ -18,12 +18,14 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SettingDialog(
     onDismiss: () -> Unit,
-    onTodoistClicked: () -> Unit
+    onTodoistClicked: () -> Unit,
+    viewModel: SettingViewModel = hiltViewModel()
 ) {
     val configuration = LocalConfiguration.current
 
@@ -75,7 +77,7 @@ private fun SettingDialogTodoistExtensionRow(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(
-                interactionSource =  remember { MutableInteractionSource() },
+                interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(),
                 onClick = onTodoistClicked
             )

@@ -4,11 +4,13 @@ plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
     id("jacoco")
+    kotlin("kapt")
 }
 
 apply(from = rootProject.file("gradle/android_common.gradle"))
 
 dependencies {
+    implementation(project(path = ":data:auth"))
 
     implementation(Libraries.AndroidX.coreKtx)
     implementation(Libraries.AndroidX.appCompat)
@@ -23,7 +25,14 @@ dependencies {
     implementation(Libraries.AndroidX.Compose.constraintLayout)
     implementation(Libraries.AndroidX.Compose.hiltNavigationCompose)
 
-    implementation(Libraries.Test.junit)
+    //Dagger
+    implementation(Libraries.Dagger.core)
+    annotationProcessor(Libraries.Dagger.compiler)
+    kapt(Libraries.Dagger.compiler)
+    implementation(Libraries.Dagger.hilt)
+    kapt(Libraries.Dagger.hiltCompiler)
+
+    testImplementation(Libraries.Test.junit)
 }
 
 android {
