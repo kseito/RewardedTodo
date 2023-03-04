@@ -1,5 +1,6 @@
 package jp.kztproject.rewardedtodo.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -8,6 +9,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -16,6 +18,7 @@ import jp.kztproject.rewardedtodo.RewardedTodoBottomBar
 import jp.kztproject.rewardedtodo.TopBar
 import jp.kztproject.rewardedtodo.TopLevelDestination
 import jp.kztproject.rewardedtodo.feature.setting.SettingDialog
+import jp.kztproject.rewardedtodo.presentation.auth.todoist.TodoistAuthActivity
 import jp.kztproject.rewardedtodo.presentation.reward.REWARD_SCREEN
 import jp.kztproject.rewardedtodo.presentation.reward.rewardListScreen
 import jp.kztproject.rewardedtodo.presentation.todo.TODO_SCREEN
@@ -45,6 +48,7 @@ class HomeActivity : ComponentActivity() {
                 currentDestination = it
             }
             var showSettingDialog by remember { mutableStateOf(false) }
+            val context = LocalContext.current
 
             Scaffold(
                 topBar = {
@@ -67,7 +71,10 @@ class HomeActivity : ComponentActivity() {
                     onDismiss = {
                         showSettingDialog = false
                     },
-                    onTodoistClicked = {}
+                    onTodoistClicked = {
+                        val intent = Intent(context, TodoistAuthActivity::class.java)
+                        context.startActivity(intent)
+                    }
                 )
             }
         }
