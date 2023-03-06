@@ -10,6 +10,7 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
@@ -28,6 +29,7 @@ fun SettingDialog(
     viewModel: SettingViewModel = hiltViewModel()
 ) {
     val configuration = LocalConfiguration.current
+    val todoistExtensionEnabled = viewModel.hasAccessToken.collectAsState()
 
     AlertDialog(
         title = {
@@ -41,6 +43,7 @@ fun SettingDialog(
                 Divider(Modifier.padding(vertical = 8.dp))
                 SettingDialogSectionTitle(text = stringResource(R.string.extensions_section))
                 SettingDialogTodoistExtensionRow(
+                    todoistExtensionEnabled = todoistExtensionEnabled.value,
                     onTodoistClicked = onTodoistClicked
                 )
             }
@@ -71,7 +74,8 @@ private fun SettingDialogSectionTitle(text: String) {
 
 @Composable
 private fun SettingDialogTodoistExtensionRow(
-    onTodoistClicked: () -> Unit
+    onTodoistClicked: () -> Unit,
+    todoistExtensionEnabled: Boolean
 ) {
     Box(
         modifier = Modifier
@@ -85,7 +89,7 @@ private fun SettingDialogTodoistExtensionRow(
         Text(text = stringResource(R.string.todoist_extension_title))
 
         Switch(
-            checked = false,
+            checked = todoistExtensionEnabled,
             onCheckedChange = null,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
