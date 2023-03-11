@@ -3,7 +3,9 @@ package jp.kztproject.rewardedtodo.presentation
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
@@ -67,13 +69,19 @@ class HomeActivity : ComponentActivity() {
             }
 
             if (showSettingDialog) {
+                var settingFinished by remember { mutableStateOf(false) }
+                val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                    settingFinished = true
+                }
                 SettingDialog(
+                    todoistAuthFinished = settingFinished,
                     onDismiss = {
                         showSettingDialog = false
                     },
                     onTodoistClicked = {
                         val intent = Intent(context, TodoistAuthActivity::class.java)
                         context.startActivity(intent)
+                        launcher.launch(intent)
                     }
                 )
             }

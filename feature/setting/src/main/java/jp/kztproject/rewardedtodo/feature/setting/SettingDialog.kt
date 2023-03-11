@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
@@ -21,9 +20,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun SettingDialog(
+    todoistAuthFinished: Boolean,
     onDismiss: () -> Unit,
     onTodoistClicked: () -> Unit,
     viewModel: SettingViewModel = hiltViewModel()
@@ -32,6 +31,9 @@ fun SettingDialog(
     val todoistExtensionEnabled = viewModel.hasAccessToken.collectAsState()
     val onTodoistClearClicked: () -> Unit = {
         viewModel.clearAccessToken()
+    }
+    if (todoistAuthFinished) {
+        viewModel.loadAccessToken()
     }
 
     AlertDialog(
@@ -113,6 +115,7 @@ private fun SettingDialogTodoistExtensionRow(
 @Preview
 fun SettingDialogPreview() {
     SettingDialog(
+        todoistAuthFinished = false,
         onDismiss = {},
         onTodoistClicked = {}
     )
