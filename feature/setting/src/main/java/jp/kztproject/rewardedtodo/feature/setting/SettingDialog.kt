@@ -27,7 +27,6 @@ fun SettingDialog(
     onTodoistAuthStartClicked: () -> Unit,
     viewModel: SettingViewModel = hiltViewModel()
 ) {
-    val configuration = LocalConfiguration.current
     val todoistExtensionEnabled = viewModel.hasAccessToken.collectAsState()
     val onTodoistAuthClearClicked: () -> Unit = {
         viewModel.clearAccessToken()
@@ -35,6 +34,23 @@ fun SettingDialog(
     if (todoistAuthFinished) {
         viewModel.loadAccessToken()
     }
+
+    SettingDialog(
+        todoistExtensionEnabled.value,
+        onTodoistAuthStartClicked,
+        onTodoistAuthClearClicked,
+        onDismiss,
+    )
+}
+
+@Composable
+private fun SettingDialog(
+    todoistExtensionEnabled: Boolean,
+    onTodoistAuthStartClicked: () -> Unit,
+    onTodoistAuthClearClicked: () -> Unit,
+    onDismiss: () -> Unit,
+) {
+    val configuration = LocalConfiguration.current
 
     AlertDialog(
         title = {
@@ -48,7 +64,7 @@ fun SettingDialog(
                 Divider(Modifier.padding(vertical = 8.dp))
                 SettingDialogSectionTitle(text = stringResource(R.string.extensions_section))
                 SettingDialogTodoistExtensionRow(
-                    todoistExtensionEnabled = todoistExtensionEnabled.value,
+                    todoistExtensionEnabled = todoistExtensionEnabled,
                     onTodoistClicked = onTodoistAuthStartClicked,
                     onTodoistClearClicked = onTodoistAuthClearClicked,
                 )
@@ -115,8 +131,9 @@ private fun SettingDialogTodoistExtensionRow(
 @Preview
 fun SettingDialogPreview() {
     SettingDialog(
-        todoistAuthFinished = false,
-        onDismiss = {},
-        onTodoistAuthStartClicked = {}
+        todoistExtensionEnabled = false,
+        onTodoistAuthStartClicked = {},
+        onTodoistAuthClearClicked = {},
+        onDismiss = {}
     )
 }
