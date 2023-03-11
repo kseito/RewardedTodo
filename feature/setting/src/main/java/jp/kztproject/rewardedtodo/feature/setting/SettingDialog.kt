@@ -30,6 +30,9 @@ fun SettingDialog(
 ) {
     val configuration = LocalConfiguration.current
     val todoistExtensionEnabled = viewModel.hasAccessToken.collectAsState()
+    val onTodoistClearClicked: () -> Unit = {
+        viewModel.clearAccessToken()
+    }
 
     AlertDialog(
         title = {
@@ -44,7 +47,8 @@ fun SettingDialog(
                 SettingDialogSectionTitle(text = stringResource(R.string.extensions_section))
                 SettingDialogTodoistExtensionRow(
                     todoistExtensionEnabled = todoistExtensionEnabled.value,
-                    onTodoistClicked = onTodoistClicked
+                    onTodoistClicked = onTodoistClicked,
+                    onTodoistClearClicked = onTodoistClearClicked,
                 )
             }
         },
@@ -75,6 +79,7 @@ private fun SettingDialogSectionTitle(text: String) {
 @Composable
 private fun SettingDialogTodoistExtensionRow(
     onTodoistClicked: () -> Unit,
+    onTodoistClearClicked: () -> Unit,
     todoistExtensionEnabled: Boolean
 ) {
     Box(
@@ -83,7 +88,13 @@ private fun SettingDialogTodoistExtensionRow(
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(),
-                onClick = onTodoistClicked
+                onClick = {
+                    if (todoistExtensionEnabled) {
+                        onTodoistClearClicked()
+                    } else {
+                        onTodoistClicked()
+                    }
+                }
             )
     ) {
         Text(text = stringResource(R.string.todoist_extension_title))
