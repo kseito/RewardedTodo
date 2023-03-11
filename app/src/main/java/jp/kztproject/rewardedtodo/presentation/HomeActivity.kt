@@ -32,12 +32,6 @@ class HomeActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-//        val onSettingClicked = {
-//            // TODO show SettingScreen
-//            Toast.makeText(this, "Swho SettingScreen", Toast.LENGTH_LONG).show()
-//        }
-
         setContent {
             val navController = rememberNavController()
             val topLevelDestinations = TopLevelDestination.values().asList()
