@@ -24,12 +24,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun SettingDialog(
     todoistAuthFinished: Boolean,
     onDismiss: () -> Unit,
-    onTodoistClicked: () -> Unit,
+    onTodoistAuthStartClicked: () -> Unit,
     viewModel: SettingViewModel = hiltViewModel()
 ) {
     val configuration = LocalConfiguration.current
     val todoistExtensionEnabled = viewModel.hasAccessToken.collectAsState()
-    val onTodoistClearClicked: () -> Unit = {
+    val onTodoistAuthClearClicked: () -> Unit = {
         viewModel.clearAccessToken()
     }
     if (todoistAuthFinished) {
@@ -49,8 +49,8 @@ fun SettingDialog(
                 SettingDialogSectionTitle(text = stringResource(R.string.extensions_section))
                 SettingDialogTodoistExtensionRow(
                     todoistExtensionEnabled = todoistExtensionEnabled.value,
-                    onTodoistClicked = onTodoistClicked,
-                    onTodoistClearClicked = onTodoistClearClicked,
+                    onTodoistClicked = onTodoistAuthStartClicked,
+                    onTodoistClearClicked = onTodoistAuthClearClicked,
                 )
             }
         },
@@ -117,6 +117,6 @@ fun SettingDialogPreview() {
     SettingDialog(
         todoistAuthFinished = false,
         onDismiss = {},
-        onTodoistClicked = {}
+        onTodoistAuthStartClicked = {}
     )
 }

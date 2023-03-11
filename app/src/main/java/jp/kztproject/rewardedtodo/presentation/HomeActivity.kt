@@ -78,7 +78,7 @@ class HomeActivity : ComponentActivity() {
                     onDismiss = {
                         showSettingDialog = false
                     },
-                    onTodoistClicked = {
+                    onTodoistAuthStartClicked = {
                         val intent = Intent(context, TodoistAuthActivity::class.java)
                         context.startActivity(intent)
                         launcher.launch(intent)
