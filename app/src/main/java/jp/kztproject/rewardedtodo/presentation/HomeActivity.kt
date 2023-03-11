@@ -69,12 +69,12 @@ class HomeActivity : ComponentActivity() {
             }
 
             if (showSettingDialog) {
-                var settingFinished by remember { mutableStateOf(false) }
+                var todoistAuthFinished by remember { mutableStateOf(false) }
                 val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                    settingFinished = true
+                    todoistAuthFinished = true
                 }
                 SettingDialog(
-                    todoistAuthFinished = settingFinished,
+                    todoistAuthFinished = todoistAuthFinished,
                     onDismiss = {
                         showSettingDialog = false
                     },
