@@ -6,10 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.* // ktlint-disable
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.*
+import androidx.compose.runtime.* // ktlint-disable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
@@ -64,9 +64,12 @@ class HomeActivity : ComponentActivity() {
 
             if (showSettingDialog) {
                 var todoistAuthFinished by remember { mutableStateOf(false) }
-                val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-                    todoistAuthFinished = true
-                }
+                val launcher =
+                    rememberLauncherForActivityResult(
+                        ActivityResultContracts.StartActivityForResult()
+                    ) {
+                        todoistAuthFinished = true
+                    }
                 SettingDialog(
                     todoistAuthFinished = todoistAuthFinished,
                     onDismiss = {
