@@ -33,6 +33,9 @@ class TodoistAuthActivity : AppCompatActivity(),
         binding = DataBindingUtil.setContentView(this, R.layout.activity_todoist_auth)
 
         binding.webView.loadUrl("https://todoist.com/oauth/authorize?client_id=$clientId&scope=data:read_write&state=$clientSecret")
+        // TODO need following setting to open above URL
+        binding.webView.settings.javaScriptEnabled = true
+        binding.webView.settings.domStorageEnabled = true
         binding.webView.webViewClient = TodoistAuthWebViewClient(this)
     }
 

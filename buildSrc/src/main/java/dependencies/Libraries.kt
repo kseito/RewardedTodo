@@ -15,12 +15,12 @@ object Libraries {
     }
 
     object AndroidX {
-        const val appCompat = "androidx.appcompat:appcompat:1.3.1"
+        const val appCompat = "androidx.appcompat:appcompat:1.6.0"
         const val activityCompose = "androidx.activity:activity-compose:1.3.1"
-        const val design = "com.google.android.material:material:1.0.0"
+        const val design = "com.google.android.material:material:1.8.0"
         const val fragment = "androidx.fragment:fragment-ktx:1.3.0"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
-        const val coreKtx = "androidx.core:core-ktx:1.3.2"
+        const val coreKtx = "androidx.core:core-ktx:1.9.0"
         const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
         const val preference = "androidx.preference:preference-ktx:1.1.1"
 
@@ -102,7 +102,7 @@ object Libraries {
     }
 
     object Test {
-        const val junit = "junit:junit:4.13.1"
+        const val junit = "junit:junit:4.13.2"
         const val androidXCore = "androidx.test:core:1.2.0"
         const val androidArchCore = "androidx.arch.core:core-testing:2.1.0"
         const val mockito = "org.mockito:mockito-core:3.11.1"

@@ -28,9 +28,7 @@ class TodoListViewModel @Inject constructor(
         .asLiveData()
 
     val error = MutableLiveData<Result<Unit>?>()
-
-    fun initialize() {
-
+    init {
         viewModelScope.launch(Dispatchers.Default) {
             try {
                 fetchTodoListUseCase.execute()
