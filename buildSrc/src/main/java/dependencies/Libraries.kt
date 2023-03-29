@@ -3,7 +3,7 @@ package dependencies
 @Suppress("MayBeConstant")
 object Libraries {
     object Kotlin {
-        const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${GradlePlugins.Kotlin.version}"
+        const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${GradlePlugins.Kotlin.version}"
 
         object Coroutines {
             const val version = "1.6.4"
@@ -25,12 +25,12 @@ object Libraries {
         const val preference = "androidx.preference:preference-ktx:1.1.1"
 
         object Compose {
-            const val compilerVersion = "1.3.2"
-            const val foundation = "androidx.compose.foundation:foundation:1.3.0"
-            const val material = "androidx.compose.material:material:1.3.0"
-            const val ui = "androidx.compose.ui:ui:1.3.0"
-            const val uiTooling = "androidx.compose.ui:ui-tooling:1.3.0"
-            const val liveData = "androidx.compose.runtime:runtime-livedata:1.3.0"
+            const val compilerVersion = "1.4.4"
+            const val foundation = "androidx.compose.foundation:foundation:1.4.0"
+            const val material = "androidx.compose.material:material:1.4.0"
+            const val ui = "androidx.compose.ui:ui:1.4.0"
+            const val uiTooling = "androidx.compose.ui:ui-tooling:1.4.0"
+            const val liveData = "androidx.compose.runtime:runtime-livedata:1.4.0"
             const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
             const val material3 = "androidx.compose.material3:material3:1.0.1"
             const val hiltNavigationCompose = "androidx.hilt:hilt-navigation-compose:1.0.0"
@@ -67,7 +67,7 @@ object Libraries {
     }
 
     object Dagger {
-        private const val version = "2.42"
+        private const val version = "2.44"
         const val core = "com.google.dagger:dagger:${version}"
         const val compiler = "com.google.dagger:dagger-compiler:${version}"
         const val hilt = "com.google.dagger:hilt-android:${GradlePlugins.Hilt.version}"
