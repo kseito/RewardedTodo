@@ -119,12 +119,15 @@ private fun TodoDetailBottomSheetContent(
         )
         Button(
             onClick = {
-                val editingTodo = EditingTodo(
-                    id = id,
-                    name = title,
-                    numberOfTicketsObtained = numberOfTicket.value.toFloat()
-                )
-                onTodoSaveSelected(editingTodo)
+                todo?.let {
+                    val editingTodo = EditingTodo.from(it)
+                        .copy(
+                            id = id,
+                            name = title,
+                            numberOfTicketsObtained = numberOfTicket.value.toFloat()
+                        )
+                    onTodoSaveSelected(editingTodo)
+                }
             },
             modifier = Modifier
                 .padding(end = 8.dp)
@@ -137,11 +140,7 @@ private fun TodoDetailBottomSheetContent(
         todo?.let {
             Button(
                 onClick = {
-                    val editingTodo = EditingTodo(
-                        id = id,
-                        name = title,
-                        numberOfTicketsObtained = numberOfTicket.value.toFloat()
-                    )
+                    val editingTodo = EditingTodo.from(todo)
                     onTodoDeleteSelected(editingTodo)
                 },
                 modifier = Modifier
