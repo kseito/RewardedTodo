@@ -11,6 +11,7 @@ apply from: rootProject.file('gradle/android_common.gradle')
 dependencies {
 
     implementation Libraries.Kotlin.stdlib
+    implementation Libraries.AndroidX.appCompat
 
     //Dagger
     implementation Libraries.Dagger.core
@@ -41,7 +42,6 @@ dependencies {
     testImplementation project(path: ':test:reward')
 
     implementation project(path: ':domain:reward')
-    implementation project(path: ':screen_transition')
 }
 
 android {

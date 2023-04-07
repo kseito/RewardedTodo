@@ -116,7 +116,6 @@ dependencies {
 
     implementation Libraries.Moshi.moshi
 
-    implementation project(path: ':screen_transition')
     implementation project(path: ':presentation:todo')
     implementation project(path: ':presentation:reward')
     implementation project(path: ':presentation:auth')
