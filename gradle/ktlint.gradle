@@ -1,0 +1,10 @@
+import dependencies.GradlePlugins
+
+ktlint {
+    version = GradlePlugins.Ktlint.version
+    android = true
+    reporters {
+        reporter "checkstyle"
+    }
+    ignoreFailures = true
+}
