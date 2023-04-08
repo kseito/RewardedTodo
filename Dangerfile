@@ -12,6 +12,8 @@
 # fail("fdescribe left in tests") if `grep -r fdescribe specs/ `.length > 1
 # fail("fit left in tests") if `grep -r fit specs/ `.length > 1
 
+github.dismiss_out_of_range_messages
+
 # Android Lint Setting
 android_lint.skip_gradle_task = true
 android_lint.filtering = true
@@ -22,10 +24,8 @@ Dir["**/build/reports/lint-results-debug.xml"].each do |file|
 end
 
 # ktlint Setting
-github.dismiss_out_of_range_messages
 checkstyle_format.base_path = Dir.pwd
 # support multi module
 Dir["**/build/reports/ktlint/ktlintMainSourceSetCheck/ktlintMainSourceSetCheck.xml"].each do |file|
     checkstyle_format.report file
-    puts file
 end
