@@ -10,7 +10,7 @@ This app is composed with MVVM Architecture and separate each layer by multi mod
 
 ## Libraries
 This app use folloing libraries.
-- DataBinding
+- Jetpack Compose
 - Retrofit2
 - Dagger Hilt
 - Android Architecture Component(Room, Navigation)
