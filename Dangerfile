@@ -27,4 +27,5 @@ checkstyle_format.base_path = Dir.pwd
 # support multi module
 Dir["**/build/reports/ktlint/ktlintMainSourceSetCheck/ktlintMainSourceSetCheck.xml"].each do |file|
     checkstyle_format.report file
+    puts file
 end

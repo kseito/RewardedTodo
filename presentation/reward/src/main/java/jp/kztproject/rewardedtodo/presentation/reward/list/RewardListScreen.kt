@@ -54,7 +54,7 @@ fun RewardListScreenWithBottomSheet(
                 name = title,
                 description = description,
                 probability = if (chanceOfWinning.isNullOrEmpty()) null else chanceOfWinning.toFloat(),
-                needRepeat = repeat
+                needRepeat = repeat,
             )
             viewModel.saveReward(reward)
         }
