@@ -35,7 +35,7 @@ import kotlinx.coroutines.launch
 @ExperimentalMaterialApi
 @Composable
 fun RewardListScreenWithBottomSheet(
-    viewModel: RewardListViewModel = hiltViewModel()
+    viewModel: RewardListViewModel = hiltViewModel(),
 ) {
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
