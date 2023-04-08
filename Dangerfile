@@ -14,9 +14,11 @@
 
 # Android Lint Setting
 android_lint.gradle_task = "lintDebug"
-android_lint.report_file = "app/build/reports/lint-results-debug.xml"
 android_lint.filtering = true
-android_lint.lint(inline_mode: true)
+Dir["**/build/reports/lint-results-debug.xml"].each do |file|
+  android_lint.report_file = file
+  android_lint.lint(inline_mode: true)
+end
 
 # ktlint Setting
 github.dismiss_out_of_range_messages

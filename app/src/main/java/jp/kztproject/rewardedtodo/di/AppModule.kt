@@ -11,18 +11,12 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import jp.kztproject.rewardedtodo.common.kvs.EncryptedStore
-import project.seito.screen_transition.IFragmentsTransitionManager
-import project.seito.screen_transition.preference.PrefsWrapper
 import javax.inject.Named
 import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
 internal class AppModule {
-
-    @Provides
-    @Singleton
-    fun providesPrefsWrapper(@ApplicationContext context: Context): PrefsWrapper = PrefsWrapper(context)
 
     @Provides
     @Singleton
@@ -45,8 +39,4 @@ internal class AppModule {
                 EncryptedSharedPreferences.PrefValueEncryptionScheme.AES256_GCM
         )
     }
-
-    @Provides
-    @Singleton
-    fun providesFragmentsInitializer(fragmentsInitializer: FragmentsTransitionManager): IFragmentsTransitionManager = fragmentsInitializer
 }

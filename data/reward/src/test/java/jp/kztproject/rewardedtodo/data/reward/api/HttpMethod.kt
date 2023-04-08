@@ -1,4 +1,4 @@
-package project.seito.screen_transition.api
+package jp.kztproject.rewardedtodo.data.reward.api
 
 class HttpMethod {
     companion object {

@@ -21,7 +21,6 @@ android {
 }
 
 dependencies {
-    implementation project(path: ':screen_transition')
     implementation project(path: ':feature:todo')
     implementation project(path: ':common:ui')
     implementation project(path: ':presentation:common')
