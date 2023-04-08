@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'dagger.hilt.android.plugin'
+    id 'org.jlleitschuh.gradle.ktlint'
 }
 
 apply from: rootProject.file('gradle/android_common.gradle')
@@ -40,3 +41,5 @@ dependencies {
     implementation Libraries.Dagger.hilt
     kapt Libraries.Dagger.hiltCompiler
 }
+
+apply from: rootProject.file('gradle/ktlint.gradle')
