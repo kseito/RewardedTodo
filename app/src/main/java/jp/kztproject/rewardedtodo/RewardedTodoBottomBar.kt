@@ -11,7 +11,7 @@ import androidx.compose.ui.res.stringResource
 @Composable
 fun RewardedTodoBottomBar(
     topLevelDestinations: List<TopLevelDestination>,
-    onNavigateToDestination: (TopLevelDestination) -> Unit
+    onNavigateToDestination: (TopLevelDestination) -> Unit,
 ) {
     NavigationBar() {
         topLevelDestinations.forEach { destination ->
