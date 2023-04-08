@@ -15,6 +15,7 @@
 # Android Lint Setting
 android_lint.gradle_task = "lintDebug"
 android_lint.filtering = true
+# support multi module
 Dir["**/build/reports/lint-results-debug.xml"].each do |file|
   android_lint.report_file = file
   android_lint.lint(inline_mode: true)
@@ -23,4 +24,7 @@ end
 # ktlint Setting
 github.dismiss_out_of_range_messages
 checkstyle_format.base_path = Dir.pwd
-checkstyle_format.report 'app/build/reports/ktlint/ktlintMainSourceSetCheck/ktlintMainSourceSetCheck.xml'
+# support multi module
+Dir["**/build/reports/ktlint/ktlintMainSourceSetCheck/ktlintMainSourceSetCheck.xml"].each do |file|
+    checkstyle_format.report file
+end
