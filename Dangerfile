@@ -13,7 +13,7 @@
 # fail("fit left in tests") if `grep -r fit specs/ `.length > 1
 
 # Android Lint Setting
-android_lint.gradle_task = "lintDebug"
+android_lint.skip_gradle_task = true
 android_lint.filtering = true
 # support multi module
 Dir["**/build/reports/lint-results-debug.xml"].each do |file|

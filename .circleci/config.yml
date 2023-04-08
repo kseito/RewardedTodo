@@ -27,7 +27,7 @@ jobs:
       - run:
           name: Static Code Analytics
           command: |
-            ./gradlew ktlintCheck
+            ./gradlew lintDebug ktlintCheck
             bundle config set path 'vendor/bundle'
             bundle install
             bundle exec danger
