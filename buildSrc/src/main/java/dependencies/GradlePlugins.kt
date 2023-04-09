@@ -10,6 +10,9 @@ object GradlePlugins {
     object Hilt {
         const val version = "2.44"
     }
+    object Ktlint {
+        const val version = "0.48.2"
+    }
     object KtlintGradle {
         const val version = "11.1.0"
     }
