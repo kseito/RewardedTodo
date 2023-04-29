@@ -127,6 +127,13 @@ private fun TodoDetailBottomSheetContent(
                             numberOfTicketsObtained = numberOfTicket.value.toFloat()
                         )
                     onTodoSaveSelected(editingTodo)
+                } ?: run {
+                    val editingTodo = EditingTodo(
+                        id = id,
+                        name = title,
+                        numberOfTicketsObtained = numberOfTicket.value.toFloat()
+                    )
+                    onTodoSaveSelected(editingTodo)
                 }
             },
             modifier = Modifier
