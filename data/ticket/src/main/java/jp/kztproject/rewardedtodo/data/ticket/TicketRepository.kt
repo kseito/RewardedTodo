@@ -30,14 +30,16 @@ class TicketRepository @Inject constructor(
         }
     }
 
-    override fun consumeTicket() {
-        val current = 0f //FIXME
-        if (current < NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY) {
-            throw LackOfTicketsException()
+    override suspend fun consumeTicket() {
+        datastore.edit { settings ->
+            val numberOfTicketKey = floatPreferencesKey(NUMBER_OF_TICKET)
+            val currentNumberOfTicket = settings[numberOfTicketKey] ?: 0f
+
+            if (currentNumberOfTicket < NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY) {
+                throw LackOfTicketsException()
+            }
+            settings[numberOfTicketKey] = currentNumberOfTicket - NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY
         }
-        preferences.edit()
-                .putFloat(NUMBER_OF_TICKET, current - NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY)
-                .apply()
     }
 
     override suspend fun getNumberOfTicket(): Flow<Float> {
