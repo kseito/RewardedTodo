@@ -1,6 +1,5 @@
 package jp.kztproject.rewardedtodo.data.ticket
 
-import android.content.SharedPreferences
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
@@ -9,10 +8,8 @@ import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-import javax.inject.Named
 
 class TicketRepository @Inject constructor(
-        @Named("default") private val preferences: SharedPreferences,
         private val datastore: DataStore<Preferences>
 ) : ITicketRepository {
 

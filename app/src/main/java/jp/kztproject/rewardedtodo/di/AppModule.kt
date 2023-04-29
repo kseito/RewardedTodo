@@ -7,7 +7,6 @@ import androidx.datastore.preferences.SharedPreferencesMigration
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.preferencesDataStoreFile
-import androidx.preference.PreferenceManager
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
 import dagger.Module
@@ -25,13 +24,6 @@ internal class AppModule {
 
     companion object {
         private const val USER_PREFERENCES_NAME = "user_preferences"
-    }
-
-    @Provides
-    @Singleton
-    @Named("default")
-    fun provideSharedPreferences(@ApplicationContext context: Context): SharedPreferences {
-        return PreferenceManager.getDefaultSharedPreferences(context)
     }
 
     @Provides
