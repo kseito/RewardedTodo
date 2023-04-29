@@ -7,6 +7,6 @@ interface ITicketRepository {
 
     suspend fun consumeTicket()
 
-    //TODO change return type to domain model
+    // TODO change return type to domain model
     suspend fun getNumberOfTicket(): Flow<Float>
 }

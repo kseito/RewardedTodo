@@ -4,10 +4,10 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
+import javax.inject.Inject
 import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
 class TicketRepository @Inject constructor(
     private val datastore: DataStore<Preferences>
@@ -16,7 +16,7 @@ class TicketRepository @Inject constructor(
     companion object {
         private const val NUMBER_OF_TICKET = "number_of_ticket"
 
-        //TODO put into domain layer
+        // TODO put into domain layer
         private const val NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY = 1
     }
 
