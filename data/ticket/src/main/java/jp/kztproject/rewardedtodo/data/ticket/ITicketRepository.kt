@@ -3,7 +3,7 @@ package jp.kztproject.rewardedtodo.data.ticket
 import kotlinx.coroutines.flow.Flow
 
 interface ITicketRepository {
-    fun addTicket(numberOfTicket: Float)
+    suspend fun addTicket(numberOfTicket: Float)
 
     fun consumeTicket()
 

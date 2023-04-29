@@ -3,6 +3,7 @@ package jp.kztproject.rewardedtodo.data.ticket
 import android.content.SharedPreferences
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.floatPreferencesKey
 import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
 import kotlinx.coroutines.flow.Flow
@@ -21,11 +22,12 @@ class TicketRepository @Inject constructor(
         private const val NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY = 1
     }
 
-    override fun addTicket(numberOfTicket: Float) {
-        val current = 0f //FIXME
-        preferences.edit()
-                .putFloat(NUMBER_OF_TICKET, current + numberOfTicket)
-                .apply()
+    override suspend fun addTicket(numberOfTicket: Float) {
+        datastore.edit { settings ->
+            val numberOfTicketKey = floatPreferencesKey(NUMBER_OF_TICKET)
+            val currentNumberOfTicket = settings[numberOfTicketKey] ?: 0f
+            settings[numberOfTicketKey] = currentNumberOfTicket + numberOfTicket
+        }
     }
 
     override fun consumeTicket() {
