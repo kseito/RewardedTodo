@@ -10,11 +10,12 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class TicketRepository @Inject constructor(
-        private val datastore: DataStore<Preferences>
+    private val datastore: DataStore<Preferences>
 ) : ITicketRepository {
 
     companion object {
         private const val NUMBER_OF_TICKET = "number_of_ticket"
+
         //TODO put into domain layer
         private const val NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY = 1
     }
@@ -40,7 +41,7 @@ class TicketRepository @Inject constructor(
     }
 
     override suspend fun getNumberOfTicket(): Flow<Float> {
-        return datastore.data.map {preferences ->
+        return datastore.data.map { preferences ->
             val numberOfTicket = floatPreferencesKey(NUMBER_OF_TICKET)
             preferences[numberOfTicket] ?: 0f
         }
