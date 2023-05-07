@@ -68,7 +68,7 @@ class RewardListViewModelTest {
     @Test
     fun testLoadPoint() = runTest {
         val dummyPoint = DummyCreator.createDummyRewardPoint()
-        whenever(mockGetPointUseCase.execute()).thenReturn(dummyPoint)
+        whenever(mockGetPointUseCase.execute()).thenReturn(flowOf( dummyPoint))
         viewModel.loadPoint()
 
         assertThat(viewModel.rewardPoint.value).isEqualTo(10)

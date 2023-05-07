@@ -5,7 +5,11 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import jp.kztproject.rewardedtodo.application.reward.usecase.*
+import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
@@ -59,8 +63,9 @@ class RewardListViewModel @Inject constructor(
 
     fun loadPoint() {
         viewModelScope.launch {
-            val point = getPointUseCase.execute()
-            mutableRewardPoint.value = point.value
+            getPointUseCase.execute().collect {
+                mutableRewardPoint.value = it.value
+            }
         }
     }
 

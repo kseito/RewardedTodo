@@ -16,6 +16,7 @@ dependencies {
     implementation Libraries.AndroidX.appCompat
     implementation Libraries.AndroidX.coreKtx
     implementation Libraries.AndroidX.design
+    implementation Libraries.AndroidX.dataStore
 
     testImplementation Libraries.Test.junit
 

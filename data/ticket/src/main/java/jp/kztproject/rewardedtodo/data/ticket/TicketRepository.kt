@@ -1,38 +1,49 @@
 package jp.kztproject.rewardedtodo.data.ticket
 
-import android.content.SharedPreferences
-import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.floatPreferencesKey
 import javax.inject.Inject
-import javax.inject.Named
+import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 
 class TicketRepository @Inject constructor(
-        @Named("default") private val preferences: SharedPreferences
+    private val datastore: DataStore<Preferences>
 ) : ITicketRepository {
 
     companion object {
         private const val NUMBER_OF_TICKET = "number_of_ticket"
-        //TODO put into domain layer
+
+        // TODO put into domain layer
         private const val NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY = 1
     }
 
-    override fun addTicket(numberOfTicket: Float) {
-        val current = getNumberOfTicket()
-        preferences.edit()
-                .putFloat(NUMBER_OF_TICKET, current + numberOfTicket)
-                .apply()
-    }
-
-    override fun consumeTicket() {
-        val current = getNumberOfTicket()
-        if (current < NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY) {
-            throw LackOfTicketsException()
+    override suspend fun addTicket(numberOfTicket: Float) {
+        datastore.edit { settings ->
+            val numberOfTicketKey = floatPreferencesKey(NUMBER_OF_TICKET)
+            val currentNumberOfTicket = settings[numberOfTicketKey] ?: 0f
+            settings[numberOfTicketKey] = currentNumberOfTicket + numberOfTicket
         }
-        preferences.edit()
-                .putFloat(NUMBER_OF_TICKET, current - NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY)
-                .apply()
     }
 
-    override fun getNumberOfTicket(): Float {
-        return preferences.getFloat(NUMBER_OF_TICKET, 0F)
+    override suspend fun consumeTicket() {
+        datastore.edit { settings ->
+            val numberOfTicketKey = floatPreferencesKey(NUMBER_OF_TICKET)
+            val currentNumberOfTicket = settings[numberOfTicketKey] ?: 0f
+
+            if (currentNumberOfTicket < NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY) {
+                throw LackOfTicketsException()
+            }
+            settings[numberOfTicketKey] = currentNumberOfTicket - NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY
+        }
+    }
+
+    override suspend fun getNumberOfTicket(): Flow<Float> {
+        return datastore.data.map { preferences ->
+            val numberOfTicket = floatPreferencesKey(NUMBER_OF_TICKET)
+            preferences[numberOfTicket] ?: 0f
+        }
     }
 }
