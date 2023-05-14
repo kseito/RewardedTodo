@@ -8,7 +8,7 @@ data class TodoEntity(
     @PrimaryKey(autoGenerate = true) val id: Long,
     val todoistId: Long?,
     val name: String,
-    val numberOfTicketsObtained: Float,
+    val numberOfTicketsObtained: Int,
     val isRepeat: Boolean,
     val isDone: Boolean
 ) {

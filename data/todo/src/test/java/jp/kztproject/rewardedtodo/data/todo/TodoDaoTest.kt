@@ -19,9 +19,9 @@ class TodoDaoTest {
 
     private lateinit var database: AppDatabase
     private val dummyTodoList = listOf(
-        TodoEntity(1, 101, "test 1", 1.0f, isRepeat = true, isDone = false),
-        TodoEntity(2, 102, "test 2", 2.0f, isRepeat = true, isDone = false),
-        TodoEntity(3, 103, "test 3", 1.2f, isRepeat = true, isDone = false)
+        TodoEntity(1, 101, "test 1", 1, isRepeat = true, isDone = false),
+        TodoEntity(2, 102, "test 2", 2, isRepeat = true, isDone = false),
+        TodoEntity(3, 103, "test 3", 1, isRepeat = true, isDone = false)
     )
 
     @Before
@@ -49,7 +49,7 @@ class TodoDaoTest {
         actual[0].run {
             assertThat(id).isEqualTo(1)
             assertThat(name).isEqualTo("test 1")
-            assertThat(numberOfTicketsObtained).isEqualTo(1.0f)
+            assertThat(numberOfTicketsObtained).isEqualTo(1)
             assertThat(isRepeat).isTrue()
         }
     }
