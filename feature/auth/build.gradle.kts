@@ -39,6 +39,8 @@ dependencies {
     kapt(Libraries.Dagger.compiler)
     implementation(Libraries.Dagger.hilt)
     kapt(Libraries.Dagger.hiltCompiler)
+
+    testImplementation(Libraries.Test.junit)
 }
 
 apply(from = rootProject.file("gradle/ktlint.gradle"))
