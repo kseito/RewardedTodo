@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.presentation.auth.todoist
+package jp.kztproject.rewardedtodo.feature.auth
 
 import android.os.Bundle
 import android.widget.Toast
@@ -6,14 +6,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import dagger.hilt.android.AndroidEntryPoint
-import jp.kztproject.rewardedtodo.presentation.auth.BuildConfig
-import jp.kztproject.rewardedtodo.presentation.auth.R
-import jp.kztproject.rewardedtodo.presentation.auth.databinding.ActivityTodoistAuthBinding
+import jp.kztproject.rewardedtodo.feature.auth.databinding.ActivityTodoistAuthBinding
 
 @AndroidEntryPoint
 class TodoistAuthActivity : AppCompatActivity(),
-        TodoistAuthWebViewClient.AuthResultListener,
-        TodoistAuthViewModel.Callback {
+    TodoistAuthWebViewClient.AuthResultListener,
+    TodoistAuthViewModel.Callback {
 
     private lateinit var binding: ActivityTodoistAuthBinding
 

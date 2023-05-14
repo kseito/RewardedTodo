@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.presentation.auth.todoist
+package jp.kztproject.rewardedtodo.feature.auth
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
