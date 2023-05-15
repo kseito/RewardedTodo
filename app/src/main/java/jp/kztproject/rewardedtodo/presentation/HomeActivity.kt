@@ -19,8 +19,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.RewardedTodoBottomBar
 import jp.kztproject.rewardedtodo.TopBar
 import jp.kztproject.rewardedtodo.TopLevelDestination
+import jp.kztproject.rewardedtodo.feature.auth.TodoistAuthActivity
 import jp.kztproject.rewardedtodo.feature.setting.SettingDialog
-import jp.kztproject.rewardedtodo.presentation.auth.todoist.TodoistAuthActivity
 import jp.kztproject.rewardedtodo.presentation.reward.REWARD_SCREEN
 import jp.kztproject.rewardedtodo.presentation.reward.rewardListScreen
 import jp.kztproject.rewardedtodo.presentation.todo.TODO_SCREEN

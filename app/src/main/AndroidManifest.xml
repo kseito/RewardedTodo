@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.auth.todoist.TodoistAuthActivity"
+        <activity android:name=".feature.auth.TodoistAuthActivity"
             android:exported="false"/>
     </application>
 
