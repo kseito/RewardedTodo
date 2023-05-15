@@ -30,7 +30,7 @@ apply plugin: 'jacoco'
 jacoco {
     toolVersion = "0.8.8"
 }
-task jacocoMergeReports(type: JacocoMerge) {
+task jacocoMergeReports(type: JacocoReport) {
     group = 'Reporting'
     description = "Merge all JaCoCo reports from projects into one."
 
@@ -46,7 +46,7 @@ task jacocoTestReports(type: JacocoReport, dependsOn: 'jacocoMergeReports') {
     group = 'Reporting'
     description = "Generate Jacoco coverage reports for the build. Only unit tests."
 
-    executionData jacocoMergeReports.destinationFile
+    executionData jacocoMergeReports.executionData
 
     gradle.afterProject { p, state ->
         if (p.rootProject != p && p.plugins.hasPlugin('jacoco')) {
@@ -60,9 +60,9 @@ task jacocoTestReports(type: JacocoReport, dependsOn: 'jacocoMergeReports') {
     }
 
     reports {
-        xml.enabled true
-        html.enabled true
-        csv.enabled false
+        xml.required.set(true)
+        html.required.set(true)
+        csv.required.set(false)
 
         xml.destination file("${buildDir}/reports/jacoco/report.xml")
         html.destination file("${buildDir}/reports/jacoco/html")
