@@ -17,6 +17,7 @@ android {
     }
     buildFeatures {
         dataBinding = true
+        buildConfig = true
     }
     namespace = "jp.kztproject.rewardedtodo.feature.auth"
 }
