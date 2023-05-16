@@ -26,10 +26,6 @@
     <string name="error_empty_probability">Input chance of Winning</string>
     <string name="error_empty_tickets">No lottery tickets</string>
 
-    <!-- Home Menu -->
-    <string name="menu_todo">Todo</string>
-    <string name="menu_reward">Reward</string>
-
     <!-- Drawer Menu -->
     <string name="section_association">Association</string>
     <string name="menu_todoist">Todoist</string>
