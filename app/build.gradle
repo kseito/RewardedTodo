@@ -82,10 +82,11 @@ dependencies {
     implementation Libraries.AndroidX.design
     implementation Libraries.AndroidX.constraintLayout
     implementation Libraries.AndroidX.preference
+    implementation Libraries.AndroidX.dataStore
+    implementation Libraries.Stetho.stetho
     implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
     implementation Libraries.AndroidX.NavigationComponent.uiKtx
     implementation Libraries.AndroidX.Security.crypto
-    implementation Libraries.Stetho.stetho
 
     // Jetpack Compose
     implementation Libraries.AndroidX.Compose.foundation
@@ -118,7 +119,7 @@ dependencies {
 
     implementation project(path: ':presentation:todo')
     implementation project(path: ':presentation:reward')
-    implementation project(path: ':presentation:auth')
+    implementation project(path: ':feature:auth')
     implementation project(path: ':common:kvs')
 
     //TODO I don`t know why this module is needed

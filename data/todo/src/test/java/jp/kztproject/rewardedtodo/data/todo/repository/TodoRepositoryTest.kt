@@ -97,7 +97,7 @@ class TodoRepositoryTest {
                     1,
                     101,
                     "test_name1",
-                    1f,
+                    1,
                     isRepeat = true,
                     isDone = false
                 )
@@ -107,7 +107,7 @@ class TodoRepositoryTest {
                     2,
                     102,
                     "test_name2",
-                    1f,
+                    1,
                     isRepeat = true,
                     isDone = true
                 )
@@ -117,7 +117,7 @@ class TodoRepositoryTest {
                     3,
                     103,
                     "test_name3",
-                    1f,
+                    1,
                     isRepeat = true,
                     isDone = false
                 )

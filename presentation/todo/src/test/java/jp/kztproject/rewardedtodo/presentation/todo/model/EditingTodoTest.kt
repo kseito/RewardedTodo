@@ -10,7 +10,7 @@ class EditingTodoTest {
 
     @Test
     fun shouldBeValidWhenNameLengthIs1() {
-        val todo = EditingTodo(name = "test_todo", numberOfTicketsObtained = 1f)
+        val todo = EditingTodo(name = "test_todo", numberOfTicketsObtained = 1)
         todo.validate()
     }
 
@@ -28,19 +28,19 @@ class EditingTodoTest {
 
     @Test
     fun shouldBeValidWhenNumberOfTicketsIs100() {
-        val todo = EditingTodo(name = "test_todo", numberOfTicketsObtained = 100f)
+        val todo = EditingTodo(name = "test_todo", numberOfTicketsObtained = 100)
         todo.validate()
     }
 
     @Test(expected = InvalidNumberOfTicketsException::class)
     fun shouldNotBeValidWhenNumberOfTicketsIs0() {
-        val todo = EditingTodo(name = "test_todo", numberOfTicketsObtained = 0f)
+        val todo = EditingTodo(name = "test_todo", numberOfTicketsObtained = 0)
         todo.validate()
     }
 
     @Test(expected = InvalidNumberOfTicketsException::class)
     fun shouldNotBeValidWhenNumberOfTicketsIs101() {
-        val todo = EditingTodo(name = "test_todo", numberOfTicketsObtained = 101f)
+        val todo = EditingTodo(name = "test_todo", numberOfTicketsObtained = 101)
         todo.validate()
     }
 }

@@ -8,7 +8,7 @@
         android:name="jp.kztproject.rewardedtodo.MyApplication"
         android:allowBackup="false"
         android:fullBackupContent="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_app_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         tools:node="replace"
@@ -21,7 +21,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.auth.todoist.TodoistAuthActivity"
+        <activity android:name=".feature.auth.TodoistAuthActivity"
             android:exported="false"/>
     </application>
 

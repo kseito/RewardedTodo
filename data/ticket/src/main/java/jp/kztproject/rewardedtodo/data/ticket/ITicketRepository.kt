@@ -1,10 +1,12 @@
 package jp.kztproject.rewardedtodo.data.ticket
 
+import kotlinx.coroutines.flow.Flow
+
 interface ITicketRepository {
-    fun addTicket(numberOfTicket: Float)
+    suspend fun addTicket(numberOfTicket: Int)
 
-    fun consumeTicket()
+    suspend fun consumeTicket()
 
-    //TODO change return type to domain model
-    fun getNumberOfTicket(): Float
+    // TODO change return type to domain model
+    suspend fun getNumberOfTicket(): Flow<Int>
 }
