@@ -9,6 +9,7 @@ jobs:
     environment:
       JAVA_OPTS: -Xmx3584m
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx3584m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false -Dorg.gradle.parallel=false'
+    resource_class: medium+
     steps:
       - checkout
       - restore_cache:
