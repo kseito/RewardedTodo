@@ -2,13 +2,14 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cimg/android:2022.03
+      - image: cimg/android:2023.05
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
     environment:
       JAVA_OPTS: -Xmx3584m
-      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx3584m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false -Dorg.gradle.parallel=false'
+      GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx3584m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false -Dorg.gradle.parallel=false'
+    resource_class: medium+
     steps:
       - checkout
       - restore_cache:

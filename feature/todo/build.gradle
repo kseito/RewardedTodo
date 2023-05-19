@@ -27,5 +27,5 @@ dependencies {
 }
 
 android {
-    namespace 'jp.kztproject.rewardedtodo'
+    namespace 'jp.kztproject.rewardedtodo.feature.todo'
 }
