@@ -133,6 +133,7 @@ dependencies {
     implementation project(path: ':data:auth')
     implementation project(path: ':data:todoist')
     implementation project(path: ':application:reward')
+    implementation project(path: ':application:todo')
 }
 
 kapt {

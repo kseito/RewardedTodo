@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.todo.application
+package jp.kztproject.rewardedtodo.application.reward
 
 import kotlinx.coroutines.flow.Flow
 import jp.kztproject.rewardedtodo.todo.domain.Todo
