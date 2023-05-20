@@ -1,6 +1,5 @@
 include ':common:kvs'
 include ':data:auth'
-include ':presentation:reward'
 include ':application:reward'
 include ':test:reward'
 include ':data:reward'
