@@ -28,6 +28,7 @@
             <option value="$PROJECT_DIR$/data/todoist" />
             <option value="$PROJECT_DIR$/domain" />
             <option value="$PROJECT_DIR$/domain/reward" />
+            <option value="$PROJECT_DIR$/domain/todo" />
             <option value="$PROJECT_DIR$/feature" />
             <option value="$PROJECT_DIR$/feature/auth" />
             <option value="$PROJECT_DIR$/feature/reward" />
