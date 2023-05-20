@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.todo.application
+package jp.kztproject.rewardedtodo.application.reward
 
 import jp.kztproject.rewardedtodo.todo.domain.EditingTodo
 import jp.kztproject.rewardedtodo.todo.domain.repository.ITodoRepository

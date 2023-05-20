@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.todo.application
+package jp.kztproject.rewardedtodo.application.reward
 
 interface FetchTodoListUseCase {
 
