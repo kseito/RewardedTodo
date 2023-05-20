@@ -6,10 +6,10 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.* // ktlint-disable
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Scaffold
-import androidx.compose.runtime.* // ktlint-disable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
@@ -20,9 +20,9 @@ import jp.kztproject.rewardedtodo.RewardedTodoBottomBar
 import jp.kztproject.rewardedtodo.TopBar
 import jp.kztproject.rewardedtodo.TopLevelDestination
 import jp.kztproject.rewardedtodo.feature.auth.TodoistAuthActivity
+import jp.kztproject.rewardedtodo.feature.reward.REWARD_SCREEN
+import jp.kztproject.rewardedtodo.feature.reward.rewardListScreen
 import jp.kztproject.rewardedtodo.feature.setting.SettingDialog
-import jp.kztproject.rewardedtodo.presentation.reward.REWARD_SCREEN
-import jp.kztproject.rewardedtodo.presentation.reward.rewardListScreen
 import jp.kztproject.rewardedtodo.presentation.todo.TODO_SCREEN
 import jp.kztproject.rewardedtodo.presentation.todo.todoListScreen
 
