@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.presentation.reward.detail
+package jp.kztproject.rewardedtodo.feature.reward.detail
 
 import jp.kztproject.rewardedtodo.application.reward.model.error.RewardProbabilityEmptyException
 import jp.kztproject.rewardedtodo.application.reward.model.error.RewardTitleEmptyException

@@ -11,6 +11,12 @@ plugins {
 apply(from = rootProject.file("gradle/android_common.gradle"))
 
 android {
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Libraries.AndroidX.Compose.compilerVersion
+    }
     namespace = "jp.kztproject.rewardedtodo.presentation.reward"
 }
 

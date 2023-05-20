@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.presentation.reward.list
+package jp.kztproject.rewardedtodo.feature.reward.list
 
 import android.widget.Toast
 import androidx.compose.foundation.background
@@ -65,7 +65,7 @@ import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import jp.kztproject.rewardedtodo.domain.reward.RewardName
 import jp.kztproject.rewardedtodo.presentation.common.CommonAlertDialog
 import jp.kztproject.rewardedtodo.presentation.reward.R
-import jp.kztproject.rewardedtodo.presentation.reward.detail.ErrorMessageClassifier
+import jp.kztproject.rewardedtodo.feature.reward.detail.ErrorMessageClassifier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch

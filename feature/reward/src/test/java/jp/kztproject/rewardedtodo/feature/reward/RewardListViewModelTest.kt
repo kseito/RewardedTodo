@@ -1,6 +1,7 @@
-package jp.kztproject.rewardedtodo.presentation.reward.list
+package jp.kztproject.rewardedtodo.feature.reward
 
 import jp.kztproject.rewardedtodo.application.reward.usecase.*
+import jp.kztproject.rewardedtodo.feature.reward.list.RewardListViewModel
 import jp.kztproject.rewardedtodo.test.reward.DummyCreator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi

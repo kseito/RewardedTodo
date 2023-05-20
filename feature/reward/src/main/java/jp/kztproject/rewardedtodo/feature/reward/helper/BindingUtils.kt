@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.presentation.reward.helper
+package jp.kztproject.rewardedtodo.feature.reward.helper
 
 import androidx.databinding.InverseMethod
 
