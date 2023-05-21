@@ -117,7 +117,6 @@ dependencies {
 
     implementation Libraries.Moshi.moshi
 
-    implementation project(path: ':presentation:todo')
     implementation project(path: ':feature:reward')
     implementation project(path: ':feature:auth')
     implementation project(path: ':common:kvs')
