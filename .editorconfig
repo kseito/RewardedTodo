@@ -4,3 +4,4 @@ root = true
 [*.{kt,kts}]
 max_line_length = 120
 ktlint_standard_no-wildcard-imports = disabled
+ktlint_standard_import-ordering = disabled
