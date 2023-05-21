@@ -1,11 +1,11 @@
 package jp.kztproject.rewardedtodo.application.reward.usecase
 
-import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository
-import jp.kztproject.rewardedtodo.domain.reward.Reward
 import javax.inject.Inject
+import jp.kztproject.rewardedtodo.domain.reward.Reward
+import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository
 
 class DeleteRewardInteractor @Inject constructor(
-        private val rewardRepository: IRewardRepository
+    private val rewardRepository: IRewardRepository
 ) : DeleteRewardUseCase {
     override suspend fun execute(reward: Reward) {
         rewardRepository.delete(reward)
