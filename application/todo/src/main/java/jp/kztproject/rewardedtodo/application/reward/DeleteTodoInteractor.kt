@@ -1,7 +1,7 @@
 package jp.kztproject.rewardedtodo.application.reward
 
-import jp.kztproject.rewardedtodo.todo.domain.Todo
-import jp.kztproject.rewardedtodo.todo.domain.repository.ITodoRepository
+import jp.kztproject.rewardedtodo.domain.todo.Todo
+import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoRepository
 import javax.inject.Inject
 
 class DeleteTodoInteractor @Inject constructor(

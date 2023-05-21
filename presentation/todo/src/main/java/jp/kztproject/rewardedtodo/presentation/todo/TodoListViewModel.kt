@@ -11,8 +11,8 @@ import jp.kztproject.rewardedtodo.application.reward.DeleteTodoUseCase
 import jp.kztproject.rewardedtodo.application.reward.FetchTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.GetTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
-import jp.kztproject.rewardedtodo.todo.domain.EditingTodo
-import jp.kztproject.rewardedtodo.todo.domain.Todo
+import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
+import jp.kztproject.rewardedtodo.domain.todo.Todo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch

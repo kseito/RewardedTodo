@@ -1,6 +1,6 @@
-package jp.kztproject.rewardedtodo.todo.domain.repository
+package jp.kztproject.rewardedtodo.domain.todo.repository
 
-import jp.kztproject.rewardedtodo.todo.domain.Todo
+import jp.kztproject.rewardedtodo.domain.todo.Todo
 import kotlinx.coroutines.flow.Flow
 
 interface ITodoRepository {

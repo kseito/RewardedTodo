@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.todo.domain
+package jp.kztproject.rewardedtodo.domain.todo
 
 data class EditingTodo(
     var id: Long? = null,

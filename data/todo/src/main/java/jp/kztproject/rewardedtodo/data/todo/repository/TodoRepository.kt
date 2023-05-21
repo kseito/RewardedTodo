@@ -6,8 +6,8 @@ import jp.kztproject.rewardedtodo.data.todo.TodoDao
 import jp.kztproject.rewardedtodo.data.todo.TodoEntity
 import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
 import jp.kztproject.rewardedtodo.data.todoist.model.Task
-import jp.kztproject.rewardedtodo.todo.domain.Todo
-import jp.kztproject.rewardedtodo.todo.domain.repository.ITodoRepository
+import jp.kztproject.rewardedtodo.domain.todo.Todo
+import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

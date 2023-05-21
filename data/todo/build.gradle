@@ -38,7 +38,7 @@ dependencies {
     //Coroutines
     implementation Libraries.Kotlin.Coroutines.core
 
-    implementation project(path: ':feature:todo')
+    implementation project(path: ':domain:todo')
     implementation project(path: ':common:database')
     implementation project(path: ':common:kvs')
     implementation project(path: ':data:todoist')

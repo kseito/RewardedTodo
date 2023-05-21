@@ -5,7 +5,7 @@ import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import jp.kztproject.rewardedtodo.data.todo.repository.TodoRepository
-import jp.kztproject.rewardedtodo.todo.domain.repository.ITodoRepository
+import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoRepository
 
 @InstallIn(SingletonComponent::class)
 @Module
