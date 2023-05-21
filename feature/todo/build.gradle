@@ -7,9 +7,19 @@ apply plugin: 'jacoco'
 
 apply from: rootProject.file('gradle/android_common.gradle')
 
+android {
+    buildFeatures {
+        dataBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Libraries.AndroidX.Compose.compilerVersion
+    }
+    namespace 'jp.kztproject.rewardedtodo.feature.todo'
+}
+
 dependencies {
     //TODO need to reverse dependencies when todo module separate application layer and domain layer
-    implementation project(path: ':feature:todo')
     implementation project(path: ':application:todo')
     implementation project(path: ':domain:todo')
     implementation project(path: ':common:ui')
@@ -45,8 +55,4 @@ dependencies {
     kapt Libraries.Dagger.compiler
     implementation Libraries.Dagger.hilt
     kapt Libraries.Dagger.hiltCompiler
-}
-
-android {
-    namespace 'jp.kztproject.rewardedtodo.feature.todo'
 }
