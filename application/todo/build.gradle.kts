@@ -18,7 +18,7 @@ dependencies {
 
     //TODO need to reverse dependencies when todo module separate application layer and domain layer
     implementation(project(path = ":data:ticket"))
-    implementation(project(path = ":feature:todo"))
+    implementation(project(path = ":domain:todo"))
 
     implementation(Libraries.Kotlin.stdlib)
 

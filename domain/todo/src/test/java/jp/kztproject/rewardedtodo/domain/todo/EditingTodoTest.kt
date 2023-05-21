@@ -1,9 +1,5 @@
-package jp.kztproject.rewardedtodo.presentation.todo.model
+package jp.kztproject.rewardedtodo.domain.todo
 
-import jp.kztproject.rewardedtodo.todo.domain.EditingTodo
-import jp.kztproject.rewardedtodo.todo.domain.InvalidNumberOfTicketsException
-import jp.kztproject.rewardedtodo.todo.domain.NameEmptyException
-import jp.kztproject.rewardedtodo.todo.domain.NameLengthTooLongException
 import org.junit.Test
 
 class EditingTodoTest {

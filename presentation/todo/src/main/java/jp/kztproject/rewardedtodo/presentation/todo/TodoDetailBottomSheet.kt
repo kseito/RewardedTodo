@@ -23,8 +23,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
-import jp.kztproject.rewardedtodo.todo.domain.EditingTodo
-import jp.kztproject.rewardedtodo.todo.domain.Todo
+import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
+import jp.kztproject.rewardedtodo.domain.todo.Todo
 
 @ExperimentalMaterialApi
 @Composable

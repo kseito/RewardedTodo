@@ -1,6 +1,6 @@
 package jp.kztproject.rewardedtodo.application.reward
 
-import jp.kztproject.rewardedtodo.todo.domain.EditingTodo
+import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 
 
 interface UpdateTodoUseCase {

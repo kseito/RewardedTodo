@@ -23,6 +23,7 @@ android {
 dependencies {
     implementation project(path: ':feature:todo')
     implementation project(path: ':application:todo')
+    implementation project(path: ':domain:todo')
     implementation project(path: ':common:ui')
     implementation project(path: ':presentation:common')
 
