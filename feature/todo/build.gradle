@@ -7,25 +7,52 @@ apply plugin: 'jacoco'
 
 apply from: rootProject.file('gradle/android_common.gradle')
 
+android {
+    buildFeatures {
+        dataBinding = true
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = Libraries.AndroidX.Compose.compilerVersion
+    }
+    namespace 'jp.kztproject.rewardedtodo.feature.todo'
+}
+
 dependencies {
     //TODO need to reverse dependencies when todo module separate application layer and domain layer
-    implementation project(path: ':data:ticket')
+    implementation project(path: ':application:todo')
+    implementation project(path: ':domain:todo')
+    implementation project(path: ':common:ui')
+    implementation project(path: ':presentation:common')
 
     implementation Libraries.Kotlin.stdlib
-
-    implementation Libraries.AndroidX.appCompat
     implementation Libraries.AndroidX.coreKtx
+    implementation Libraries.AndroidX.appCompat
+    implementation Libraries.AndroidX.fragment
+    implementation Libraries.AndroidX.constraintLayout
+    implementation Libraries.AndroidX.recyclerView
+    implementation Libraries.AndroidX.design
+
+    // Jetpack Compose
+    implementation Libraries.AndroidX.activityCompose
+    implementation Libraries.AndroidX.Compose.foundation
+    implementation Libraries.AndroidX.Compose.material
+    implementation Libraries.AndroidX.Compose.ui
+    implementation Libraries.AndroidX.Compose.uiTooling
+    implementation Libraries.AndroidX.Compose.liveData
+    implementation Libraries.AndroidX.Compose.constraintLayout
+    implementation Libraries.AndroidX.Compose.hiltNavigationCompose
 
     testImplementation Libraries.Test.junit
+    testImplementation Libraries.Google.truth
+    androidTestImplementation Libraries.Test.AndroidX.junit
+    androidTestImplementation Libraries.Test.AndroidX.espresso
+    implementation Libraries.AndroidX.LifeCycle.livedataKtx
+    implementation Libraries.AndroidX.LifeCycle.viewModelKtx
 
     //Dagger
     implementation Libraries.Dagger.core
     kapt Libraries.Dagger.compiler
-
-    //Coroutines
-    implementation Libraries.Kotlin.Coroutines.core
-}
-
-android {
-    namespace 'jp.kztproject.rewardedtodo.feature.todo'
+    implementation Libraries.Dagger.hilt
+    kapt Libraries.Dagger.hiltCompiler
 }
