@@ -34,7 +34,7 @@ data class EditingTodo(
         if (name.isEmpty()) {
             throw NameEmptyException()
         }
-        if (name.length > 100) {
+        if (name.length > 500) {
             throw NameLengthTooLongException()
         }
         if (numberOfTicketsObtained <= 0) {

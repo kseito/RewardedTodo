@@ -17,8 +17,8 @@ class EditingTodoTest {
     }
 
     @Test(expected = NameLengthTooLongException::class)
-    fun shouldNotBeValidWhenNameLengthIs101() {
-        val todo = EditingTodo(name = "a".repeat(101))
+    fun shouldNotBeValidWhenNameLengthIs501() {
+        val todo = EditingTodo(name = "a".repeat(501))
         todo.validate()
     }
 
