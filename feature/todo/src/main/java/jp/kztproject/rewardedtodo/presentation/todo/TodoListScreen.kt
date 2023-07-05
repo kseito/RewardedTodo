@@ -1,16 +1,15 @@
 package jp.kztproject.rewardedtodo.presentation.todo
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Checkbox
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
@@ -30,6 +29,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -112,40 +112,35 @@ private fun TodoListScreen(
     val todoList by viewModel.todoList.observeAsState()
     val error by viewModel.error.observeAsState()
 
-    ConstraintLayout(
+    Box(
         modifier = Modifier
             .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .background(MaterialTheme.colors.background)
     ) {
-        Column {
-            todoList?.forEachIndexed { index, todo ->
-                TodoListItem(
-                    todo = todo,
-                    onItemClicked = {
-                        onTodoItemClicked(todo)
-                    },
-                    onTodoDone = {
-                        viewModel.completeTodo(it)
-                    })
-                if (index < todoList!!.lastIndex) {
-                    Divider()
+        LazyColumn {
+            todoList?.let {
+                itemsIndexed(it) { index, todo ->
+                    TodoListItem(
+                        todo = todo,
+                        onItemClicked = {
+                            onTodoItemClicked(todo)
+                        },
+                        onTodoDone = {
+                            viewModel.completeTodo(todo)
+                        })
+                    if (index < todoList!!.lastIndex) {
+                        Divider()
+                    }
                 }
             }
         }
-
-        val (createTodoButton) = createRefs()
 
         FloatingActionButton(
             onClick = onTodoAddClicked,
             shape = RoundedCornerShape(8.dp),
             backgroundColor = MaterialTheme.colors.primary,
             modifier = Modifier
-                .constrainAs(createTodoButton) {
-                    bottom.linkTo(parent.bottom)
-                    end.linkTo(parent.end)
-                }
                 .padding(24.dp)
+                .align(Alignment.BottomEnd)
         ) {
             Icon(Icons.Rounded.Add, contentDescription = "Add")
         }
