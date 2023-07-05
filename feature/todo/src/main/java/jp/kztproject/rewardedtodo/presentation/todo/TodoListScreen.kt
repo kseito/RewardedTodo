@@ -110,7 +110,7 @@ private fun TodoListScreen(
     onTodoUpdateSucceed: () -> Unit,
 ) {
     val todoList by viewModel.todoList.observeAsState()
-    val error by viewModel.error.observeAsState()
+    val result by viewModel.result.observeAsState()
 
     Box(
         modifier = Modifier
@@ -145,7 +145,7 @@ private fun TodoListScreen(
             Icon(Icons.Rounded.Add, contentDescription = "Add")
         }
 
-        error?.let {
+        result?.let {
             it.fold(
                 onSuccess = {
                     onTodoUpdateSucceed()
@@ -155,7 +155,7 @@ private fun TodoListScreen(
                     CommonAlertDialog(
                         message = stringResource(id = R.string.error_message),
                         onOkClicked = {
-                            viewModel.error.value = null
+                            viewModel.result.value = null
                         }
                     )
                 }
