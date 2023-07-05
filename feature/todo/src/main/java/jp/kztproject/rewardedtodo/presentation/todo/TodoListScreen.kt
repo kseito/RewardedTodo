@@ -171,7 +171,6 @@ fun TodoListScreenPreview() {
     val viewModel = TodoListViewModel(
         object : GetTodoListUseCase {
             override fun execute(): Flow<List<Todo>> {
-                // TODO cannot display
                 return flowOf(
                     listOf(
                         Todo(1, 1001, "英語学習", 2, true),
