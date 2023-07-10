@@ -31,11 +31,11 @@ class TodoListViewModel @Inject constructor(
     val todoList: LiveData<List<Todo>> = getTodoListUseCase.execute()
         .catch {
             it.printStackTrace()
-            error.value = Result.failure(it)
+            result.value = Result.failure(it)
         }
         .asLiveData()
 
-    val error = MutableLiveData<Result<Unit>?>()
+    val result = MutableLiveData<Result<Unit>?>()
     init {
         viewModelScope.launch(Dispatchers.Default) {
             try {
@@ -48,10 +48,10 @@ class TodoListViewModel @Inject constructor(
 
     fun updateTodo(todo: EditingTodo) {
         viewModelScope.launch(Dispatchers.Default) {
-            val result = updateTodoUseCase.execute(todo)
+            val newResult = updateTodoUseCase.execute(todo)
 
             withContext(Dispatchers.Main) {
-                error.value = result
+                result.value = newResult
             }
         }
     }
