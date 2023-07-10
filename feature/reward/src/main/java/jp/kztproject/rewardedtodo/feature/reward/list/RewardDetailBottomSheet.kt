@@ -102,20 +102,6 @@ private fun RewardDetailBottomSheetContent(
             },
             modifier = modifier
         )
-        Row(
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-        ) {
-            Checkbox(
-                checked = repeat,
-                onCheckedChange = { repeat = it }
-            )
-            Text(
-                text = "Repeat",
-                modifier = Modifier
-                    .align(Alignment.CenterVertically)
-            )
-        }
         Row {
             Button(
                 modifier = Modifier
@@ -135,6 +121,15 @@ private fun RewardDetailBottomSheetContent(
             ) {
                 Text("Delete")
             }
+            Checkbox(
+                checked = repeat,
+                onCheckedChange = { repeat = it }
+            )
+            Text(
+                text = "Repeat",
+                modifier = Modifier
+                    .align(Alignment.CenterVertically)
+            )
         }
     }
 }
