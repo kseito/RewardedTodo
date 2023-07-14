@@ -63,9 +63,9 @@ import jp.kztproject.rewardedtodo.domain.reward.RewardDescription
 import jp.kztproject.rewardedtodo.domain.reward.RewardId
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import jp.kztproject.rewardedtodo.domain.reward.RewardName
+import jp.kztproject.rewardedtodo.feature.reward.detail.ErrorMessageClassifier
 import jp.kztproject.rewardedtodo.presentation.common.CommonAlertDialog
 import jp.kztproject.rewardedtodo.presentation.reward.R
-import jp.kztproject.rewardedtodo.feature.reward.detail.ErrorMessageClassifier
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -153,9 +153,7 @@ private fun RewardListScreen(
 
         FloatingActionButton(
             onClick = {
-                coroutineScope.launch {
-                    bottomSheetState.show()
-                }
+                viewModel.startLottery()
             },
             shape = RoundedCornerShape(8.dp),
             backgroundColor = MaterialTheme.colors.primary,
@@ -166,12 +164,14 @@ private fun RewardListScreen(
                 }
                 .padding(24.dp)
         ) {
-            Icon(Icons.Filled.Add, contentDescription = "Add")
+            Icon(Icons.Filled.Done, contentDescription = "Done")
         }
 
         FloatingActionButton(
             onClick = {
-                viewModel.startLottery()
+                coroutineScope.launch {
+                    bottomSheetState.show()
+                }
             },
             backgroundColor = MaterialTheme.colors.primary,
             modifier = Modifier
@@ -181,7 +181,7 @@ private fun RewardListScreen(
                 }
                 .padding(24.dp)
         ) {
-            Icon(Icons.Filled.Done, contentDescription = "Done")
+            Icon(Icons.Filled.Add, contentDescription = "Add")
         }
     }
 
