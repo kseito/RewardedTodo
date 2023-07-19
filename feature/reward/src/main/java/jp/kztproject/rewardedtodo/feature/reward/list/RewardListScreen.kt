@@ -65,6 +65,7 @@ import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import jp.kztproject.rewardedtodo.domain.reward.RewardName
 import jp.kztproject.rewardedtodo.feature.reward.detail.ErrorMessageClassifier
 import jp.kztproject.rewardedtodo.presentation.common.CommonAlertDialog
+import jp.kztproject.rewardedtodo.presentation.common.vibrate
 import jp.kztproject.rewardedtodo.presentation.reward.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -129,6 +130,7 @@ private fun RewardListScreen(
     val obtainedReward by viewModel.obtainedReward.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
 
     ConstraintLayout(
         modifier = Modifier
@@ -154,6 +156,8 @@ private fun RewardListScreen(
         FloatingActionButton(
             onClick = {
                 viewModel.startLottery()
+
+                context.vibrate()
             },
             shape = RoundedCornerShape(8.dp),
             backgroundColor = MaterialTheme.colors.primary,
@@ -185,7 +189,6 @@ private fun RewardListScreen(
         }
     }
 
-    val context = LocalContext.current
     LaunchedEffect(result) {
         result?.let {
             it.fold(
