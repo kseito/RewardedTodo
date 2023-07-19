@@ -117,11 +117,10 @@ private fun TodoDetailBottomSheetContent(
                     start.linkTo(ticketLabelText.end)
                 }
         )
-        // TODO Sometimes weird actions occurred.
         NumberPicker(
             state = numberOfTicket,
             onStateChanged = { numberOfTicket.value = it },
-            range = 1..100,
+            range = 0..100,
             modifier = Modifier
                 .constrainAs(ticketInput) {
                     top.linkTo(titleTextField.bottom)
