@@ -45,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -151,7 +152,7 @@ private fun RewardListScreen(
             }
         }
 
-        val (createRewardButton, lotteryRewardButton) = createRefs()
+        val (createRewardButton, lotteryRewardButton, ticketLabel) = createRefs()
 
         FloatingActionButton(
             onClick = {
@@ -166,7 +167,7 @@ private fun RewardListScreen(
                     bottom.linkTo(parent.bottom)
                     centerHorizontallyTo(parent)
                 }
-                .padding(24.dp)
+                .padding(bottom = 24.dp)
         ) {
             Icon(Icons.Filled.Done, contentDescription = "Done")
         }
@@ -187,6 +188,16 @@ private fun RewardListScreen(
         ) {
             Icon(Icons.Filled.Add, contentDescription = "Add")
         }
+
+        TicketLabel(
+            ticket = ticket,
+            modifier = Modifier
+                .constrainAs(ticketLabel) {
+                    bottom.linkTo(createRewardButton.top)
+                    centerHorizontallyTo(parent)
+                }
+                .padding(8.dp)
+        )
     }
 
     LaunchedEffect(result) {
@@ -308,6 +319,20 @@ private fun RewardListScreenPreview() {
         viewModel = viewModel,
         bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
         onRewardItemClick = {},
+    )
+}
+
+@Composable
+private fun TicketLabel(
+    ticket: Int?,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = "$ticket tickets",
+        modifier = modifier,
+        textAlign = TextAlign.Center,
+        fontSize = 18.sp,
+        color = Color.Black
     )
 }
 
