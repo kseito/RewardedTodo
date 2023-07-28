@@ -3,7 +3,6 @@ package jp.kztproject.rewardedtodo.feature.reward.list
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -139,7 +138,6 @@ private fun RewardListScreen(
             .background(MaterialTheme.colors.background)
     ) {
         Column {
-            Header(ticket)
 
             Box {
                 RewardList(rewards, onRewardItemClick)
@@ -334,29 +332,6 @@ private fun TicketLabel(
         fontSize = 18.sp,
         color = Color.Black
     )
-}
-
-@Composable
-private fun Header(ticket: Int?) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.primary)
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.End
-    ) {
-        Text(
-            text = "$ticket tickets",
-            fontSize = 18.sp,
-            color = MaterialTheme.colors.onPrimary
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun HeaderPreview() {
-    Header(1)
 }
 
 @Composable
