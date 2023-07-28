@@ -3,7 +3,6 @@ package jp.kztproject.rewardedtodo.feature.reward.list
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -45,6 +44,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -138,7 +138,6 @@ private fun RewardListScreen(
             .background(MaterialTheme.colors.background)
     ) {
         Column {
-            Header(ticket)
 
             Box {
                 RewardList(rewards, onRewardItemClick)
@@ -151,7 +150,7 @@ private fun RewardListScreen(
             }
         }
 
-        val (createRewardButton, lotteryRewardButton) = createRefs()
+        val (createRewardButton, lotteryRewardButton, ticketLabel) = createRefs()
 
         FloatingActionButton(
             onClick = {
@@ -166,7 +165,7 @@ private fun RewardListScreen(
                     bottom.linkTo(parent.bottom)
                     centerHorizontallyTo(parent)
                 }
-                .padding(24.dp)
+                .padding(bottom = 24.dp)
         ) {
             Icon(Icons.Filled.Done, contentDescription = "Done")
         }
@@ -187,6 +186,16 @@ private fun RewardListScreen(
         ) {
             Icon(Icons.Filled.Add, contentDescription = "Add")
         }
+
+        TicketLabel(
+            ticket = ticket,
+            modifier = Modifier
+                .constrainAs(ticketLabel) {
+                    bottom.linkTo(createRewardButton.top)
+                    centerHorizontallyTo(parent)
+                }
+                .padding(8.dp)
+        )
     }
 
     LaunchedEffect(result) {
@@ -312,26 +321,17 @@ private fun RewardListScreenPreview() {
 }
 
 @Composable
-private fun Header(ticket: Int?) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .background(MaterialTheme.colors.primary)
-            .padding(16.dp),
-        horizontalArrangement = Arrangement.End
-    ) {
-        Text(
-            text = "$ticket tickets",
-            fontSize = 18.sp,
-            color = MaterialTheme.colors.onPrimary
-        )
-    }
-}
-
-@Preview
-@Composable
-private fun HeaderPreview() {
-    Header(1)
+private fun TicketLabel(
+    ticket: Int?,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = "$ticket tickets",
+        modifier = modifier,
+        textAlign = TextAlign.Center,
+        fontSize = 18.sp,
+        color = Color.Black
+    )
 }
 
 @Composable
