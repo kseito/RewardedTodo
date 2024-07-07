@@ -1,6 +1,7 @@
-version: 2
-jobs:
-  build:
+version: 2.1
+
+executors:
+  android:
     docker:
       - image: cimg/android:2023.05
         auth:
@@ -10,6 +11,10 @@ jobs:
       JAVA_OPTS: -Xmx3584m
       GRADLE_OPTS: '-Dorg.gradle.jvmargs="-Xmx3584m -XX:+HeapDumpOnOutOfMemoryError" -Dorg.gradle.daemon=false -Dorg.gradle.parallel=false'
     resource_class: medium+
+
+jobs:
+  build:
+    executor: android
     steps:
       - checkout
       - restore_cache:
