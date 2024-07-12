@@ -62,4 +62,4 @@ workflows:
               ignore: /.*/
             tags:
               only:
-                - /.*/
+                - /super.*/
