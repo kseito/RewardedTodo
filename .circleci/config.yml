@@ -37,6 +37,13 @@ jobs:
             bundle config set path 'vendor/bundle'
             bundle install
             bundle exec danger
+  get_tag_name:
+    executor: android
+    steps:
+      - run:
+          name: Get Tag Name
+          command: |
+            echo "Tag Name: $CIRCLE_TAG"
 
 workflows:
   version: 2
@@ -47,3 +54,12 @@ workflows:
             branches:
               only:
                 - /feature\/.*/
+  get_tag:
+    jobs:
+      - get_tag_name:
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only:
+                - /.*/
