@@ -40,10 +40,11 @@ jobs:
   deploy-to-deploygate:
     executor: android
     steps:
-      - run: |
+      - run:
           name: Deploy to deploygate
-          echo $ENCODED_STORE_FILE | base64 -d > staging.keystore
-          command: ./gradlew uploadDeployGateStaging
+          command: |
+            echo $ENCODED_STORE_FILE | base64 -d > staging.keystore
+            ./gradlew uploadDeployGateStaging
 
 workflows:
   version: 2
