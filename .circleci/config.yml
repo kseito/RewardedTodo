@@ -37,6 +37,13 @@ jobs:
             bundle config set path 'vendor/bundle'
             bundle install
             bundle exec danger
+  deploy-to-deploygate:
+    executor: android
+    steps:
+      - run: |
+          name: Deploy to deploygate
+          echo $ENCODED_STORE_FILE | base64 -d > staging.keystore
+          command: ./gradlew uploadDeployGateStaging
 
 workflows:
   version: 2
@@ -47,3 +54,10 @@ workflows:
             branches:
               only:
                 - /feature\/.*/
+  deploy-to-staging:
+    jobs:
+      - deploy-to-deploygate:
+          filters:
+            branches:
+              only:
+                - /stg-release\/.*/
