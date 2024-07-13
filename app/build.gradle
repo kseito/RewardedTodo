@@ -23,11 +23,26 @@ android {
         buildConfigField "String", "REWARD_LIST_SERVER_URL", "\"https://rewardlist.herokuapp.com\""
     }
 
+    signingConfigs {
+        staging {
+            storeFile file(System.getenv("STORE_FILE"))
+            storePassword System.getenv("STORE_PASSWORD")
+            keyAlias System.getenv("KEY_ALIAS")
+            keyPassword System.getenv("KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
         }
-
+        staging {
+            signingConfig = signingConfigs.getByName("staging")
+            applicationIdSuffix ".beta"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            matchingFallbacks = ['debug']
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
