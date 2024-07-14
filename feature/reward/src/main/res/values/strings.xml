@@ -1,12 +1,5 @@
 <resources>
     <!-- Reward -->
-    <string name="reward_title">Reward</string>
-    <string name="format_consume_point">%dP</string>
-    <string name="reward_empty_text">Please add new reward</string>
-    <string name="confirm_title">Confirm</string>
-    <string name="reward_delete_message">%s was Deleted</string>
-    <string name="delete_confirm_message">Do you delete %s?</string>
-    <string name="error_acquire_reward">You need more points</string>
     <string name="won_reward">You won %s</string>
     <string name="missed_reward">You missed the lottery</string>
 
@@ -16,9 +9,6 @@
     <string name="hint_description">Reward Description</string>
     <string name="hint_point">Consume Point</string>
     <string name="hint_probability">Chance of Winning(Unit %)</string>
-    <string name="check_repeat">Repeat</string>
-    <string name="button_save">Save</string>
-    <string name="button_delete">Delete</string>
     <string name="error_empty_title">Input title</string>
     <string name="error_empty_point">Input point</string>
     <string name="error_unexpected">Unexpected error has occurred.</string>

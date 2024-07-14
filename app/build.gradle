@@ -6,6 +6,7 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'dagger.hilt.android.plugin'
 apply plugin: "org.jlleitschuh.gradle.ktlint"
+apply plugin: 'deploygate'
 
 android {
     compileSdkVersion Versions.androidCompileSdkVersion
@@ -22,11 +23,26 @@ android {
         buildConfigField "String", "REWARD_LIST_SERVER_URL", "\"https://rewardlist.herokuapp.com\""
     }
 
+    signingConfigs {
+        staging {
+            storeFile rootProject.file("staging.keystore")
+            storePassword System.getenv("STORE_PASSWORD")
+            keyAlias System.getenv("KEY_ALIAS")
+            keyPassword System.getenv("KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         debug {
             applicationIdSuffix ".debug"
         }
-
+        staging {
+            signingConfig = signingConfigs.getByName("staging")
+            applicationIdSuffix ".beta"
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            matchingFallbacks = ['debug']
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
@@ -148,4 +164,9 @@ ktlint {
         reporter "checkstyle"
     }
     ignoreFailures = true
+}
+
+deploygate {
+    appOwnerName = System.getenv("DEPLOY_GATE_OWENER_NAME")
+    apiToken = System.getenv("DEPLOY_GATE_API_KEY")
 }
