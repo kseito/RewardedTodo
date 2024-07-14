@@ -38,7 +38,7 @@ object Libraries {
         }
 
         object LifeCycle {
-            private const val version = "2.4.1"
+            private const val version = "2.8.3"
             const val livedataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${version}"
             const val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${version}"
         }
