@@ -10,12 +10,8 @@ apply(from = rootProject.file("gradle/android_common.gradle"))
 android {
     buildFeatures {
         dataBinding = true
-        compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = Libraries.AndroidX.Compose.compilerVersion
-    }
     namespace = "jp.kztproject.rewardedtodo.presentation.common"
 }
 

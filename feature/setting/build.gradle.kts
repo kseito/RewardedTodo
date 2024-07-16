@@ -36,13 +36,5 @@ dependencies {
 }
 
 android {
-    buildFeatures {
-        compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = Libraries.AndroidX.Compose.compilerVersion
-    }
-
     namespace = "jp.kztproject.rewardedtodo.feature.setting"
 }
