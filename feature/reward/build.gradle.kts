@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
     id("org.jlleitschuh.gradle.ktlint")
+    id("org.jetbrains.kotlin.plugin.compose")
     kotlin("kapt")
 }
 

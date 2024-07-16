@@ -1,6 +1,10 @@
 import dependencies.GradlePlugins
 import dependencies.Libraries
 
+plugins {
+    id("org.jetbrains.kotlin.plugin.compose")
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
