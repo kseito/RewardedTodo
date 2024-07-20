@@ -69,7 +69,7 @@ task jacocoTestReports(type: JacocoReport, dependsOn: 'jacocoMergeReports') {
         html.required.set(true)
         csv.required.set(false)
 
-        xml.destination file("${buildDir}/reports/jacoco/report.xml")
-        html.destination file("${buildDir}/reports/jacoco/html")
+        xml.destination file("${layout.buildDirectory.get()}/reports/jacoco/report.xml")
+        html.destination file("${layout.buildDirectory.get()}/reports/jacoco/html")
     }
 }
