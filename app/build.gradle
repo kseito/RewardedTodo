@@ -1,6 +1,10 @@
 import dependencies.GradlePlugins
 import dependencies.Libraries
 
+plugins {
+    id("org.jetbrains.kotlin.plugin.compose")
+}
+
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -78,11 +82,7 @@ android {
 
     buildFeatures {
         dataBinding = true
-        compose = true
         buildConfig = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = Libraries.AndroidX.Compose.compilerVersion
     }
     sourceSets {
         test.java.srcDirs += "src/test/kotlin"

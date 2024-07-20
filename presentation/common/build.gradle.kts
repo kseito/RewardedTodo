@@ -3,6 +3,7 @@ import dependencies.Libraries
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 apply(from = rootProject.file("gradle/android_common.gradle"))
@@ -10,12 +11,8 @@ apply(from = rootProject.file("gradle/android_common.gradle"))
 android {
     buildFeatures {
         dataBinding = true
-        compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = Libraries.AndroidX.Compose.compilerVersion
-    }
     namespace = "jp.kztproject.rewardedtodo.presentation.common"
 }
 

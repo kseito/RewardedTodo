@@ -9,6 +9,9 @@ staging.keystore
 # Java class files
 *.class
 
+# Kotlin 2.0
+kotlin/
+
 # Generated files
 bin/
 gen/

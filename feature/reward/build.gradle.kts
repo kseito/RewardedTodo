@@ -5,18 +5,13 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
     id("org.jlleitschuh.gradle.ktlint")
+    id("org.jetbrains.kotlin.plugin.compose")
     kotlin("kapt")
 }
 
 apply(from = rootProject.file("gradle/android_common.gradle"))
 
 android {
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = Libraries.AndroidX.Compose.compilerVersion
-    }
     namespace = "jp.kztproject.rewardedtodo.presentation.reward"
 }
 
