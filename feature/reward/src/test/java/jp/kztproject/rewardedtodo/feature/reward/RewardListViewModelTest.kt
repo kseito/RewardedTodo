@@ -1,11 +1,16 @@
 package jp.kztproject.rewardedtodo.feature.reward
 
-import jp.kztproject.rewardedtodo.application.reward.usecase.*
+import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
 import jp.kztproject.rewardedtodo.feature.reward.list.RewardListViewModel
 import jp.kztproject.rewardedtodo.test.reward.DummyCreator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -36,13 +41,25 @@ class RewardListViewModelTest {
 
     @Before
     fun setup() {
-        viewModel = RewardListViewModel(
-            mockLotteryUseCase,
-            mockGetRewardsUseCase,
-            mockGetPointUseCase,
-            mockSaveRewardUseCase,
-            mockDeleteRewardUseCase
-        )
+        runBlocking {
+            whenever(mockGetRewardsUseCase.executeAsFlow()).thenReturn(
+                flowOf(
+                    listOf(
+                        DummyCreator.createDummyReward()
+                    )
+                )
+            )
+            val dummyPoint = DummyCreator.createDummyRewardPoint()
+            whenever(mockGetPointUseCase.execute()).thenReturn(flowOf( dummyPoint))
+
+            viewModel = RewardListViewModel(
+                mockLotteryUseCase,
+                mockGetRewardsUseCase,
+                mockGetPointUseCase,
+                mockSaveRewardUseCase,
+                mockDeleteRewardUseCase
+            )
+        }
 
         Dispatchers.setMain(Dispatchers.Unconfined)
     }
@@ -54,13 +71,6 @@ class RewardListViewModelTest {
 
     @Test
     fun testGetRewards() = runTest {
-        whenever(mockGetRewardsUseCase.executeAsFlow()).thenReturn(
-            flowOf(
-                listOf(
-                    DummyCreator.createDummyReward()
-                )
-            )
-        )
         viewModel.loadRewards()
 
         assertThat(viewModel.rewardList.value!!.size).isEqualTo(1)
@@ -68,8 +78,6 @@ class RewardListViewModelTest {
 
     @Test
     fun testLoadPoint() = runTest {
-        val dummyPoint = DummyCreator.createDummyRewardPoint()
-        whenever(mockGetPointUseCase.execute()).thenReturn(flowOf( dummyPoint))
         viewModel.loadPoint()
 
         assertThat(viewModel.rewardPoint.value).isEqualTo(10)
