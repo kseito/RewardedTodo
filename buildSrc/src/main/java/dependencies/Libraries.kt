@@ -89,7 +89,7 @@ object Libraries {
     }
 
     object Moshi {
-        private const val version = "1.12.0"
+        private const val version = "1.15.1"
         const val moshi = "com.squareup.moshi:moshi-kotlin:${version}"
         const val adapters = "com.squareup.moshi:moshi-adapters:${version}"
         const val codegen = "com.squareup.moshi:moshi-kotlin-codegen:${version}"
