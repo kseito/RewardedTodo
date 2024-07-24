@@ -2,13 +2,13 @@ package dependencies
 
 object GradlePlugins {
     object Android {
-        const val version = "8.1.0"
+        const val version = "8.5.1"
     }
     object Kotlin {
-        const val version = "1.8.10"
+        const val version = "2.0.0"
     }
     object Hilt {
-        const val version = "2.44"
+        const val version = "2.51.1"
     }
     object Ktlint {
         const val version = "0.48.2"
