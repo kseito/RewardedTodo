@@ -16,7 +16,7 @@ object Libraries {
 
     object AndroidX {
         const val appCompat = "androidx.appcompat:appcompat:1.6.0"
-        const val activityCompose = "androidx.activity:activity-compose:1.3.1"
+        const val activityCompose = "androidx.activity:activity-compose:1.9.1"
         const val design = "com.google.android.material:material:1.8.0"
         const val fragment = "androidx.fragment:fragment-ktx:1.3.0"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
