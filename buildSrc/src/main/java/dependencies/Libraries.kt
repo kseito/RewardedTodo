@@ -30,7 +30,7 @@ object Libraries {
             const val foundation = "androidx.compose.foundation:foundation:1.6.8"
             const val material = "androidx.compose.material:material:1.4.0"
             const val ui = "androidx.compose.ui:ui:1.4.0"
-            const val uiTooling = "androidx.compose.ui:ui-tooling:1.4.0"
+            const val uiTooling = "androidx.compose.ui:ui-tooling:1.6.8"
             const val liveData = "androidx.compose.runtime:runtime-livedata:1.6.8"
             const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
             const val material3 = "androidx.compose.material3:material3:1.2.1"
