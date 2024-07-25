@@ -34,7 +34,7 @@ object Libraries {
             const val liveData = "androidx.compose.runtime:runtime-livedata:1.6.8"
             const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
             const val material3 = "androidx.compose.material3:material3:1.2.1"
-            const val hiltNavigationCompose = "androidx.hilt:hilt-navigation-compose:1.0.0"
+            const val hiltNavigationCompose = "androidx.hilt:hilt-navigation-compose:1.2.0"
         }
 
         object LifeCycle {
