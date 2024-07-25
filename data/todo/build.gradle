@@ -14,7 +14,7 @@ dependencies {
 
     testImplementation Libraries.Test.junit
     testImplementation Libraries.Test.androidXCore
-    testImplementation Libraries.Test.androidArchCore
+    testImplementation Libraries.Test.AndroidX.coreTesting
     testImplementation Libraries.Test.robolectric
     testImplementation Libraries.Google.truth
     testImplementation Libraries.Test.mockito
