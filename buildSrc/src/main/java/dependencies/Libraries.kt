@@ -105,7 +105,6 @@ object Libraries {
     object Test {
         const val junit = "junit:junit:4.13.2"
         const val androidXCore = "androidx.test:core:1.2.0"
-        const val androidArchCore = "androidx.arch.core:core-testing:2.2.0"
         const val mockito = "org.mockito:mockito-core:3.11.1"
         const val mockitoKotlin = "org.mockito.kotlin:mockito-kotlin:3.2.0"
         const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Kotlin.Coroutines.version}"
