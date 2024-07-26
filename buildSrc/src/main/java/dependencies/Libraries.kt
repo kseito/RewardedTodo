@@ -116,7 +116,7 @@ object Libraries {
             const val junit = "androidx.test.ext:junit:1.1.3"
             const val coreTesting = "androidx.arch.core:core-testing:2.2.0"
             const val testRunner = "androidx.test:runner:1.4.0"
-            const val espresso = "androidx.test.espresso:espresso-core:3.4.0"
+            const val espresso = "androidx.test.espresso:espresso-core:3.6.1"
         }
     }
 }
