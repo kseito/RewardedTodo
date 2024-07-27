@@ -96,7 +96,7 @@ object Libraries {
     }
 
     const val gson = "com.google.code.gson:gson:2.8.2"
-    const val bottomNavigation = "com.aurelhubert:ahbottomnavigation:2.1.0"
+    const val bottomNavigation = "com.aurelhubert:ahbottomnavigation:2.2.0"
 
     object Stetho {
         const val stetho = "com.facebook.stetho:stetho:1.4.2"
