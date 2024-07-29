@@ -99,7 +99,7 @@ object Libraries {
     const val bottomNavigation = "com.aurelhubert:ahbottomnavigation:2.1.0"
 
     object Stetho {
-        const val stetho = "com.facebook.stetho:stetho:1.4.2"
+        const val stetho = "com.facebook.stetho:stetho:1.6.0"
     }
 
     object Test {
