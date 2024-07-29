@@ -64,7 +64,7 @@ object Libraries {
     }
 
     object Google {
-        const val truth = "com.google.truth:truth:1.0"
+        const val truth = "com.google.truth:truth:1.4.4"
     }
 
     object Dagger {
