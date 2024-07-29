@@ -108,7 +108,7 @@ object Libraries {
         const val mockito = "org.mockito:mockito-core:3.11.1"
         const val mockitoKotlin = "org.mockito.kotlin:mockito-kotlin:3.2.0"
         const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Kotlin.Coroutines.version}"
-        const val mockWebServer = "com.squareup.okhttp3:mockwebserver:3.10.0"
+        const val mockWebServer = "com.squareup.okhttp3:mockwebserver:3.14.9"
         const val robolectric = "org.robolectric:robolectric:4.9"
         const val assertJ = "org.assertj:assertj-core:3.12.2"
 
