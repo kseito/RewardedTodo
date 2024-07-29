@@ -95,7 +95,7 @@ object Libraries {
         const val codegen = "com.squareup.moshi:moshi-kotlin-codegen:${version}"
     }
 
-    const val gson = "com.google.code.gson:gson:2.8.2"
+    const val gson = "com.google.code.gson:gson:2.11.0"
     const val bottomNavigation = "com.aurelhubert:ahbottomnavigation:2.2.0"
 
     object Stetho {
