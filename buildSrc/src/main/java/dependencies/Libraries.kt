@@ -21,7 +21,7 @@ object Libraries {
         const val fragment = "androidx.fragment:fragment-ktx:1.8.2"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout:1.1.3"
         const val coreKtx = "androidx.core:core-ktx:1.13.1"
-        const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
+        const val recyclerView = "androidx.recyclerview:recyclerview:1.3.2"
         const val preference = "androidx.preference:preference-ktx:1.1.1"
         const val dataStore = "androidx.datastore:datastore-preferences:1.1.1"
 
