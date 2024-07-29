@@ -109,7 +109,7 @@ object Libraries {
         const val mockitoKotlin = "org.mockito.kotlin:mockito-kotlin:3.2.0"
         const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Kotlin.Coroutines.version}"
         const val mockWebServer = "com.squareup.okhttp3:mockwebserver:3.14.9"
-        const val robolectric = "org.robolectric:robolectric:4.9"
+        const val robolectric = "org.robolectric:robolectric:4.13"
         const val assertJ = "org.assertj:assertj-core:3.26.3"
 
         object AndroidX {
