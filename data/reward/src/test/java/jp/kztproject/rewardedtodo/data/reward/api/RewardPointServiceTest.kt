@@ -31,20 +31,20 @@ class RewardPointServiceTest {
     @Before
     fun setup() {
         val dispatcher = object : Dispatcher() {
-            override fun dispatch(request: RecordedRequest?): MockResponse {
-                if (request == null || request.path == null) {
+            override fun dispatch(request: RecordedRequest): MockResponse {
+                if (request.path == null) {
                     return MockResponse().setResponseCode(400)
                 }
-                if (request.method == HttpMethod.GET && request.path.matches(Regex("/api/users/[0-9]+"))) {
+                if (request.method == HttpMethod.GET && request.path!!.matches(Regex("/api/users/[0-9]+"))) {
                     return MockResponse().setBody(readJsonFromResources("get_point.json")).setResponseCode(200)
                 }
-                if (request.method == HttpMethod.PUT && request.path.matches(Regex("/api/users/[0-9]+"))) {
+                if (request.method == HttpMethod.PUT && request.path!!.matches(Regex("/api/users/[0-9]+"))) {
                     return MockResponse().setBody(readJsonFromResources("test_user.json")).setResponseCode(200)
                 }
                 return MockResponse().setResponseCode(404)
             }
         }
-        mockWebServer.setDispatcher(dispatcher)
+        mockWebServer.dispatcher = dispatcher
     }
 
     @After
