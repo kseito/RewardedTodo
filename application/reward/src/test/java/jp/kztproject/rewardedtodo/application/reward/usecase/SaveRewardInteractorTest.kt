@@ -1,20 +1,26 @@
 package jp.kztproject.rewardedtodo.application.reward.usecase
 
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.impl.annotations.MockK
+import jp.kztproject.rewardedtodo.application.reward.model.error.OverMaxRewardsException
 import jp.kztproject.rewardedtodo.application.reward.model.error.RewardProbabilityEmptyException
 import jp.kztproject.rewardedtodo.application.reward.model.error.RewardTitleEmptyException
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository
+import jp.kztproject.rewardedtodo.test.reward.DummyCreator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
+import org.junit.Before
 import org.junit.Test
-import org.mockito.kotlin.mock
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class SaveRewardInteractorTest {
 
-    private val mockIRewardRepository: IRewardRepository = mock()
-    private val interactor = SaveRewardInteractor(mockIRewardRepository)
+    @MockK(relaxed = true)
+    private lateinit var mockIRewardRepository: IRewardRepository
+    private lateinit var interactor: SaveRewardInteractor
     private val filledReward = RewardInput(
         null,
         "test_name",
@@ -22,6 +28,12 @@ class SaveRewardInteractorTest {
         "test_description",
         false
     )
+
+    @Before
+    fun setUp() {
+        MockKAnnotations.init(this)
+        interactor = SaveRewardInteractor(mockIRewardRepository)
+    }
 
     @Test
     fun shouldSuccess_WhenSaveFilledReward() = runTest {
@@ -43,5 +55,14 @@ class SaveRewardInteractorTest {
 
         val actual = interactor.execute(rewardInput)
         assertThat(actual.exceptionOrNull()).isInstanceOf(RewardProbabilityEmptyException().javaClass)
+    }
+
+    @Test
+    fun shouldFail_WhenSaveRewardOverMaxRewards() = runTest {
+        val rewards = (1..7).map { DummyCreator.createDummyReward() }
+        coEvery { mockIRewardRepository.findAll() } returns rewards
+
+        val actual = interactor.execute(filledReward)
+        assertThat(actual.exceptionOrNull()).isInstanceOf(OverMaxRewardsException().javaClass)
     }
 }

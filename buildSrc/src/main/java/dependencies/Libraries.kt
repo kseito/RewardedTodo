@@ -111,6 +111,7 @@ object Libraries {
         const val mockWebServer = "com.squareup.okhttp3:mockwebserver:4.12.0"
         const val robolectric = "org.robolectric:robolectric:4.13"
         const val assertJ = "org.assertj:assertj-core:3.26.3"
+        const val mockk = "io.mockk:mockk:1.13.12"
 
         object AndroidX {
             const val junit = "androidx.test.ext:junit:1.2.1"
