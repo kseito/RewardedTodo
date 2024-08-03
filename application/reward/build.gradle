@@ -25,6 +25,7 @@ dependencies {
     testImplementation Libraries.Test.mockito
     testImplementation Libraries.Test.mockitoKotlin
     testImplementation Libraries.Test.coroutinesTest
+    testImplementation Libraries.Test.mockk
     testImplementation project(path: ':test:reward')
 
     implementation project(path: ':domain:reward')
