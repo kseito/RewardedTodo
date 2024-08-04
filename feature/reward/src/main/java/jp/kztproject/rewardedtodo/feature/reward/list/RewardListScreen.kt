@@ -55,6 +55,8 @@ import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
+import jp.kztproject.rewardedtodo.common.ui.CommonAlertDialog
+import jp.kztproject.rewardedtodo.common.ui.vibrate
 import jp.kztproject.rewardedtodo.domain.reward.NumberOfTicket
 import jp.kztproject.rewardedtodo.domain.reward.Probability
 import jp.kztproject.rewardedtodo.domain.reward.Reward
@@ -64,8 +66,6 @@ import jp.kztproject.rewardedtodo.domain.reward.RewardId
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import jp.kztproject.rewardedtodo.domain.reward.RewardName
 import jp.kztproject.rewardedtodo.feature.reward.detail.ErrorMessageClassifier
-import jp.kztproject.rewardedtodo.presentation.common.CommonAlertDialog
-import jp.kztproject.rewardedtodo.presentation.common.vibrate
 import jp.kztproject.rewardedtodo.presentation.reward.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf

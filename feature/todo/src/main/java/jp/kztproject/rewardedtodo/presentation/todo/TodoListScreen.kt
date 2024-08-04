@@ -45,10 +45,10 @@ import jp.kztproject.rewardedtodo.application.reward.DeleteTodoUseCase
 import jp.kztproject.rewardedtodo.application.reward.FetchTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.GetTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
+import jp.kztproject.rewardedtodo.common.ui.CommonAlertDialog
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.Todo
 import jp.kztproject.rewardedtodo.feature.todo.R
-import jp.kztproject.rewardedtodo.presentation.common.CommonAlertDialog
 import jp.kztproject.rewardedtodo.presentation.reward.list.DarkColorScheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
