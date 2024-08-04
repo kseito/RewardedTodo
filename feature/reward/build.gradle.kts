@@ -65,7 +65,6 @@ dependencies {
     implementation(project(path = ":application:reward"))
     implementation(project(path = ":domain:reward"))
     implementation(project(path = ":common:ui"))
-    implementation(project(path = ":presentation:common"))
 }
 
 apply(from = rootProject.file("gradle/ktlint.gradle"))
