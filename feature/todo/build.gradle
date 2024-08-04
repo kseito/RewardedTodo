@@ -23,7 +23,6 @@ dependencies {
     implementation project(path: ':application:todo')
     implementation project(path: ':domain:todo')
     implementation project(path: ':common:ui')
-    implementation project(path: ':presentation:common')
 
     implementation Libraries.Kotlin.stdlib
     implementation Libraries.AndroidX.coreKtx
