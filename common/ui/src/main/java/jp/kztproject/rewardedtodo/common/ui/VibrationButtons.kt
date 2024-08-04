@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.presentation.common
+package jp.kztproject.rewardedtodo.common.ui
 
 import android.annotation.SuppressLint
 import android.content.Context
