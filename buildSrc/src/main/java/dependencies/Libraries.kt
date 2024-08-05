@@ -68,7 +68,7 @@ object Libraries {
     }
 
     object Dagger {
-        private const val version = "2.51.1"
+        private const val version = "2.52"
         const val core = "com.google.dagger:dagger:${version}"
         const val compiler = "com.google.dagger:dagger-compiler:${version}"
         const val hilt = "com.google.dagger:hilt-android:${GradlePlugins.Hilt.version}"
