@@ -8,7 +8,7 @@ object GradlePlugins {
         const val version = "2.0.0"
     }
     object Hilt {
-        const val version = "2.51.1"
+        const val version = "2.52"
     }
     object Ktlint {
         const val version = "0.48.2"
