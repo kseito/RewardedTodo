@@ -7,6 +7,7 @@ import androidx.compose.material.AlertDialog
 import androidx.compose.material.Switch
 import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -61,7 +62,7 @@ private fun SettingDialog(
         },
         text = {
             Column {
-                Divider(Modifier.padding(vertical = 8.dp))
+                HorizontalDivider(Modifier.padding(vertical = 8.dp))
                 SettingDialogSectionTitle(text = stringResource(R.string.extensions_section))
                 SettingDialogTodoistExtensionRow(
                     todoistExtensionEnabled = todoistExtensionEnabled,
