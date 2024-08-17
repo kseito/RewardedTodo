@@ -1,0 +1,39 @@
+name: Staging Preparation
+
+on:
+  workflow_dispatch:
+    inputs:
+      versionName:
+        description: 'Specify version'
+        required: true
+        default: 'x.x.x'
+        type: string
+
+jobs:
+  prepare-staging-app:
+    runs-on: ubuntu-latest
+    env:
+      VERSION_NAME: ${{ inputs.versionName }}
+      RELEASE_BRANCH: stg-release/${{ inputs.versionName }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+
+      - name: set-git-user
+        run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: create-branch
+        run: git checkout -b ${RELEASE_BRANCH}
+
+      - name: update-version-name
+        run: |
+          sed -i "s/const val versionName = \"[0-9.]*\"/const val versionName = \"${VERSION_NAME}\"/" ./buildSrc/src/main/java/Versions.kt
+          git add .
+          git commit -m "Update VersionName to ${VERSION_NAME}."
+
+      - name: push-branch
+        run: git push origin ${RELEASE_BRANCH}

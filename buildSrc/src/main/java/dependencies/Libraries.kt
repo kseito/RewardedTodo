@@ -68,7 +68,7 @@ object Libraries {
     }
 
     object Dagger {
-        private const val version = "2.51.1"
+        private const val version = "2.52"
         const val core = "com.google.dagger:dagger:${version}"
         const val compiler = "com.google.dagger:dagger-compiler:${version}"
         const val hilt = "com.google.dagger:hilt-android:${GradlePlugins.Hilt.version}"
@@ -116,7 +116,7 @@ object Libraries {
         object AndroidX {
             const val junit = "androidx.test.ext:junit:1.2.1"
             const val coreTesting = "androidx.arch.core:core-testing:2.2.0"
-            const val testRunner = "androidx.test:runner:1.6.1"
+            const val testRunner = "androidx.test:runner:1.6.2"
             const val espresso = "androidx.test.espresso:espresso-core:3.6.1"
         }
     }

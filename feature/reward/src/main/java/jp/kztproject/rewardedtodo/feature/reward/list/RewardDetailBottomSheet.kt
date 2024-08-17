@@ -98,7 +98,7 @@ private fun RewardDetailBottomSheetContent(
             value = chanceOfWinning,
             onValueChange = { chanceOfWinning = it },
             label = {
-                Text(text = stringResource(id = R.string.hint_point))
+                Text(text = stringResource(id = R.string.hint_probability))
             },
             modifier = modifier
         )
