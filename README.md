@@ -13,7 +13,7 @@ You can try this app on your device by clicking the button below.
 This app is composed with MVVM Architecture and separate each layer by multi module function.
 
 ## Libraries
-This app use folloing libraries.
+This app use following libraries.
 - Jetpack Compose
 - Retrofit2
 - Dagger Hilt
