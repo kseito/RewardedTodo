@@ -14,7 +14,11 @@ import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.Todo
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -36,6 +40,10 @@ class TodoListViewModel @Inject constructor(
         .asLiveData()
 
     val result = MutableLiveData<Result<Unit>?>()
+
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing = _isRefreshing.asStateFlow()
+
     init {
         viewModelScope.launch(Dispatchers.Default) {
             try {
@@ -43,6 +51,18 @@ class TodoListViewModel @Inject constructor(
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+        }
+    }
+
+    fun refreshTodoList() {
+        viewModelScope.launch(Dispatchers.Default) {
+            _isRefreshing.update { true }
+            try {
+                fetchTodoListUseCase.execute()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            _isRefreshing.update { false }
         }
     }
 
