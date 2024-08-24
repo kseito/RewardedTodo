@@ -48,6 +48,7 @@ dependencies {
     androidTestImplementation Libraries.Test.AndroidX.espresso
     implementation Libraries.AndroidX.LifeCycle.livedataKtx
     implementation Libraries.AndroidX.LifeCycle.viewModelKtx
+    implementation Libraries.AndroidX.LifeCycle.runtimeCompose
 
     //Dagger
     implementation Libraries.Dagger.core
