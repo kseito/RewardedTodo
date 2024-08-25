@@ -21,8 +21,12 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.kztproject.rewardedtodo.application.reward.CompleteTodoUseCase
 import jp.kztproject.rewardedtodo.application.reward.DeleteTodoUseCase
 import jp.kztproject.rewardedtodo.application.reward.FetchTodoListUseCase
@@ -111,9 +116,14 @@ private fun TodoListScreen(
 ) {
     val todoList by viewModel.todoList.observeAsState()
     val result by viewModel.result.observeAsState()
+    val refreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+    val pullRefreshState = rememberPullRefreshState(
+        refreshing = refreshing,
+        onRefresh = { viewModel.refreshTodoList() })
 
     Box(
         modifier = Modifier
+            .pullRefresh(pullRefreshState)
             .fillMaxSize()
     ) {
         LazyColumn {
@@ -144,6 +154,12 @@ private fun TodoListScreen(
         ) {
             Icon(Icons.Rounded.Add, contentDescription = "Add")
         }
+
+        PullRefreshIndicator(
+            modifier = Modifier.align(Alignment.TopCenter),
+            refreshing = refreshing,
+            state = pullRefreshState
+        )
 
         result?.let {
             it.fold(

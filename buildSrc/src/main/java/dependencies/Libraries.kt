@@ -41,6 +41,7 @@ object Libraries {
             private const val version = "2.8.4"
             const val livedataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${version}"
             const val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${version}"
+            const val runtimeCompose = "androidx.lifecycle:lifecycle-runtime-compose:${version}"
         }
 
         object Room {
@@ -104,6 +105,7 @@ object Libraries {
 
     object Test {
         const val junit = "junit:junit:4.13.2"
+        const val kotest = "io.kotest:kotest-runner-junit5:5.9.1"
         const val androidXCore = "androidx.test:core:1.6.1"
         const val mockito = "org.mockito:mockito-core:5.12.0"
         const val mockitoKotlin = "org.mockito.kotlin:mockito-kotlin:5.4.0"
