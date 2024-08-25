@@ -16,6 +16,12 @@ android {
         dataBinding = true
     }
     namespace 'jp.kztproject.rewardedtodo.feature.todo'
+
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
+    }
 }
 
 dependencies {
@@ -43,12 +49,15 @@ dependencies {
     implementation Libraries.AndroidX.Compose.hiltNavigationCompose
 
     testImplementation Libraries.Test.junit
+    testImplementation Libraries.Test.kotest
     testImplementation Libraries.Google.truth
+    testImplementation Libraries.Test.mockk
     androidTestImplementation Libraries.Test.AndroidX.junit
     androidTestImplementation Libraries.Test.AndroidX.espresso
     implementation Libraries.AndroidX.LifeCycle.livedataKtx
     implementation Libraries.AndroidX.LifeCycle.viewModelKtx
     implementation Libraries.AndroidX.LifeCycle.runtimeCompose
+    testImplementation Libraries.Test.coroutinesTest
 
     //Dagger
     implementation Libraries.Dagger.core
