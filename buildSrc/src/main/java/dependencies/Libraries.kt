@@ -6,7 +6,7 @@ object Libraries {
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${GradlePlugins.Kotlin.version}"
 
         object Coroutines {
-            const val version = "1.8.1"
+            const val version = "1.9.0"
             const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${version}"
             const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${version}"
             const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${version}"
