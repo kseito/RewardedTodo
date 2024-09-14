@@ -30,6 +30,7 @@ dependencies {
     implementation(Libraries.AndroidX.activityCompose)
     implementation(Libraries.AndroidX.Compose.foundation)
     implementation(Libraries.AndroidX.Compose.material)
+    implementation(libs.compose.material.icon.core)
     implementation(Libraries.AndroidX.Compose.ui)
     implementation(Libraries.AndroidX.Compose.uiTooling)
     implementation(Libraries.AndroidX.Compose.liveData)
