@@ -107,7 +107,7 @@ object Libraries {
         const val junit = "junit:junit:4.13.2"
         const val kotest = "io.kotest:kotest-runner-junit5:5.9.1"
         const val androidXCore = "androidx.test:core:1.6.1"
-        const val mockito = "org.mockito:mockito-core:5.14.0"
+        const val mockito = "org.mockito:mockito-core:5.14.1"
         const val mockitoKotlin = "org.mockito.kotlin:mockito-kotlin:5.4.0"
         const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Kotlin.Coroutines.version}"
         const val mockWebServer = "com.squareup.okhttp3:mockwebserver:4.12.0"
