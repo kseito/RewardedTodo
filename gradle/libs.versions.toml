@@ -1,5 +1,5 @@
 [versions]
-compose-material = "1.7.1"
+compose-material = "1.7.2"
 
 [libraries]
 compose-material-icon-core = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "compose-material"}
