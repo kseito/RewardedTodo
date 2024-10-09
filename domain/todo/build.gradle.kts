@@ -15,7 +15,7 @@ android {
 }
 
 dependencies {
-    implementation(Libraries.Kotlin.stdlib)
+    implementation(libs.kotlin.stdlib)
     implementation(Libraries.Kotlin.Coroutines.core)
 
     testImplementation(Libraries.Test.junit)

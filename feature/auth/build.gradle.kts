@@ -25,7 +25,7 @@ android {
 dependencies {
     implementation(project(path = ":data:auth"))
 
-    implementation(Libraries.Kotlin.stdlib)
+    implementation(libs.kotlin.stdlib)
     implementation(Libraries.AndroidX.coreKtx)
     implementation(Libraries.AndroidX.appCompat)
     implementation(Libraries.AndroidX.fragment)

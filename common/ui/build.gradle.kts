@@ -10,7 +10,7 @@ plugins {
 apply(from = rootProject.file("gradle/android_common.gradle"))
 
 dependencies {
-    implementation(Libraries.Kotlin.stdlib)
+    implementation(libs.kotlin.stdlib)
 
     implementation(Libraries.AndroidX.appCompat)
     implementation(Libraries.AndroidX.coreKtx)

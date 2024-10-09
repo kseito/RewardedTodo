@@ -17,7 +17,7 @@ android {
 
 dependencies {
 
-    implementation(Libraries.Kotlin.stdlib)
+    implementation(libs.kotlin.stdlib)
     implementation(Libraries.AndroidX.coreKtx)
     implementation(Libraries.AndroidX.appCompat)
     implementation(Libraries.AndroidX.constraintLayout)
