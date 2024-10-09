@@ -1,7 +1,9 @@
 [versions]
 compose-material = "1.7.2"
+kotlin = "2.0.20"
 
 [libraries]
 compose-material-icon-core = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "compose-material"}
 
 [plugins]
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
