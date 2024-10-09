@@ -25,7 +25,7 @@ dependencies {
     implementation(Libraries.AndroidX.NavigationComponent.fragmentKtx)
 
     // Jetpack Compose
-    implementation(Libraries.AndroidX.activityCompose)
+    implementation(libs.activity.compose)
     implementation(Libraries.AndroidX.Compose.foundation)
     implementation(Libraries.AndroidX.Compose.material)
     implementation(libs.compose.material.icon.core)

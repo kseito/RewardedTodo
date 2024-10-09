@@ -15,7 +15,7 @@ dependencies {
 
     implementation(Libraries.AndroidX.coreKtx)
     implementation(Libraries.AndroidX.design)
-    implementation(Libraries.AndroidX.activityCompose)
+    implementation(libs.activity.compose)
     implementation(Libraries.AndroidX.Compose.foundation)
     implementation(Libraries.AndroidX.Compose.material)
     implementation(Libraries.AndroidX.Compose.material3)

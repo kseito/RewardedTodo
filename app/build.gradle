@@ -93,7 +93,7 @@ android {
 dependencies {
     implementation libs.kotlin.stdlib
 
-    implementation Libraries.AndroidX.activityCompose
+    implementation libs.activity.compose
     implementation Libraries.AndroidX.fragment
     implementation Libraries.AndroidX.design
     implementation Libraries.AndroidX.preference
