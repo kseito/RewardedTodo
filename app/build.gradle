@@ -93,7 +93,6 @@ android {
 dependencies {
     implementation libs.kotlin.stdlib
 
-    implementation Libraries.AndroidX.appCompat
     implementation Libraries.AndroidX.activityCompose
     implementation Libraries.AndroidX.fragment
     implementation Libraries.AndroidX.design

@@ -10,7 +10,6 @@ apply from: rootProject.file('gradle/android_common.gradle')
 dependencies {
     implementation libs.kotlin.stdlib
     implementation Libraries.AndroidX.coreKtx
-    implementation Libraries.AndroidX.appCompat
 
     testImplementation Libraries.Test.junit
     testImplementation Libraries.Test.androidXCore

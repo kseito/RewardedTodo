@@ -12,7 +12,6 @@ apply from: rootProject.file('gradle/android_common.gradle')
 dependencies {
 
     implementation libs.kotlin.stdlib
-    implementation Libraries.AndroidX.appCompat
 
     //Dagger
     implementation Libraries.Dagger.core

@@ -22,7 +22,6 @@ dependencies {
 
     implementation(libs.kotlin.stdlib)
 
-    implementation(Libraries.AndroidX.appCompat)
     implementation(Libraries.AndroidX.coreKtx)
 
     testImplementation(Libraries.Test.junit)

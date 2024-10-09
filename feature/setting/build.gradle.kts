@@ -14,7 +14,6 @@ dependencies {
     implementation(project(path = ":data:auth"))
 
     implementation(Libraries.AndroidX.coreKtx)
-    implementation(Libraries.AndroidX.appCompat)
     implementation(Libraries.AndroidX.design)
     implementation(Libraries.AndroidX.activityCompose)
     implementation(Libraries.AndroidX.Compose.foundation)

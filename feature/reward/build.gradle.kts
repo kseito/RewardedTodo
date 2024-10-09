@@ -19,7 +19,6 @@ dependencies {
 
     implementation(libs.kotlin.stdlib)
     implementation(Libraries.AndroidX.coreKtx)
-    implementation(Libraries.AndroidX.appCompat)
     implementation(Libraries.AndroidX.constraintLayout)
     implementation(Libraries.AndroidX.recyclerView)
     implementation(Libraries.AndroidX.design)

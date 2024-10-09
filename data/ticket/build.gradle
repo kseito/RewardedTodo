@@ -13,7 +13,6 @@ dependencies {
     implementation project(path: ':domain:reward')
 
     implementation libs.kotlin.stdlib
-    implementation Libraries.AndroidX.appCompat
     implementation Libraries.AndroidX.coreKtx
     implementation Libraries.AndroidX.design
     implementation Libraries.AndroidX.dataStore
