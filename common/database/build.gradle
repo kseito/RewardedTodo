@@ -1,5 +1,9 @@
 import dependencies.Libraries
 
+plugins {
+    alias libs.plugins.ksp
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -7,14 +11,15 @@ apply plugin: 'kotlin-kapt'
 apply from: rootProject.file('gradle/android_common.gradle')
 
 dependencies {
-    implementation Libraries.Kotlin.stdlib
+    implementation libs.kotlin.stdlib
 
-    implementation Libraries.AndroidX.appCompat
     implementation Libraries.AndroidX.coreKtx
 
     testImplementation Libraries.Test.junit
 
-    implementation Libraries.AndroidX.Room.runtime
+    implementation libs.room.runtime
+    implementation libs.room.ktx
+    ksp libs.room.compiler
 }
 
 android {

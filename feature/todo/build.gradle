@@ -30,16 +30,14 @@ dependencies {
     implementation project(path: ':domain:todo')
     implementation project(path: ':common:ui')
 
-    implementation Libraries.Kotlin.stdlib
+    implementation libs.kotlin.stdlib
     implementation Libraries.AndroidX.coreKtx
-    implementation Libraries.AndroidX.appCompat
     implementation Libraries.AndroidX.fragment
-    implementation Libraries.AndroidX.constraintLayout
     implementation Libraries.AndroidX.recyclerView
     implementation Libraries.AndroidX.design
 
     // Jetpack Compose
-    implementation Libraries.AndroidX.activityCompose
+    implementation libs.activity.compose
     implementation Libraries.AndroidX.Compose.foundation
     implementation Libraries.AndroidX.Compose.material
     implementation(libs.compose.material.icon.core)

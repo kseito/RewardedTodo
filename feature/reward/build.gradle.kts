@@ -17,17 +17,15 @@ android {
 
 dependencies {
 
-    implementation(Libraries.Kotlin.stdlib)
+    implementation(libs.kotlin.stdlib)
     implementation(Libraries.AndroidX.coreKtx)
-    implementation(Libraries.AndroidX.appCompat)
-    implementation(Libraries.AndroidX.constraintLayout)
     implementation(Libraries.AndroidX.recyclerView)
     implementation(Libraries.AndroidX.design)
     implementation(Libraries.AndroidX.LifeCycle.viewModelKtx)
     implementation(Libraries.AndroidX.NavigationComponent.fragmentKtx)
 
     // Jetpack Compose
-    implementation(Libraries.AndroidX.activityCompose)
+    implementation(libs.activity.compose)
     implementation(Libraries.AndroidX.Compose.foundation)
     implementation(Libraries.AndroidX.Compose.material)
     implementation(libs.compose.material.icon.core)

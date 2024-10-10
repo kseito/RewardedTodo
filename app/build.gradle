@@ -3,6 +3,7 @@ import dependencies.Libraries
 
 plugins {
     alias libs.plugins.compose.compiler
+    alias libs.plugins.ksp
 }
 
 apply plugin: 'com.android.application'
@@ -91,13 +92,11 @@ android {
 }
 
 dependencies {
-    implementation Libraries.Kotlin.stdlib
+    implementation libs.kotlin.stdlib
 
-    implementation Libraries.AndroidX.appCompat
-    implementation Libraries.AndroidX.activityCompose
+    implementation libs.activity.compose
     implementation Libraries.AndroidX.fragment
     implementation Libraries.AndroidX.design
-    implementation Libraries.AndroidX.constraintLayout
     implementation Libraries.AndroidX.preference
     implementation Libraries.AndroidX.dataStore
     implementation Libraries.Stetho.stetho
@@ -113,9 +112,8 @@ dependencies {
     implementation Libraries.AndroidX.NavigationComponent.navigationCompose
 
     //Room
-    implementation Libraries.AndroidX.Room.runtime
-    annotationProcessor Libraries.AndroidX.Room.compiler
-    kapt Libraries.AndroidX.Room.kaptCompiler
+    implementation libs.room.runtime
+    ksp libs.room.compiler
 
     //Dagger
     implementation Libraries.Dagger.core

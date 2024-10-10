@@ -20,9 +20,8 @@ dependencies {
     implementation(project(path = ":data:ticket"))
     implementation(project(path = ":domain:todo"))
 
-    implementation(Libraries.Kotlin.stdlib)
+    implementation(libs.kotlin.stdlib)
 
-    implementation(Libraries.AndroidX.appCompat)
     implementation(Libraries.AndroidX.coreKtx)
 
     testImplementation(Libraries.Test.junit)

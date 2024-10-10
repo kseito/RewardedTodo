@@ -34,7 +34,7 @@ android {
 
 dependencies {
 
-    implementation Libraries.Kotlin.stdlib
+    implementation libs.kotlin.stdlib
 
     implementation project(path: ':domain:reward')
     implementation project(path: ':data:reward')
