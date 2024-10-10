@@ -5,6 +5,7 @@ plugins {
     id("org.jetbrains.kotlin.android")
     alias(libs.plugins.compose.compiler)
     kotlin("kapt")
+    alias(libs.plugins.ksp)
 }
 
 apply(from = rootProject.file("gradle/android_common.gradle"))
@@ -21,7 +22,9 @@ dependencies {
 
     testImplementation(Libraries.Test.junit)
 
-    implementation(Libraries.AndroidX.Room.runtime)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 }
 
 android {

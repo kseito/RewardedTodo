@@ -3,6 +3,7 @@ import dependencies.Libraries
 
 plugins {
     alias libs.plugins.compose.compiler
+    alias libs.plugins.ksp
 }
 
 apply plugin: 'com.android.application'
@@ -111,9 +112,8 @@ dependencies {
     implementation Libraries.AndroidX.NavigationComponent.navigationCompose
 
     //Room
-    implementation Libraries.AndroidX.Room.runtime
-    annotationProcessor Libraries.AndroidX.Room.compiler
-    kapt Libraries.AndroidX.Room.kaptCompiler
+    implementation libs.room.runtime
+    ksp libs.room.compiler
 
     //Dagger
     implementation Libraries.Dagger.core

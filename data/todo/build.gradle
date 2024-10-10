@@ -1,5 +1,9 @@
 import dependencies.Libraries
 
+plugins {
+    alias libs.plugins.ksp
+}
+
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
@@ -26,10 +30,9 @@ dependencies {
     kapt Libraries.Dagger.compiler
 
     //Room
-    implementation Libraries.AndroidX.Room.runtime
-    implementation Libraries.AndroidX.Room.ktx
-    annotationProcessor Libraries.AndroidX.Room.compiler
-    kapt Libraries.AndroidX.Room.kaptCompiler
+    implementation libs.room.runtime
+    implementation libs.room.ktx
+    ksp libs.room.compiler
 
     //Retrofit
     implementation Libraries.Retrofit.core

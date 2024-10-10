@@ -5,6 +5,7 @@ plugins {
     id 'kotlin-android'
     id 'kotlin-kapt'
     id 'org.jlleitschuh.gradle.ktlint'
+    alias libs.plugins.ksp
 }
 
 apply from: rootProject.file('gradle/android_common.gradle')
@@ -17,10 +18,9 @@ dependencies {
     implementation Libraries.Dagger.core
 
     //Room
-    implementation Libraries.AndroidX.Room.runtime
-    implementation Libraries.AndroidX.Room.ktx
-    annotationProcessor Libraries.AndroidX.Room.compiler
-    kapt Libraries.AndroidX.Room.kaptCompiler
+    implementation libs.room.runtime
+    implementation libs.room.ktx
+    ksp libs.room.compiler
 
     //Retrofit
     implementation Libraries.Retrofit.core
