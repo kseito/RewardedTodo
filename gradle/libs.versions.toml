@@ -1,7 +1,7 @@
 [versions]
 activity-compose = "1.9.2"
 compose-material = "1.7.3"
-kotlin = "2.0.20"
+kotlin = "2.0.21"
 ksp = "2.0.20-1.0.25"
 room = "2.6.1"
 

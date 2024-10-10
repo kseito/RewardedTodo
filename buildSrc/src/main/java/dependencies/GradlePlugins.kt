@@ -5,7 +5,7 @@ object GradlePlugins {
         const val version = "8.6.1"
     }
     object Kotlin {
-        const val version = "2.0.20"
+        const val version = "2.0.21"
     }
     object Hilt {
         const val version = "2.52"
