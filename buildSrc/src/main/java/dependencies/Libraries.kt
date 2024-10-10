@@ -17,7 +17,7 @@ object Libraries {
     object AndroidX {
         const val activityCompose = "androidx.activity:activity-compose:1.9.2"
         const val design = "com.google.android.material:material:1.12.0"
-        const val fragment = "androidx.fragment:fragment-ktx:1.8.3"
+        const val fragment = "androidx.fragment:fragment-ktx:1.8.4"
         const val coreKtx = "androidx.core:core-ktx:1.13.1"
         const val recyclerView = "androidx.recyclerview:recyclerview:1.3.2"
         const val preference = "androidx.preference:preference-ktx:1.2.1"
@@ -111,7 +111,7 @@ object Libraries {
         const val mockWebServer = "com.squareup.okhttp3:mockwebserver:4.12.0"
         const val robolectric = "org.robolectric:robolectric:4.13"
         const val assertJ = "org.assertj:assertj-core:3.26.3"
-        const val mockk = "io.mockk:mockk:1.13.12"
+        const val mockk = "io.mockk:mockk:1.13.13"
 
         object AndroidX {
             const val junit = "androidx.test.ext:junit:1.2.1"
