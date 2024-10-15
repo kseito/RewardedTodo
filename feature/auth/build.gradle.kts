@@ -27,7 +27,7 @@ dependencies {
 
     implementation(libs.kotlin.stdlib)
     implementation(libs.core.ktx)
-    implementation(Libraries.AndroidX.fragment)
+    implementation(libs.fragment.ktx)
     implementation(libs.material)
     implementation(Libraries.AndroidX.LifeCycle.viewModelKtx)
     implementation(Libraries.AndroidX.NavigationComponent.fragmentKtx)
