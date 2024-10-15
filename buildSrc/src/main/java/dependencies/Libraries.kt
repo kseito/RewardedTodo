@@ -3,8 +3,6 @@ package dependencies
 @Suppress("MayBeConstant")
 object Libraries {
     object Kotlin {
-        const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${GradlePlugins.Kotlin.version}"
-
         object Coroutines {
             const val version = "1.9.0"
             const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${version}"
