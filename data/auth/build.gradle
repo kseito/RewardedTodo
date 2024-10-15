@@ -27,7 +27,7 @@ dependencies {
     implementation Libraries.Moshi.codegen
 
     //Coroutines
-    implementation Libraries.Kotlin.Coroutines.core
+    implementation libs.coroutines.core
 
     //Dagger
     implementation Libraries.Dagger.core

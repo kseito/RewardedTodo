@@ -28,8 +28,8 @@ dependencies {
     implementation Libraries.gson
 
     //Coroutines
-    implementation Libraries.Kotlin.Coroutines.core
-    implementation Libraries.Kotlin.Coroutines.adapter
+    implementation libs.coroutines.core
+    implementation libs.coroutines.adapter
 
     testImplementation Libraries.Test.junit
     testImplementation Libraries.Test.assertJ
@@ -38,7 +38,7 @@ dependencies {
     testImplementation Libraries.Test.androidXCore
     testImplementation Libraries.Test.mockito
     testImplementation Libraries.Test.mockitoKotlin
-    testImplementation Libraries.Test.coroutinesTest
+    testImplementation libs.coroutines.test
     testImplementation project(path: ':test:reward')
 
     implementation project(path: ':domain:reward')

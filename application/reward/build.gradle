@@ -16,15 +16,15 @@ dependencies {
     implementation Libraries.Dagger.core
 
     //Coroutines
-    implementation Libraries.Kotlin.Coroutines.core
-    implementation Libraries.Kotlin.Coroutines.android
-    implementation Libraries.Kotlin.Coroutines.adapter
+    implementation libs.coroutines.core
+    implementation libs.coroutines.android
+    implementation libs.coroutines.adapter
 
     testImplementation Libraries.Test.junit
     testImplementation Libraries.Test.assertJ
     testImplementation Libraries.Test.mockito
     testImplementation Libraries.Test.mockitoKotlin
-    testImplementation Libraries.Test.coroutinesTest
+    testImplementation libs.coroutines.test
     testImplementation Libraries.Test.mockk
     testImplementation project(path: ':test:reward')
 

@@ -31,5 +31,5 @@ dependencies {
     kapt(Libraries.Dagger.compiler)
 
     //Coroutines
-    implementation(Libraries.Kotlin.Coroutines.core)
+    implementation(libs.coroutines.core)
 }

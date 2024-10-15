@@ -22,7 +22,7 @@ dependencies {
     testImplementation Libraries.Google.truth
     testImplementation Libraries.Test.mockito
     testImplementation Libraries.Test.mockitoKotlin
-    testImplementation Libraries.Kotlin.Coroutines.test
+    testImplementation libs.coroutines.test
 
     //Dagger
     implementation Libraries.Dagger.core
@@ -38,7 +38,7 @@ dependencies {
     implementation Libraries.Retrofit.core
 
     //Coroutines
-    implementation Libraries.Kotlin.Coroutines.core
+    implementation libs.coroutines.core
 
     implementation project(path: ':domain:todo')
     implementation project(path: ':common:database')

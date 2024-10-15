@@ -56,7 +56,7 @@ dependencies {
     implementation Libraries.AndroidX.LifeCycle.livedataKtx
     implementation Libraries.AndroidX.LifeCycle.viewModelKtx
     implementation Libraries.AndroidX.LifeCycle.runtimeCompose
-    testImplementation Libraries.Test.coroutinesTest
+    testImplementation libs.coroutines.test
 
     //Dagger
     implementation Libraries.Dagger.core
