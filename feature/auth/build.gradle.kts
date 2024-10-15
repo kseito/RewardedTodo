@@ -26,9 +26,9 @@ dependencies {
     implementation(project(path = ":data:auth"))
 
     implementation(libs.kotlin.stdlib)
-    implementation(Libraries.AndroidX.coreKtx)
+    implementation(libs.core.ktx)
     implementation(Libraries.AndroidX.fragment)
-    implementation(Libraries.AndroidX.design)
+    implementation(libs.material)
     implementation(Libraries.AndroidX.LifeCycle.viewModelKtx)
     implementation(Libraries.AndroidX.NavigationComponent.fragmentKtx)
 

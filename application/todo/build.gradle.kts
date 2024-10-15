@@ -22,7 +22,7 @@ dependencies {
 
     implementation(libs.kotlin.stdlib)
 
-    implementation(Libraries.AndroidX.coreKtx)
+    implementation(libs.core.ktx)
 
     testImplementation(Libraries.Test.junit)
 

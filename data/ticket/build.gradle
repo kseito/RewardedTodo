@@ -13,8 +13,8 @@ dependencies {
     implementation project(path: ':domain:reward')
 
     implementation libs.kotlin.stdlib
-    implementation Libraries.AndroidX.coreKtx
-    implementation Libraries.AndroidX.design
+    implementation libs.core.ktx
+    implementation libs.material
     implementation Libraries.AndroidX.dataStore
 
     testImplementation Libraries.Test.junit
