@@ -2,24 +2,8 @@ package dependencies
 
 @Suppress("MayBeConstant")
 object Libraries {
-    object Kotlin {
-        const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib:${GradlePlugins.Kotlin.version}"
-
-        object Coroutines {
-            const val version = "1.9.0"
-            const val core = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${version}"
-            const val test = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${version}"
-            const val android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${version}"
-            const val adapter = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
-        }
-    }
 
     object AndroidX {
-        const val activityCompose = "androidx.activity:activity-compose:1.9.2"
-        const val design = "com.google.android.material:material:1.12.0"
-        const val fragment = "androidx.fragment:fragment-ktx:1.8.4"
-        const val coreKtx = "androidx.core:core-ktx:1.13.1"
-        const val recyclerView = "androidx.recyclerview:recyclerview:1.3.2"
         const val preference = "androidx.preference:preference-ktx:1.2.1"
         const val dataStore = "androidx.datastore:datastore-preferences:1.1.1"
 
@@ -107,7 +91,6 @@ object Libraries {
         const val androidXCore = "androidx.test:core:1.6.1"
         const val mockito = "org.mockito:mockito-core:5.14.1"
         const val mockitoKotlin = "org.mockito.kotlin:mockito-kotlin:5.4.0"
-        const val coroutinesTest = "org.jetbrains.kotlinx:kotlinx-coroutines-test:${Kotlin.Coroutines.version}"
         const val mockWebServer = "com.squareup.okhttp3:mockwebserver:4.12.0"
         const val robolectric = "org.robolectric:robolectric:4.13"
         const val assertJ = "org.assertj:assertj-core:3.26.3"

@@ -31,10 +31,9 @@ dependencies {
     implementation project(path: ':common:ui')
 
     implementation libs.kotlin.stdlib
-    implementation Libraries.AndroidX.coreKtx
-    implementation Libraries.AndroidX.fragment
-    implementation Libraries.AndroidX.recyclerView
-    implementation Libraries.AndroidX.design
+    implementation libs.core.ktx
+    implementation libs.fragment.ktx
+    implementation libs.material
 
     // Jetpack Compose
     implementation libs.activity.compose
@@ -56,7 +55,7 @@ dependencies {
     implementation Libraries.AndroidX.LifeCycle.livedataKtx
     implementation Libraries.AndroidX.LifeCycle.viewModelKtx
     implementation Libraries.AndroidX.LifeCycle.runtimeCompose
-    testImplementation Libraries.Test.coroutinesTest
+    testImplementation libs.coroutines.test
 
     //Dagger
     implementation Libraries.Dagger.core

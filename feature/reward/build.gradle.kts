@@ -18,9 +18,8 @@ android {
 dependencies {
 
     implementation(libs.kotlin.stdlib)
-    implementation(Libraries.AndroidX.coreKtx)
-    implementation(Libraries.AndroidX.recyclerView)
-    implementation(Libraries.AndroidX.design)
+    implementation(libs.core.ktx)
+    implementation(libs.material)
     implementation(Libraries.AndroidX.LifeCycle.viewModelKtx)
     implementation(Libraries.AndroidX.NavigationComponent.fragmentKtx)
 
@@ -43,16 +42,16 @@ dependencies {
     kapt(Libraries.Dagger.hiltCompiler)
 
     //Coroutines
-    implementation(Libraries.Kotlin.Coroutines.core)
-    implementation(Libraries.Kotlin.Coroutines.android)
-    implementation(Libraries.Kotlin.Coroutines.adapter)
+    implementation(libs.coroutines.core)
+    implementation(libs.coroutines.android)
+    implementation(libs.coroutines.adapter)
 
     //Test
     testImplementation(Libraries.Test.junit)
     testImplementation(Libraries.Test.androidXCore)
     testImplementation(Libraries.Test.mockito)
     testImplementation(Libraries.Test.mockitoKotlin)
-    testImplementation(Libraries.Test.coroutinesTest)
+    testImplementation(libs.coroutines.test)
     testImplementation(Libraries.Test.mockWebServer)
     testImplementation(Libraries.Test.robolectric)
     testImplementation(Libraries.Test.assertJ)

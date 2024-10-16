@@ -13,8 +13,8 @@ apply(from = rootProject.file("gradle/android_common.gradle"))
 dependencies {
     implementation(project(path = ":data:auth"))
 
-    implementation(Libraries.AndroidX.coreKtx)
-    implementation(Libraries.AndroidX.design)
+    implementation(libs.core.ktx)
+    implementation(libs.material)
     implementation(libs.activity.compose)
     implementation(Libraries.AndroidX.Compose.foundation)
     implementation(Libraries.AndroidX.Compose.material)

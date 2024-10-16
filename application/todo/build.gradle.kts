@@ -22,7 +22,7 @@ dependencies {
 
     implementation(libs.kotlin.stdlib)
 
-    implementation(Libraries.AndroidX.coreKtx)
+    implementation(libs.core.ktx)
 
     testImplementation(Libraries.Test.junit)
 
@@ -31,5 +31,5 @@ dependencies {
     kapt(Libraries.Dagger.compiler)
 
     //Coroutines
-    implementation(Libraries.Kotlin.Coroutines.core)
+    implementation(libs.coroutines.core)
 }

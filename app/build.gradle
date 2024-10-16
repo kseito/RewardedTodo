@@ -95,8 +95,7 @@ dependencies {
     implementation libs.kotlin.stdlib
 
     implementation libs.activity.compose
-    implementation Libraries.AndroidX.fragment
-    implementation Libraries.AndroidX.design
+    implementation libs.material
     implementation Libraries.AndroidX.preference
     implementation Libraries.AndroidX.dataStore
     implementation Libraries.Stetho.stetho

@@ -1,14 +1,26 @@
 [versions]
 activity-compose = "1.9.2"
 compose-material = "1.7.3"
+core-ktx = "1.13.1"
+coroutines = "1.9.0"
+coroutines-adapter = "0.9.2"
 kotlin = "2.0.21"
 ksp = "2.0.20-1.0.25"
+material = "1.12.0"
 room = "2.6.1"
+fragment-ktx = "1.8.4"
 
 [libraries]
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin"}
 compose-material-icon-core = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "compose-material"}
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx"}
+coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines"}
+coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "coroutines"}
+coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "coroutines"}
+coroutines-adapter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlin-coroutines-adapter", version.ref = "coroutines-adapter"}
 activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity-compose"}
+fragment-ktx = { group = "androidx.fragment", name = "fragment-ktx", version.ref = "fragment-ktx"}
+material = { group = "com.google.android.material", name = "material", version.ref = "material"}
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room"}
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room"}
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room"}
