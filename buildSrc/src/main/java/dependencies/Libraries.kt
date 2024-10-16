@@ -15,7 +15,7 @@ object Libraries {
     }
 
     object AndroidX {
-        const val activityCompose = "androidx.activity:activity-compose:1.9.2"
+        const val activityCompose = "androidx.activity:activity-compose:1.9.3"
         const val design = "com.google.android.material:material:1.12.0"
         const val fragment = "androidx.fragment:fragment-ktx:1.8.4"
         const val coreKtx = "androidx.core:core-ktx:1.13.1"
