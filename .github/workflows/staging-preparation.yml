@@ -37,3 +37,7 @@ jobs:
 
       - name: push-branch
         run: git push origin ${RELEASE_BRANCH}
+
+      - name: echo user name
+        run: echo "🔎 The user name is ${{ github.actor }}."
+
