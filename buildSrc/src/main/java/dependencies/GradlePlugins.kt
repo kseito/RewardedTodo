@@ -16,5 +16,4 @@ object GradlePlugins {
     object KtlintGradle {
         const val version = "12.1.1"
     }
-    const val deploy_gate = "com.deploygate:gradle:2.8.0"
 }
