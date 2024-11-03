@@ -10,7 +10,7 @@ object Libraries {
         object Compose {
             const val compilerVersion = "1.4.4"
             const val foundation = "androidx.compose.foundation:foundation:1.7.5"
-            const val material = "androidx.compose.material:material:1.7.3"
+            const val material = "androidx.compose.material:material:1.7.5"
             const val ui = "androidx.compose.ui:ui:1.7.5"
             const val uiTooling = "androidx.compose.ui:ui-tooling:1.7.5"
             const val liveData = "androidx.compose.runtime:runtime-livedata:1.7.3"
