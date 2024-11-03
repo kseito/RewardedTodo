@@ -11,7 +11,7 @@ buildscript {
         classpath libs.kotlin.gradle.plugin
         classpath libs.navigation.safe.args
         classpath libs.dagger.hilt
-        classpath GradlePlugins.ktlint
+        classpath libs.ktlint.gradle
         classpath GradlePlugins.deploy_gate
     }
 }

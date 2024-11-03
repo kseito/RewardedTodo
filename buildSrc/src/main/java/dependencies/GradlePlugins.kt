@@ -16,6 +16,5 @@ object GradlePlugins {
     object KtlintGradle {
         const val version = "12.1.1"
     }
-    const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:${KtlintGradle.version}"
     const val deploy_gate = "com.deploygate:gradle:2.8.0"
 }
