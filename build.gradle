@@ -10,7 +10,6 @@ buildscript {
         classpath libs.android.gradle.plugin
         classpath libs.kotlin.gradle.plugin
         classpath libs.navigation.safe.args
-        classpath libs.dagger.hilt
         classpath libs.ktlint.gradle
         classpath libs.deploy.gate
     }
@@ -18,6 +17,7 @@ buildscript {
 
 plugins {
     alias libs.plugins.compose.compiler apply false
+    alias libs.plugins.dagger.hilt apply false
     alias libs.plugins.ksp apply false
 }
 
