@@ -33,11 +33,8 @@ dependencies {
     implementation(Libraries.AndroidX.NavigationComponent.fragmentKtx)
 
     //Dagger
-    implementation(Libraries.Dagger.core)
-    annotationProcessor(Libraries.Dagger.compiler)
-    kapt(Libraries.Dagger.compiler)
-    implementation(Libraries.Dagger.hilt)
-    kapt(Libraries.Dagger.hiltCompiler)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     testImplementation(Libraries.Test.junit)
 }

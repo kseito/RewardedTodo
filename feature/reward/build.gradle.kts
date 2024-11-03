@@ -35,11 +35,8 @@ dependencies {
     implementation(Libraries.AndroidX.Compose.hiltNavigationCompose)
 
     //Dagger
-    implementation(Libraries.Dagger.core)
-    annotationProcessor(Libraries.Dagger.compiler)
-    kapt(Libraries.Dagger.compiler)
-    implementation(Libraries.Dagger.hilt)
-    kapt(Libraries.Dagger.hiltCompiler)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     //Coroutines
     implementation(libs.coroutines.core)

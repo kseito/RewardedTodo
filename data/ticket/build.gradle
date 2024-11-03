@@ -20,7 +20,7 @@ dependencies {
     testImplementation Libraries.Test.junit
 
     //Dagger
-    implementation Libraries.Dagger.core
+    implementation libs.hilt.android
 }
 
 android {

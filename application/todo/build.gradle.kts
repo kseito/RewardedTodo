@@ -27,8 +27,8 @@ dependencies {
     testImplementation(Libraries.Test.junit)
 
     //Dagger
-    implementation(Libraries.Dagger.core)
-    kapt(Libraries.Dagger.compiler)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     //Coroutines
     implementation(libs.coroutines.core)
