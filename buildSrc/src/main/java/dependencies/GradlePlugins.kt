@@ -16,7 +16,6 @@ object GradlePlugins {
     object KtlintGradle {
         const val version = "12.1.1"
     }
-    const val dagger_hilt = "com.google.dagger:hilt-android-gradle-plugin:${Hilt.version}"
     const val ktlint = "org.jlleitschuh.gradle:ktlint-gradle:${KtlintGradle.version}"
     const val deploy_gate = "com.deploygate:gradle:2.8.0"
 }
