@@ -9,7 +9,7 @@ buildscript {
     dependencies {
         classpath libs.android.gradle.plugin
         classpath libs.kotlin.gradle.plugin
-        classpath GradlePlugins.navigation_safe_args
+        classpath libs.navigation.safe.args
         classpath GradlePlugins.dagger_hilt
         classpath GradlePlugins.ktlint
         classpath GradlePlugins.deploy_gate
