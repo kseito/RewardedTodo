@@ -1,7 +1,7 @@
 [versions]
 android-gradle-plugin = "8.6.1"
 activity-compose = "1.9.3"
-compose-material = "1.7.3"
+compose-material = "1.7.5"
 core-ktx = "1.13.1"
 coroutines = "1.9.0"
 coroutines-adapter = "0.9.2"
