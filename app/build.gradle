@@ -96,8 +96,8 @@ dependencies {
 
     implementation libs.activity.compose
     implementation libs.material
-    implementation Libraries.AndroidX.preference
-    implementation Libraries.AndroidX.dataStore
+    implementation libs.preference
+    implementation libs.datastore.preferences
     implementation Libraries.Stetho.stetho
     implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
     implementation Libraries.AndroidX.NavigationComponent.uiKtx

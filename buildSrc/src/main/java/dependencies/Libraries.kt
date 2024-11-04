@@ -4,8 +4,6 @@ package dependencies
 object Libraries {
 
     object AndroidX {
-        const val preference = "androidx.preference:preference-ktx:1.2.1"
-        const val dataStore = "androidx.datastore:datastore-preferences:1.1.1"
 
         object Compose {
             const val compilerVersion = "1.4.4"
