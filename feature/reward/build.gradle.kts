@@ -21,7 +21,7 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.material)
     implementation(Libraries.AndroidX.LifeCycle.viewModelKtx)
-    implementation(Libraries.AndroidX.NavigationComponent.fragmentKtx)
+    implementation(libs.navigation.fragment.ktx)
 
     // Jetpack Compose
     implementation(libs.activity.compose)

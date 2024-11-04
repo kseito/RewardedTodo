@@ -98,8 +98,8 @@ dependencies {
     implementation libs.material
     implementation libs.preference
     implementation libs.datastore.preferences
-    implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
-    implementation Libraries.AndroidX.NavigationComponent.uiKtx
+    implementation libs.navigation.fragment.ktx
+    implementation libs.navigation.ui.ktx
     implementation Libraries.AndroidX.Security.crypto
 
     // Jetpack Compose
@@ -107,7 +107,7 @@ dependencies {
     implementation Libraries.AndroidX.Compose.uiTooling
     implementation Libraries.AndroidX.Compose.material
     implementation Libraries.AndroidX.Compose.material3
-    implementation Libraries.AndroidX.NavigationComponent.navigationCompose
+    implementation libs.navigation.compose
 
     //Room
     implementation libs.room.runtime

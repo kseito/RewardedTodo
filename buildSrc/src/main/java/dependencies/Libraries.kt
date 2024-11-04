@@ -32,13 +32,6 @@ object Libraries {
             const val kaptCompiler = "androidx.room:room-compiler:${version}"
         }
 
-        object NavigationComponent {
-            const val version = "2.8.3"
-            const val fragmentKtx = "androidx.navigation:navigation-fragment-ktx:${version}"
-            const val uiKtx = "androidx.navigation:navigation-ui-ktx:${version}"
-            const val navigationCompose = "androidx.navigation:navigation-compose:${version}"
-        }
-
         object Security {
             const val crypto = "androidx.security:security-crypto:1.0.0"
         }
