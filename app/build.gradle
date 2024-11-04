@@ -100,7 +100,7 @@ dependencies {
     implementation libs.datastore.preferences
     implementation libs.navigation.fragment.ktx
     implementation libs.navigation.ui.ktx
-    implementation Libraries.AndroidX.Security.crypto
+    implementation libs.security.crypto
 
     // Jetpack Compose
     implementation Libraries.AndroidX.Compose.foundation

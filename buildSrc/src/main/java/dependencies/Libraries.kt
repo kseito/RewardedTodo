@@ -31,10 +31,6 @@ object Libraries {
             const val compiler = "androidx.room:room-compiler:${version}"
             const val kaptCompiler = "androidx.room:room-compiler:${version}"
         }
-
-        object Security {
-            const val crypto = "androidx.security:security-crypto:1.0.0"
-        }
     }
 
     object Google {
