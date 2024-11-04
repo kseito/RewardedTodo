@@ -98,7 +98,6 @@ dependencies {
     implementation libs.material
     implementation libs.preference
     implementation libs.datastore.preferences
-    implementation Libraries.Stetho.stetho
     implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
     implementation Libraries.AndroidX.NavigationComponent.uiKtx
     implementation Libraries.AndroidX.Security.crypto

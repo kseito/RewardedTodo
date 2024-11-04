@@ -79,10 +79,6 @@ object Libraries {
     const val gson = "com.google.code.gson:gson:2.11.0"
     const val bottomNavigation = "com.aurelhubert:ahbottomnavigation:2.2.0"
 
-    object Stetho {
-        const val stetho = "com.facebook.stetho:stetho:1.6.0"
-    }
-
     object Test {
         const val junit = "junit:junit:4.13.2"
         const val kotest = "io.kotest:kotest-runner-junit5:5.9.1"
