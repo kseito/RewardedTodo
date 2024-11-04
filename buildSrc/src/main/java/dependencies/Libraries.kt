@@ -15,7 +15,7 @@ object Libraries {
             const val uiTooling = "androidx.compose.ui:ui-tooling:1.7.5"
             const val liveData = "androidx.compose.runtime:runtime-livedata:1.7.5"
             const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.0.1"
-            const val material3 = "androidx.compose.material3:material3:1.3.0"
+            const val material3 = "androidx.compose.material3:material3:1.3.1"
             const val hiltNavigationCompose = "androidx.hilt:hilt-navigation-compose:1.2.0"
         }
 
