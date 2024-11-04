@@ -13,7 +13,7 @@ dependencies {
 
     implementation libs.kotlin.stdlib
 
-    implementation Libraries.Dagger.core
+    implementation libs.hilt.android
 
     //Coroutines
     implementation libs.coroutines.core

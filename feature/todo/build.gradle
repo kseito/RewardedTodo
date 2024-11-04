@@ -58,8 +58,6 @@ dependencies {
     testImplementation libs.coroutines.test
 
     //Dagger
-    implementation Libraries.Dagger.core
-    kapt Libraries.Dagger.compiler
-    implementation Libraries.Dagger.hilt
-    kapt Libraries.Dagger.hiltCompiler
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }
