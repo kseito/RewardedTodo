@@ -16,9 +16,10 @@ dependencies {
     implementation(libs.core.ktx)
 
     // Jetpack Compose
-    implementation(Libraries.AndroidX.Compose.foundation)
-    implementation(Libraries.AndroidX.Compose.material)
-    implementation(Libraries.AndroidX.Compose.uiTooling)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.ui.tooling)
 
     testImplementation(Libraries.Test.junit)
 

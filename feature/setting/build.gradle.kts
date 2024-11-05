@@ -15,14 +15,15 @@ dependencies {
 
     implementation(libs.core.ktx)
     implementation(libs.material)
+    implementation(platform(libs.androidx.compose.bom))
     implementation(libs.activity.compose)
-    implementation(Libraries.AndroidX.Compose.foundation)
-    implementation(Libraries.AndroidX.Compose.material)
-    implementation(Libraries.AndroidX.Compose.material3)
-    implementation(Libraries.AndroidX.Compose.ui)
-    implementation(Libraries.AndroidX.Compose.uiTooling)
-    implementation(Libraries.AndroidX.Compose.liveData)
-    implementation(Libraries.AndroidX.Compose.constraintLayout)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.livedata)
+    implementation(libs.constraintlayout.compose)
     implementation(Libraries.AndroidX.Compose.hiltNavigationCompose)
 
     //Dagger
