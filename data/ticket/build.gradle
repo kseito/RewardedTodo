@@ -15,7 +15,7 @@ dependencies {
     implementation libs.kotlin.stdlib
     implementation libs.core.ktx
     implementation libs.material
-    implementation Libraries.AndroidX.dataStore
+    implementation libs.datastore.preferences
 
     testImplementation Libraries.Test.junit
 

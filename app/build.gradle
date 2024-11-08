@@ -96,19 +96,19 @@ dependencies {
 
     implementation libs.activity.compose
     implementation libs.material
-    implementation Libraries.AndroidX.preference
-    implementation Libraries.AndroidX.dataStore
-    implementation Libraries.Stetho.stetho
-    implementation Libraries.AndroidX.NavigationComponent.fragmentKtx
-    implementation Libraries.AndroidX.NavigationComponent.uiKtx
-    implementation Libraries.AndroidX.Security.crypto
+    implementation libs.preference
+    implementation libs.datastore.preferences
+    implementation libs.navigation.fragment.ktx
+    implementation libs.navigation.ui.ktx
+    implementation libs.security.crypto
 
     // Jetpack Compose
-    implementation Libraries.AndroidX.Compose.foundation
-    implementation Libraries.AndroidX.Compose.uiTooling
-    implementation Libraries.AndroidX.Compose.material
-    implementation Libraries.AndroidX.Compose.material3
-    implementation Libraries.AndroidX.NavigationComponent.navigationCompose
+    implementation platform(libs.androidx.compose.bom)
+    implementation libs.androidx.compose.foundation
+    implementation libs.androidx.compose.ui.tooling
+    implementation libs.androidx.compose.material
+    implementation libs.androidx.compose.material3
+    implementation libs.navigation.compose
 
     //Room
     implementation libs.room.runtime

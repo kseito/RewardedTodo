@@ -4,8 +4,6 @@ package dependencies
 object Libraries {
 
     object AndroidX {
-        const val preference = "androidx.preference:preference-ktx:1.2.1"
-        const val dataStore = "androidx.datastore:datastore-preferences:1.1.1"
 
         object Compose {
             const val compilerVersion = "1.4.4"
@@ -32,17 +30,6 @@ object Libraries {
             const val ktx = "androidx.room:room-ktx:${version}"
             const val compiler = "androidx.room:room-compiler:${version}"
             const val kaptCompiler = "androidx.room:room-compiler:${version}"
-        }
-
-        object NavigationComponent {
-            const val version = "2.8.3"
-            const val fragmentKtx = "androidx.navigation:navigation-fragment-ktx:${version}"
-            const val uiKtx = "androidx.navigation:navigation-ui-ktx:${version}"
-            const val navigationCompose = "androidx.navigation:navigation-compose:${version}"
-        }
-
-        object Security {
-            const val crypto = "androidx.security:security-crypto:1.0.0"
         }
     }
 
@@ -80,10 +67,6 @@ object Libraries {
 
     const val gson = "com.google.code.gson:gson:2.11.0"
     const val bottomNavigation = "com.aurelhubert:ahbottomnavigation:2.2.0"
-
-    object Stetho {
-        const val stetho = "com.facebook.stetho:stetho:1.6.0"
-    }
 
     object Test {
         const val junit = "junit:junit:4.13.2"

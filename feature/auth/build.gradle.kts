@@ -30,7 +30,7 @@ dependencies {
     implementation(libs.fragment.ktx)
     implementation(libs.material)
     implementation(Libraries.AndroidX.LifeCycle.viewModelKtx)
-    implementation(Libraries.AndroidX.NavigationComponent.fragmentKtx)
+    implementation(libs.navigation.fragment.ktx)
 
     //Dagger
     implementation(libs.hilt.android)
