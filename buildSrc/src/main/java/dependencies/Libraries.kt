@@ -45,28 +45,10 @@ object Libraries {
         const val hiltCompiler = "com.google.dagger:hilt-android-compiler:${GradlePlugins.Hilt.version}"
     }
 
-    object Retrofit {
-        private const val version = "2.11.0"
-        const val core = "com.squareup.retrofit2:retrofit:${version}"
-        const val gsonConverter = "com.squareup.retrofit2:converter-gson:${version}"
-        const val moshiConverter = "com.squareup.retrofit2:converter-moshi:${version}"
-        const val coroutinesAdapter = "com.jakewharton.retrofit:retrofit2-kotlin-coroutines-adapter:0.9.2"
-    }
-
     object OkHttp {
         private const val version = "4.12.0"
         const val interceptor = "com.squareup.okhttp3:logging-interceptor:${version}"
     }
-
-    object Moshi {
-        private const val version = "1.15.1"
-        const val moshi = "com.squareup.moshi:moshi-kotlin:${version}"
-        const val adapters = "com.squareup.moshi:moshi-adapters:${version}"
-        const val codegen = "com.squareup.moshi:moshi-kotlin-codegen:${version}"
-    }
-
-    const val gson = "com.google.code.gson:gson:2.11.0"
-    const val bottomNavigation = "com.aurelhubert:ahbottomnavigation:2.2.0"
 
     object Test {
         const val junit = "junit:junit:4.13.2"

@@ -34,7 +34,7 @@ dependencies {
     ksp libs.room.compiler
 
     //Retrofit
-    implementation Libraries.Retrofit.core
+    implementation libs.retrofit.core
 
     //Coroutines
     implementation libs.coroutines.core

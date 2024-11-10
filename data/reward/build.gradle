@@ -23,9 +23,9 @@ dependencies {
     ksp libs.room.compiler
 
     //Retrofit
-    implementation Libraries.Retrofit.core
-    implementation Libraries.Retrofit.gsonConverter
-    implementation Libraries.gson
+    implementation libs.retrofit.core
+    implementation libs.retrofit.gson
+    implementation libs.gson
 
     //Coroutines
     implementation libs.coroutines.core

@@ -15,17 +15,6 @@ dependencies {
 
     implementation libs.kotlin.stdlib
 
-    //Retrofit
-    implementation Libraries.Retrofit.core
-    implementation Libraries.Retrofit.gsonConverter
-    implementation Libraries.Retrofit.coroutinesAdapter
-    implementation Libraries.Retrofit.moshiConverter
-
-    //Moshi
-    implementation Libraries.Moshi.moshi
-    implementation Libraries.Moshi.adapters
-    implementation Libraries.Moshi.codegen
-
     //Coroutines
     implementation libs.coroutines.core
 
