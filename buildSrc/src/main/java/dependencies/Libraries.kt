@@ -6,14 +6,6 @@ object Libraries {
     object AndroidX {
 
         object Compose {
-            const val compilerVersion = "1.4.4"
-            const val foundation = "androidx.compose.foundation:foundation:1.7.5"
-            const val material = "androidx.compose.material:material:1.7.5"
-            const val ui = "androidx.compose.ui:ui:1.7.5"
-            const val uiTooling = "androidx.compose.ui:ui-tooling:1.7.5"
-            const val liveData = "androidx.compose.runtime:runtime-livedata:1.7.5"
-            const val constraintLayout = "androidx.constraintlayout:constraintlayout-compose:1.1.0"
-            const val material3 = "androidx.compose.material3:material3:1.3.1"
             const val hiltNavigationCompose = "androidx.hilt:hilt-navigation-compose:1.2.0"
         }
 
@@ -23,31 +15,10 @@ object Libraries {
             const val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:${version}"
             const val runtimeCompose = "androidx.lifecycle:lifecycle-runtime-compose:${version}"
         }
-
-        object Room {
-            private const val version = "2.6.1"
-            const val runtime = "androidx.room:room-runtime:${version}"
-            const val ktx = "androidx.room:room-ktx:${version}"
-            const val compiler = "androidx.room:room-compiler:${version}"
-            const val kaptCompiler = "androidx.room:room-compiler:${version}"
-        }
     }
 
     object Google {
         const val truth = "com.google.truth:truth:1.4.4"
-    }
-
-    object Dagger {
-        private const val version = "2.52"
-        const val core = "com.google.dagger:dagger:${version}"
-        const val compiler = "com.google.dagger:dagger-compiler:${version}"
-        const val hilt = "com.google.dagger:hilt-android:${GradlePlugins.Hilt.version}"
-        const val hiltCompiler = "com.google.dagger:hilt-android-compiler:${GradlePlugins.Hilt.version}"
-    }
-
-    object OkHttp {
-        private const val version = "4.12.0"
-        const val interceptor = "com.squareup.okhttp3:logging-interceptor:${version}"
     }
 
     object Test {
