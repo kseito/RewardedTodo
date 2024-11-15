@@ -75,7 +75,7 @@ object Libraries {
         const val mockito = "org.mockito:mockito-core:5.14.2"
         const val mockitoKotlin = "org.mockito.kotlin:mockito-kotlin:5.4.0"
         const val mockWebServer = "com.squareup.okhttp3:mockwebserver:4.12.0"
-        const val robolectric = "org.robolectric:robolectric:4.13"
+        const val robolectric = "org.robolectric:robolectric:4.14"
         const val assertJ = "org.assertj:assertj-core:3.26.3"
         const val mockk = "io.mockk:mockk:1.13.13"
 
