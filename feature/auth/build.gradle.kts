@@ -29,7 +29,6 @@ dependencies {
     implementation(libs.core.ktx)
     implementation(libs.fragment.ktx)
     implementation(libs.material)
-    implementation(Libraries.AndroidX.LifeCycle.viewModelKtx)
     implementation(libs.navigation.fragment.ktx)
 
     //Dagger

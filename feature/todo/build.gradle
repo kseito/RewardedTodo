@@ -53,9 +53,6 @@ dependencies {
     testImplementation Libraries.Test.mockk
     androidTestImplementation Libraries.Test.AndroidX.junit
     androidTestImplementation Libraries.Test.AndroidX.espresso
-    implementation Libraries.AndroidX.LifeCycle.livedataKtx
-    implementation Libraries.AndroidX.LifeCycle.viewModelKtx
-    implementation Libraries.AndroidX.LifeCycle.runtimeCompose
     testImplementation libs.coroutines.test
 
     //Dagger
