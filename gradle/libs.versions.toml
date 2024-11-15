@@ -61,6 +61,7 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room"}
 security-crypto = { group = "androidx.security", name = "security-crypto", version.ref = "security-crypto" }
 
+# Plugins
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle",  version.ref = "android-gradle-plugin"}
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin"}
 navigation-safe-args = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigation" }
