@@ -5,10 +5,6 @@ object Libraries {
 
     object AndroidX {
 
-        object Compose {
-            const val hiltNavigationCompose = "androidx.hilt:hilt-navigation-compose:1.2.0"
-        }
-
         object LifeCycle {
             private const val version = "2.8.7"
             const val livedataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:${version}"
