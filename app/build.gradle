@@ -1,5 +1,4 @@
 import dependencies.GradlePlugins
-import dependencies.Libraries
 
 plugins {
     alias libs.plugins.compose.compiler

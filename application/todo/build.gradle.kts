@@ -1,4 +1,3 @@
-import dependencies.Libraries
 
 plugins {
     id("com.android.library")
@@ -24,7 +23,7 @@ dependencies {
 
     implementation(libs.core.ktx)
 
-    testImplementation(Libraries.Test.junit)
+    testImplementation(libs.junit)
 
     //Dagger
     implementation(libs.hilt.android)

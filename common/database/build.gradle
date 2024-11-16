@@ -1,4 +1,3 @@
-import dependencies.Libraries
 
 plugins {
     alias libs.plugins.ksp
@@ -15,7 +14,7 @@ dependencies {
 
     implementation libs.core.ktx
 
-    testImplementation Libraries.Test.junit
+    testImplementation libs.junit
 
     implementation libs.room.runtime
     implementation libs.room.ktx

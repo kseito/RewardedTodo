@@ -1,4 +1,3 @@
-import dependencies.Libraries
 
 plugins {
     id("com.android.library")
@@ -44,18 +43,18 @@ dependencies {
     implementation(libs.coroutines.adapter)
 
     //Test
-    testImplementation(Libraries.Test.junit)
-    testImplementation(Libraries.Test.androidXCore)
-    testImplementation(Libraries.Test.mockito)
-    testImplementation(Libraries.Test.mockitoKotlin)
+    testImplementation(libs.junit)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.mockito.core)
+    testImplementation(libs.mockito.kotlin)
     testImplementation(libs.coroutines.test)
-    testImplementation(Libraries.Test.mockWebServer)
-    testImplementation(Libraries.Test.robolectric)
-    testImplementation(Libraries.Test.assertJ)
-    testImplementation(Libraries.Test.AndroidX.coreTesting)
+    testImplementation(libs.mockwebserver)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.assertj.core)
+    testImplementation(libs.androidx.arch.core.testing)
     implementation(project(path = ":test:reward"))
-    androidTestImplementation(Libraries.Test.AndroidX.junit)
-    androidTestImplementation(Libraries.Test.AndroidX.espresso)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.espresso.core)
 
     implementation(project(path = ":application:reward"))
     implementation(project(path = ":domain:reward"))

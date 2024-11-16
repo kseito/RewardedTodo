@@ -1,4 +1,3 @@
-import dependencies.Libraries
 
 plugins {
     id 'com.android.library'
@@ -31,13 +30,13 @@ dependencies {
     implementation libs.coroutines.core
     implementation libs.coroutines.adapter
 
-    testImplementation Libraries.Test.junit
-    testImplementation Libraries.Test.assertJ
-    testImplementation Libraries.Test.mockWebServer
-    testImplementation Libraries.Test.robolectric
-    testImplementation Libraries.Test.androidXCore
-    testImplementation Libraries.Test.mockito
-    testImplementation Libraries.Test.mockitoKotlin
+    testImplementation libs.junit
+    testImplementation libs.assertj.core
+    testImplementation libs.mockwebserver
+    testImplementation libs.robolectric
+    testImplementation libs.androidx.test.core
+    testImplementation libs.mockito.core
+    testImplementation libs.mockito.kotlin
     testImplementation libs.coroutines.test
     testImplementation project(path: ':test:reward')
 

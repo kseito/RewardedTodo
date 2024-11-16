@@ -1,4 +1,3 @@
-import dependencies.Libraries
 
 plugins {
     id("com.android.library")
@@ -35,7 +34,7 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
-    testImplementation(Libraries.Test.junit)
+    testImplementation(libs.junit)
 }
 
 apply(from = rootProject.file("gradle/ktlint.gradle"))

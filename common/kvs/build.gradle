@@ -1,4 +1,3 @@
-import dependencies.Libraries
 import dependencies.GradlePlugins
 
 plugins {
@@ -12,7 +11,7 @@ apply from: rootProject.file('gradle/android_common.gradle')
 dependencies {
 
     implementation libs.kotlin.stdlib
-    testImplementation Libraries.Test.junit
+    testImplementation libs.junit
 }
 
 android {

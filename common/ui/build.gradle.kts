@@ -1,4 +1,3 @@
-import dependencies.Libraries
 
 plugins {
     id("com.android.library")
@@ -21,7 +20,7 @@ dependencies {
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.ui.tooling)
 
-    testImplementation(Libraries.Test.junit)
+    testImplementation(libs.junit)
 
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
