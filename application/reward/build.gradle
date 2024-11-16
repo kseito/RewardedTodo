@@ -1,5 +1,4 @@
 import dependencies.GradlePlugins
-import dependencies.Libraries
 
 plugins {
     id 'com.android.library'
@@ -20,12 +19,12 @@ dependencies {
     implementation libs.coroutines.android
     implementation libs.coroutines.adapter
 
-    testImplementation Libraries.Test.junit
-    testImplementation Libraries.Test.assertJ
-    testImplementation Libraries.Test.mockito
-    testImplementation Libraries.Test.mockitoKotlin
+    testImplementation libs.junit
+    testImplementation libs.assertj.core
+    testImplementation libs.mockito.core
+    testImplementation libs.mockito.kotlin
     testImplementation libs.coroutines.test
-    testImplementation Libraries.Test.mockk
+    testImplementation libs.mockk
     testImplementation project(path: ':test:reward')
 
     implementation project(path: ':domain:reward')
