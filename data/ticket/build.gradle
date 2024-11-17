@@ -1,4 +1,3 @@
-import dependencies.Libraries
 
 plugins {
     id 'com.android.library'
@@ -17,7 +16,7 @@ dependencies {
     implementation libs.material
     implementation libs.datastore.preferences
 
-    testImplementation Libraries.Test.junit
+    testImplementation libs.junit
 
     //Dagger
     implementation libs.hilt.android

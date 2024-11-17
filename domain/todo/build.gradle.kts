@@ -1,4 +1,3 @@
-import dependencies.Libraries
 
 plugins {
     id("com.android.library")
@@ -18,5 +17,5 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.coroutines.core)
 
-    testImplementation(Libraries.Test.junit)
+    testImplementation(libs.junit)
 }

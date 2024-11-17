@@ -1,5 +1,4 @@
 import dependencies.GradlePlugins
-import dependencies.Libraries
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -120,14 +119,13 @@ dependencies {
     kapt libs.hilt.compiler
 
     //Retrofit
-    implementation Libraries.Retrofit.core
-    implementation Libraries.Retrofit.gsonConverter
-    implementation Libraries.Retrofit.coroutinesAdapter
-    implementation Libraries.gson
-    implementation Libraries.Retrofit.moshiConverter
-    implementation Libraries.OkHttp.interceptor
-
-    implementation Libraries.Moshi.moshi
+    implementation libs.retrofit.core
+    implementation libs.retrofit.gson
+    implementation libs.coroutines.adapter
+    implementation libs.gson
+    implementation libs.retrofit.moshi
+    implementation libs.okhttp.interceptor
+    implementation libs.moshi
 
     implementation project(path: ':feature:reward')
     implementation project(path: ':feature:auth')

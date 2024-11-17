@@ -1,5 +1,4 @@
 import dependencies.GradlePlugins
-import dependencies.Libraries
 
 plugins {
     id 'com.android.library'
@@ -14,8 +13,8 @@ dependencies {
     implementation libs.kotlin.stdlib
     implementation libs.coroutines.core
 
-    testImplementation Libraries.Test.junit
-    testImplementation Libraries.Test.assertJ
+    testImplementation libs.junit
+    testImplementation libs.assertj.core
 }
 
 android {

@@ -1,4 +1,3 @@
-import dependencies.Libraries
 
 plugins {
     id("com.android.library")
@@ -24,13 +23,13 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.livedata)
     implementation(libs.constraintlayout.compose)
-    implementation(Libraries.AndroidX.Compose.hiltNavigationCompose)
+    implementation(libs.hilt.navigation.compose)
 
     //Dagger
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
-    testImplementation(Libraries.Test.junit)
+    testImplementation(libs.junit)
 }
 
 android {
