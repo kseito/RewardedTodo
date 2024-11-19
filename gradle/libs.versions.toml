@@ -92,7 +92,6 @@ espresso-core = { group = "androidx.test.espresso", name = "espresso-core", vers
 # Plugins
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle",  version.ref = "android-gradle-plugin"}
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin"}
-navigation-safe-args = { group = "androidx.navigation", name = "navigation-safe-args-gradle-plugin", version.ref = "navigation" }
 ktlint-gradle = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version.ref = "ktlint-gradle"}
 deploy-gate = { group = "com.deploygate", name = "gradle", version.ref = "deploy-gate"}
 
