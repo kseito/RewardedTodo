@@ -3,10 +3,9 @@ plugins {
     alias libs.plugins.android.library
     alias libs.plugins.kotlin.android
     alias libs.plugins.ksp
+    alias libs.plugins.kotlin.kapt
+    id 'jacoco'
 }
-
-apply plugin: 'kotlin-kapt'
-apply plugin: 'jacoco'
 
 apply from: rootProject.file('gradle/android_common.gradle')
 
