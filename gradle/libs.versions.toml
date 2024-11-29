@@ -90,7 +90,6 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "a
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 
 # Plugins
-android-gradle-plugin = { group = "com.android.tools.build", name = "gradle",  version.ref = "android-gradle-plugin"}
 deploy-gate = { group = "com.deploygate", name = "gradle", version.ref = "deploy-gate"}
 
 [plugins]
