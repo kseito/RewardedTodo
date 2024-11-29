@@ -1,9 +1,9 @@
 
 plugins {
     alias libs.plugins.ksp
+    alias libs.plugins.android.library
 }
 
-apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 

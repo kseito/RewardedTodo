@@ -1,6 +1,6 @@
 
 plugins {
-    id("com.android.library")
+    alias(libs.plugins.android.library)
     id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
     id("org.jlleitschuh.gradle.ktlint")
