@@ -11,6 +11,7 @@ staging.keystore
 
 # Kotlin 2.0
 kotlin/
+.kotlin
 
 # Generated files
 bin/
