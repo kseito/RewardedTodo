@@ -92,7 +92,6 @@ espresso-core = { group = "androidx.test.espresso", name = "espresso-core", vers
 # Plugins
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle",  version.ref = "android-gradle-plugin"}
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin"}
-ktlint-gradle = { group = "org.jlleitschuh.gradle", name = "ktlint-gradle", version.ref = "ktlint-gradle"}
 deploy-gate = { group = "com.deploygate", name = "gradle", version.ref = "deploy-gate"}
 
 [plugins]
@@ -103,4 +102,5 @@ compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "dagger-hilt"}
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin"}
+ktlint-gradle = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-gradle" }
 

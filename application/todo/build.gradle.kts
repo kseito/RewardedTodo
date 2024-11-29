@@ -2,7 +2,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    id("org.jlleitschuh.gradle.ktlint")
+    alias(libs.plugins.ktlint.gradle)
     kotlin("kapt")
 }
 

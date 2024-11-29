@@ -8,7 +8,6 @@ buildscript {
     }
     dependencies {
         classpath libs.android.gradle.plugin
-        classpath libs.ktlint.gradle
         classpath libs.deploy.gate
     }
 }
@@ -21,6 +20,7 @@ plugins {
     alias libs.plugins.dagger.hilt apply false
     alias libs.plugins.ksp apply false
     alias libs.plugins.kotlin.kapt apply false
+    alias libs.plugins.ktlint.gradle apply false
 }
 
 allprojects {
