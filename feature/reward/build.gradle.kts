@@ -1,7 +1,7 @@
 
 plugins {
     alias(libs.plugins.android.library)
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.kotlin.android)
     id("dagger.hilt.android.plugin")
     id("org.jlleitschuh.gradle.ktlint")
     alias(libs.plugins.compose.compiler)
