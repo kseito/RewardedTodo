@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("jacoco")
     alias(libs.plugins.compose.compiler)
-    kotlin("kapt")
+    alias(libs.plugins.kotlin.kapt)
 }
 
 apply(from = rootProject.file("gradle/android_common.gradle"))

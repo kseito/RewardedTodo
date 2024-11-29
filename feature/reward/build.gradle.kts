@@ -5,7 +5,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     alias(libs.plugins.ktlint.gradle)
     alias(libs.plugins.compose.compiler)
-    kotlin("kapt")
+    alias(libs.plugins.kotlin.kapt)
 }
 
 apply(from = rootProject.file("gradle/android_common.gradle"))
