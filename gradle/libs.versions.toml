@@ -90,7 +90,9 @@ androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "a
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 
 # Plugins
+android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
 deploy-gate = { group = "com.deploygate", name = "gradle", version.ref = "deploy-gate"}
+kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin"}
@@ -103,3 +105,4 @@ kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin"}
 ktlint-gradle = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-gradle" }
 deploy-gate = { id = "com.deploygate", version.ref = "deploy-gate" }
 
+rewardedtodo-android-library = { id = "rewardedtodo.android.library" }

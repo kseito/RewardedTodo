@@ -1,13 +1,11 @@
 
 plugins {
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.rewardedtodo.android.library)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
     id("jacoco")
 }
-
-apply(from = rootProject.file("gradle/android_common.gradle"))
 
 android {
     buildFeatures {

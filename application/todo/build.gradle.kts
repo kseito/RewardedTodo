@@ -1,12 +1,11 @@
 
 plugins {
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.rewardedtodo.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.ktlint.gradle)
     alias(libs.plugins.kotlin.kapt)
 }
 
-apply(from = rootProject.file("gradle/android_common.gradle"))
 apply(from = rootProject.file("gradle/ktlint.gradle"))
 
 android {

@@ -1,13 +1,10 @@
 
 plugins {
-    alias(libs.plugins.android.application)
+    alias(libs.plugins.rewardedtodo.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.ksp)
 }
-
-apply(from = rootProject.file("gradle/android_common.gradle"))
 
 dependencies {
     implementation(libs.kotlin.stdlib)
