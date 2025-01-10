@@ -7,8 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Scaffold
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -26,7 +25,6 @@ import jp.kztproject.rewardedtodo.feature.setting.SettingDialog
 import jp.kztproject.rewardedtodo.presentation.todo.TODO_SCREEN
 import jp.kztproject.rewardedtodo.presentation.todo.todoListScreen
 
-@OptIn(ExperimentalMaterialApi::class)
 @AndroidEntryPoint
 class HomeActivity : ComponentActivity() {
 
