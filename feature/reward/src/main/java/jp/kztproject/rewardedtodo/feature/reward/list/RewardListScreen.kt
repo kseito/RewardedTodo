@@ -172,8 +172,10 @@ private fun RewardListScreen(
 
         FloatingActionButton(
             onClick = {
-                coroutineScope.launch {
-                    bottomSheetState.show()
+                viewModel.validateRewards {
+                    coroutineScope.launch {
+                        bottomSheetState.show()
+                    }
                 }
             },
             backgroundColor = MaterialTheme.colors.primary,
