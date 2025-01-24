@@ -15,6 +15,7 @@ jobs:
           java-version: 17
           distribution: "temurin"
           cache: "gradle"
+      - run: git fetch origin master
       - run: ./gradlew spotlessKotlinApply
       - uses: reviewdog/action-suggester@v1
         with:
