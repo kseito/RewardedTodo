@@ -26,8 +26,6 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -62,9 +60,7 @@ import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @Composable
-fun TodoListScreenWithBottomSheet(
-    viewModel: TodoListViewModel = hiltViewModel(),
-) {
+fun TodoListScreenWithBottomSheet(viewModel: TodoListViewModel = hiltViewModel()) {
     val coroutineScope = rememberCoroutineScope()
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     var selectedTodo: Todo? by remember { mutableStateOf(null) }
@@ -96,7 +92,7 @@ fun TodoListScreenWithBottomSheet(
         todo = selectedTodo,
         bottomSheetState = bottomSheetState,
         onTodoSaveSelected = onTodoSaveSelected,
-        onTodoDeleteSelected = onTodoDeleteSelected
+        onTodoDeleteSelected = onTodoDeleteSelected,
     ) {
         TodoListScreen(
             viewModel = viewModel,
@@ -120,12 +116,13 @@ private fun TodoListScreen(
     val refreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val pullRefreshState = rememberPullRefreshState(
         refreshing = refreshing,
-        onRefresh = { viewModel.refreshTodoList() })
+        onRefresh = { viewModel.refreshTodoList() },
+    )
 
     Box(
         modifier = Modifier
             .pullRefresh(pullRefreshState)
-            .fillMaxSize()
+            .fillMaxSize(),
     ) {
         LazyColumn {
             todoList?.let {
@@ -137,7 +134,8 @@ private fun TodoListScreen(
                         },
                         onTodoDone = {
                             viewModel.completeTodo(todo)
-                        })
+                        },
+                    )
                     if (index < todoList!!.lastIndex) {
                         Divider()
                     }
@@ -151,7 +149,7 @@ private fun TodoListScreen(
             backgroundColor = MaterialTheme.colors.primary,
             modifier = Modifier
                 .padding(24.dp)
-                .align(Alignment.BottomEnd)
+                .align(Alignment.BottomEnd),
         ) {
             Icon(Icons.Rounded.Add, contentDescription = "Add")
         }
@@ -159,7 +157,7 @@ private fun TodoListScreen(
         PullRefreshIndicator(
             modifier = Modifier.align(Alignment.TopCenter),
             refreshing = refreshing,
-            state = pullRefreshState
+            state = pullRefreshState,
         )
 
         result?.let {
@@ -173,9 +171,9 @@ private fun TodoListScreen(
                         message = stringResource(id = R.string.error_message),
                         onOkClicked = {
                             viewModel.result.value = null
-                        }
+                        },
                     )
-                }
+                },
             )
         }
     }
@@ -191,7 +189,7 @@ fun TodoListScreenPreview() {
                 return flowOf(
                     listOf(
                         Todo(1, 1001, "英語学習", 2, true),
-                    )
+                    ),
                 )
             }
         },
@@ -208,13 +206,13 @@ fun TodoListScreenPreview() {
         },
         object : CompleteTodoUseCase {
             override suspend fun execute(todo: Todo) {}
-        }
+        },
     )
     TodoListScreen(
         viewModel = viewModel,
         onTodoItemClicked = {},
         onTodoAddClicked = {},
-        onTodoUpdateSucceed = {}
+        onTodoUpdateSucceed = {},
     )
 }
 
@@ -225,7 +223,7 @@ private fun TodoListItem(todo: Todo, onItemClicked: () -> Unit, onTodoDone: (Tod
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = onItemClicked)
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         val (checkbox, title, ticketImage, ticketCount) = createRefs()
 
@@ -238,7 +236,7 @@ private fun TodoListItem(todo: Todo, onItemClicked: () -> Unit, onTodoDone: (Tod
                     start.linkTo(parent.start)
                     bottom.linkTo(parent.bottom)
                 }
-                .padding(0.dp, 0.dp, 16.dp, 0.dp)
+                .padding(0.dp, 0.dp, 16.dp, 0.dp),
         )
         Text(
             text = todo.name,
@@ -249,7 +247,7 @@ private fun TodoListItem(todo: Todo, onItemClicked: () -> Unit, onTodoDone: (Tod
                     start.linkTo(checkbox.end)
                     end.linkTo(parent.end)
                     width = Dimension.fillToConstraints
-                }
+                },
         )
         Image(
             painter = painterResource(id = R.drawable.ic_ticket),
@@ -260,7 +258,7 @@ private fun TodoListItem(todo: Todo, onItemClicked: () -> Unit, onTodoDone: (Tod
                 .constrainAs(ticketImage) {
                     top.linkTo(title.bottom)
                     start.linkTo(title.start)
-                }
+                },
         )
         Text(
             text = "${todo.numberOfTicketsObtained}",
@@ -271,7 +269,7 @@ private fun TodoListItem(todo: Todo, onItemClicked: () -> Unit, onTodoDone: (Tod
                     top.linkTo(ticketImage.top)
                     start.linkTo(ticketImage.end, 16.dp)
                     bottom.linkTo(ticketImage.bottom)
-                }
+                },
         )
     }
 }
@@ -289,7 +287,7 @@ private fun TodoListItemPreview() {
 @Composable
 private fun DarkModeTodoListItemPreview() {
     MaterialTheme(
-        colors = DarkColorScheme
+        colors = DarkColorScheme,
     ) {
         val todo = Todo(1, 1, "Buy ingredients for dinner", 1, false)
         TodoListItem(todo, {}) {}
