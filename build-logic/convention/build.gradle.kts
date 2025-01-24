@@ -20,6 +20,7 @@ kotlin {
 dependencies {
     implementation(libs.android.gradle.plugin)
     implementation(libs.kotlin.gradle.plugin)
+    compileOnly(libs.spotless.gradle.plugin)
 }
 
 gradlePlugin {
@@ -27,6 +28,12 @@ gradlePlugin {
         register("androidLibrary") {
             id = "rewardedtodo.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
+        }
+    }
+    plugins {
+        register("androidApplicationSpotless") {
+            id = "rewardedtodo.android.application.spotless"
+            implementationClass = "AndroidApplicationSpotlessConventionPlugin"
         }
     }
 }

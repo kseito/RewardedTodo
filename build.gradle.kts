@@ -12,6 +12,8 @@ plugins {
     alias(libs.plugins.kotlin.kapt) apply false
     alias(libs.plugins.ktlint.gradle) apply false
     alias(libs.plugins.deploy.gate) apply false
+    alias(libs.plugins.rewardedtodo.android.application.spotless)
+    alias(libs.plugins.spotless)
 //    id("org.gradle.jacoco")
 }
 
