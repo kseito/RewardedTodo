@@ -10,8 +10,7 @@ class AndroidApplicationSpotlessConventionPlugin : Plugin<Project> {
             // Configure the Spotless plugin
             extensions.configure<SpotlessExtension> {
                 kotlin {
-                    // I comment it out because it causes the following problem. https://github.com/diffplug/spotless/issues/911
-//                    ratchetFrom("origin/master")
+                    ratchetFrom("origin/master")
 
                     target("**/*.kt")
                     targetExclude("**/build/**/*.kt")
