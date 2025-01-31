@@ -10,6 +10,7 @@ plugins {
     alias(libs.plugins.deploy.gate) apply false
     alias(libs.plugins.rewardedtodo.android.application.spotless)
     alias(libs.plugins.spotless)
+    alias(libs.plugins.rewardedtodo.android.application.deploygate)
 }
 
 allprojects {

@@ -21,6 +21,7 @@ dependencies {
     implementation(libs.android.gradle.plugin)
     implementation(libs.kotlin.gradle.plugin)
     compileOnly(libs.spotless.gradle.plugin)
+    compileOnly(libs.deploygate.gradle.plugin)
 }
 
 gradlePlugin {
@@ -34,6 +35,12 @@ gradlePlugin {
         register("androidApplicationSpotless") {
             id = "rewardedtodo.android.application.spotless"
             implementationClass = "AndroidApplicationSpotlessConventionPlugin"
+        }
+    }
+    plugins {
+        register("androidApplicationDeploygate") {
+            id = "rewardedtodo.android.application.deploygate"
+            implementationClass = "AndroidApplicationDeploygateConventionPlugin"
         }
     }
 }
