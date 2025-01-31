@@ -11,9 +11,6 @@ plugins {
     alias(libs.plugins.ktlint.gradle)
 }
 
-// FIXME: cannnot find the plugin
-//apply(plugin = "com.deploygate")
-
 android {
     compileSdk = Versions.androidCompileSdkVersion
 
@@ -160,8 +157,3 @@ configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
     }
     ignoreFailures.set(true)
 }
-
-//deploygate {
-//    appOwnerName = System.getenv("DEPLOY_GATE_OWENER_NAME")
-//    apiToken = System.getenv("DEPLOY_GATE_API_KEY")
-//}
