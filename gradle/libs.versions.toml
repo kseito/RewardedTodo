@@ -92,7 +92,7 @@ espresso-core = { group = "androidx.test.espresso", name = "espresso-core", vers
 
 # Plugins
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
-deploy-gate = { group = "com.deploygate", name = "gradle", version.ref = "deploy-gate"}
+deploygate-gradle-plugin = { group = "com.deploygate", name = "gradle", version.ref = "deploy-gate"}
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 spotless-gradle-plugin = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless_gradle_plugin" }
 
@@ -110,3 +110,4 @@ spotless = { id = "com.diffplug.spotless", version.ref = "spotless_gradle_plugin
 
 rewardedtodo-android-library = { id = "rewardedtodo.android.library" }
 rewardedtodo-android-application-spotless = { id = "rewardedtodo.android.application.spotless" }
+rewardedtodo-android-application-deploygate = { id = "rewardedtodo.android.application.deploygate" }
