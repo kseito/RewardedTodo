@@ -85,6 +85,12 @@ fun RewardListScreenWithBottomSheet(
             bottomSheetState.show()
         }
     }
+    val onAddRewardItemClick: () -> Unit = {
+        coroutineScope.launch {
+            selectedReward = null
+            bottomSheetState.show()
+        }
+    }
     val onRewardSaveSelected: (Int?, String?, String?, String?, Boolean) -> Unit =
         { id, title, description, chanceOfWinning, repeat ->
             // TODO use factory method
@@ -110,6 +116,7 @@ fun RewardListScreenWithBottomSheet(
         RewardListScreen(
             viewModel = viewModel,
             bottomSheetState = bottomSheetState,
+            onAddNewRewardClick = onAddRewardItemClick,
             onRewardItemClick = onRewardItemClick
         )
     }
@@ -120,6 +127,7 @@ fun RewardListScreenWithBottomSheet(
 private fun RewardListScreen(
     viewModel: RewardListViewModel,
     bottomSheetState: ModalBottomSheetState,
+    onAddNewRewardClick: () -> Unit,
     onRewardItemClick: (Reward) -> Unit
 ) {
     val ticket by viewModel.rewardPoint.observeAsState()
@@ -174,7 +182,7 @@ private fun RewardListScreen(
             onClick = {
                 viewModel.validateRewards {
                     coroutineScope.launch {
-                        bottomSheetState.show()
+                        onAddNewRewardClick()
                     }
                 }
             },
@@ -318,6 +326,7 @@ private fun RewardListScreenPreview() {
     RewardListScreen(
         viewModel = viewModel,
         bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
+        onAddNewRewardClick = {},
         onRewardItemClick = {},
     )
 }
