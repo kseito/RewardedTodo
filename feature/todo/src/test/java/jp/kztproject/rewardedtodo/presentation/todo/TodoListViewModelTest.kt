@@ -34,7 +34,7 @@ class TodoListViewModelTest : ShouldSpec({
             fetchTodoListUseCase,
             updateTodoListUseCase,
             deleteTodoUseCase,
-            completeTodoUseCase
+            completeTodoUseCase,
         )
     }
 
