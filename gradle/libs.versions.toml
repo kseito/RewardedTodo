@@ -10,7 +10,6 @@ coroutines-adapter = "0.9.2"
 dagger-hilt = "2.55"
 datastore = "1.1.2"
 deploy-gate = "2.9.0"
-gson = "2.11.0"
 hilt-navigation-compose = "1.2.0"
 kotlin = "2.1.0"
 ksp = "2.0.21-1.0.28"
@@ -67,10 +66,8 @@ navigation-fragment-ktx = { group = "androidx.navigation", name = "navigation-fr
 navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
 preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-retrofit-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
 okhttp-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 moshi = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room"}
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room"}

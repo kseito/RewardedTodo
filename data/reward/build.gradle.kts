@@ -23,8 +23,6 @@ dependencies {
 
     //Retrofit
     implementation(libs.retrofit.core)
-    implementation(libs.retrofit.gson)
-    implementation(libs.gson)
 
     //Coroutines
     implementation(libs.coroutines.core)
