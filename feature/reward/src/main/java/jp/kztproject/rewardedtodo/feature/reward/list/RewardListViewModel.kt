@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import jp.kztproject.rewardedtodo.application.reward.model.error.OverMaxRewardsException
 import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
@@ -57,6 +58,19 @@ class RewardListViewModel @Inject constructor(
         viewModelScope.launch {
             getRewardsUseCase.executeAsFlow().collect { newRewardList ->
                 mutableRewardList.value = newRewardList
+            }
+        }
+    }
+
+    fun validateRewards(onSuccess: () -> Unit) {
+        viewModelScope.launch {
+            rewardList.value?.let {
+                if (it.size >= RewardCollection.MAX) {
+                    // TODO Create error property to show this error
+                    mutableObtainedReward.value = Result.failure(OverMaxRewardsException())
+                } else {
+                    onSuccess()
+                }
             }
         }
     }

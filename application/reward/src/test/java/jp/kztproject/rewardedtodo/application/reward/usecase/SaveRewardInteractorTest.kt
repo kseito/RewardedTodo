@@ -56,13 +56,4 @@ class SaveRewardInteractorTest {
         val actual = interactor.execute(rewardInput)
         assertThat(actual.exceptionOrNull()).isInstanceOf(RewardProbabilityEmptyException().javaClass)
     }
-
-    @Test
-    fun shouldFail_WhenSaveRewardOverMaxRewards() = runTest {
-        val rewards = (1..7).map { DummyCreator.createDummyReward() }
-        coEvery { mockIRewardRepository.findAll() } returns rewards
-
-        val actual = interactor.execute(filledReward)
-        assertThat(actual.exceptionOrNull()).isInstanceOf(OverMaxRewardsException().javaClass)
-    }
 }
