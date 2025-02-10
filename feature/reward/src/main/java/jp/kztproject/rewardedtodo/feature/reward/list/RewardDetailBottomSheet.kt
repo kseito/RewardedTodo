@@ -67,6 +67,12 @@ private fun RewardDetailBottomSheetContent(
             description = it.description.value ?: ""
             chanceOfWinning = it.probability.value.toString()
             repeat = it.needRepeat
+        } ?: run {
+            id = null
+            title = ""
+            description = ""
+            chanceOfWinning = ""
+            repeat = false
         }
     }
 
