@@ -17,28 +17,30 @@ import kotlinx.coroutines.test.setMain
 @OptIn(ExperimentalCoroutinesApi::class)
 class TodoListViewModelTest : ShouldSpec({
 
-    beforeTest {
-        MockKAnnotations.init(this)
-        Dispatchers.setMain(Dispatchers.Unconfined)
-    }
-
-    afterTest {
-        Dispatchers.resetMain()
-    }
-
     val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
     val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
     val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
     val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
     val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
 
-    val viewModel = TodoListViewModel(
-        getTodoListUseCase,
-        fetchTodoListUseCase,
-        updateTodoListUseCase,
-        deleteTodoUseCase,
-        completeTodoUseCase
-    )
+    lateinit var viewModel: TodoListViewModel
+
+    beforeSpec {
+        MockKAnnotations.init(this)
+        Dispatchers.setMain(Dispatchers.Unconfined)
+
+        viewModel = TodoListViewModel(
+            getTodoListUseCase,
+            fetchTodoListUseCase,
+            updateTodoListUseCase,
+            deleteTodoUseCase,
+            completeTodoUseCase
+        )
+    }
+
+    afterSpec {
+        Dispatchers.resetMain()
+    }
 
     context("When viewModel is initialized") {
         should("get todo list") {
