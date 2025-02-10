@@ -119,9 +119,7 @@ dependencies {
 
     // Retrofit
     implementation(libs.retrofit.core)
-    implementation(libs.retrofit.gson)
     implementation(libs.coroutines.adapter)
-    implementation(libs.gson)
     implementation(libs.retrofit.moshi)
     implementation(libs.okhttp.interceptor)
     implementation(libs.moshi)
