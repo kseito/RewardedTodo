@@ -43,7 +43,7 @@ fun RewardDetailBottomSheet(
                 onRewardDeleteSelected = onRewardDeleteSelected,
             )
         },
-        content = content
+        content = content,
     )
 }
 
@@ -67,12 +67,18 @@ private fun RewardDetailBottomSheetContent(
             description = it.description.value ?: ""
             chanceOfWinning = it.probability.value.toString()
             repeat = it.needRepeat
+        } ?: run {
+            id = null
+            title = ""
+            description = ""
+            chanceOfWinning = ""
+            repeat = false
         }
     }
 
     Column(
         modifier = Modifier
-            .padding(8.dp)
+            .padding(8.dp),
     ) {
         val modifier = Modifier
             .fillMaxWidth()
@@ -84,7 +90,7 @@ private fun RewardDetailBottomSheetContent(
                 Text(text = stringResource(id = R.string.hint_title))
             },
             modifier = modifier,
-            singleLine = true
+            singleLine = true,
         )
         OutlinedTextField(
             value = description,
@@ -92,7 +98,7 @@ private fun RewardDetailBottomSheetContent(
             label = {
                 Text(text = stringResource(id = R.string.hint_description))
             },
-            modifier = modifier
+            modifier = modifier,
         )
         OutlinedTextField(
             value = chanceOfWinning,
@@ -100,7 +106,7 @@ private fun RewardDetailBottomSheetContent(
             label = {
                 Text(text = stringResource(id = R.string.hint_probability))
             },
-            modifier = modifier
+            modifier = modifier,
         )
         Row {
             Button(
@@ -108,7 +114,7 @@ private fun RewardDetailBottomSheetContent(
                     .padding(end = 8.dp),
                 onClick = {
                     onRewardSaveSelected(id, title, description, chanceOfWinning, repeat)
-                }
+                },
             ) {
                 Text("Save")
             }
@@ -117,18 +123,18 @@ private fun RewardDetailBottomSheetContent(
                     reward?.let {
                         onRewardDeleteSelected(it)
                     }
-                }
+                },
             ) {
                 Text("Delete")
             }
             Checkbox(
                 checked = repeat,
-                onCheckedChange = { repeat = it }
+                onCheckedChange = { repeat = it },
             )
             Text(
                 text = "Repeat",
                 modifier = Modifier
-                    .align(Alignment.CenterVertically)
+                    .align(Alignment.CenterVertically),
             )
         }
     }
@@ -141,6 +147,6 @@ fun RewardDetailBottomSheetContentPreview() {
     RewardDetailBottomSheetContent(
         reward = null,
         onRewardSaveSelected = { _, _, _, _, _ -> },
-        onRewardDeleteSelected = {}
+        onRewardDeleteSelected = {},
     )
 }

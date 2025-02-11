@@ -73,15 +73,19 @@ import kotlinx.coroutines.launch
 
 @ExperimentalMaterialApi
 @Composable
-fun RewardListScreenWithBottomSheet(
-    viewModel: RewardListViewModel = hiltViewModel(),
-) {
+fun RewardListScreenWithBottomSheet(viewModel: RewardListViewModel = hiltViewModel()) {
     val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
     val coroutineScope = rememberCoroutineScope()
     var selectedReward: Reward? by remember { mutableStateOf(null) }
     val onRewardItemClick: (Reward) -> Unit = { reward ->
         coroutineScope.launch {
             selectedReward = reward
+            bottomSheetState.show()
+        }
+    }
+    val onAddRewardItemClick: () -> Unit = {
+        coroutineScope.launch {
+            selectedReward = null
             bottomSheetState.show()
         }
     }
@@ -93,7 +97,7 @@ fun RewardListScreenWithBottomSheet(
                 name = title,
                 description = description,
                 probability = if (chanceOfWinning.isNullOrEmpty()) null else chanceOfWinning.toFloat(),
-                needRepeat = repeat
+                needRepeat = repeat,
             )
             viewModel.saveReward(reward)
         }
@@ -105,12 +109,13 @@ fun RewardListScreenWithBottomSheet(
         bottomSheetState = bottomSheetState,
         onRewardSaveSelected = onRewardSaveSelected,
         onRewardDeleteSelected = onRewardDeleteSelected,
-        reward = selectedReward
+        reward = selectedReward,
     ) {
         RewardListScreen(
             viewModel = viewModel,
             bottomSheetState = bottomSheetState,
-            onRewardItemClick = onRewardItemClick
+            onAddNewRewardClick = onAddRewardItemClick,
+            onRewardItemClick = onRewardItemClick,
         )
     }
 }
@@ -120,7 +125,8 @@ fun RewardListScreenWithBottomSheet(
 private fun RewardListScreen(
     viewModel: RewardListViewModel,
     bottomSheetState: ModalBottomSheetState,
-    onRewardItemClick: (Reward) -> Unit
+    onAddNewRewardClick: () -> Unit,
+    onRewardItemClick: (Reward) -> Unit,
 ) {
     val ticket by viewModel.rewardPoint.observeAsState()
     val rewards by viewModel.rewardList.observeAsState()
@@ -135,17 +141,16 @@ private fun RewardListScreen(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background)
+            .background(MaterialTheme.colors.background),
     ) {
         Column {
-
             Box {
                 RewardList(rewards, onRewardItemClick)
                 SnackbarHost(
                     hostState = snackbarHostState,
                     snackbar = {
                         ErrorSnackBar(it)
-                    }
+                    },
                 )
             }
         }
@@ -165,7 +170,7 @@ private fun RewardListScreen(
                     bottom.linkTo(parent.bottom)
                     centerHorizontallyTo(parent)
                 }
-                .padding(bottom = 24.dp)
+                .padding(bottom = 24.dp),
         ) {
             Icon(Icons.Filled.Done, contentDescription = "Done")
         }
@@ -174,7 +179,7 @@ private fun RewardListScreen(
             onClick = {
                 viewModel.validateRewards {
                     coroutineScope.launch {
-                        bottomSheetState.show()
+                        onAddNewRewardClick()
                     }
                 }
             },
@@ -184,7 +189,7 @@ private fun RewardListScreen(
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
                 }
-                .padding(24.dp)
+                .padding(24.dp),
         ) {
             Icon(Icons.Filled.Add, contentDescription = "Add")
         }
@@ -196,7 +201,7 @@ private fun RewardListScreen(
                     bottom.linkTo(createRewardButton.top)
                     centerHorizontallyTo(parent)
                 }
-                .padding(8.dp)
+                .padding(8.dp),
         )
     }
 
@@ -207,10 +212,12 @@ private fun RewardListScreen(
                     coroutineScope.launch {
                         bottomSheetState.hide()
                     }
-                }, onFailure = { error ->
+                },
+                onFailure = { error ->
                     val errorMessageId = ErrorMessageClassifier(error).messageId
                     Toast.makeText(context, errorMessageId, Toast.LENGTH_LONG).show()
-                })
+                },
+            )
             viewModel.result.value = null
         }
     }
@@ -222,14 +229,14 @@ private fun RewardListScreen(
                     message = stringResource(id = R.string.missed_reward),
                     onOkClicked = {
                         viewModel.resetObtainedReward()
-                    }
+                    },
                 )
             } else {
                 CommonAlertDialog(
                     message = stringResource(R.string.won_reward, reward.name.value),
                     onOkClicked = {
                         viewModel.resetObtainedReward()
-                    }
+                    },
                 )
             }
         } else if (it.isFailure) {
@@ -240,7 +247,7 @@ private fun RewardListScreen(
                     snackbarHostState.showSnackbar(
                         message = errorMessage,
                         actionLabel = null,
-                        duration = SnackbarDuration.Short
+                        duration = SnackbarDuration.Short,
                     )
                 }
             }
@@ -253,12 +260,12 @@ private fun ErrorSnackBar(it: SnackbarData) {
     Card(
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxWidth()
+            .fillMaxWidth(),
     ) {
         Text(
             text = it.message,
             modifier = Modifier
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(horizontal = 16.dp, vertical = 8.dp),
         )
     }
 }
@@ -266,81 +273,83 @@ private fun ErrorSnackBar(it: SnackbarData) {
 @Preview
 @Composable
 private fun ErrorSnackBarPreview() {
-    ErrorSnackBar(it = object : SnackbarData {
-        override val actionLabel: String?
-            get() = null
-        override val duration: SnackbarDuration
-            get() = SnackbarDuration.Indefinite
-        override val message: String
-            get() = "Cannot connect Internet."
+    ErrorSnackBar(
+        it = object : SnackbarData {
+            override val actionLabel: String?
+                get() = null
+            override val duration: SnackbarDuration
+                get() = SnackbarDuration.Indefinite
+            override val message: String
+                get() = "Cannot connect Internet."
 
-        override fun dismiss() {}
+            override fun dismiss() {}
 
-        override fun performAction() {}
-    })
+            override fun performAction() {}
+        },
+    )
 }
 
 @Preview
 @Composable
 @ExperimentalMaterialApi
 private fun RewardListScreenPreview() {
-    val viewModel = RewardListViewModel(object : LotteryUseCase {
-        override suspend fun execute(rewards: RewardCollection): Result<Reward?> =
-            Result.success(null)
-    }, object : GetRewardsUseCase {
-        private val reward = Reward(
-            RewardId(1),
-            RewardName("PS5"),
-            Probability(0.5f),
-            RewardDescription(""),
-            false
-        )
+    val viewModel = RewardListViewModel(
+        object : LotteryUseCase {
+            override suspend fun execute(rewards: RewardCollection): Result<Reward?> = Result.success(null)
+        },
+        object : GetRewardsUseCase {
+            private val reward = Reward(
+                RewardId(1),
+                RewardName("PS5"),
+                Probability(0.5f),
+                RewardDescription(""),
+                false,
+            )
 
-        override suspend fun execute(): List<Reward> {
-            return listOf(reward)
-        }
+            override suspend fun execute(): List<Reward> {
+                return listOf(reward)
+            }
 
-        override suspend fun executeAsFlow(): Flow<List<Reward>> {
-            return flowOf(listOf(reward))
-        }
-    }, object : GetPointUseCase {
-        override suspend fun execute(): Flow<NumberOfTicket> {
-            return flowOf(NumberOfTicket(100))
-        }
-    }, object : SaveRewardUseCase {
-        override suspend fun execute(reward: RewardInput): Result<Unit> {
-            return Result.success(Unit)
-        }
-    }, object : DeleteRewardUseCase {
-        override suspend fun execute(reward: Reward) {}
-    })
+            override suspend fun executeAsFlow(): Flow<List<Reward>> {
+                return flowOf(listOf(reward))
+            }
+        },
+        object : GetPointUseCase {
+            override suspend fun execute(): Flow<NumberOfTicket> {
+                return flowOf(NumberOfTicket(100))
+            }
+        },
+        object : SaveRewardUseCase {
+            override suspend fun execute(reward: RewardInput): Result<Unit> {
+                return Result.success(Unit)
+            }
+        },
+        object : DeleteRewardUseCase {
+            override suspend fun execute(reward: Reward) {}
+        },
+    )
 
     RewardListScreen(
         viewModel = viewModel,
         bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
+        onAddNewRewardClick = {},
         onRewardItemClick = {},
     )
 }
 
 @Composable
-private fun TicketLabel(
-    ticket: Int?,
-    modifier: Modifier = Modifier
-) {
+private fun TicketLabel(ticket: Int?, modifier: Modifier = Modifier) {
     Text(
         text = "$ticket tickets",
         modifier = modifier,
         textAlign = TextAlign.Center,
         fontSize = 18.sp,
-        color = Color.Black
+        color = Color.Black,
     )
 }
 
 @Composable
-private fun RewardList(
-    rewards: List<Reward>?,
-    onRewardItemClick: (Reward) -> Unit
-) {
+private fun RewardList(rewards: List<Reward>?, onRewardItemClick: (Reward) -> Unit) {
     LazyColumn {
         rewards?.let {
             itemsIndexed(it) { index, reward ->
@@ -363,42 +372,39 @@ private fun RewardListPreview() {
                 RewardName("PS5"),
                 Probability(1f),
                 RewardDescription("this is very rare"),
-                true
+                true,
             ),
             Reward(
                 RewardId(1),
                 RewardName("New Macbook Pro"),
                 Probability(1f),
                 RewardDescription("M1 Max is great"),
-                true
-            )
+                true,
+            ),
         ),
-        onRewardItemClick = {}
+        onRewardItemClick = {},
     )
 }
 
 @Composable
-private fun RewardItem(
-    reward: Reward,
-    onRewardItemClick: (Reward) -> Unit
-) {
+private fun RewardItem(reward: Reward, onRewardItemClick: (Reward) -> Unit) {
     Surface {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .clickable(onClick = { onRewardItemClick(reward) })
-                .padding(16.dp)
+                .padding(16.dp),
         ) {
             Column(
-                modifier = Modifier.weight(8f)
+                modifier = Modifier.weight(8f),
             ) {
                 Text(
                     text = reward.name.value,
-                    style = MaterialTheme.typography.h4
+                    style = MaterialTheme.typography.h4,
                 )
                 Text(
                     text = reward.description.value ?: "",
-                    color = Color.Gray
+                    color = Color.Gray,
                 )
             }
             Text(
@@ -406,7 +412,7 @@ private fun RewardItem(
                 modifier = Modifier
                     .weight(2f)
                     .align(Alignment.CenterVertically),
-                style = MaterialTheme.typography.h5
+                style = MaterialTheme.typography.h5,
             )
         }
     }
@@ -420,10 +426,10 @@ private fun RewardItemPreview() {
         RewardName("PS5"),
         Probability(1f),
         RewardDescription("this is very rare"),
-        true
+        true,
     )
     RewardItem(
         reward = reward,
-        onRewardItemClick = {}
+        onRewardItemClick = {},
     )
 }
