@@ -24,6 +24,11 @@
 
         <activity android:name=".feature.auth.TodoistAuthActivity"
             android:exported="false"/>
+
+        <!-- TODO: androidx.compose.ui:ui-test-manifest is not working on this repository. -->
+        <activity
+            android:name="androidx.activity.ComponentActivity"
+            android:exported="true" />
     </application>
 
 </manifest>
