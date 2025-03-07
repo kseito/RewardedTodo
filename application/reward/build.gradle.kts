@@ -1,11 +1,6 @@
-import dependencies.GradlePlugins
-import org.jlleitschuh.gradle.ktlint.KtlintExtension
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
-
 plugins {
     alias(libs.plugins.rewardedtodo.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ktlint.gradle)
 }
 
 dependencies {
@@ -31,13 +26,4 @@ dependencies {
 
 android {
     namespace = "jp.kztproject.rewardedtodo.application.reward"
-}
-
-configure<KtlintExtension> {
-    version.set(GradlePlugins.Ktlint.version)
-    android.set(true)
-    reporters {
-        reporter(ReporterType.CHECKSTYLE)
-    }
-    ignoreFailures.set(true)
 }

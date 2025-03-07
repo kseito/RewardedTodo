@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.rewardedtodo.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ktlint.gradle)
 }
 
 dependencies {
@@ -21,5 +20,3 @@ dependencies {
 android {
     namespace = "jp.kztproject.rewardedtodo.data.ticket"
 }
-
-apply(from = rootProject.file("gradle/ktlint.gradle"))

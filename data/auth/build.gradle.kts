@@ -2,10 +2,7 @@ plugins {
     alias(libs.plugins.rewardedtodo.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.ktlint.gradle)
 }
-
-apply(from = rootProject.file("gradle/ktlint.gradle"))
 
 dependencies {
     implementation(project(":common:kvs"))

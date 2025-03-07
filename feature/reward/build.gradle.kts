@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.rewardedtodo.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.dagger.hilt)
-    alias(libs.plugins.ktlint.gradle)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.kapt)
 }
@@ -58,5 +57,3 @@ dependencies {
     implementation(project(path = ":domain:reward"))
     implementation(project(path = ":common:ui"))
 }
-
-apply(from = rootProject.file("gradle/ktlint.gradle"))
