@@ -1,7 +1,10 @@
 package jp.kztproject.rewardedtodo.data.todo.repository
 
 import io.mockk.coEvery
+import io.mockk.every
 import io.mockk.mockk
+import io.mockk.unmockkAll
+import io.mockk.verify
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
@@ -51,6 +54,7 @@ class TodoRepositoryTest {
     @After
     fun teardown() {
         Dispatchers.resetMain()
+        unmockkAll()
     }
 
     @Test

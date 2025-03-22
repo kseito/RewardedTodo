@@ -14,8 +14,6 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.assertj.core)
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.kotlin)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.mockk)
     testImplementation(project(":test:reward"))
