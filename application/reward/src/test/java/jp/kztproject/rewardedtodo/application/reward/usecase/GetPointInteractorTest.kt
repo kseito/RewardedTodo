@@ -1,11 +1,9 @@
 package jp.kztproject.rewardedtodo.application.reward.usecase
 
-import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
 import jp.kztproject.rewardedtodo.data.ticket.ITicketRepository
-import kotlinx.coroutines.flow.flowOf
 import org.junit.Test
 
 class GetPointInteractorTest {
