@@ -49,6 +49,7 @@ dependencies {
     testImplementation(libs.robolectric)
     testImplementation(libs.assertj.core)
     testImplementation(libs.androidx.arch.core.testing)
+    testImplementation(libs.mockk)
     implementation(project(path = ":test:reward"))
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.espresso.core)
