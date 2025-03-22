@@ -33,6 +33,7 @@ dependencies {
     testImplementation(libs.mockito.core)
     testImplementation(libs.mockito.kotlin)
     testImplementation(libs.coroutines.test)
+    testImplementation(libs.mockk)
     testImplementation(project(path = ":test:reward"))
 
     implementation(project(path = ":domain:reward"))
