@@ -1,23 +1,20 @@
 package jp.kztproject.rewardedtodo.application.reward.usecase
 
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.times
-import org.mockito.kotlin.verify
-import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointInteractor
-import kotlinx.coroutines.runBlocking
+import io.mockk.coVerify
+import io.mockk.mockk
+import kotlinx.coroutines.test.runTest
 import jp.kztproject.rewardedtodo.data.ticket.ITicketRepository
 import org.junit.Test
 
 class GetPointInteractorTest {
 
-    private val mockTicketRepository: ITicketRepository = mock()
+    private val mockTicketRepository: ITicketRepository = mockk(relaxed = true)
 
     @Test
-    fun shouldGetPoint() {
-        runBlocking {
-            val interactor = GetPointInteractor(mockTicketRepository)
-            interactor.execute()
-            verify(mockTicketRepository, times(1)).getNumberOfTicket()
-        }
+    fun shouldGetPoint() = runTest {
+        val interactor = GetPointInteractor(mockTicketRepository)
+        interactor.execute()
+
+        coVerify(exactly = 1) { mockTicketRepository.getNumberOfTicket() }
     }
 }

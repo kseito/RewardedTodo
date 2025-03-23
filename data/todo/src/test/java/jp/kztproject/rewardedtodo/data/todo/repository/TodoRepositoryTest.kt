@@ -1,5 +1,8 @@
 package jp.kztproject.rewardedtodo.data.todo.repository
 
+import io.mockk.coEvery
+import io.mockk.mockk
+import io.mockk.unmockkAll
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
@@ -24,9 +27,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.mockito.ArgumentMatchers.anyString
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.whenever
 import org.robolectric.RobolectricTestRunner
 
 @ExperimentalCoroutinesApi
@@ -39,7 +39,7 @@ class TodoRepositoryTest {
     private val applicationContext = ApplicationProvider.getApplicationContext<Context>()
     private val dao: TodoDao =
         DatabaseInitializer.init(applicationContext, AppDatabase::class.java, "todo").todoDao()
-    private val api: TodoistApi = mock()
+    private val api: TodoistApi = mockk()
     private val preferences = applicationContext.getSharedPreferences("test", Context.MODE_PRIVATE)
 
     private val repository = TodoRepository(dao, api, preferences)
@@ -52,6 +52,7 @@ class TodoRepositoryTest {
     @After
     fun teardown() {
         Dispatchers.resetMain()
+        unmockkAll()
     }
 
     @Test
@@ -63,7 +64,7 @@ class TodoRepositoryTest {
             Task(102, "test_content", false, Due(true)),
             Task(103, "test_content", false, Due(false)),
         )
-        whenever(api.fetchTasks(anyString())).thenReturn(tasks)
+        coEvery { api.fetchTasks(any()) } returns tasks
 
         withContext(Dispatchers.IO) {
             repository.sync()
@@ -99,8 +100,8 @@ class TodoRepositoryTest {
                     "test_name1",
                     1,
                     isRepeat = true,
-                    isDone = false
-                )
+                    isDone = false,
+                ),
             )
             dao.insertOrUpdate(
                 TodoEntity(
@@ -109,8 +110,8 @@ class TodoRepositoryTest {
                     "test_name2",
                     1,
                     isRepeat = true,
-                    isDone = true
-                )
+                    isDone = true,
+                ),
             )
             dao.insertOrUpdate(
                 TodoEntity(
@@ -119,15 +120,15 @@ class TodoRepositoryTest {
                     "test_name3",
                     1,
                     isRepeat = true,
-                    isDone = false
-                )
+                    isDone = false,
+                ),
             )
         }
         val tasks = listOf(
             Task(101, "test_content1", false, Due(true)),
             Task(102, "test_content2", false, Due(true)),
         )
-        whenever(api.fetchTasks(anyString())).thenReturn(tasks)
+        coEvery { api.fetchTasks(any()) } returns tasks
 
         withContext(Dispatchers.IO) {
             repository.sync()
