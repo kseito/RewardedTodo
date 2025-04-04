@@ -37,21 +37,17 @@ class ExampleTest {
             TodoListScreenWithBottomSheet(
                 viewModel = TodoListViewModel(
                     object : GetTodoListUseCase {
-                        override fun execute(): Flow<List<Todo>> {
-                            return flowOf(
-                                listOf(
-                                    Todo(1, 1001, "英語学習", 3, true),
-                                ),
-                            )
-                        }
+                        override fun execute(): Flow<List<Todo>> = flowOf(
+                            listOf(
+                                Todo(1, 1001, "英語学習", 3, true),
+                            ),
+                        )
                     },
                     object : FetchTodoListUseCase {
                         override suspend fun execute() {}
                     },
                     object : UpdateTodoUseCase {
-                        override suspend fun execute(todo: EditingTodo): Result<Unit> {
-                            return Result.success(Unit)
-                        }
+                        override suspend fun execute(todo: EditingTodo): Result<Unit> = Result.success(Unit)
                     },
                     object : DeleteTodoUseCase {
                         override suspend fun execute(todo: Todo) {}
@@ -59,7 +55,7 @@ class ExampleTest {
                     object : CompleteTodoUseCase {
                         override suspend fun execute(todo: Todo) {}
                     },
-                )
+                ),
             )
         }
 
