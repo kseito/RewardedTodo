@@ -3,7 +3,7 @@ version: 2.1
 executors:
   android:
     docker:
-      - image: cimg/android:2025.02
+      - image: cimg/android:2025.03
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
@@ -33,7 +33,7 @@ jobs:
       - run:
           name: Static Code Analytics
           command: |
-            ./gradlew lintDebug ktlintCheck
+            ./gradlew lintDebug
             bundle config set path 'vendor/bundle'
             bundle install
             bundle exec danger

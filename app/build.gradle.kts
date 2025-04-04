@@ -1,14 +1,10 @@
-import dependencies.GradlePlugins
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.dagger.hilt)
-    alias(libs.plugins.ktlint.gradle)
+    alias(libs.plugins.dagger.hilt)    
     alias(libs.plugins.roborazzi)
 }
 
@@ -161,13 +157,4 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
-}
-
-configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-    version.set(GradlePlugins.Ktlint.version)
-    android.set(true)
-    reporters {
-        reporter(org.jlleitschuh.gradle.ktlint.reporter.ReporterType.CHECKSTYLE)
-    }
-    ignoreFailures.set(true)
 }

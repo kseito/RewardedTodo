@@ -1,11 +1,6 @@
-import dependencies.GradlePlugins
-import org.jlleitschuh.gradle.ktlint.KtlintExtension
-import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
-
 plugins {
     alias(libs.plugins.rewardedtodo.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ktlint.gradle)
 }
 
 dependencies {
@@ -19,8 +14,6 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.assertj.core)
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.kotlin)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.mockk)
     testImplementation(project(":test:reward"))
@@ -31,13 +24,4 @@ dependencies {
 
 android {
     namespace = "jp.kztproject.rewardedtodo.application.reward"
-}
-
-configure<KtlintExtension> {
-    version.set(GradlePlugins.Ktlint.version)
-    android.set(true)
-    reporters {
-        reporter(ReporterType.CHECKSTYLE)
-    }
-    ignoreFailures.set(true)
 }

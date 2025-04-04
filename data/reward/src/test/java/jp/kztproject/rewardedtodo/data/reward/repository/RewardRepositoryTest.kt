@@ -1,32 +1,24 @@
 package jp.kztproject.rewardedtodo.data.reward.repository
 
+import io.mockk.coVerify
+import io.mockk.mockk
 import jp.kztproject.rewardedtodo.data.reward.database.RewardDao
 import jp.kztproject.rewardedtodo.data.reward.database.model.RewardEntity
 import jp.kztproject.rewardedtodo.test.reward.DummyCreator
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.mockito.kotlin.any
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.times
-import org.mockito.kotlin.verify
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class RewardRepositoryTest {
 
-    private val rewardDao: RewardDao = mock()
-    private val target: RewardRepository
-
-    init {
-        target = RewardRepository(rewardDao)
-    }
+    private val rewardDao: RewardDao = mockk(relaxed = true)
+    private val target: RewardRepository = RewardRepository(rewardDao)
 
     @Test
     fun insertReward() = runTest {
         val dummyReward = DummyCreator.createDummyRewardInput()
         target.createOrUpdate(dummyReward)
 
-        verify(rewardDao, times(1)).insertReward(any())
+        coVerify(exactly = 1) { rewardDao.insertReward(any()) }
     }
 
     @Test
@@ -34,21 +26,20 @@ class RewardRepositoryTest {
         val dummyReward = DummyCreator.createDummyReward()
         target.delete(dummyReward)
 
-        verify(rewardDao, times(1)).deleteReward(RewardEntity.from(dummyReward))
+        coVerify(exactly = 1) { rewardDao.deleteReward(RewardEntity.from(dummyReward)) }
     }
 
     @Test
     fun findBy() = runTest {
         target.findBy(1)
 
-        verify(rewardDao, times(1)).findBy(1)
+        coVerify(exactly = 1) { rewardDao.findBy(1) }
     }
 
     @Test
     fun findAll() = runTest {
         target.findAll()
 
-        verify(rewardDao, times(1)).findAll()
+        coVerify(exactly = 1) { rewardDao.findAll() }
     }
-
 }

@@ -1,19 +1,15 @@
 package jp.kztproject.rewardedtodo.application.reward.usecase
 
+import io.mockk.coVerify
+import io.mockk.mockk
 import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository
 import jp.kztproject.rewardedtodo.test.reward.DummyCreator
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.mockito.kotlin.any
-import org.mockito.kotlin.mock
-import org.mockito.kotlin.times
-import org.mockito.kotlin.verify
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class DeleteRewardInteractorTest {
 
-    private val mockRewardDao: IRewardRepository = mock()
+    private val mockRewardDao: IRewardRepository = mockk(relaxed = true)
     private val interactor = DeleteRewardInteractor(mockRewardDao)
 
     @Test
@@ -22,6 +18,6 @@ class DeleteRewardInteractorTest {
 
         interactor.execute(dummyReward)
 
-        verify(mockRewardDao, times(1)).delete(any())
+        coVerify(exactly = 1) { mockRewardDao.delete(any()) }
     }
 }

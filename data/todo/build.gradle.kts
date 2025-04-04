@@ -14,9 +14,8 @@ dependencies {
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.robolectric)
     testImplementation(libs.truth)
-    testImplementation(libs.mockito.core)
-    testImplementation(libs.mockito.kotlin)
     testImplementation(libs.coroutines.test)
+    testImplementation(libs.mockk)
 
     // Dagger
     implementation(libs.hilt.android)
