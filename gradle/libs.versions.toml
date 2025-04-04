@@ -35,6 +35,7 @@ kotest = "5.9.1"
 androidx-junit = "1.2.1"
 espresso-core = "3.6.1"
 spotless_gradle_plugin = "7.0.2"
+roborazzi = "1.43.0"
 
 [libraries]
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose" }
@@ -44,6 +45,7 @@ androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-compose-material = { group = "androidx.compose.material", name = "material" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata" }
+androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 constraintlayout-compose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraintlayout-compose" }
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin"}
 compose-material-icon-core = { group = "androidx.compose.material", name = "material-icons-core", version.ref = "compose-material"}
@@ -82,6 +84,10 @@ assertj-core = { group = "org.assertj", name = "assertj-core", version.ref = "as
 kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
+ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
+roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
+roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
+roborazzi-rule = { group = "io.github.takahirom.roborazzi", name = "roborazzi-junit-rule", version.ref = "roborazzi" }
 
 # Plugins
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
@@ -99,6 +105,7 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin"}
 deploy-gate = { id = "com.deploygate", version.ref = "deploy-gate" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless_gradle_plugin"}
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 
 rewardedtodo-android-library = { id = "rewardedtodo.android.library" }
 rewardedtodo-android-application-spotless = { id = "rewardedtodo.android.application.spotless" }

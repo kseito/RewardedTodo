@@ -4,7 +4,8 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.kapt)
-    alias(libs.plugins.dagger.hilt)
+    alias(libs.plugins.dagger.hilt)    
+    alias(libs.plugins.roborazzi)
 }
 
 android {
@@ -84,6 +85,11 @@ android {
         }
     }
     namespace = "jp.kztproject.rewardedtodo"
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -119,6 +125,16 @@ dependencies {
     implementation(libs.retrofit.moshi)
     implementation(libs.okhttp.interceptor)
     implementation(libs.moshi)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.ui.test.junit4)
+    testImplementation(libs.espresso.core)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.roborazzi)
+    testImplementation(libs.roborazzi.compose)
+    testImplementation(libs.roborazzi.rule)
+    debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(project(":feature:reward"))
     implementation(project(":feature:auth"))
