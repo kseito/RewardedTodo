@@ -41,7 +41,7 @@ jobs:
     - name: Build project
       run: |
         chmod +x ./gradlew
-        ./gradlew assemble --no-daemon
+        ./gradlew assembleDebug --no-daemon
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v2
