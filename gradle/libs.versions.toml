@@ -34,7 +34,7 @@ assertj = "3.27.3"
 kotest = "5.9.1"
 androidx-junit = "1.2.1"
 espresso-core = "3.6.1"
-spotless_gradle_plugin = "7.0.2"
+spotless_gradle_plugin = "7.0.3"
 roborazzi = "1.43.1"
 
 [libraries]
