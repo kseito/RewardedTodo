@@ -19,6 +19,7 @@ gen/
 # Gradle files
 .gradle/
 build/
+!**/build/outputs/roborazzi/
 
 # Local configuration file (sdk path, etc)
 local.properties
