@@ -309,23 +309,15 @@ private fun RewardListScreenPreview() {
                 false,
             )
 
-            override suspend fun execute(): List<Reward> {
-                return listOf(reward)
-            }
+            override suspend fun execute(): List<Reward> = listOf(reward)
 
-            override suspend fun executeAsFlow(): Flow<List<Reward>> {
-                return flowOf(listOf(reward))
-            }
+            override suspend fun executeAsFlow(): Flow<List<Reward>> = flowOf(listOf(reward))
         },
         object : GetPointUseCase {
-            override suspend fun execute(): Flow<NumberOfTicket> {
-                return flowOf(NumberOfTicket(100))
-            }
+            override suspend fun execute(): Flow<NumberOfTicket> = flowOf(NumberOfTicket(100))
         },
         object : SaveRewardUseCase {
-            override suspend fun execute(reward: RewardInput): Result<Unit> {
-                return Result.success(Unit)
-            }
+            override suspend fun execute(reward: RewardInput): Result<Unit> = Result.success(Unit)
         },
         object : DeleteRewardUseCase {
             override suspend fun execute(reward: Reward) {}
@@ -398,7 +390,7 @@ private fun RewardItem(reward: Reward, onRewardItemClick: (Reward) -> Unit) {
                 .clickable(
                     interactionSource = remember { MutableInteractionSource() },
                     indication = ripple(),
-                    onClick = { onRewardItemClick(reward) }
+                    onClick = { onRewardItemClick(reward) },
                 )
                 .padding(16.dp),
         ) {

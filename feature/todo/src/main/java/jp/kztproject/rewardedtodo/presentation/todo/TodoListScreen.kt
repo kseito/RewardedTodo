@@ -187,21 +187,17 @@ private fun TodoListScreen(
 fun TodoListScreenPreview() {
     val viewModel = TodoListViewModel(
         object : GetTodoListUseCase {
-            override fun execute(): Flow<List<Todo>> {
-                return flowOf(
-                    listOf(
-                        Todo(1, 1001, "英語学習", 2, true),
-                    ),
-                )
-            }
+            override fun execute(): Flow<List<Todo>> = flowOf(
+                listOf(
+                    Todo(1, 1001, "英語学習", 2, true),
+                ),
+            )
         },
         object : FetchTodoListUseCase {
             override suspend fun execute() {}
         },
         object : UpdateTodoUseCase {
-            override suspend fun execute(todo: EditingTodo): Result<Unit> {
-                return Result.success(Unit)
-            }
+            override suspend fun execute(todo: EditingTodo): Result<Unit> = Result.success(Unit)
         },
         object : DeleteTodoUseCase {
             override suspend fun execute(todo: Todo) {}
@@ -227,7 +223,7 @@ private fun TodoListItem(todo: Todo, onItemClicked: () -> Unit, onTodoDone: (Tod
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
                 indication = ripple(),
-                onClick = onItemClicked
+                onClick = onItemClicked,
             )
             .padding(16.dp),
     ) {
