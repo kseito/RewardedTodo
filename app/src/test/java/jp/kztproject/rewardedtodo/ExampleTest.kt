@@ -9,8 +9,23 @@ import jp.kztproject.rewardedtodo.application.reward.DeleteTodoUseCase
 import jp.kztproject.rewardedtodo.application.reward.FetchTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.GetTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
+import jp.kztproject.rewardedtodo.domain.reward.NumberOfTicket
+import jp.kztproject.rewardedtodo.domain.reward.Probability
+import jp.kztproject.rewardedtodo.domain.reward.Reward
+import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
+import jp.kztproject.rewardedtodo.domain.reward.RewardDescription
+import jp.kztproject.rewardedtodo.domain.reward.RewardId
+import jp.kztproject.rewardedtodo.domain.reward.RewardInput
+import jp.kztproject.rewardedtodo.domain.reward.RewardName
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.Todo
+import jp.kztproject.rewardedtodo.feature.reward.list.RewardListScreenWithBottomSheet
+import jp.kztproject.rewardedtodo.feature.reward.list.RewardListViewModel
 import jp.kztproject.rewardedtodo.presentation.todo.TodoListScreenWithBottomSheet
 import jp.kztproject.rewardedtodo.presentation.todo.TodoListViewModel
 import kotlinx.coroutines.flow.Flow
@@ -59,6 +74,53 @@ class ExampleTest {
             )
         }
 
+        composeRule
+            .onRoot()
+            .captureRoboImage()
+    }
+
+    @Test
+    fun rewardListScreenTest() {
+        // Create mock RewardListViewModel with fake implementations
+        val mockViewModel = RewardListViewModel(
+            object : LotteryUseCase {
+                override suspend fun execute(rewards: RewardCollection): Result<Reward?> = 
+                    Result.success(null)
+            },
+            object : GetRewardsUseCase {
+                override suspend fun execute(): List<Reward> = listOf(
+                    Reward(RewardId(1), RewardName("映画鑑賞"), Probability(80f), RewardDescription("映画を見に行く"), false),
+                    Reward(RewardId(2), RewardName("ゲーム"), Probability(50f), RewardDescription("1時間ゲームをする"), true)
+                )
+
+                override suspend fun executeAsFlow(): Flow<List<Reward>> = flowOf(
+                    listOf(
+                        Reward(RewardId(1), RewardName("映画鑑賞"), Probability(80f), RewardDescription("映画を見に行く"), false),
+                        Reward(RewardId(2), RewardName("ゲーム"), Probability(50f), RewardDescription("1時間ゲームをする"), true)
+                    )
+                )
+            },
+            object : GetPointUseCase {
+                override suspend fun execute(): Flow<NumberOfTicket> =
+                    flowOf(NumberOfTicket(100))
+            },
+            object : SaveRewardUseCase {
+                override suspend fun execute(reward: RewardInput): Result<Unit> = 
+                    Result.success(Unit)
+            },
+            object : DeleteRewardUseCase {
+                override suspend fun execute(reward: Reward) {}
+            }
+        )
+
+        // Set up the test to render RewardListScreenWithBottomSheet
+        composeRule.setContent {
+            RewardListScreenWithBottomSheet(
+                viewModel = mockViewModel
+            )
+        }
+
+        // Capture screenshot
         composeRule
             .onRoot()
             .captureRoboImage()
