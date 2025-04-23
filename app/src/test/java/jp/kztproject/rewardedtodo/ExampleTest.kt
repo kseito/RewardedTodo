@@ -84,39 +84,36 @@ class ExampleTest {
         // Create mock RewardListViewModel with fake implementations
         val mockViewModel = RewardListViewModel(
             object : LotteryUseCase {
-                override suspend fun execute(rewards: RewardCollection): Result<Reward?> = 
-                    Result.success(null)
+                override suspend fun execute(rewards: RewardCollection): Result<Reward?> = Result.success(null)
             },
             object : GetRewardsUseCase {
                 override suspend fun execute(): List<Reward> = listOf(
                     Reward(RewardId(1), RewardName("映画鑑賞"), Probability(80f), RewardDescription("映画を見に行く"), false),
-                    Reward(RewardId(2), RewardName("ゲーム"), Probability(50f), RewardDescription("1時間ゲームをする"), true)
+                    Reward(RewardId(2), RewardName("ゲーム"), Probability(50f), RewardDescription("1時間ゲームをする"), true),
                 )
 
                 override suspend fun executeAsFlow(): Flow<List<Reward>> = flowOf(
                     listOf(
                         Reward(RewardId(1), RewardName("映画鑑賞"), Probability(80f), RewardDescription("映画を見に行く"), false),
-                        Reward(RewardId(2), RewardName("ゲーム"), Probability(50f), RewardDescription("1時間ゲームをする"), true)
-                    )
+                        Reward(RewardId(2), RewardName("ゲーム"), Probability(50f), RewardDescription("1時間ゲームをする"), true),
+                    ),
                 )
             },
             object : GetPointUseCase {
-                override suspend fun execute(): Flow<NumberOfTicket> =
-                    flowOf(NumberOfTicket(100))
+                override suspend fun execute(): Flow<NumberOfTicket> = flowOf(NumberOfTicket(100))
             },
             object : SaveRewardUseCase {
-                override suspend fun execute(reward: RewardInput): Result<Unit> = 
-                    Result.success(Unit)
+                override suspend fun execute(reward: RewardInput): Result<Unit> = Result.success(Unit)
             },
             object : DeleteRewardUseCase {
                 override suspend fun execute(reward: Reward) {}
-            }
+            },
         )
 
         // Set up the test to render RewardListScreenWithBottomSheet
         composeRule.setContent {
             RewardListScreenWithBottomSheet(
-                viewModel = mockViewModel
+                viewModel = mockViewModel,
             )
         }
 
