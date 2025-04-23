@@ -1,0 +1,24 @@
+name: Visual Regression Tests
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  vrt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      - name: Run VRT tests
+        run: ./gradlew compareRoborazziDebug
+      - name: Upload comparison results
+        if: failure()
+        uses: actions/upload-artifact@v3
+        with:
+          name: roborazzi-comparison-results
+          path: '**/build/outputs/roborazzi'
