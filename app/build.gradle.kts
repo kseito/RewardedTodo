@@ -159,3 +159,8 @@ dependencies {
 kapt {
     correctErrorTypes = true
 }
+
+// TODO: Move to convention plugin
+roborazzi {
+    outputDir.set(file("src/screenshots"))
+}
