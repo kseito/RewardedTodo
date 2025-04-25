@@ -14,11 +14,11 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
-      - name: Run VRT tests
-        run: ./gradlew compareRoborazziDebug
+      - name: Run screenshot tests
+        run: ./gradlew verifyRoborazziDebug
       - name: Upload comparison results
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: roborazzi-comparison-results
-          path: '**/build/outputs/roborazzi'
+          path: '**/build/reports/roborazzi'
