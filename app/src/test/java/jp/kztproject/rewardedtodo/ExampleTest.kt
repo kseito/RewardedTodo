@@ -90,12 +90,14 @@ class ExampleTest {
                 override suspend fun execute(): List<Reward> = listOf(
                     Reward(RewardId(1), RewardName("映画鑑賞"), Probability(80f), RewardDescription("映画を見に行く"), false),
                     Reward(RewardId(2), RewardName("ゲーム"), Probability(50f), RewardDescription("1時間ゲームをする"), true),
+                    Reward(RewardId(3), RewardName("お酒"), Probability(30f), RewardDescription("好きなお酒を飲む"), false),
                 )
 
                 override suspend fun executeAsFlow(): Flow<List<Reward>> = flowOf(
                     listOf(
                         Reward(RewardId(1), RewardName("映画鑑賞"), Probability(80f), RewardDescription("映画を見に行く"), false),
                         Reward(RewardId(2), RewardName("ゲーム"), Probability(50f), RewardDescription("1時間ゲームをする"), true),
+                        Reward(RewardId(3), RewardName("お酒"), Probability(30f), RewardDescription("好きなお酒を飲む"), false),
                     ),
                 )
             },
