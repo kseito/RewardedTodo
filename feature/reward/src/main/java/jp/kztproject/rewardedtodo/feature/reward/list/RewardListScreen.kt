@@ -60,6 +60,7 @@ import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
 import jp.kztproject.rewardedtodo.common.ui.CommonAlertDialog
 import jp.kztproject.rewardedtodo.common.ui.vibrate
+import jp.kztproject.rewardedtodo.common.ui.vibrateRichly
 import jp.kztproject.rewardedtodo.domain.reward.NumberOfTicket
 import jp.kztproject.rewardedtodo.domain.reward.Probability
 import jp.kztproject.rewardedtodo.domain.reward.Reward
@@ -163,8 +164,6 @@ private fun RewardListScreen(
         FloatingActionButton(
             onClick = {
                 viewModel.startLottery()
-
-                context.vibrate()
             },
             shape = RoundedCornerShape(8.dp),
             backgroundColor = MaterialTheme.colors.primary,
@@ -228,6 +227,8 @@ private fun RewardListScreen(
         if (it.isSuccess) {
             val reward = it.getOrNull()
             if (reward == null) {
+                context.vibrate()
+
                 CommonAlertDialog(
                     message = stringResource(id = R.string.missed_reward),
                     onOkClicked = {
@@ -235,6 +236,8 @@ private fun RewardListScreen(
                     },
                 )
             } else {
+                context.vibrateRichly()
+
                 CommonAlertDialog(
                     message = stringResource(R.string.won_reward, reward.name.value),
                     onOkClicked = {
