@@ -18,12 +18,12 @@ fun Context.vibrate() {
 fun Context.vibrateRichly() {
     val vibratorManager = getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
     val timings: LongArray = longArrayOf(
-        25, 25, 50, 25, 25, 25, 25, 25, 25, 25, 75, 25, 25,
-        300, 25, 25, 150, 25, 25, 25
+        0, 40, 20, 30, 25, 60, 30, 70, 25, 80, 20, 60, 15,
+        40, 10, 30, 10, 20, 10, 10
     )
     val amplitudes: IntArray = intArrayOf(
-        38, 77, 79, 84, 92, 99, 121, 143, 180, 217, 255, 170, 85,
-        0, 85, 170, 255, 170, 85, 0
+        0, 255, 180, 200, 160, 220, 140, 180, 120, 150, 100,
+        120, 90, 80, 70, 60, 50, 40, 30, 20
     )
     val newVibration = VibrationEffect.createWaveform(timings, amplitudes, -1)
     val combinedVibration = CombinedVibration.createParallel(newVibration)
