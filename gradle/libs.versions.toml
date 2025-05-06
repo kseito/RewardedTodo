@@ -1,5 +1,5 @@
 [versions]
-android-gradle-plugin = "8.9.2"
+android-gradle-plugin = "8.10.0"
 activity-compose = "1.10.1"
 constraintlayout-compose = "1.1.1"
 compose-material = "1.7.8"
