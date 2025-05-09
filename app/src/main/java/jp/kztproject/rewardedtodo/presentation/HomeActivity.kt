@@ -12,7 +12,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,8 +45,8 @@ class HomeActivity : ComponentActivity() {
             var currentDestination by remember { mutableStateOf(TopLevelDestination.TODO) }
             val onNavigateToDestination: (TopLevelDestination) -> Unit = {
                 when (it) {
-                    TopLevelDestination.TODO -> navController.navigate(TODO_SCREEN)
-                    TopLevelDestination.REWARD -> navController.navigate(REWARD_SCREEN)
+                    TopLevelDestination.TODO -> navController.navigateHome(TODO_SCREEN)
+                    TopLevelDestination.REWARD -> navController.navigateHome(REWARD_SCREEN)
                 }
                 currentDestination = it
             }
@@ -109,5 +111,15 @@ private fun RewardedTodoApp(
             todoListScreen()
             rewardListScreen()
         }
+    }
+}
+
+private fun NavHostController.navigateHome(route: String) {
+    this.navigate(route) {
+        popUpTo(this@navigateHome.graph.findStartDestination().id) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
     }
 }
