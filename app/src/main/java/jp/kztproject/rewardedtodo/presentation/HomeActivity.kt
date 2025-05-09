@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -39,12 +40,12 @@ class HomeActivity : ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
-            val topLevelDestinations = TopLevelDestination.values().asList()
+            val topLevelDestinations = TopLevelDestination.entries
             var currentDestination by remember { mutableStateOf(TopLevelDestination.TODO) }
             val onNavigateToDestination: (TopLevelDestination) -> Unit = {
                 when (it) {
-                    TopLevelDestination.TODO -> navController.navigate(TODO_SCREEN)
-                    TopLevelDestination.REWARD -> navController.navigate(REWARD_SCREEN)
+                    TopLevelDestination.TODO -> navController.navigateHome(TODO_SCREEN)
+                    TopLevelDestination.REWARD -> navController.navigateHome(REWARD_SCREEN)
                 }
                 currentDestination = it
             }
@@ -57,12 +58,12 @@ class HomeActivity : ComponentActivity() {
                         currentDestination.iconTextId,
                         onSettingClicked = {
                             showSettingDialog = true
-                        }
+                        },
                     )
                 },
                 bottomBar = {
                     RewardedTodoBottomBar(topLevelDestinations, onNavigateToDestination)
-                }
+                },
             ) { padding ->
                 RewardedTodoApp(padding, navController)
             }
@@ -71,7 +72,7 @@ class HomeActivity : ComponentActivity() {
                 var todoistAuthFinished by remember { mutableStateOf(false) }
                 val launcher =
                     rememberLauncherForActivityResult(
-                        ActivityResultContracts.StartActivityForResult()
+                        ActivityResultContracts.StartActivityForResult(),
                     ) {
                         todoistAuthFinished = true
                     }
@@ -84,7 +85,7 @@ class HomeActivity : ComponentActivity() {
                         val intent = Intent(context, TodoistAuthActivity::class.java)
                         context.startActivity(intent)
                         launcher.launch(intent)
-                    }
+                    },
                 )
             }
         }
@@ -92,22 +93,29 @@ class HomeActivity : ComponentActivity() {
 }
 
 @Composable
-private fun RewardedTodoApp(
-    padding: PaddingValues,
-    navController: NavHostController
-) {
+private fun RewardedTodoApp(padding: PaddingValues, navController: NavHostController) {
     Box(
         Modifier
             .fillMaxSize()
-            .padding(padding)
+            .padding(padding),
     ) {
         // TODO apply Theme
         NavHost(
             navController = navController,
-            startDestination = TODO_SCREEN
+            startDestination = TODO_SCREEN,
         ) {
             todoListScreen()
             rewardListScreen()
         }
+    }
+}
+
+private fun NavHostController.navigateHome(route: String) {
+    this.navigate(route) {
+        popUpTo(this@navigateHome.graph.findStartDestination().id) {
+            saveState = true
+        }
+        launchSingleTop = true
+        restoreState = true
     }
 }
