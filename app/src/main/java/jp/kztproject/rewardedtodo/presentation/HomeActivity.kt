@@ -14,7 +14,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
@@ -59,12 +58,12 @@ class HomeActivity : ComponentActivity() {
                         currentDestination.iconTextId,
                         onSettingClicked = {
                             showSettingDialog = true
-                        }
+                        },
                     )
                 },
                 bottomBar = {
                     RewardedTodoBottomBar(topLevelDestinations, onNavigateToDestination)
-                }
+                },
             ) { padding ->
                 RewardedTodoApp(padding, navController)
             }
@@ -73,7 +72,7 @@ class HomeActivity : ComponentActivity() {
                 var todoistAuthFinished by remember { mutableStateOf(false) }
                 val launcher =
                     rememberLauncherForActivityResult(
-                        ActivityResultContracts.StartActivityForResult()
+                        ActivityResultContracts.StartActivityForResult(),
                     ) {
                         todoistAuthFinished = true
                     }
@@ -86,7 +85,7 @@ class HomeActivity : ComponentActivity() {
                         val intent = Intent(context, TodoistAuthActivity::class.java)
                         context.startActivity(intent)
                         launcher.launch(intent)
-                    }
+                    },
                 )
             }
         }
@@ -94,19 +93,16 @@ class HomeActivity : ComponentActivity() {
 }
 
 @Composable
-private fun RewardedTodoApp(
-    padding: PaddingValues,
-    navController: NavHostController
-) {
+private fun RewardedTodoApp(padding: PaddingValues, navController: NavHostController) {
     Box(
         Modifier
             .fillMaxSize()
-            .padding(padding)
+            .padding(padding),
     ) {
         // TODO apply Theme
         NavHost(
             navController = navController,
-            startDestination = TODO_SCREEN
+            startDestination = TODO_SCREEN,
         ) {
             todoListScreen()
             rewardListScreen()
