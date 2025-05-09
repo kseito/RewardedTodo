@@ -40,7 +40,7 @@ class HomeActivity : ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
-            val topLevelDestinations = TopLevelDestination.values().asList()
+            val topLevelDestinations = TopLevelDestination.entries
             var currentDestination by remember { mutableStateOf(TopLevelDestination.TODO) }
             val onNavigateToDestination: (TopLevelDestination) -> Unit = {
                 when (it) {
