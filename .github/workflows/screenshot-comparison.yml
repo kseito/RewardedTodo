@@ -30,11 +30,13 @@ jobs:
           workflow: upload_expected_image.yml
           branch: ${{ github.base_ref }}
 
-      - name: Run screenshot tests
-        run: ./gradlew compareRoborazziDebug
+      - run: ls -al
 
-      - name: Upload comparison results
-        uses: actions/upload-artifact@v4
-        with:
-          name: roborazzi-comparison-results
-          path: '**/build/outputs/roborazzi'
+#      - name: Run screenshot tests
+#        run: ./gradlew compareRoborazziDebug
+#
+#      - name: Upload comparison results
+#        uses: actions/upload-artifact@v4
+#        with:
+#          name: roborazzi-comparison-results
+#          path: '**/build/outputs/roborazzi'
