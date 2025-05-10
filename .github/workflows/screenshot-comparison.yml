@@ -31,7 +31,7 @@ jobs:
           branch: ${{ github.base_ref }}
 
       - name: Run screenshot tests
-        run: ./gradlew verifyRoborazziDebug
+        run: ./gradlew compareRoborazziDebug
 
       - name: Upload comparison results
         if: failure()
