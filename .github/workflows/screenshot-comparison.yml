@@ -5,7 +5,7 @@ on:
     branches: [ main, master, develop, feature/roborazzi-on-github-actions ]
 
 jobs:
-  vrt:
+  visual-regression-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,7 +30,9 @@ jobs:
           workflow: upload_expected_image.yml
           branch: ${{ github.base_ref }}
 
-      - run: ls -al
+      - run: |
+          cd app/screenshots
+          ls -al
 
 #      - name: Run screenshot tests
 #        run: ./gradlew compareRoborazziDebug
