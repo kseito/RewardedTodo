@@ -2,23 +2,40 @@ name: Visual Regression Tests
 
 on:
   pull_request:
-    branches: [ main, master, develop ]
+    branches: [ main, master, develop, feature/roborazzi-on-github-actions ]
 
 jobs:
   vrt:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: Set up JDK
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+      
+      - name: Download reference images
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          name: expected_screenshots
+          path: app/screenshots
+          workflow: upload_expected_image.yml
+          branch: ${{ github.base_ref }}
+
       - name: Run screenshot tests
         run: ./gradlew verifyRoborazziDebug
+
       - name: Upload comparison results
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: roborazzi-comparison-results
-          path: '**/build/reports/roborazzi'
+          path: '**/build/outputs/roborazzi'
