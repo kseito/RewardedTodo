@@ -34,6 +34,6 @@ jobs:
           issue-number: 366
           body: |
             ## Screenshot Comparison Results
-            hoge
+            fuga
             ![Screenshot Comparison](app/screenshots/jp.kztproject.rewardedtodo.ExampleTest.rewardListScreenTest.png)
           edit-mode: replace
