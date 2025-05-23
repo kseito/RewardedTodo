@@ -19,3 +19,14 @@ jobs:
           ls ${{ github.workspace }}
       - run: echo "🍏 This job's status is ${{ job.status }}."
 #      - run: echo "This job body is ${{ github.event.pull_request.body }}."
+      - name: Add or update comment on PR
+        uses: peter-evans/create-or-update-comment@c6c9a1a66007646a28c153e2a8580a5bad27bcfa # v3
+        #        if: steps.generate-diff-reports.outputs.reports != ''
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ steps.get-pull-request-number.outputs.pull_request_number }}
+          body: |
+            ## Screenshot Comparison Results
+            hoge
+            ![Screenshot Comparison](app/screenshots/jp.kztproject.rewardedtodo.ExampleTest.rewardListScreenTest.png)
+          edit-mode: replace
