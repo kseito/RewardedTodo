@@ -37,4 +37,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: screenshot-diff-reports
-          path: '**/build/outputs/roborazzi'
+          path: |
+            **/reports
+            **/build/outputs/roborazzi
+          retention-days: 30
