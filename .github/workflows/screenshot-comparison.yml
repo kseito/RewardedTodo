@@ -2,7 +2,7 @@ name: screenshot-comparison
 
 on:
   pull_request:
-    branches: [ main, master, develop, feature/roborazzi-on-github-actions ]
+    branches: [ main, master, develop ]
 
 jobs:
   screenshot-comparison:
@@ -41,3 +41,13 @@ jobs:
             **/reports
             **/build/outputs/roborazzi
           retention-days: 30
+
+      - name: Save PR number for comment
+        if: ${{ github.event_name == 'pull_request' }}
+        run: |
+          mkdir -p ./pr
+          echo ${{ github.event.number }} > ./pr/NR
+          - uses: actions/upload-artifact@v4
+            with:
+              name: pr
+              path: pr/
