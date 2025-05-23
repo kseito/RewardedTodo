@@ -1,0 +1,45 @@
+name: screenshot-comparison-comment
+
+on:
+  workflow_run:
+    workflows:
+      - screenshot-comparison
+    types:
+      - completed
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.head_ref }}-${{ github.event.workflow_run.id }}
+  cancel-in-progress: true
+
+jobs:
+  screenshot-comparison-comment:
+    if: >
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success'
+
+    timeout-minutes: 2
+
+    permissions:
+      actions: read # for downloading artifacts
+      contents: write # for pushing screenshot-diff to companion branch
+      pull-requests: write # for creating a comment on pull requests
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615 # v2.27.0
+        with:
+          run_id: ${{ github.event.workflow_run.id }}
+          name: screenshot-diff-reports
+          path: screenshot-diff-reports
+      - name: Add or update comment on PR
+        uses: peter-evans/create-or-update-comment@c6c9a1a66007646a28c153e2a8580a5bad27bcfa # v3
+        if: steps.generate-diff-reports.outputs.reports != ''
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ steps.get-pull-request-number.outputs.pull_request_number }}
+          body: |
+            ## Screenshot Comparison Results
+            hoge
+            ![Screenshot Comparison](app/build/outputs/roborazzi/jp.kztproject.rewardedtodo.ExampleTest.roborazziTest_compare.png)
+          edit-mode: replace
