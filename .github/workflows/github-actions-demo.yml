@@ -31,7 +31,7 @@ jobs:
         #        if: steps.generate-diff-reports.outputs.reports != ''
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ steps.get-pull-request-number.outputs.pull_request_number }}
+          issue-number: 366
           body: |
             ## Screenshot Comparison Results
             hoge
