@@ -27,6 +27,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - uses: dawidd6/action-download-artifact@246dbf436b23d7c49e21a7ab8204ca9ecd1fe615 # v2.27.0
+        with:
+          name: pr
+          run_id: ${{ github.event.workflow_run.id }}
+      - id: get-pull-request-number
+        name: Get pull request number
+        shell: bash
+        run: |
+          echo "pull_request_number=$(cat NR)" >> "$GITHUB_OUTPUT"
       - uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
         with:
           run_id: ${{ github.event.workflow_run.id }}
