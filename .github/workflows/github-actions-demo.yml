@@ -23,7 +23,7 @@ jobs:
         uses: peter-evans/find-comment@a54c31d7fa095754bfef525c0c8e5e5674c4b4b1 # v2
         id: fc
         with:
-          issue-number: ${{ steps.get-pull-request-number.outputs.pull_request_number }}
+          issue-number: 366
           comment-author: 'github-actions[bot]'
           body-includes: Screenshot Comparison Results
       - name: Add or update comment on PR
