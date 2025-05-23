@@ -23,7 +23,7 @@ jobs:
         uses: android-actions/setup-android@v3
       
       - name: Download reference images
-        uses: dawidd6/action-download-artifact@v3
+        uses: dawidd6/action-download-artifact@v9
         with:
           name: expected_screenshots
           path: app/screenshots
