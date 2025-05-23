@@ -57,6 +57,7 @@ class ExampleTest {
                                 Todo(1, 1001, "英語学習", 3, true),
                                 Todo(2, 1002, "筋トレ", 2, false),
                                 Todo(3, 1003, "読書", 1, true),
+                                Todo(4, 1004, "料理", 0, false),
                             ),
                         )
                     },
