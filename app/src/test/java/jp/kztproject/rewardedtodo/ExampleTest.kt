@@ -55,7 +55,8 @@ class ExampleTest {
                         override fun execute(): Flow<List<Todo>> = flowOf(
                             listOf(
                                 Todo(1, 1001, "英語学習", 3, true),
-                                Todo(2, 1002, "筋トレ", 2, false)
+                                Todo(2, 1002, "筋トレ", 2, false),
+                                Todo(3, 1003, "読書", 1, true),
                             ),
                         )
                     },
