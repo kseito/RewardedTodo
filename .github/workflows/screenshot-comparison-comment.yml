@@ -43,7 +43,7 @@ jobs:
           path: screenshot-diff-reports
       - id: collect-compare-images
         run: |
-          files=$(find app/build/outputs/roborazzi -type f -name '*_compare.png' | sort)
+          files=$(find . -type f -name '*_compare.png' | sort)
           {
             echo "screenshot_compare_images<<EOF"
             echo "$files"
