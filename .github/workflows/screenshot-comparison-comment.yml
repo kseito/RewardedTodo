@@ -41,11 +41,11 @@ jobs:
           run_id: ${{ github.event.workflow_run.id }}
           name: screenshot-diff-reports
           path: screenshot-diff-reports
-      - name: main checkout
-        id: checkout-main
+      - name: master checkout
+        id: checkout-master
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: master
       - id: collect-compare-images
         run: |
           files=$(find . -type f -name '*_compare.png' | sort)
