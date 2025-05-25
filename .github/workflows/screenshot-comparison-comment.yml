@@ -32,6 +32,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: master
+
       - uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
         with:
           name: pr
@@ -41,6 +42,7 @@ jobs:
         shell: bash
         run: |
           echo "pull_request_number=$(cat NR)" >> "$GITHUB_OUTPUT"
+
       - uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
         with:
           run_id: ${{ github.event.workflow_run.id }}
@@ -49,37 +51,55 @@ jobs:
       - id: collect-compare-images
         run: |
           files=$(find . -type f -name '*_compare.png' | sort)
+          delimiter="$(openssl rand -hex 8)"
           {
-            echo "screenshot_compare_images<<EOF"
+            echo "screenshot_compare_images<<${delimiter}"
             echo "$files"
-            echo "EOF"
+            echo "${delimiter}"
           } >> hoge.txt
           cat hoge.txt
           cat hoge.txt >> "$GITHUB_OUTPUT"
-      - id: prepare-companion-branch
+
+      - name: Prepare companion branch and outputs
+        id: prepare-companion-branch
         if: steps.collect-compare-images.outputs.screenshot_compare_images != ''
         env:
           BRANCH_NAME: companion_${{ github.event.workflow_run.head_branch }}
         run: |
+          delimiter="$(openssl rand -hex 8)"
+          {
+            echo "comment_content<<${delimiter}"
+            echo "## Screenshot Comparison Results"
+          } >> "$GITHUB_OUTPUT"
+          
           # orphan means it will create no history branch
           git branch -D "$BRANCH_NAME" || true
           git checkout --orphan "$BRANCH_NAME"
           git rm -rf .
           echo "${{ steps.collect-compare-images.outputs.screenshot_compare_images }}" | while read file; do
             [ -n "$file" ] && git add "$file"
+            echo "/blob/${file}" >> "$GITHUB_OUTPUT"
           done
+          echo "${delimiter}" >> "$GITHUB_OUTPUT"
           git config --global user.name github-actions[bot]
           git config --global user.email github-actions[bot]@users.noreply.github.com
           git commit -m "Add screenshot diff"
           git push origin HEAD:"$BRANCH_NAME" -f
+
+      - name: Find Comment
+        uses: peter-evans/find-comment@a54c31d7fa095754bfef525c0c8e5e5674c4b4b1 # v2
+        id: fc
+        if: steps.prepare-companion-branch.outputs.comment_content != ''
+        with:
+          issue-number: ${{ steps.get-pull-request-number.outputs.pull_request_number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: Screenshot Comparison Results
+
       - name: Add or update comment on PR
         uses: peter-evans/create-or-update-comment@71345be0265236311c031f5c7866368bd1eff043 # v4
-        if: steps.generate-diff-reports.outputs.reports != ''
+        if: steps.prepare-companion-branch.outputs.comment_content != ''
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
           issue-number: ${{ steps.get-pull-request-number.outputs.pull_request_number }}
-          body: |
-            ## Screenshot Comparison Results
-            hoge
-            ![Screenshot Comparison](app/build/outputs/roborazzi/jp.kztproject.rewardedtodo.ExampleTest.roborazziTest_compare.png)
+          body: ${{ steps.prepare-companion-branch.outputs.comment_content }}
           edit-mode: replace
