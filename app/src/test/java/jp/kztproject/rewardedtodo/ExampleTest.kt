@@ -56,6 +56,7 @@ class ExampleTest {
                             listOf(
                                 Todo(1, 1001, "英語学習", 3, true),
                                 Todo(2, 1002, "筋トレ", 2, false),
+                                Todo(3, 1003, "読書", 1, false),
                             ),
                         )
                     },
@@ -92,6 +93,7 @@ class ExampleTest {
                     Reward(RewardId(1), RewardName("映画鑑賞"), Probability(80f), RewardDescription("映画を見に行く"), false),
                     Reward(RewardId(2), RewardName("ゲーム"), Probability(50f), RewardDescription("1時間ゲームをする"), true),
                     Reward(RewardId(3), RewardName("お酒"), Probability(30f), RewardDescription("好きなお酒を飲む"), false),
+                    Reward(RewardId(3), RewardName("お酒を買う"), Probability(30f), RewardDescription("好きなお酒を買う"), false),
                 )
 
                 override suspend fun executeAsFlow(): Flow<List<Reward>> = flowOf(
@@ -99,6 +101,13 @@ class ExampleTest {
                         Reward(RewardId(1), RewardName("映画鑑賞"), Probability(80f), RewardDescription("映画を見に行く"), false),
                         Reward(RewardId(2), RewardName("ゲーム"), Probability(50f), RewardDescription("1時間ゲームをする"), true),
                         Reward(RewardId(3), RewardName("お酒"), Probability(30f), RewardDescription("好きなお酒を飲む"), false),
+                        Reward(
+                            RewardId(3),
+                            RewardName("お酒を買う"),
+                            Probability(30f),
+                            RewardDescription("好きなお酒を買う"),
+                            false,
+                        ),
                     ),
                 )
             },

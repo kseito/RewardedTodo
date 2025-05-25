@@ -56,9 +56,7 @@ jobs:
             echo "screenshot_compare_images<<${delimiter}"
             echo "$files"
             echo "${delimiter}"
-          } >> hoge.txt
-          cat hoge.txt
-          cat hoge.txt >> "$GITHUB_OUTPUT"
+          } >> "$GITHUB_OUTPUT"
 
       - name: Prepare companion branch and outputs
         id: prepare-companion-branch
