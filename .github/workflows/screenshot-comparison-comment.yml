@@ -53,7 +53,9 @@ jobs:
             echo "screenshot_compare_images<<EOF"
             echo "$files"
             echo "EOF"
-          } >> "$GITHUB_OUTPUT"
+          } >> hoge.txt
+          cat hoge.txt
+          cat hoge.txt >> "$GITHUB_OUTPUT"
       - id: prepare-companion-branch
         if: steps.collect-compare-images.outputs.screenshot_compare_images != ''
         env:
