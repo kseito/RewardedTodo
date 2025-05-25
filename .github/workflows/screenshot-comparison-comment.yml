@@ -78,7 +78,7 @@ jobs:
           git rm -rf .
           echo "${{ steps.collect-compare-images.outputs.screenshot_compare_images }}" | while read file; do
             [ -n "$file" ] && git add "$file"
-            echo "![](https://github.com/${{ github.repository }}/blob/${BRANCH_NAME}/$(echo "${file}" | sed 's|^\./||'))?raw=true" >> "$GITHUB_OUTPUT"
+            echo "![](https://github.com/${{ github.repository }}/blob/${BRANCH_NAME}/$(echo "${file}" | sed 's|^\./||')?raw=true)" >> "$GITHUB_OUTPUT"
           done
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
           git config --global user.name github-actions[bot]
@@ -87,7 +87,7 @@ jobs:
           git push origin HEAD:"$BRANCH_NAME" -f
 
       - name: Find Comment
-        uses: peter-evans/find-comment@a54c31d7fa095754bfef525c0c8e5e5674c4b4b1 # v2
+        uses: peter-evans/find-comment@3eae4d37986fb5a8592848f6a574fdf654e61f9e # v3
         id: fc
         if: steps.prepare-companion-branch.outputs.comment_content != ''
         with:
@@ -103,3 +103,15 @@ jobs:
           issue-number: ${{ steps.get-pull-request-number.outputs.pull_request_number }}
           body: ${{ steps.prepare-companion-branch.outputs.comment_content }}
           edit-mode: replace
+
+      - name: Cleanup outdated companion branches
+        run: |
+          # Find outdated companion branches with last commit date
+          git branch -r --format="%(refname:lstrip=3)" | grep companion_ | while read -r branch; do
+            last_commit_date_timestamp=$(git log -1 --format=%ct "origin/$branch")
+            now_timestamp=$(date +%s)
+            # Delete branch if it's older than 1 month
+            if [ $((now_timestamp - last_commit_date_timestamp)) -gt 1209600 ]; then
+               git push origin --delete "$branch"
+            fi
+          done
