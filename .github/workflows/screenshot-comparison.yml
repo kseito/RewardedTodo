@@ -33,8 +33,6 @@ jobs:
       - name: Run screenshot tests
         run: ./gradlew compareRoborazziDebug
 
-      - run: ls app/build/outputs/roborazzi
-
       - name: Upload comparison results
         uses: actions/upload-artifact@v4
         with:
