@@ -78,7 +78,7 @@ jobs:
           git rm -rf .
           echo "${{ steps.collect-compare-images.outputs.screenshot_compare_images }}" | while read file; do
             [ -n "$file" ] && git add "$file"
-            echo "/blob/${file}" >> "$GITHUB_OUTPUT"
+            echo "![](https://github.com/${{ github.repository }}/blob/${BRANCH_NAME}/$(echo "${file}" | sed 's|^\./||'))?raw=true" >> "$GITHUB_OUTPUT"
           done
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
           git config --global user.name github-actions[bot]
