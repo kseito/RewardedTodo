@@ -27,6 +27,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: master checkout
+        id: checkout-master
+        uses: actions/checkout@v4
+        with:
+          ref: master
       - uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
         with:
           name: pr
@@ -41,11 +46,6 @@ jobs:
           run_id: ${{ github.event.workflow_run.id }}
           name: screenshot-diff-reports
           path: screenshot-diff-reports
-      - name: master checkout
-        id: checkout-master
-        uses: actions/checkout@v4
-        with:
-          ref: master
       - id: collect-compare-images
         run: |
           files=$(find . -type f -name '*_compare.png' | sort)
