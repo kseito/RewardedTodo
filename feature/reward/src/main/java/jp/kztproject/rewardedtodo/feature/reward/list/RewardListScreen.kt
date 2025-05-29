@@ -295,40 +295,41 @@ private fun ErrorSnackBarPreview() {
     )
 }
 
+// Create preview ViewModel outside the composable function
+private val previewViewModel = RewardListViewModel(
+    object : LotteryUseCase {
+        override suspend fun execute(rewards: RewardCollection): Result<Reward?> = Result.success(null)
+    },
+    object : GetRewardsUseCase {
+        private val reward = Reward(
+            RewardId(1),
+            RewardName("PS5"),
+            Probability(0.5f),
+            RewardDescription(""),
+            false,
+        )
+
+        override suspend fun execute(): List<Reward> = listOf(reward)
+
+        override suspend fun executeAsFlow(): Flow<List<Reward>> = flowOf(listOf(reward))
+    },
+    object : GetPointUseCase {
+        override suspend fun execute(): Flow<NumberOfTicket> = flowOf(NumberOfTicket(100))
+    },
+    object : SaveRewardUseCase {
+        override suspend fun execute(reward: RewardInput): Result<Unit> = Result.success(Unit)
+    },
+    object : DeleteRewardUseCase {
+        override suspend fun execute(reward: Reward) {}
+    },
+)
+
 @Preview
 @Composable
 @ExperimentalMaterialApi
 private fun RewardListScreenPreview() {
-    val viewModel = RewardListViewModel(
-        object : LotteryUseCase {
-            override suspend fun execute(rewards: RewardCollection): Result<Reward?> = Result.success(null)
-        },
-        object : GetRewardsUseCase {
-            private val reward = Reward(
-                RewardId(1),
-                RewardName("PS5"),
-                Probability(0.5f),
-                RewardDescription(""),
-                false,
-            )
-
-            override suspend fun execute(): List<Reward> = listOf(reward)
-
-            override suspend fun executeAsFlow(): Flow<List<Reward>> = flowOf(listOf(reward))
-        },
-        object : GetPointUseCase {
-            override suspend fun execute(): Flow<NumberOfTicket> = flowOf(NumberOfTicket(100))
-        },
-        object : SaveRewardUseCase {
-            override suspend fun execute(reward: RewardInput): Result<Unit> = Result.success(Unit)
-        },
-        object : DeleteRewardUseCase {
-            override suspend fun execute(reward: Reward) {}
-        },
-    )
-
     RewardListScreen(
-        viewModel = viewModel,
+        viewModel = previewViewModel,
         bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
         onAddNewRewardClick = {},
         onRewardItemClick = {},
