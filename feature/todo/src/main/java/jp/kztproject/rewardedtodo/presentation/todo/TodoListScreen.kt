@@ -130,7 +130,7 @@ private fun TodoListScreen(
             todoList?.let {
                 itemsIndexed(
                     items = it,
-                    key = { index, todo -> todo.id ?: index},
+                    key = { index, todo -> todo.id ?: index },
                 ) { index, todo ->
                     TodoListItem(
                         todo = todo,
@@ -140,7 +140,7 @@ private fun TodoListScreen(
                         onTodoDone = {
                             viewModel.completeTodo(todo)
                         },
-                        modifier = Modifier.animateItem()
+                        modifier = Modifier.animateItem(),
                     )
                     if (index < todoList!!.lastIndex) {
                         Divider()
@@ -220,10 +220,10 @@ fun TodoListScreenPreview() {
 
 @Composable
 private fun TodoListItem(
-    todo: Todo, 
-    onItemClicked: () -> Unit, 
+    todo: Todo,
+    onItemClicked: () -> Unit,
     onTodoDone: (Todo) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val isDone by remember { mutableStateOf(false) }
     ConstraintLayout(
