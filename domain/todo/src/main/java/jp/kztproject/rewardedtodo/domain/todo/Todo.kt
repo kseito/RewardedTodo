@@ -1,7 +1,7 @@
 package jp.kztproject.rewardedtodo.domain.todo
 
 data class Todo(
-        val id: Long?,
+        val id: Long,
         val todoistId: Long?,
         var name: String,   //TODO divide model
         val numberOfTicketsObtained: Int,

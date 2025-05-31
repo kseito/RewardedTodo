@@ -130,7 +130,7 @@ private fun TodoListScreen(
             todoList?.let {
                 itemsIndexed(
                     items = it,
-                    key = { index, todo -> todo.id ?: index },
+                    key = { _, todo -> todo.id },
                 ) { index, todo ->
                     TodoListItem(
                         todo = todo,

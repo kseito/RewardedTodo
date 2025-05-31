@@ -22,7 +22,7 @@ data class EditingTodo(
 
     fun toTodo(): Todo {
         return Todo(
-            this.id,
+            this.id ?: 0,
             this.todoistId,
             this.name,
             this.numberOfTicketsObtained,

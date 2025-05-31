@@ -85,7 +85,7 @@ class TodoRepository @Inject constructor(
 
     private fun Todo.convert(): TodoEntity {
         return TodoEntity(
-            id = this.id ?: 0,
+            id = this.id,
             todoistId = this.todoistId,
             name = this.name,
             numberOfTicketsObtained = this.numberOfTicketsObtained,
