@@ -5,30 +5,26 @@ data class EditingTodo(
     val todoistId: Long? = null,
     var name: String = "",
     private var numberOfTicketsObtained: Int = 0,
-    private var isRepeat: Boolean = false
+    private var isRepeat: Boolean = false,
 ) {
 
     companion object {
-        fun from(todo: Todo): EditingTodo {
-            return EditingTodo(
-                todo.id,
-                todo.todoistId,
-                todo.name,
-                todo.numberOfTicketsObtained,
-                todo.isRepeat
-            )
-        }
-    }
-
-    fun toTodo(): Todo {
-        return Todo(
-            this.id,
-            this.todoistId,
-            this.name,
-            this.numberOfTicketsObtained,
-            this.isRepeat
+        fun from(todo: Todo): EditingTodo = EditingTodo(
+            todo.id,
+            todo.todoistId,
+            todo.name,
+            todo.numberOfTicketsObtained,
+            todo.isRepeat,
         )
     }
+
+    fun toTodo(): Todo = Todo(
+        this.id ?: 0,
+        this.todoistId,
+        this.name,
+        this.numberOfTicketsObtained,
+        this.isRepeat,
+    )
 
     fun validate() {
         if (name.isEmpty()) {

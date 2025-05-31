@@ -16,13 +16,11 @@ import javax.inject.Named
 class TodoRepository @Inject constructor(
     private val todoDao: TodoDao,
     private val todoistApi: TodoistApi,
-    @Named("encrypted") private val preferences: SharedPreferences
+    @Named("encrypted") private val preferences: SharedPreferences,
 ) : ITodoRepository {
 
-    override fun findAll(): Flow<List<Todo>> {
-        return todoDao.findAllAsFlow().map { list ->
-            list.map { todo -> todo.convert() }
-        }
+    override fun findAll(): Flow<List<Todo>> = todoDao.findAllAsFlow().map { list ->
+        list.map { todo -> todo.convert() }
     }
 
     override suspend fun sync() {
@@ -34,12 +32,12 @@ class TodoRepository @Inject constructor(
             val localTaskIds = localTasks.map { it.todoistId }
             latestTasks.forEach { task ->
                 if (localTaskIds.contains(task.id)) {
-                    //Update if both
+                    // Update if both
                     val todoEntity = todoDao.findBy(task.id)
                         .copy(name = task.content)
                     todoDao.insertOrUpdate(todoEntity.resetIsDone())
                 } else {
-                    //Insert if only in Todoist
+                    // Insert if only in Todoist
                     todoDao.insertOrUpdate(task.convert(false))
                 }
             }
@@ -73,39 +71,31 @@ class TodoRepository @Inject constructor(
         todoDao.delete(todo.convert())
     }
 
-    private fun TodoEntity.convert(): Todo {
-        return Todo(
-            id = this.id,
-            todoistId = this.todoistId,
-            name = this.name,
-            numberOfTicketsObtained = this.numberOfTicketsObtained,
-            isRepeat = this.isRepeat
-        )
-    }
+    private fun TodoEntity.convert(): Todo = Todo(
+        id = this.id,
+        todoistId = this.todoistId,
+        name = this.name,
+        numberOfTicketsObtained = this.numberOfTicketsObtained,
+        isRepeat = this.isRepeat,
+    )
 
-    private fun Todo.convert(): TodoEntity {
-        return TodoEntity(
-            id = this.id ?: 0,
-            todoistId = this.todoistId,
-            name = this.name,
-            numberOfTicketsObtained = this.numberOfTicketsObtained,
-            isRepeat = this.isRepeat,
-            isDone = false
-        )
-    }
+    private fun Todo.convert(): TodoEntity = TodoEntity(
+        id = this.id,
+        todoistId = this.todoistId,
+        name = this.name,
+        numberOfTicketsObtained = this.numberOfTicketsObtained,
+        isRepeat = this.isRepeat,
+        isDone = false,
+    )
 
-    private fun Task.convert(isDone: Boolean): TodoEntity {
-        return TodoEntity(
-            id = 0,
-            todoistId = this.id,
-            name = this.content,
-            numberOfTicketsObtained = Todo.DEFAULT_NUMBER_OF_TICHKET,
-            isRepeat = this.due.recurring,
-            isDone = isDone
-        )
-    }
+    private fun Task.convert(isDone: Boolean): TodoEntity = TodoEntity(
+        id = 0,
+        todoistId = this.id,
+        name = this.content,
+        numberOfTicketsObtained = Todo.DEFAULT_NUMBER_OF_TICHKET,
+        isRepeat = this.due.recurring,
+        isDone = isDone,
+    )
 
-    private fun TodoEntity.resetIsDone(): TodoEntity {
-        return copy(isDone = false)
-    }
+    private fun TodoEntity.resetIsDone(): TodoEntity = copy(isDone = false)
 }
