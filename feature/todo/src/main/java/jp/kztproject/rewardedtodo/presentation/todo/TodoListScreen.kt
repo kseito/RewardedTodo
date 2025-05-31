@@ -128,7 +128,10 @@ private fun TodoListScreen(
     ) {
         LazyColumn {
             todoList?.let {
-                itemsIndexed(it) { index, todo ->
+                itemsIndexed(
+                    items = it,
+                    key = { index, todo -> todo.id ?: index},
+                ) { index, todo ->
                     TodoListItem(
                         todo = todo,
                         onItemClicked = {
@@ -137,6 +140,7 @@ private fun TodoListScreen(
                         onTodoDone = {
                             viewModel.completeTodo(todo)
                         },
+                        modifier = Modifier.animateItem()
                     )
                     if (index < todoList!!.lastIndex) {
                         Divider()
@@ -215,10 +219,15 @@ fun TodoListScreenPreview() {
 }
 
 @Composable
-private fun TodoListItem(todo: Todo, onItemClicked: () -> Unit, onTodoDone: (Todo) -> Unit) {
+private fun TodoListItem(
+    todo: Todo, 
+    onItemClicked: () -> Unit, 
+    onTodoDone: (Todo) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val isDone by remember { mutableStateOf(false) }
     ConstraintLayout(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .clickable(
                 interactionSource = remember { MutableInteractionSource() },
@@ -281,7 +290,11 @@ private fun TodoListItem(todo: Todo, onItemClicked: () -> Unit, onTodoDone: (Tod
 private fun TodoListItemPreview() {
     Surface {
         val todo = Todo(1, 1, "Buy ingredients for dinner", 1, false)
-        TodoListItem(todo, {}) {}
+        TodoListItem(
+            todo = todo,
+            onItemClicked = {},
+            onTodoDone = {},
+        )
     }
 }
 
@@ -292,6 +305,10 @@ private fun DarkModeTodoListItemPreview() {
         colors = DarkColorScheme,
     ) {
         val todo = Todo(1, 1, "Buy ingredients for dinner", 1, false)
-        TodoListItem(todo, {}) {}
+        TodoListItem(
+            todo = todo,
+            onItemClicked = {},
+            onTodoDone = {},
+        )
     }
 }
