@@ -17,7 +17,7 @@ jobs:
       RELEASE_BRANCH: stg-release/${{ inputs.versionName }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
         with:
           ref: master
 
@@ -40,4 +40,3 @@ jobs:
 
       - name: echo user name
         run: echo "🔎 The user name is ${{ github.actor }}."
-

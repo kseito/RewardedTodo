@@ -29,7 +29,7 @@ jobs:
     steps:
       - name: master checkout
         id: checkout-master
-        uses: actions/checkout@v4
+        uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
         with:
           ref: master
 
@@ -69,7 +69,7 @@ jobs:
             echo "comment_content<<${delimiter}"
             echo "## Screenshot Comparison Results"
           } >> "$GITHUB_OUTPUT"
-          
+
           # orphan means it will create no history branch
           git branch -D "$BRANCH_NAME" || true
           git checkout --orphan "$BRANCH_NAME"
