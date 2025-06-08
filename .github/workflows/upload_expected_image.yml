@@ -29,7 +29,7 @@ jobs:
         uses: gradle/actions/setup-gradle@3b1b3b9a2104cd213f8ede8e3aa8d4e77e397e9e # v4
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2 のコミットハッシュ
+        uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3.2.2
 
       - name: Create screenshots
         run: |
