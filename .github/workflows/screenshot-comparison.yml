@@ -17,7 +17,7 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@3b1b3b9a2104cd213f8ede8e3aa8d4e77e397e9e # v4
+        uses: gradle/actions/setup-gradle@8379f6a1328ee0e06e2bb424dadb7b159856a326 # v4.4.0
 
       - name: Setup Android SDK
         uses: android-actions/setup-android@934d46e3c2a4a9e0e1b61a4e9f2424e0e7d2b1c9 # v3
