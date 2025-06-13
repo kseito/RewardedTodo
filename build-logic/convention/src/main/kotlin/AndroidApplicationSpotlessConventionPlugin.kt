@@ -10,7 +10,7 @@ class AndroidApplicationSpotlessConventionPlugin : Plugin<Project> {
             // Configure the Spotless plugin
             extensions.configure<SpotlessExtension> {
                 kotlin {
-                    ratchetFrom("origin/master")
+                    ratchetFrom("origin/main")
 
                     target("**/*.kt")
                     targetExclude("**/build/**/*.kt")

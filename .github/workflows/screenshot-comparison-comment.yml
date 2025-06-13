@@ -27,11 +27,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: master checkout
-        id: checkout-master
+      - name: main checkout
+        id: checkout-main
         uses: actions/checkout@8ade135a41bc03ea155e62e844d188df1ea18608 # v4
         with:
-          ref: master
+          ref: main
 
       - uses: dawidd6/action-download-artifact@09f2f74827fd3a8607589e5ad7f9398816f540fe # v3.1.4
         with:
