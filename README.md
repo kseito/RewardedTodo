@@ -1,6 +1,6 @@
 # RewardedTodo
 
-[![CircleCI](https://circleci.com/gh/kseito/RewardedTodo.svg?style=svg)](https://circleci.com/gh/kseito/Splacounter)
+[![CircleCI](https://circleci.com/gh/kseito/RewardedTodo.svg?style=svg)](https://circleci.com/gh/kseito/RewardedTodo)
 
 ## Project Overview
 RewardedTodo is an Android application that manages rewards and points using Todoist. It follows MVVM architecture with a multi-module structure to separate concerns.
