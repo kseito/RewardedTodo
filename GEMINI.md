@@ -39,9 +39,6 @@ This Android project implements **Clean Architecture** with a **multi-modular st
 # Format Kotlin code
 ./gradlew spotlessKotlinApply
 
-# Check code style
-./gradlew spotlessCheck
-
 # Screenshot comparison tests (Roborazzi)
 ./gradlew compareRoborazziDebug
 ```
