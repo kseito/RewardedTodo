@@ -40,7 +40,7 @@ import org.robolectric.annotation.GraphicsMode
 @OptIn(ExperimentalMaterialApi::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @RunWith(RobolectricTestRunner::class)
-@Config(sdk = [34])
+@Config(sdk = [35])
 class ExampleTest {
 
     @get:Rule
