@@ -13,7 +13,7 @@ android {
     compileSdk = libs.versions.androidCompileSdkVersion.get().toInt()
 
     defaultConfig {
-        applicationId = Packages.name
+        applicationId = "jp.kztproject.rewardedtodo"
         minSdk = libs.versions.androidTargetSdkVersion.get().toInt()
         targetSdk = libs.versions.androidTargetSdkVersion.get().toInt()
         versionCode = libs.versions.versionCode.get().toInt()
