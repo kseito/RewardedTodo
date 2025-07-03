@@ -34,9 +34,6 @@ jobs:
           name: Static Code Analytics
           command: |
             ./gradlew lintDebug
-            bundle config set path 'vendor/bundle'
-            bundle install
-            bundle exec danger
   deploy-to-deploygate:
     executor: android
     steps:
