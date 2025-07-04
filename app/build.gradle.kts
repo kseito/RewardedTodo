@@ -10,19 +10,20 @@ plugins {
 }
 
 android {
-    compileSdk = Versions.androidCompileSdkVersion
+    compileSdk = libs.versions.androidCompileSdkVersion.get().toInt()
 
     defaultConfig {
-        applicationId = Packages.name
-        minSdk = Versions.androidMinSdkVersion
-        targetSdk = Versions.androidTargetSdkVersion
-        versionCode = Versions.versionCode
-        versionName = Versions.versionName
+        applicationId = "jp.kztproject.rewardedtodo"
+        minSdk = libs.versions.androidTargetSdkVersion.get().toInt()
+        targetSdk = libs.versions.androidTargetSdkVersion.get().toInt()
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.versionName.get()
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "TODOIST_URL", "\"https://todoist.com\"")
         buildConfigField("String", "REWARD_LIST_SERVER_URL", "\"https://rewardlist.herokuapp.com\"")
     }
+
 
     signingConfigs {
         create("staging") {
