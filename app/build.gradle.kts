@@ -91,6 +91,10 @@ android {
             isIncludeAndroidResources = true
         }
     }
+
+    lint {
+        warningsAsErrors = true
+    }
 }
 
 dependencies {
