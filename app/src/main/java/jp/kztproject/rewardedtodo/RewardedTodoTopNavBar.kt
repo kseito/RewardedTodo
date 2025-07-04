@@ -16,29 +16,26 @@ import androidx.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar(
-    @StringRes titleResourceId: Int,
-    onSettingClicked: () -> Unit
-) {
+fun TopBar(@StringRes titleResourceId: Int, onSettingClicked: () -> Unit) {
     TopAppBar(
         title = {
             Text(text = stringResource(id = titleResourceId))
         },
         colors = TopAppBarDefaults.topAppBarColors().copy(
             containerColor = MaterialTheme.colorScheme.primary,
-            titleContentColor = MaterialTheme.colorScheme.onPrimary
+            titleContentColor = MaterialTheme.colorScheme.onPrimary,
         ),
         actions = {
             IconButton(
-                onClick = onSettingClicked
+                onClick = onSettingClicked,
             ) {
                 Icon(
                     imageVector = Icons.Filled.Settings,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.onPrimary
+                    tint = MaterialTheme.colorScheme.onPrimary,
                 )
             }
-        }
+        },
     )
 }
 
@@ -48,6 +45,6 @@ fun TopBarPreview() {
     val destination = TopLevelDestination.TODO
     TopBar(
         titleResourceId = destination.iconTextId,
-        onSettingClicked = {}
+        onSettingClicked = {},
     )
 }
