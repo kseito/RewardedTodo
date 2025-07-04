@@ -1,7 +1,7 @@
 package jp.kztproject.rewardedtodo
 
 import androidx.annotation.StringRes
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -25,8 +25,8 @@ fun TopBar(
             Text(text = stringResource(id = titleResourceId))
         },
         colors = TopAppBarDefaults.topAppBarColors().copy(
-            containerColor = MaterialTheme.colors.primary,
-            titleContentColor = MaterialTheme.colors.onPrimary
+            containerColor = MaterialTheme.colorScheme.primary,
+            titleContentColor = MaterialTheme.colorScheme.onPrimary
         ),
         actions = {
             IconButton(
@@ -35,7 +35,7 @@ fun TopBar(
                 Icon(
                     imageVector = Icons.Filled.Settings,
                     contentDescription = null,
-                    tint = MaterialTheme.colors.onPrimary
+                    tint = MaterialTheme.colorScheme.onPrimary
                 )
             }
         }
