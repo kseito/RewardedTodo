@@ -10,11 +10,13 @@ plugins {
 }
 
 android {
+    //noinspection GradleDependency
     compileSdk = libs.versions.androidCompileSdkVersion.get().toInt()
 
     defaultConfig {
         applicationId = "jp.kztproject.rewardedtodo"
         minSdk = libs.versions.androidTargetSdkVersion.get().toInt()
+        //noinspection OldTargetApi
         targetSdk = libs.versions.androidTargetSdkVersion.get().toInt()
         versionCode = libs.versions.versionCode.get().toInt()
         versionName = libs.versions.versionName.get()
@@ -91,6 +93,10 @@ android {
         unitTests {
             isIncludeAndroidResources = true
         }
+    }
+
+    lint {
+        warningsAsErrors = true
     }
 }
 
