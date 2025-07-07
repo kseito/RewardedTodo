@@ -6,5 +6,5 @@ data class Task(
     val id: Long,
     val content: String,
     @param:Json(name = "is_completed") val completed: Boolean,
-    val due: Due
+    val due: Due,
 )
