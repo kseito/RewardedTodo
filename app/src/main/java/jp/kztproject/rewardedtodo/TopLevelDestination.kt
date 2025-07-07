@@ -4,8 +4,8 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 
 enum class TopLevelDestination(
-    @DrawableRes val iconImageId: Int,
-    @StringRes val iconTextId: Int
+    @param:DrawableRes val iconImageId: Int,
+    @param:StringRes val iconTextId: Int
 ) {
     TODO(
         iconImageId = R.drawable.reward_done,

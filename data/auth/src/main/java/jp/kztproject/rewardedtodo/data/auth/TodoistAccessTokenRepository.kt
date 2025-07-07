@@ -10,7 +10,7 @@ import javax.inject.Named
 @SuppressLint("ApplySharedPref")
 class TodoistAccessTokenRepository @Inject constructor(
     private val api: TodoistApi,
-    @Named("encrypted") private val preferences: SharedPreferences
+    @param:Named("encrypted") private val preferences: SharedPreferences
 ) : ITodoistAccessTokenRepository {
 
     override suspend fun refresh(clientId: String, clientToken: String, code: String) {

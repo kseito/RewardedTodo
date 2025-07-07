@@ -16,7 +16,7 @@ import javax.inject.Named
 class TodoRepository @Inject constructor(
     private val todoDao: TodoDao,
     private val todoistApi: TodoistApi,
-    @Named("encrypted") private val preferences: SharedPreferences,
+    @param:Named("encrypted") private val preferences: SharedPreferences,
 ) : ITodoRepository {
 
     override fun findAll(): Flow<List<Todo>> = todoDao.findAllAsFlow().map { list ->
