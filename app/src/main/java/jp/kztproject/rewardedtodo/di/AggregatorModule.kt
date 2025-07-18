@@ -5,7 +5,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
 @InstallIn(SingletonComponent::class)
-@Module(includes = [
-    AppModule::class,
-    RepositoriesModule::class])
+@Module(
+    includes = [
+        AppModule::class,
+        RepositoriesModule::class,
+    ],
+)
 interface AggregatorModule

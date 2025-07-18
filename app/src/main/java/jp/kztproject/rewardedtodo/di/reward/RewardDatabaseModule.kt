@@ -16,12 +16,9 @@ class RewardDatabaseModule {
 
     @Provides
     @Singleton
-    fun providesAppDatabase(application: Application): AppDatabase {
-        return DatabaseInitializer.init(application, AppDatabase::class.java, "reward")
-    }
+    fun providesAppDatabase(application: Application): AppDatabase =
+        DatabaseInitializer.init(application, AppDatabase::class.java, "reward")
 
     @Provides
-    fun providesRewardDao(appDatabase: AppDatabase): RewardDao {
-        return appDatabase.rewardDao()
-    }
+    fun providesRewardDao(appDatabase: AppDatabase): RewardDao = appDatabase.rewardDao()
 }
