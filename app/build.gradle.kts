@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.rewardedtodo.android.application.deploygate)
     alias(libs.plugins.roborazzi)
+    alias(libs.plugins.rewardedtodo.android.library.detekt)
 }
 
 android {
@@ -171,3 +172,7 @@ kapt {
 roborazzi {
     outputDir.set(file("screenshots"))
 }
+
+//detekt {
+//    config.setFrom(files("$rootDir/detekt.yml"))
+//}

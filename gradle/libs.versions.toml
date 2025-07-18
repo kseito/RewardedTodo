@@ -43,6 +43,7 @@ androidx-junit = "1.2.1"
 espresso-core = "3.6.1"
 spotless_gradle_plugin = "7.1.0"
 roborazzi = "1.46.1"
+detekt = "1.23.8"
 
 [libraries]
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose" }
@@ -101,6 +102,7 @@ android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", ve
 deploygate-gradle-plugin = { group = "com.deploygate", name = "gradle", version.ref = "deploy-gate"}
 kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 spotless-gradle-plugin = { group = "com.diffplug.spotless", name = "spotless-plugin-gradle", version.ref = "spotless_gradle_plugin" }
+detekt-gradle-plugin = { group = "io.gitlab.arturbosch.detekt", name = "detekt-gradle-plugin", version.ref = "detekt" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-gradle-plugin"}
@@ -113,7 +115,9 @@ kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin"}
 deploy-gate = { id = "com.deploygate", version.ref = "deploy-gate" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless_gradle_plugin"}
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 
 rewardedtodo-android-library = { id = "rewardedtodo.android.library" }
 rewardedtodo-android-application-spotless = { id = "rewardedtodo.android.application.spotless" }
 rewardedtodo-android-application-deploygate = { id = "rewardedtodo.android.application.deploygate" }
+rewardedtodo-android-library-detekt = { id = "rewardedtodo.android.library.detekt" }
