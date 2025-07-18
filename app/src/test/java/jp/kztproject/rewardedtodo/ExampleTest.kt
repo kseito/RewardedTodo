@@ -61,16 +61,16 @@ class ExampleTest {
                         )
                     },
                     object : FetchTodoListUseCase {
-                        override suspend fun execute() {}
+                        override suspend fun execute() = Unit
                     },
                     object : UpdateTodoUseCase {
                         override suspend fun execute(todo: EditingTodo): Result<Unit> = Result.success(Unit)
                     },
                     object : DeleteTodoUseCase {
-                        override suspend fun execute(todo: Todo) {}
+                        override suspend fun execute(todo: Todo) = Unit
                     },
                     object : CompleteTodoUseCase {
-                        override suspend fun execute(todo: Todo) {}
+                        override suspend fun execute(todo: Todo) = Unit
                     },
                 ),
             )
@@ -118,7 +118,7 @@ class ExampleTest {
                 override suspend fun execute(reward: RewardInput): Result<Unit> = Result.success(Unit)
             },
             object : DeleteRewardUseCase {
-                override suspend fun execute(reward: Reward) {}
+                override suspend fun execute(reward: Reward) = Unit
             },
         )
 

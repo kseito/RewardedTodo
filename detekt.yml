@@ -213,8 +213,7 @@ empty-blocks:
   EmptyForBlock:
     active: true
   EmptyFunctionBlock:
-    # Disabled temporarily due to
-    active: false
+    active: true
     ignoreOverridden: false
   EmptyIfBlock:
     active: true
