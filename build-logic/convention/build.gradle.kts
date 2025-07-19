@@ -31,20 +31,14 @@ gradlePlugin {
             id = "rewardedtodo.android.library"
             implementationClass = "AndroidLibraryConventionPlugin"
         }
-    }
-    plugins {
         register("androidApplicationSpotless") {
             id = "rewardedtodo.android.application.spotless"
             implementationClass = "AndroidApplicationSpotlessConventionPlugin"
         }
-    }
-    plugins {
         register("androidApplicationDeploygate") {
             id = "rewardedtodo.android.application.deploygate"
             implementationClass = "AndroidApplicationDeploygateConventionPlugin"
         }
-    }
-    plugins {
         register("androidLibraryDetekt") {
             id = "rewardedtodo.android.library.detekt"
             implementationClass = "AndroidLibraryDetektConventionPlugin"
