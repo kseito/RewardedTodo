@@ -4,7 +4,12 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.FragmentComponent
-import jp.kztproject.rewardedtodo.application.reward.usecase.*
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointInteractor
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsInteractor
+import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryInteractor
+import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
 
 @InstallIn(FragmentComponent::class)
 @Module
