@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "jp.kztproject.rewardedtodo"
-        minSdk = libs.versions.androidTargetSdkVersion.get().toInt()
+        minSdk = libs.versions.androidMinSdkVersion.get().toInt()
         //noinspection OldTargetApi
         targetSdk = libs.versions.androidTargetSdkVersion.get().toInt()
         versionCode = libs.versions.versionCode.get().toInt()
