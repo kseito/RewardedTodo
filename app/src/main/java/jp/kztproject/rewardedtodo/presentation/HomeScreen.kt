@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 
@@ -36,7 +37,7 @@ fun HomeScreen(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     val topLevelDestinations = TopLevelDestination.entries
-    var currentDestination by remember { mutableStateOf(TopLevelDestination.TODO) }
+    var currentDestination by rememberSaveable { mutableStateOf(TopLevelDestination.TODO) }
     val onNavigateToDestination: (TopLevelDestination) -> Unit = {
         when (it) {
             TopLevelDestination.TODO -> navController.navigateHome(TODO_SCREEN)
