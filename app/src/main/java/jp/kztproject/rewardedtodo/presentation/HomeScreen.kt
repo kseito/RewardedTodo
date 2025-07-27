@@ -50,9 +50,7 @@ fun HomeScreen(onClickSetting: () -> Unit) {
             )
         },
         bottomBar = {
-            if (currentRoute != SETTING_SCREEN) {
-                RewardedTodoBottomBar(topLevelDestinations, onNavigateToDestination)
-            }
+            RewardedTodoBottomBar(topLevelDestinations, onNavigateToDestination)
         },
     ) { padding ->
         RewardedTodoApp(padding, navController)
