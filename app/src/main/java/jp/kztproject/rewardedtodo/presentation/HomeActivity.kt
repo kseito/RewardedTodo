@@ -6,10 +6,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.compose.NavHost
@@ -33,11 +29,10 @@ class HomeActivity : ComponentActivity() {
         setContent {
             val navController = rememberNavController()
             val context = LocalContext.current
-            var todoistAuthFinished by remember { mutableStateOf(false) }
             val launcher = rememberLauncherForActivityResult(
                     ActivityResultContracts.StartActivityForResult(),
                 ) {
-                    todoistAuthFinished = true
+                    // No action needed here.
                 }
             NavHost(navController = navController, startDestination = HOME_SCREEN) {
                 homeScreen(
