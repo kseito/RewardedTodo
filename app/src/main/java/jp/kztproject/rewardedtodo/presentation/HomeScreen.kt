@@ -23,7 +23,6 @@ import jp.kztproject.rewardedtodo.TopLevelDestination
 
 import jp.kztproject.rewardedtodo.feature.reward.REWARD_SCREEN
 import jp.kztproject.rewardedtodo.feature.reward.rewardListScreen
-import jp.kztproject.rewardedtodo.feature.setting.SETTING_SCREEN
 import jp.kztproject.rewardedtodo.presentation.todo.TODO_SCREEN
 import jp.kztproject.rewardedtodo.presentation.todo.todoListScreen
 
