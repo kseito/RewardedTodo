@@ -5,10 +5,8 @@ import androidx.navigation.compose.composable
 
 const val HOME_SCREEN = "home_screen"
 
-fun NavGraphBuilder.homeScreen(
-    onClickSetting: () -> Unit
-) {
+fun NavGraphBuilder.homeScreen(onClickSetting: () -> Unit) {
     composable(HOME_SCREEN) {
-         HomeScreen(onClickSetting)
+        HomeScreen(onClickSetting)
     }
 }

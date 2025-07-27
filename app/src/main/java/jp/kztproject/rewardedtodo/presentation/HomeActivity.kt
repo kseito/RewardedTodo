@@ -27,7 +27,7 @@ class HomeActivity : ComponentActivity() {
                 homeScreen(
                     onClickSetting = {
                         navController.navigate(SETTING_SCREEN)
-                    }
+                    },
                 )
                 settingScreen()
             }
