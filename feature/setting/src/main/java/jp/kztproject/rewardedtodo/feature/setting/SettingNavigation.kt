@@ -5,8 +5,12 @@ import androidx.navigation.compose.composable
 
 const val SETTING_SCREEN = "setting_screen"
 
-fun NavGraphBuilder.settingScreen() {
+fun NavGraphBuilder.settingScreen(
+    onTodoistAuthStartClicked: () -> Unit
+) {
     composable(SETTING_SCREEN) {
-        SettingScreen()
+        SettingScreen(
+            onTodoistAuthStartClicked = onTodoistAuthStartClicked
+        )
     }
 }
