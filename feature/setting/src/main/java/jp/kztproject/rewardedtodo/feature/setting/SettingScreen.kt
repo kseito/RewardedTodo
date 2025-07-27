@@ -24,7 +24,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun SettingScreen(
     todoistAuthFinished: Boolean = false,
     onTodoistAuthStartClicked: () -> Unit,
-    viewModel: SettingViewModel = hiltViewModel()
+    viewModel: SettingViewModel = hiltViewModel(),
 ) {
     val todoistExtensionEnabled = viewModel.hasAccessToken.collectAsState()
     val onTodoistAuthClearClicked: () -> Unit = {
@@ -52,20 +52,20 @@ private fun SettingScreenContent(
             .fillMaxSize()
             .windowInsetsPadding(WindowInsets.systemBars)
             .padding(16.dp)
-            .verticalScroll(rememberScrollState())
+            .verticalScroll(rememberScrollState()),
     ) {
         Text(
             text = stringResource(R.string.settings_title),
             style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(bottom = 16.dp)
+            modifier = Modifier.padding(bottom = 16.dp),
         )
-        
+
         HorizontalDivider(Modifier.padding(vertical = 8.dp))
-        
+
         SettingSectionTitle(text = stringResource(R.string.extensions_section))
-        
+
         Spacer(modifier = Modifier.height(16.dp))
-        
+
         SettingTodoistExtensionRow(
             todoistExtensionEnabled = todoistExtensionEnabled,
             onTodoistClicked = onTodoistAuthStartClicked,
@@ -79,7 +79,7 @@ private fun SettingSectionTitle(text: String) {
     Text(
         text = text,
         style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier.padding(bottom = 8.dp)
+        modifier = Modifier.padding(bottom = 8.dp),
     )
 }
 
@@ -87,7 +87,7 @@ private fun SettingSectionTitle(text: String) {
 private fun SettingTodoistExtensionRow(
     onTodoistClicked: () -> Unit,
     onTodoistClearClicked: () -> Unit,
-    todoistExtensionEnabled: Boolean
+    todoistExtensionEnabled: Boolean,
 ) {
     Row(
         modifier = Modifier
@@ -101,20 +101,20 @@ private fun SettingTodoistExtensionRow(
                     } else {
                         onTodoistClicked()
                     }
-                }
+                },
             )
             .padding(vertical = 12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = stringResource(R.string.todoist_extension_title),
-            style = MaterialTheme.typography.bodyLarge
+            style = MaterialTheme.typography.bodyLarge,
         )
 
         Switch(
             checked = todoistExtensionEnabled,
-            onCheckedChange = null
+            onCheckedChange = null,
         )
     }
 }
@@ -125,6 +125,6 @@ fun SettingScreenPreview() {
     SettingScreenContent(
         todoistExtensionEnabled = false,
         onTodoistAuthStartClicked = {},
-        onTodoistAuthClearClicked = {}
+        onTodoistAuthClearClicked = {},
     )
 }

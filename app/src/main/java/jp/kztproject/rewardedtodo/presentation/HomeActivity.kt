@@ -30,10 +30,10 @@ class HomeActivity : ComponentActivity() {
             val navController = rememberNavController()
             val context = LocalContext.current
             val launcher = rememberLauncherForActivityResult(
-                    ActivityResultContracts.StartActivityForResult(),
-                ) {
-                    // No action needed here.
-                }
+                ActivityResultContracts.StartActivityForResult(),
+            ) {
+                // No action needed here.
+            }
             NavHost(navController = navController, startDestination = HOME_SCREEN) {
                 homeScreen(
                     onClickSetting = {
@@ -44,7 +44,7 @@ class HomeActivity : ComponentActivity() {
                     onTodoistAuthStartClicked = {
                         val intent = Intent(context, TodoistAuthActivity::class.java)
                         launcher.launch(intent)
-                    }
+                    },
                 )
             }
         }
