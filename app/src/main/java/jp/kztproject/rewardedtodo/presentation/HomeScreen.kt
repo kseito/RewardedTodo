@@ -29,8 +29,6 @@ import jp.kztproject.rewardedtodo.presentation.todo.todoListScreen
 @Composable
 fun HomeScreen(onClickSetting: () -> Unit) {
     val navController = rememberNavController()
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentRoute = navBackStackEntry?.destination?.route
     val topLevelDestinations = TopLevelDestination.entries
     var currentDestination by rememberSaveable { mutableStateOf(TopLevelDestination.TODO) }
     val onNavigateToDestination: (TopLevelDestination) -> Unit = {
