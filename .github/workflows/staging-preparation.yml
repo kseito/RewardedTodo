@@ -31,7 +31,7 @@ jobs:
 
       - name: update-version-name
         run: |
-          sed -i 's/versionName = "[0-9\.]*"/versionName = "'"${VERSION_NAME}"'"/' ./gradle/libs.versions.toml
+          sed -i 's|versionName = "[0-9\.]*"|versionName = "'${VERSION_NAME}'"|' ./gradle/libs.versions.toml
           git add .
           git commit -m "Update VersionName to ${VERSION_NAME}."
 
