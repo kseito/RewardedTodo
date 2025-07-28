@@ -25,7 +25,7 @@ internal fun Project.configureKotlinAndroid(
 
     configure<KotlinAndroidProjectExtension> {
         compilerOptions.apply {
-            jvmTarget.set(JvmTarget.JVM_17)
+            jvmToolchain(17)
         }
     }
 }

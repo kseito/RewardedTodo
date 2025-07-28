@@ -13,7 +13,7 @@ java {
 
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.JVM_17
+        jvmToolchain(17)
     }
 }
 
