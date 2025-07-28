@@ -57,7 +57,7 @@ android {
     kotlin {
         jvmToolchain(17)
     }
-    packagingOptions {
+    packaging {
         resources {
             excludes += listOf(
                 "META-INF/LICENSE.txt",
