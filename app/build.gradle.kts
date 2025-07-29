@@ -54,14 +54,10 @@ android {
         }
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+    kotlin {
+        jvmToolchain(17)
     }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17.toString() // or "17"
-    }
-    packagingOptions {
+    packaging {
         resources {
             excludes += listOf(
                 "META-INF/LICENSE.txt",
@@ -172,7 +168,3 @@ kapt {
 roborazzi {
     outputDir.set(file("screenshots"))
 }
-
-//detekt {
-//    config.setFrom(files("$rootDir/detekt.yml"))
-//}
