@@ -168,7 +168,3 @@ kapt {
 roborazzi {
     outputDir.set(file("screenshots"))
 }
-
-//detekt {
-//    config.setFrom(files("$rootDir/detekt.yml"))
-//}
