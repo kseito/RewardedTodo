@@ -34,24 +34,6 @@ jobs:
           name: Static Code Analytics
           command: |
             ./gradlew lintDebug
-  deploy-to-deploygate:
-    executor: android
-    steps:
-      - checkout
-      - restore_cache:
-          key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
-      - run:
-          name: Download Dependencies
-          command: ./gradlew androidDependencies
-      - save_cache:
-          paths:
-            - ~/.gradle
-          key: jars-{{ checksum "build.gradle.kts" }}-{{ checksum  "app/build.gradle.kts" }}
-      - run:
-          name: Deploy to deploygate
-          command: |
-            echo $ENCODED_STORE_FILE | base64 -d > staging.keystore
-            ./gradlew uploadDeployGateStaging
 
 workflows:
   version: 2
@@ -63,10 +45,3 @@ workflows:
               only:
                 - /feature\/.*/
                 - /renovate\/.*/
-  deploy-to-staging:
-    jobs:
-      - deploy-to-deploygate:
-          filters:
-            branches:
-              only:
-                - /stg-release\/.*/
