@@ -3,7 +3,7 @@ name: Deploy to DeployGate
 on:
   push:
     branches:
-      - 'stg-release/**'
+      - stg-release/**
 
 jobs:
   deploy-to-deploygate:
