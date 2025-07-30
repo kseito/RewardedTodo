@@ -1,4 +1,3 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     `kotlin-dsl`
@@ -6,14 +5,9 @@ plugins {
 
 group = "jp.kztproject.rewardedtodo.buildlogic"
 
-java {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
-}
-
 kotlin {
     compilerOptions {
-        jvmTarget = JvmTarget.JVM_17
+        jvmToolchain(17)
     }
 }
 
