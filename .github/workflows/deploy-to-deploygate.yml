@@ -35,3 +35,5 @@ jobs:
           STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          DEPLOY_GATE_OWNER_NAME: ${{ secrets.DEPLOY_GATE_OWNER_NAME }}
+          DEPLOY_GATE_API_KEY: ${{ secrets.DEPLOY_GATE_API_KEY }}
