@@ -24,16 +24,13 @@ jobs:
         with:
           gradle-home-cache-cleanup: true
 
-      - name: Create keystore file
-        run: echo $ENCODED_STORE_FILE | base64 -d > staging.keystore
-        env:
-          ENCODED_STORE_FILE: ${{ secrets.ENCODED_STORE_FILE }}
-
       - name: Download dependencies
         run: ./gradlew androidDependencies
 
       - name: Deploy to DeployGate
-        run: ./gradlew uploadDeployGateStaging
+        run: |
+          echo $ENCODED_STORE_FILE | base64 -d > staging.keystore
+          ./gradlew uploadDeployGateStaging
         env:
           STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
