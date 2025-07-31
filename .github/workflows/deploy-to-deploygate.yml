@@ -32,6 +32,7 @@ jobs:
           echo $ENCODED_STORE_FILE | base64 -d > staging.keystore
           ./gradlew uploadDeployGateStaging
         env:
+          ENCODED_STORE_FILE: ${{ secrets.ENCODED_STORE_FILE }}
           STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
