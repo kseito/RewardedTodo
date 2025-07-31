@@ -9,7 +9,7 @@ class AndroidApplicationDeploygateConventionPlugin : Plugin<Project> {
             pluginManager.apply("deploygate")
 
             extensions.configure<DeployGateExtension> {
-                appOwnerName = System.getenv("DEPLOY_GATE_OWENER_NAME")
+                appOwnerName = System.getenv("DEPLOY_GATE_OWNER_NAME")
                 apiToken = System.getenv("DEPLOY_GATE_API_KEY")
             }
         }
