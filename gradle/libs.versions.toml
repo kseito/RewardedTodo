@@ -4,7 +4,7 @@ androidTargetSdkVersion = "35"
 androidCompileSdkVersion = "35"
 androidMinSdkVersion = "31"
 versionCode = "1"
-versionName = "0.0.1"
+versionName = "0.0.3"
 
 #Libraries
 android-gradle-plugin = "8.12.0"

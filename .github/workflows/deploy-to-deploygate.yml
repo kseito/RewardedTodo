@@ -3,7 +3,7 @@ name: Deploy to DeployGate
 on:
   push:
     branches:
-      - stg-release/**
+      - 'stg-release/**'
 
 jobs:
   deploy-to-deploygate:
@@ -20,22 +20,21 @@ jobs:
           distribution: 'temurin'
 
       - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4
+        uses: gradle/actions/setup-gradle@ac638b010cf58a27ee6c972d7336334ccaf61c96 # v4.4.1
         with:
           gradle-home-cache-cleanup: true
-
-      - name: Create keystore file
-        run: |
-          echo ${{ secrets.ENCODED_STORE_FILE }} | base64 -d > staging.keystore
-        env:
-          ENCODED_STORE_FILE: ${{ secrets.ENCODED_STORE_FILE }}
 
       - name: Download dependencies
         run: ./gradlew androidDependencies
 
       - name: Deploy to DeployGate
-        run: ./gradlew uploadDeployGateStaging
+        run: |
+          echo $ENCODED_STORE_FILE | base64 -d > staging.keystore
+          ./gradlew uploadDeployGateStaging
         env:
+          ENCODED_STORE_FILE: ${{ secrets.ENCODED_STORE_FILE }}
           STORE_PASSWORD: ${{ secrets.STORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          DEPLOY_GATE_OWNER_NAME: ${{ secrets.DEPLOY_GATE_OWNER_NAME }}
+          DEPLOY_GATE_API_KEY: ${{ secrets.DEPLOY_GATE_API_KEY }}
