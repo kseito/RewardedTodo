@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -29,6 +30,7 @@ dependencies {
     implementation(libs.androidx.compose.livedata)
     implementation(libs.constraintlayout.compose)
     implementation(libs.hilt.navigation.compose)
+
 
     //Dagger
     implementation(libs.hilt.android)

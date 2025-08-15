@@ -131,6 +131,11 @@ dependencies {
     implementation(libs.okhttp.interceptor)
     implementation(libs.moshi)
 
+    // Showkase (debug only) - Basic setup complete, annotations can be added to composables as needed
+    debugImplementation(libs.showkase)
+    implementation(libs.showkase.annotation)
+    kspDebug(libs.showkase.processor)
+
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
     testImplementation(libs.ui.test.junit4)
