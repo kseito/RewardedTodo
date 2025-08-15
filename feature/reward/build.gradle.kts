@@ -41,6 +41,11 @@ dependencies {
     implementation(libs.coroutines.android)
     implementation(libs.coroutines.adapter)
 
+    // Showkase
+    debugImplementation(libs.showkase)
+    implementation(libs.showkase.annotation)
+    kspDebug(libs.showkase.processor)
+
     //Test
     testImplementation(libs.junit)
     testImplementation(libs.androidx.test.core)
