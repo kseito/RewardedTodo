@@ -3,6 +3,8 @@ package jp.kztproject.rewardedtodo
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
+import com.airbnb.android.showkase.models.Showkase
+import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
 import com.github.takahirom.roborazzi.captureRoboImage
 import jp.kztproject.rewardedtodo.application.reward.CompleteTodoUseCase
 import jp.kztproject.rewardedtodo.application.reward.DeleteTodoUseCase
@@ -133,5 +135,22 @@ class ExampleTest {
         composeRule
             .onRoot()
             .captureRoboImage()
+    }
+
+    @Test
+    fun showkaseTest() {
+        val showkaseBrowserComponentList: List<ShowkaseBrowserComponent> = Showkase.getMetadata().componentList
+        
+        showkaseBrowserComponentList.forEach { component ->
+            composeRule.setContent {
+                component.component()
+            }
+            
+            composeRule
+                .onRoot()
+                .captureRoboImage(
+                    filePath = "showkase_screenshots/${component.componentName}_${component.group}.png".replace(" ", "_")
+                )
+        }
     }
 }
