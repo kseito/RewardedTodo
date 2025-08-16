@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package jp.kztproject.rewardedtodo.feature.reward.list
 
 import androidx.compose.foundation.layout.Column
@@ -141,7 +143,6 @@ private fun RewardDetailBottomSheetContent(
 }
 
 @Preview
-@ExperimentalMaterialApi
 @Composable
 fun RewardDetailBottomSheetContentPreview() {
     RewardDetailBottomSheetContent(

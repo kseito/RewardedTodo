@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package jp.kztproject.rewardedtodo.presentation.todo
 
 import androidx.compose.foundation.Image
@@ -186,7 +188,6 @@ private fun TodoListScreen(
 }
 
 @Preview
-@ExperimentalMaterialApi
 @Composable
 fun TodoListScreenPreview() {
     val viewModel = TodoListViewModel(
@@ -287,7 +288,7 @@ private fun TodoListItem(
 
 @Preview
 @Composable
-private fun TodoListItemPreview() {
+fun TodoListItemPreview() {
     Surface {
         val todo = Todo(1, 1, "Buy ingredients for dinner", 1, false)
         TodoListItem(
@@ -300,7 +301,7 @@ private fun TodoListItemPreview() {
 
 @Preview
 @Composable
-private fun DarkModeTodoListItemPreview() {
+fun DarkModeTodoListItemPreview() {
     MaterialTheme(
         colors = DarkColorScheme,
     ) {

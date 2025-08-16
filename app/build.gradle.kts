@@ -131,6 +131,11 @@ dependencies {
     implementation(libs.okhttp.interceptor)
     implementation(libs.moshi)
 
+    // Showkase
+    debugImplementation(libs.showkase)
+    implementation(libs.showkase.annotation)
+    kspDebug(libs.showkase.processor)
+
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
     testImplementation(libs.ui.test.junit4)
@@ -145,12 +150,12 @@ dependencies {
     implementation(project(":feature:auth"))
     implementation(project(":common:kvs"))
 
-    // TODO I don`t know why this module is needed
     implementation(project(":feature:todo"))
     implementation(project(":feature:setting"))
     implementation(project(":data:todo"))
     implementation(project(":data:ticket"))
     implementation(project(":common:database"))
+    implementation(project(":common:ui"))
     implementation(project(":domain:reward"))
     implementation(project(":data:reward"))
     implementation(project(":data:auth"))
