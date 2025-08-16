@@ -9,9 +9,7 @@ import com.github.takahirom.roborazzi.captureRoboImage
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 import org.robolectric.ParameterizedRobolectricTestRunner
-import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 
@@ -19,9 +17,7 @@ import org.robolectric.annotation.GraphicsMode
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @RunWith(ParameterizedRobolectricTestRunner::class)
 @Config(sdk = [35])
-class ShowkaseParameterizedTest(
-    private val testCase: TestCase
-) {
+class ShowkaseParameterizedTest(private val testCase: TestCase) {
 
     @get:Rule
     val composeRule = createComposeRule()
@@ -38,17 +34,14 @@ class ShowkaseParameterizedTest(
         composeRule
             .onRoot()
             .captureRoboImage(
-                filePath = "showkase_parameterized/${component.componentName}_${component.group}.png".replace(" ", "_")
+                filePath = "showkase_parameterized/${component.componentName}_${component.group}.png".replace(" ", "_"),
             )
     }
 
     companion object {
-        class TestCase(
-            val showkaseBrowserComponent: ShowkaseBrowserComponent
-        ) {
+        class TestCase(val showkaseBrowserComponent: ShowkaseBrowserComponent) {
             override fun toString() = showkaseBrowserComponent.componentKey
         }
-
 
         @ParameterizedRobolectricTestRunner.Parameters(name = "[{index}] {0}")
         @JvmStatic

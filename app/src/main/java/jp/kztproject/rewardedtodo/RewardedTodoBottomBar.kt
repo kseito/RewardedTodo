@@ -12,9 +12,9 @@ import androidx.compose.ui.tooling.preview.Preview
 @Composable
 fun RewardedTodoBottomBar(
     topLevelDestinations: List<TopLevelDestination>,
-    onNavigateToDestination: (TopLevelDestination) -> Unit
+    onNavigateToDestination: (TopLevelDestination) -> Unit,
 ) {
-    NavigationBar() {
+    NavigationBar {
         topLevelDestinations.forEach { destination ->
             NavigationBarItem(
                 // FIXME reference appropriate value
@@ -24,9 +24,9 @@ fun RewardedTodoBottomBar(
                 icon = {
                     Icon(
                         painter = painterResource(id = destination.iconImageId),
-                        contentDescription = null
+                        contentDescription = null,
                     )
-                }
+                },
             )
         }
     }
@@ -37,6 +37,6 @@ fun RewardedTodoBottomBar(
 fun RewardedTodoBottomBarPreview() {
     RewardedTodoBottomBar(
         topLevelDestinations = TopLevelDestination.entries,
-        onNavigateToDestination = {}
+        onNavigateToDestination = {},
     )
 }
