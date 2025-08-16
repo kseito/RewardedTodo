@@ -8,7 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.airbnb.android.showkase.annotation.ShowkaseComposable
 
 @Composable
 fun RewardedTodoBottomBar(
@@ -34,7 +33,6 @@ fun RewardedTodoBottomBar(
 }
 
 @Preview
-@ShowkaseComposable(name = "BottomBar", group = "Navigation")
 @Composable
 fun RewardedTodoBottomBarPreview() {
     RewardedTodoBottomBar(
