@@ -55,7 +55,7 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
-    // Showkase (debug only) - Basic setup complete, annotations can be added to composables as needed
+    // Showkase
     debugImplementation(libs.showkase)
     implementation(libs.showkase.annotation)
     kspDebug(libs.showkase.processor)
