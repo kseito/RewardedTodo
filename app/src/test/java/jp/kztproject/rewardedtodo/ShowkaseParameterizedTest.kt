@@ -25,7 +25,6 @@ class ShowkaseParameterizedTest(private val testCase: TestCase) {
     @Test
     fun captureShowkaseComponent() {
         val component = testCase.showkaseBrowserComponent
-        println(component)
 
         composeRule.setContent {
             component.component()
