@@ -17,50 +17,51 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class TodoListViewModelTest : ShouldSpec({
+class TodoListViewModelTest :
+    ShouldSpec({
 
-    val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
-    val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
-    val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
-    val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
-    val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
+        val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
+        val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
+        val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
+        val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
+        val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
 
-    lateinit var viewModel: TodoListViewModel
+        lateinit var viewModel: TodoListViewModel
 
-    beforeSpec {
-        MockKAnnotations.init(this)
-        Dispatchers.setMain(Dispatchers.Unconfined)
+        beforeSpec {
+            MockKAnnotations.init(this)
+            Dispatchers.setMain(Dispatchers.Unconfined)
 
-        viewModel = TodoListViewModel(
-            getTodoListUseCase,
-            fetchTodoListUseCase,
-            updateTodoListUseCase,
-            deleteTodoUseCase,
-            completeTodoUseCase,
-        )
-    }
+            viewModel = TodoListViewModel(
+                getTodoListUseCase,
+                fetchTodoListUseCase,
+                updateTodoListUseCase,
+                deleteTodoUseCase,
+                completeTodoUseCase,
+            )
+        }
 
-    afterSpec {
-        Dispatchers.resetMain()
-    }
+        afterSpec {
+            Dispatchers.resetMain()
+        }
 
-    context("When viewModel is initialized") {
-        should("get todo list") {
-            runTest {
-                advanceUntilIdle()
-                coVerify(exactly = 1) { fetchTodoListUseCase.execute() }
+        context("When viewModel is initialized") {
+            should("get todo list") {
+                runTest {
+                    advanceUntilIdle()
+                    coVerify(exactly = 1) { fetchTodoListUseCase.execute() }
+                }
             }
         }
-    }
 
-    context("When refreshTodoList is called") {
-        should("get todo list if successful") {
-            runTest {
-                viewModel.refreshTodoList()
-                advanceUntilIdle()
+        context("When refreshTodoList is called") {
+            should("get todo list if successful") {
+                runTest {
+                    viewModel.refreshTodoList()
+                    advanceUntilIdle()
 
-                coVerify(exactly = 2) { fetchTodoListUseCase.execute() }
+                    coVerify(exactly = 2) { fetchTodoListUseCase.execute() }
+                }
             }
         }
-    }
-})
+    })
