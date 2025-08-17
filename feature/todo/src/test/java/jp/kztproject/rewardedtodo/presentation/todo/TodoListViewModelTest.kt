@@ -11,7 +11,9 @@ import jp.kztproject.rewardedtodo.application.reward.GetTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -44,15 +46,21 @@ class TodoListViewModelTest : ShouldSpec({
 
     context("When viewModel is initialized") {
         should("get todo list") {
-            coVerify(exactly = 1) { fetchTodoListUseCase.execute() }
+            runTest {
+                advanceUntilIdle()
+                coVerify(exactly = 1) { fetchTodoListUseCase.execute() }
+            }
         }
     }
 
     context("When refreshTodoList is called") {
         should("get todo list if successful") {
-            viewModel.refreshTodoList()
+            runTest {
+                viewModel.refreshTodoList()
+                advanceUntilIdle()
 
-            coVerify(exactly = 2) { fetchTodoListUseCase.execute() }
+                coVerify(exactly = 2) { fetchTodoListUseCase.execute() }
+            }
         }
     }
 })
