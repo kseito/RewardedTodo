@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -30,6 +31,7 @@ dependencies {
     implementation(libs.constraintlayout.compose)
     implementation(libs.hilt.navigation.compose)
 
+
     //Dagger
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
@@ -38,6 +40,11 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.coroutines.android)
     implementation(libs.coroutines.adapter)
+
+    // Showkase
+    debugImplementation(libs.showkase)
+    implementation(libs.showkase.annotation)
+    kspDebug(libs.showkase.processor)
 
     //Test
     testImplementation(libs.junit)
