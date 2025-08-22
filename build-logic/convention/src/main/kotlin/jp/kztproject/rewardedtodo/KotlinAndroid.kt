@@ -7,7 +7,7 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinAndroidProjectExtension
 
 internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension<*, *, *, *, *, *>) {
     commonExtension.apply {
-        compileSdk = 35
+        compileSdk = libs.findVersion("androidCompileSdkVersion").get().requiredVersion.toInt()
 
         defaultConfig {
             minSdk = 31
