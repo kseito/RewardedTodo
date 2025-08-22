@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterialApi::class)
+
 package jp.kztproject.rewardedtodo.feature.reward.list
 
 import android.widget.Toast
@@ -277,7 +279,7 @@ private fun ErrorSnackBar(it: SnackbarData) {
 
 @Preview
 @Composable
-private fun ErrorSnackBarPreview() {
+fun ErrorSnackBarPreview() {
     ErrorSnackBar(
         it = object : SnackbarData {
             override val actionLabel: String?
@@ -325,8 +327,7 @@ private val previewViewModel = RewardListViewModel(
 
 @Preview
 @Composable
-@ExperimentalMaterialApi
-private fun RewardListScreenPreview() {
+fun RewardListScreenPreview() {
     RewardListScreen(
         viewModel = previewViewModel,
         bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
@@ -362,7 +363,7 @@ private fun RewardList(rewards: List<Reward>?, onRewardItemClick: (Reward) -> Un
 
 @Preview
 @Composable
-private fun RewardListPreview() {
+fun RewardListPreview() {
     RewardList(
         rewards = listOf(
             Reward(
@@ -422,7 +423,7 @@ private fun RewardItem(reward: Reward, onRewardItemClick: (Reward) -> Unit) {
 
 @Preview
 @Composable
-private fun RewardItemPreview() {
+fun RewardItemPreview() {
     val reward = Reward(
         RewardId(1),
         RewardName("PS5"),

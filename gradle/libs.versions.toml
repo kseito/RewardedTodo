@@ -44,6 +44,7 @@ espresso-core = "3.7.0"
 spotless_gradle_plugin = "7.2.1"
 roborazzi = "1.49.0"
 detekt = "1.23.8"
+showkase = "1.0.5"
 
 [libraries]
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose" }
@@ -96,6 +97,9 @@ ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 roborazzi = { group = "io.github.takahirom.roborazzi", name = "roborazzi", version.ref = "roborazzi" }
 roborazzi-compose = { group = "io.github.takahirom.roborazzi", name = "roborazzi-compose", version.ref = "roborazzi" }
 roborazzi-rule = { group = "io.github.takahirom.roborazzi", name = "roborazzi-junit-rule", version.ref = "roborazzi" }
+showkase = { group = "com.airbnb.android", name = "showkase", version.ref = "showkase" }
+showkase-annotation = { group = "com.airbnb.android", name = "showkase-annotation", version.ref = "showkase" }
+showkase-processor = { group = "com.airbnb.android", name = "showkase-processor", version.ref = "showkase" }
 
 # Plugins
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
