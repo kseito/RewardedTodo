@@ -33,7 +33,7 @@ class ShowkaseParameterizedTest(private val testCase: TestCase) {
         composeRule
             .onRoot()
             .captureRoboImage(
-                filePath = "showkase_parameterized/${component.componentName}_${component.group}.png".replace(" ", "_"),
+                filePath = "screenshots/${component.componentName}_${component.group}.png".replace(" ", "_"),
             )
     }
 
