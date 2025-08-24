@@ -1,7 +1,6 @@
 package jp.kztproject.rewardedtodo.presentation.todo
 
 import io.kotest.core.spec.style.ShouldSpec
-import io.mockk.MockKAnnotations
 import io.mockk.coVerify
 import io.mockk.mockk
 import jp.kztproject.rewardedtodo.application.reward.CompleteTodoUseCase
@@ -11,6 +10,7 @@ import jp.kztproject.rewardedtodo.application.reward.GetTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -20,25 +20,10 @@ import kotlinx.coroutines.test.setMain
 class TodoListViewModelTest :
     ShouldSpec({
 
-        val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
-        val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
-        val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
-        val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
-        val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
-
-        lateinit var viewModel: TodoListViewModel
+        val testDispatcher = StandardTestDispatcher()
 
         beforeSpec {
-            MockKAnnotations.init(this)
-            Dispatchers.setMain(Dispatchers.Unconfined)
-
-            viewModel = TodoListViewModel(
-                getTodoListUseCase,
-                fetchTodoListUseCase,
-                updateTodoListUseCase,
-                deleteTodoUseCase,
-                completeTodoUseCase,
-            )
+            Dispatchers.setMain(testDispatcher)
         }
 
         afterSpec {
@@ -47,7 +32,21 @@ class TodoListViewModelTest :
 
         context("When viewModel is initialized") {
             should("get todo list") {
-                runTest {
+                runTest(testDispatcher) {
+                    val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
+                    val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
+                    val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
+                    val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
+                    val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
+
+                    TodoListViewModel(
+                        getTodoListUseCase,
+                        fetchTodoListUseCase,
+                        updateTodoListUseCase,
+                        deleteTodoUseCase,
+                        completeTodoUseCase,
+                    )
+
                     advanceUntilIdle()
                     coVerify(exactly = 1) { fetchTodoListUseCase.execute() }
                 }
@@ -55,8 +54,23 @@ class TodoListViewModelTest :
         }
 
         context("When refreshTodoList is called") {
-            should("get todo list if successful") {
-                runTest {
+            should("call fetchTodoListUseCase") {
+                runTest(testDispatcher) {
+                    val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
+                    val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
+                    val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
+                    val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
+                    val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
+
+                    val viewModel = TodoListViewModel(
+                        getTodoListUseCase,
+                        fetchTodoListUseCase,
+                        updateTodoListUseCase,
+                        deleteTodoUseCase,
+                        completeTodoUseCase,
+                    )
+
+                    advanceUntilIdle()
                     viewModel.refreshTodoList()
                     advanceUntilIdle()
 
