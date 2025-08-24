@@ -189,6 +189,7 @@ private fun TodoListScreen(
 
 @Preview
 @Composable
+@Suppress("ViewModelConstructorInComposable")
 fun TodoListScreenPreview() {
     val viewModel = TodoListViewModel(
         object : GetTodoListUseCase {
