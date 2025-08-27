@@ -163,24 +163,26 @@ private fun RewardListScreen(
             }
         }
 
-        TicketLabel(
-            ticket = ticket,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 88.dp),
-        )
-
-        FloatingActionButton(
-            onClick = {
-                viewModel.startLottery()
-            },
-            shape = RoundedCornerShape(8.dp),
-            backgroundColor = MaterialTheme.colors.primary,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 24.dp),
+        Column(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Icon(Icons.Filled.Done, contentDescription = "Done")
+            TicketLabel(
+                ticket = ticket,
+                modifier = Modifier
+                    .padding(bottom = 8.dp)
+            )
+            
+            FloatingActionButton(
+                onClick = {
+                    viewModel.startLottery()
+                },
+                shape = RoundedCornerShape(8.dp),
+                backgroundColor = MaterialTheme.colors.primary,
+                modifier = Modifier.padding(bottom = 24.dp),
+            ) {
+                Icon(Icons.Filled.Done, contentDescription = "Done")
+            }
         }
 
         FloatingActionButton(
