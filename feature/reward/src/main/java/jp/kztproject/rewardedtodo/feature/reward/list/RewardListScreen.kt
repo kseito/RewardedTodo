@@ -148,10 +148,10 @@ private fun RewardListScreen(
             .background(MaterialTheme.colors.background),
     ) {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             Box(
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
                 RewardList(rewards, onRewardItemClick)
                 SnackbarHost(
@@ -167,7 +167,7 @@ private fun RewardListScreen(
             ticket = ticket,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 88.dp)
+                .padding(bottom = 88.dp),
         )
 
         FloatingActionButton(
