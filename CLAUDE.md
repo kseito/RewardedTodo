@@ -67,3 +67,11 @@ The project uses 34+ modules organized by domain:
 - **Code Style**: Spotless enforces Kotlin code formatting
 - **Branch Strategy**: Feature branches from main, staging deployments from `stg-release/*` branches
 - **CI/CD**: GitHub Actions for testing, screenshot comparison, and DeployGate deployments
+
+## Commit Guideline
+
+- Only commit when:
+    - ALL tests are passing
+    - ALL compiler/linter warnings have been resolved
+    - Commit messages clearly state whether the commit contains structural or behavioral changes
+- Use conventional commit for commit message format
