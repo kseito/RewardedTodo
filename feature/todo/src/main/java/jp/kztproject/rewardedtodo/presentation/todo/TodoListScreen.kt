@@ -237,7 +237,7 @@ private fun TodoListItem(
                 onClick = onItemClicked,
             )
             .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(
             checked = isDone,
@@ -245,7 +245,7 @@ private fun TodoListItem(
             modifier = Modifier.padding(end = 16.dp),
         )
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         ) {
             Text(
                 text = todo.name,
@@ -253,7 +253,7 @@ private fun TodoListItem(
                 color = MaterialTheme.colors.onBackground,
             )
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Image(
                     painter = painterResource(id = R.drawable.ic_ticket),
