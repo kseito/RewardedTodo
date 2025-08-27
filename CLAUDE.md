@@ -74,4 +74,11 @@ The project uses 34+ modules organized by domain:
     - ALL tests are passing
     - ALL compiler/linter warnings have been resolved
     - Commit messages clearly state whether the commit contains structural or behavioral changes
-- Use conventional commit for commit message format
+- Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for commit message format. Example types:
+    - `feat:` for new features
+    - `fix:` for bug fixes
+    - `docs:` for documentation changes
+    - `refactor:` for code refactoring
+    - `test:` for adding or updating tests
+    - `chore:` for maintenance tasks
+    - See the [specification](https://www.conventionalcommits.org/en/v1.0.0/) for full details.
