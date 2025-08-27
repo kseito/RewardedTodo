@@ -1,6 +1,6 @@
 [versions]
 # App Configuration
-androidTargetSdkVersion = "35"
+androidTargetSdkVersion = "36"
 androidCompileSdkVersion = "36"
 androidMinSdkVersion = "31"
 versionCode = "1"
