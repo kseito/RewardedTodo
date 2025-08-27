@@ -165,14 +165,14 @@ private fun RewardListScreen(
 
         Column(
             modifier = Modifier.align(Alignment.BottomCenter),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             TicketLabel(
                 ticket = ticket,
                 modifier = Modifier
-                    .padding(bottom = 8.dp)
+                    .padding(bottom = 8.dp),
             )
-            
+
             FloatingActionButton(
                 onClick = {
                     viewModel.startLottery()
