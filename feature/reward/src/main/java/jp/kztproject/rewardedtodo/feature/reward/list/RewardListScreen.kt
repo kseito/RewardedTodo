@@ -52,7 +52,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
@@ -143,13 +142,17 @@ private fun RewardListScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
-    ConstraintLayout(
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colors.background),
     ) {
-        Column {
-            Box {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Box(
+                modifier = Modifier.weight(1f)
+            ) {
                 RewardList(rewards, onRewardItemClick)
                 SnackbarHost(
                     hostState = snackbarHostState,
@@ -160,7 +163,12 @@ private fun RewardListScreen(
             }
         }
 
-        val (createRewardButton, lotteryRewardButton, ticketLabel) = createRefs()
+        TicketLabel(
+            ticket = ticket,
+            modifier = Modifier
+                .align(Alignment.BottomCenter)
+                .padding(bottom = 88.dp)
+        )
 
         FloatingActionButton(
             onClick = {
@@ -169,10 +177,7 @@ private fun RewardListScreen(
             shape = RoundedCornerShape(8.dp),
             backgroundColor = MaterialTheme.colors.primary,
             modifier = Modifier
-                .constrainAs(createRewardButton) {
-                    bottom.linkTo(parent.bottom)
-                    centerHorizontallyTo(parent)
-                }
+                .align(Alignment.BottomCenter)
                 .padding(bottom = 24.dp),
         ) {
             Icon(Icons.Filled.Done, contentDescription = "Done")
@@ -188,24 +193,11 @@ private fun RewardListScreen(
             },
             backgroundColor = MaterialTheme.colors.primary,
             modifier = Modifier
-                .constrainAs(lotteryRewardButton) {
-                    bottom.linkTo(parent.bottom)
-                    end.linkTo(parent.end)
-                }
+                .align(Alignment.BottomEnd)
                 .padding(24.dp),
         ) {
             Icon(Icons.Filled.Add, contentDescription = "Add")
         }
-
-        TicketLabel(
-            ticket = ticket,
-            modifier = Modifier
-                .constrainAs(ticketLabel) {
-                    bottom.linkTo(createRewardButton.top)
-                    centerHorizontallyTo(parent)
-                }
-                .padding(8.dp),
-        )
     }
 
     LaunchedEffect(result) {
