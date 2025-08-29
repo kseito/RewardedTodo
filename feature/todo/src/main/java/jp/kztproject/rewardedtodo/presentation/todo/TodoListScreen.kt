@@ -227,7 +227,7 @@ private fun TodoListItem(
     onTodoDone: (Todo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isDone by remember { mutableStateOf(false) }
+    var isDone by remember { mutableStateOf(false) }
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -240,8 +240,11 @@ private fun TodoListItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(
-            checked = isDone,
-            onCheckedChange = { onTodoDone.invoke(todo) },
+            checked = true,
+            onCheckedChange = {
+                onTodoDone.invoke(todo)
+                isDone = it
+            },
             modifier = Modifier.padding(end = 16.dp),
         )
         Column(
