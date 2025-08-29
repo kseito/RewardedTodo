@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
@@ -44,8 +45,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.Dimension
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.kztproject.rewardedtodo.application.reward.CompleteTodoUseCase
@@ -227,8 +228,8 @@ private fun TodoListItem(
     onTodoDone: (Todo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isDone by remember { mutableStateOf(false) }
-    ConstraintLayout(
+    var isDone by remember { mutableStateOf(false) }
+    Row(
         modifier = modifier
             .fillMaxWidth()
             .clickable(
@@ -237,53 +238,44 @@ private fun TodoListItem(
                 onClick = onItemClicked,
             )
             .padding(16.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        val (checkbox, title, ticketImage, ticketCount) = createRefs()
-
         Checkbox(
             checked = isDone,
-            onCheckedChange = { onTodoDone.invoke(todo) },
-            modifier = Modifier
-                .constrainAs(checkbox) {
-                    top.linkTo(parent.top)
-                    start.linkTo(parent.start)
-                    bottom.linkTo(parent.bottom)
-                }
-                .padding(0.dp, 0.dp, 16.dp, 0.dp),
+            onCheckedChange = {
+                onTodoDone.invoke(todo)
+                isDone = it
+            },
+            colors = CheckboxDefaults.colors(
+                checkedColor = MaterialTheme.colors.primary,
+            ),
+            modifier = Modifier.padding(end = 16.dp),
         )
-        Text(
-            text = todo.name,
-            style = MaterialTheme.typography.h5,
-            color = MaterialTheme.colors.onBackground,
-            modifier = Modifier
-                .constrainAs(title) {
-                    start.linkTo(checkbox.end)
-                    end.linkTo(parent.end)
-                    width = Dimension.fillToConstraints
-                },
-        )
-        Image(
-            painter = painterResource(id = R.drawable.ic_ticket),
-            contentDescription = null,
-            contentScale = ContentScale.Fit,
-            modifier = Modifier
-                .size(36.dp)
-                .constrainAs(ticketImage) {
-                    top.linkTo(title.bottom)
-                    start.linkTo(title.start)
-                },
-        )
-        Text(
-            text = "${todo.numberOfTicketsObtained}",
-            fontSize = 20.sp,
-            color = MaterialTheme.colors.onBackground,
-            modifier = Modifier
-                .constrainAs(ticketCount) {
-                    top.linkTo(ticketImage.top)
-                    start.linkTo(ticketImage.end, 16.dp)
-                    bottom.linkTo(ticketImage.bottom)
-                },
-        )
+        Column(
+            modifier = Modifier.weight(1f),
+        ) {
+            Text(
+                text = todo.name,
+                style = MaterialTheme.typography.h5,
+                color = MaterialTheme.colors.onBackground,
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.ic_ticket),
+                    contentDescription = null,
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.size(36.dp),
+                )
+                Text(
+                    text = "${todo.numberOfTicketsObtained}",
+                    fontSize = 20.sp,
+                    color = MaterialTheme.colors.onBackground,
+                    modifier = Modifier.padding(start = 16.dp),
+                )
+            }
+        }
     }
 }
 
