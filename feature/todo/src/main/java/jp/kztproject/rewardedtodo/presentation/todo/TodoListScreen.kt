@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Checkbox
+import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.FloatingActionButton
@@ -240,11 +241,14 @@ private fun TodoListItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(
-            checked = true,
+            checked = isDone,
             onCheckedChange = {
                 onTodoDone.invoke(todo)
                 isDone = it
             },
+            colors = CheckboxDefaults.colors(
+                checkedColor = MaterialTheme.colors.primary,
+            ),
             modifier = Modifier.padding(end = 16.dp),
         )
         Column(
