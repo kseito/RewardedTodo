@@ -56,4 +56,3 @@ The project is organized into the following modules:
 
 ## Deployment
 - Staging builds are deployed to DeployGate from `stg-release/*` branches
-- CI/CD is handled by CircleCI
