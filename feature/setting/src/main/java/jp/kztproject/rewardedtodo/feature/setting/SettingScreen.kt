@@ -4,15 +4,15 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Switch
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
 import androidx.compose.material3.ripple
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -66,10 +66,10 @@ private fun SettingScreenContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        SettingTodoistExtensionRow(
-            todoistExtensionEnabled = todoistExtensionEnabled,
-            onTodoistClicked = onTodoistAuthStartClicked,
-            onTodoistClearClicked = onTodoistAuthClearClicked,
+        TodoistTokenSection(
+            isConnected = todoistExtensionEnabled,
+            onTokenValidate = onTodoistAuthStartClicked,
+            onTokenDelete = onTodoistAuthClearClicked,
         )
     }
 }
@@ -84,38 +84,152 @@ private fun SettingSectionTitle(text: String) {
 }
 
 @Composable
-private fun SettingTodoistExtensionRow(
-    onTodoistClicked: () -> Unit,
-    onTodoistClearClicked: () -> Unit,
-    todoistExtensionEnabled: Boolean,
+private fun TodoistTokenSection(
+    isConnected: Boolean,
+    onTokenValidate: () -> Unit,
+    onTokenDelete: () -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(),
-                onClick = {
-                    if (todoistExtensionEnabled) {
-                        onTodoistClearClicked()
-                    } else {
-                        onTodoistClicked()
-                    }
-                },
-            )
-            .padding(vertical = 12.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically,
+    var tokenInput by remember { mutableStateOf("") }
+    var isTokenVisible by remember { mutableStateOf(false) }
+    var isLoading by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = Modifier.fillMaxWidth()
     ) {
-        Text(
-            text = stringResource(R.string.todoist_extension_title),
-            style = MaterialTheme.typography.bodyLarge,
+        // Connection Status Card
+        ConnectionStatusCard(
+            isConnected = isConnected,
+            lastSyncTime = if (isConnected) "2時間前" else null
         )
 
-        Switch(
-            checked = todoistExtensionEnabled,
-            onCheckedChange = null,
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // Token Input Field
+        OutlinedTextField(
+            value = tokenInput,
+            onValueChange = { tokenInput = it },
+            label = { Text("API Token") },
+            placeholder = { Text("例: 0123456789abcdef...") },
+            visualTransformation = if (isTokenVisible) {
+                VisualTransformation.None
+            } else {
+                PasswordVisualTransformation()
+            },
+            trailingIcon = {
+                Row {
+                    // Visibility toggle
+                    IconButton(onClick = { isTokenVisible = !isTokenVisible }) {
+                        Icon(
+                            imageVector = if (isTokenVisible) {
+                                Icons.Filled.Lock
+                            } else {
+                                Icons.Filled.Edit
+                            },
+                            contentDescription = if (isTokenVisible) "Hide token" else "Show token"
+                        )
+                    }
+                    // Clear button
+                    if (tokenInput.isNotEmpty()) {
+                        IconButton(onClick = { tokenInput = "" }) {
+                            Icon(Icons.Filled.Clear, contentDescription = "Clear token")
+                        }
+                    }
+                }
+            },
+            modifier = Modifier.fillMaxWidth(),
+            singleLine = true,
+            enabled = !isConnected
         )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Action Button
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.End
+        ) {
+            if (isConnected) {
+                OutlinedButton(
+                    onClick = onTokenDelete,
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Text("連携を解除")
+                }
+            } else {
+                Button(
+                    onClick = {
+                        isLoading = true
+                        onTokenValidate()
+                        // Reset loading state - this would be handled by ViewModel in real implementation
+                        isLoading = false
+                    },
+                    enabled = tokenInput.isNotEmpty() && !isLoading
+                ) {
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(16.dp),
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Text("接続を確認")
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun ConnectionStatusCard(
+    isConnected: Boolean,
+    lastSyncTime: String?
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isConnected) {
+                MaterialTheme.colorScheme.primaryContainer
+            } else {
+                MaterialTheme.colorScheme.surfaceVariant
+            }
+        )
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(12.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = if (isConnected) {
+                    Icons.Filled.CheckCircle
+                } else {
+                    Icons.Filled.Warning
+                },
+                contentDescription = null,
+                tint = if (isConnected) {
+                    MaterialTheme.colorScheme.primary
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                }
+            )
+            Spacer(modifier = Modifier.width(12.dp))
+            Column {
+                Text(
+                    text = if (isConnected) "接続済み" else "未接続",
+                    style = MaterialTheme.typography.titleMedium
+                )
+                lastSyncTime?.let {
+                    Text(
+                        text = "最終同期: $it",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+            }
+        }
     }
 }
 
