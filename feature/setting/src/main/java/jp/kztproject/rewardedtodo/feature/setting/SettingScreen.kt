@@ -108,7 +108,7 @@ private fun TodoistTokenSection(
         OutlinedTextField(
             value = tokenInput,
             onValueChange = { tokenInput = it },
-            label = { Text("API Token") },
+            label = { Text("Todoist API Token") },
             placeholder = { Text("例: 0123456789abcdef...") },
             visualTransformation = if (isTokenVisible) {
                 VisualTransformation.None
@@ -234,10 +234,20 @@ private fun ConnectionStatusCard(
 }
 
 @Composable
-@Preview
+@Preview(name = "Disconnected State")
 fun SettingScreenPreview() {
     SettingScreenContent(
         todoistExtensionEnabled = false,
+        onTodoistAuthStartClicked = {},
+        onTodoistAuthClearClicked = {},
+    )
+}
+
+@Composable
+@Preview(name = "Connected State")
+fun SettingScreenConnectedPreview() {
+    SettingScreenContent(
+        todoistExtensionEnabled = true,
         onTodoistAuthStartClicked = {},
         onTodoistAuthClearClicked = {},
     )
