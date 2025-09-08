@@ -10,11 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
-      - uses: actions/setup-java@dded0888837ed1f317902acf8a20df0ad188d165 # v5
+      - uses: ./.github/actions/setup-java
         with:
-          java-version: 17
-          distribution: "temurin"
-          cache: "gradle"
+          cache: ''
       - run: git fetch origin main
       - run: ./gradlew spotlessKotlinApply
       - uses: reviewdog/action-suggester@3d5391db5affb50a46eb4629e908a4e2c5dd20b2 # v1.22.0
