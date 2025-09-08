@@ -1,0 +1,36 @@
+name: 'Setup Gradle'
+description: 'Setup Gradle with default configuration for this project'
+
+inputs:
+  gradle-home-cache-cleanup:
+    description: 'Whether to cleanup gradle home cache'
+    required: false
+    default: 'true'
+  gradle-home-cache-strict-match:
+    description: 'Whether to require strict match for gradle home cache'
+    required: false
+    default: 'false'
+  cache-disabled:
+    description: 'Whether to disable caching'
+    required: false
+    default: 'false'
+  cache-read-only:
+    description: 'Whether to make cache read-only'
+    required: false
+    default: 'false'
+  cache-write-only:
+    description: 'Whether to make cache write-only'
+    required: false
+    default: 'false'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@017a9effdb900e5b5b2fddfb590a105619dca3c3 # v4.4.2
+      with:
+        gradle-home-cache-cleanup: ${{ inputs.gradle-home-cache-cleanup }}
+        gradle-home-cache-strict-match: ${{ inputs.gradle-home-cache-strict-match }}
+        cache-disabled: ${{ inputs.cache-disabled }}
+        cache-read-only: ${{ inputs.cache-read-only }}
+        cache-write-only: ${{ inputs.cache-write-only }}
