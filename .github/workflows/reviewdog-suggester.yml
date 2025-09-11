@@ -15,7 +15,7 @@ jobs:
           cache: ''
       - run: git fetch origin main
       - run: ./gradlew spotlessKotlinApply
-      - uses: reviewdog/action-suggester@3d5391db5affb50a46eb4629e908a4e2c5dd20b2 # v1.22.0
+      - uses: reviewdog/action-suggester@5c1296fb4e4a63159e0033bfc2d6cf253ee6e872 # v1.23.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           tool_name: spotless
