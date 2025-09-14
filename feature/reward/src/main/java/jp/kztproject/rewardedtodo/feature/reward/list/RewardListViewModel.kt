@@ -1,7 +1,5 @@
 package jp.kztproject.rewardedtodo.feature.reward.list
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +14,7 @@ import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,11 +28,12 @@ class RewardListViewModel @Inject constructor(
     private val deleteRewardUseCase: DeleteRewardUseCase
 ) : ViewModel() {
 
-    private val mutableRewardList = MutableLiveData<List<Reward>>()
-    val rewardList: LiveData<List<Reward>> = mutableRewardList
-    private var mutableRewardPoint = MutableLiveData<Int>()
-    var rewardPoint: LiveData<Int> = mutableRewardPoint
-    val result = MutableLiveData<Result<Unit>?>()
+    private val mutableRewardList = MutableStateFlow(emptyList<Reward>())
+    val rewardList: StateFlow<List<Reward>> = mutableRewardList.asStateFlow()
+    private val mutableRewardPoint = MutableStateFlow<Int>(0)
+    val rewardPoint: StateFlow<Int> = mutableRewardPoint.asStateFlow()
+    private val mutableResult = MutableStateFlow<Result<Unit>?>(null)
+    val result: StateFlow<Result<Unit>?> = mutableResult.asStateFlow()
     private val mutableObtainedReward = MutableStateFlow<Result<Reward?>?>(null)
     val obtainedReward = mutableObtainedReward.asStateFlow()
 
@@ -44,7 +44,7 @@ class RewardListViewModel @Inject constructor(
 
     fun startLottery() {
         viewModelScope.launch {
-            val rewards = RewardCollection(mutableRewardList.value!!)
+            val rewards = RewardCollection(mutableRewardList.value)
             mutableObtainedReward.value = lotteryUseCase.execute(rewards)
             loadPoint()
         }
@@ -64,13 +64,12 @@ class RewardListViewModel @Inject constructor(
 
     fun validateRewards(onSuccess: () -> Unit) {
         viewModelScope.launch {
-            rewardList.value?.let {
-                if (it.size >= RewardCollection.MAX) {
-                    // TODO Create error property to show this error
-                    mutableObtainedReward.value = Result.failure(OverMaxRewardsException())
-                } else {
-                    onSuccess()
-                }
+            val rewards = rewardList.value
+            if (rewards.size >= RewardCollection.MAX) {
+                // TODO Create error property to show this error
+                mutableObtainedReward.value = Result.failure(OverMaxRewardsException())
+            } else {
+                onSuccess()
             }
         }
     }
@@ -86,15 +85,19 @@ class RewardListViewModel @Inject constructor(
     fun saveReward(reward: RewardInput) {
         viewModelScope.launch {
             val newResult = saveRewardUseCase.execute(reward)
-            result.value = newResult
+            mutableResult.value = newResult
         }
+    }
+
+    fun clearResult() {
+        mutableResult.value = null
     }
 
     fun deleteReward(reward: Reward) {
         // TODO show confirmation dialog
         viewModelScope.launch {
             deleteRewardUseCase.execute(reward)
-            result.value = Result.success(Unit)
+            mutableResult.value = Result.success(Unit)
         }
     }
 

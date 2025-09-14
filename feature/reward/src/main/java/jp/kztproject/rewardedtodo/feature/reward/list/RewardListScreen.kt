@@ -38,7 +38,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -132,9 +131,9 @@ private fun RewardListScreen(
     onAddNewRewardClick: () -> Unit,
     onRewardItemClick: (Reward) -> Unit,
 ) {
-    val ticket by viewModel.rewardPoint.observeAsState()
-    val rewards by viewModel.rewardList.observeAsState()
-    val result by viewModel.result.observeAsState()
+    val ticket by viewModel.rewardPoint.collectAsStateWithLifecycle()
+    val rewards by viewModel.rewardList.collectAsStateWithLifecycle()
+    val result by viewModel.result.collectAsStateWithLifecycle()
     val obtainedReward by viewModel.obtainedReward.collectAsStateWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -213,7 +212,7 @@ private fun RewardListScreen(
                     Toast.makeText(context, errorMessageId, Toast.LENGTH_LONG).show()
                 },
             )
-            viewModel.result.value = null
+            viewModel.clearResult()
         }
     }
     obtainedReward?.let { it ->
