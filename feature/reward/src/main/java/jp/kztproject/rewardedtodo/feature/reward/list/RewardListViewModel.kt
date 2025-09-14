@@ -28,16 +28,16 @@ class RewardListViewModel @Inject constructor(
     private val getRewardsUseCase: GetRewardsUseCase,
     private val getPointUseCase: GetPointUseCase,
     private val saveRewardUseCase: SaveRewardUseCase,
-    private val deleteRewardUseCase: DeleteRewardUseCase
+    private val deleteRewardUseCase: DeleteRewardUseCase,
 ) : ViewModel() {
 
     val rewardList: StateFlow<List<Reward>> = flow {
-            getRewardsUseCase.executeAsFlow().collect { emit(it) }
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
-        )
+        getRewardsUseCase.executeAsFlow().collect { emit(it) }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList(),
+    )
     private val mutableRewardPoint = MutableStateFlow(0)
     val rewardPoint: StateFlow<Int> = mutableRewardPoint.asStateFlow()
     private val mutableResult = MutableStateFlow<Result<Unit>?>(null)
