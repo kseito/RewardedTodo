@@ -11,6 +11,7 @@ import jp.kztproject.rewardedtodo.feature.reward.list.RewardListViewModel
 import jp.kztproject.rewardedtodo.test.reward.DummyCreator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -66,9 +67,8 @@ class RewardListViewModelTest {
 
     @Test
     fun testGetRewards() = runTest {
-        viewModel.loadRewards()
-
-        assertThat(viewModel.rewardList.value!!.size).isEqualTo(1)
+        val rewardList = viewModel.rewardList.first { it.isNotEmpty() }
+        assertThat(rewardList.size).isEqualTo(1)
     }
 
     @Test

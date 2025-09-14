@@ -11,7 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +26,7 @@ fun SettingScreen(
     onTodoistAuthStartClicked: () -> Unit,
     viewModel: SettingViewModel = hiltViewModel(),
 ) {
-    val todoistExtensionEnabled = viewModel.hasAccessToken.collectAsState()
+    val todoistExtensionEnabled = viewModel.hasAccessToken.collectAsStateWithLifecycle()
     val onTodoistAuthClearClicked: () -> Unit = {
         viewModel.clearAccessToken()
     }

@@ -1,7 +1,5 @@
 package jp.kztproject.rewardedtodo.feature.reward.list
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +14,11 @@ import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,25 +28,30 @@ class RewardListViewModel @Inject constructor(
     private val getRewardsUseCase: GetRewardsUseCase,
     private val getPointUseCase: GetPointUseCase,
     private val saveRewardUseCase: SaveRewardUseCase,
-    private val deleteRewardUseCase: DeleteRewardUseCase
+    private val deleteRewardUseCase: DeleteRewardUseCase,
 ) : ViewModel() {
 
-    private val mutableRewardList = MutableLiveData<List<Reward>>()
-    val rewardList: LiveData<List<Reward>> = mutableRewardList
-    private var mutableRewardPoint = MutableLiveData<Int>()
-    var rewardPoint: LiveData<Int> = mutableRewardPoint
-    val result = MutableLiveData<Result<Unit>?>()
+    val rewardList: StateFlow<List<Reward>> = flow {
+        getRewardsUseCase.executeAsFlow().collect { emit(it) }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = emptyList(),
+    )
+    private val mutableRewardPoint = MutableStateFlow(0)
+    val rewardPoint: StateFlow<Int> = mutableRewardPoint.asStateFlow()
+    private val mutableResult = MutableStateFlow<Result<Unit>?>(null)
+    val result: StateFlow<Result<Unit>?> = mutableResult.asStateFlow()
     private val mutableObtainedReward = MutableStateFlow<Result<Reward?>?>(null)
     val obtainedReward = mutableObtainedReward.asStateFlow()
 
     init {
-        loadRewards()
         loadPoint()
     }
 
     fun startLottery() {
         viewModelScope.launch {
-            val rewards = RewardCollection(mutableRewardList.value!!)
+            val rewards = RewardCollection(rewardList.value)
             mutableObtainedReward.value = lotteryUseCase.execute(rewards)
             loadPoint()
         }
@@ -54,23 +61,14 @@ class RewardListViewModel @Inject constructor(
         mutableObtainedReward.value = null
     }
 
-    fun loadRewards() {
-        viewModelScope.launch {
-            getRewardsUseCase.executeAsFlow().collect { newRewardList ->
-                mutableRewardList.value = newRewardList
-            }
-        }
-    }
-
     fun validateRewards(onSuccess: () -> Unit) {
         viewModelScope.launch {
-            rewardList.value?.let {
-                if (it.size >= RewardCollection.MAX) {
-                    // TODO Create error property to show this error
-                    mutableObtainedReward.value = Result.failure(OverMaxRewardsException())
-                } else {
-                    onSuccess()
-                }
+            val rewards = rewardList.value
+            if (rewards.size >= RewardCollection.MAX) {
+                // TODO Create error property to show this error
+                mutableObtainedReward.value = Result.failure(OverMaxRewardsException())
+            } else {
+                onSuccess()
             }
         }
     }
@@ -86,15 +84,19 @@ class RewardListViewModel @Inject constructor(
     fun saveReward(reward: RewardInput) {
         viewModelScope.launch {
             val newResult = saveRewardUseCase.execute(reward)
-            result.value = newResult
+            mutableResult.value = newResult
         }
+    }
+
+    fun clearResult() {
+        mutableResult.value = null
     }
 
     fun deleteReward(reward: Reward) {
         // TODO show confirmation dialog
         viewModelScope.launch {
             deleteRewardUseCase.execute(reward)
-            result.value = Result.success(Unit)
+            mutableResult.value = Result.success(Unit)
         }
     }
 
