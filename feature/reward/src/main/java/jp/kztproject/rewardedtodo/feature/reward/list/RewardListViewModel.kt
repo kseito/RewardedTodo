@@ -14,8 +14,11 @@ import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,9 +31,14 @@ class RewardListViewModel @Inject constructor(
     private val deleteRewardUseCase: DeleteRewardUseCase
 ) : ViewModel() {
 
-    private val mutableRewardList = MutableStateFlow(emptyList<Reward>())
-    val rewardList: StateFlow<List<Reward>> = mutableRewardList.asStateFlow()
-    private val mutableRewardPoint = MutableStateFlow<Int>(0)
+    val rewardList: StateFlow<List<Reward>> = flow {
+            getRewardsUseCase.executeAsFlow().collect { emit(it) }
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
+        )
+    private val mutableRewardPoint = MutableStateFlow(0)
     val rewardPoint: StateFlow<Int> = mutableRewardPoint.asStateFlow()
     private val mutableResult = MutableStateFlow<Result<Unit>?>(null)
     val result: StateFlow<Result<Unit>?> = mutableResult.asStateFlow()
@@ -38,13 +46,12 @@ class RewardListViewModel @Inject constructor(
     val obtainedReward = mutableObtainedReward.asStateFlow()
 
     init {
-        loadRewards()
         loadPoint()
     }
 
     fun startLottery() {
         viewModelScope.launch {
-            val rewards = RewardCollection(mutableRewardList.value)
+            val rewards = RewardCollection(rewardList.value)
             mutableObtainedReward.value = lotteryUseCase.execute(rewards)
             loadPoint()
         }
@@ -52,14 +59,6 @@ class RewardListViewModel @Inject constructor(
 
     fun resetObtainedReward() {
         mutableObtainedReward.value = null
-    }
-
-    fun loadRewards() {
-        viewModelScope.launch {
-            getRewardsUseCase.executeAsFlow().collect { newRewardList ->
-                mutableRewardList.value = newRewardList
-            }
-        }
     }
 
     fun validateRewards(onSuccess: () -> Unit) {
