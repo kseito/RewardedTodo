@@ -1,0 +1,20 @@
+name: 'Setup Gradle'
+description: 'Setup Gradle with default configuration for this project'
+
+inputs:
+  gradle-home-cache-cleanup:
+    description: 'Whether to clean up Gradle home cache'
+    required: false
+    default: 'true'
+  gradle-version:
+    description: 'Gradle version to use (if not using wrapper)'
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@ed408507eac070d1f99cc633dbcf757c94c7933a # v4.4.3
+      with:
+        gradle-home-cache-cleanup: ${{ inputs.gradle-home-cache-cleanup }}
+        gradle-version: ${{ inputs.gradle-version }}
