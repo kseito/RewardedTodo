@@ -7,6 +7,7 @@ import jp.kztproject.rewardedtodo.domain.todo.ApiToken
 import jp.kztproject.rewardedtodo.domain.todo.repository.IApiTokenRepository
 import javax.inject.Inject
 import javax.inject.Named
+import androidx.core.content.edit
 
 @SuppressLint("ApplySharedPref")
 class ApiTokenRepository @Inject constructor(
@@ -14,9 +15,9 @@ class ApiTokenRepository @Inject constructor(
 ) : IApiTokenRepository {
 
     override suspend fun saveToken(token: ApiToken): Result<Unit> {
-        preferences.edit()
-            .putString(EncryptedStore.TODOIST_API_TOKEN, token.value)
-            .commit()
+        preferences.edit(commit = true) {
+            putString(EncryptedStore.TODOIST_API_TOKEN, token.value)
+        }
         return Result.success(Unit)
     }
 
@@ -26,9 +27,9 @@ class ApiTokenRepository @Inject constructor(
     }
 
     override suspend fun deleteToken() {
-        preferences.edit()
-            .remove(EncryptedStore.TODOIST_API_TOKEN)
-            .commit()
+        preferences.edit(commit = true) {
+            remove(EncryptedStore.TODOIST_API_TOKEN)
+        }
     }
 
     override suspend fun hasToken(): Boolean {
