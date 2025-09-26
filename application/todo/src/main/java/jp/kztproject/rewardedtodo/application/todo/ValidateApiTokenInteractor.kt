@@ -5,7 +5,6 @@ import jp.kztproject.rewardedtodo.domain.todo.TokenError
 import kotlinx.coroutines.TimeoutCancellationException
 import javax.inject.Inject
 import kotlinx.coroutines.withTimeout
-import java.util.concurrent.TimeoutException
 
 class ValidateApiTokenInteractor @Inject constructor() : ValidateApiTokenUseCase {
 
@@ -17,9 +16,7 @@ class ValidateApiTokenInteractor @Inject constructor() : ValidateApiTokenUseCase
         }
     } catch (e: Exception) {
         when (e) {
-            is TimeoutException,
-            is TimeoutCancellationException,
-            ->
+            is TimeoutCancellationException ->
                 Result.failure(TokenError.Timeout)
             else -> Result.failure(TokenError.NetworkError(e))
         }
