@@ -11,11 +11,6 @@ sealed class TokenError : Exception() {
         override val message: String = "Token cannot be empty"
     }
 
-    data object AuthenticationFailed : TokenError() {
-        private fun readResolve(): Any = AuthenticationFailed
-        override val message: String = "Token authentication failed"
-    }
-
     data class NetworkError(override val cause: Throwable) : TokenError() {
         override val message: String = "Network error during token validation: ${cause.message}"
     }
