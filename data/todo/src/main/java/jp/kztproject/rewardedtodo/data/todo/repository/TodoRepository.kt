@@ -24,7 +24,7 @@ class TodoRepository @Inject constructor(
     }
 
     override suspend fun sync() {
-        if (!preferences.getString(EncryptedStore.TODOIST_ACCESS_TOKEN, null).isNullOrEmpty()) {
+        if (!preferences.getString(EncryptedStore.TODOIST_API_TOKEN, null).isNullOrEmpty()) {
             val latestTasks = todoistApi.fetchTasks("today|overdue")
                 .filter { !it.completed }
             val localTasks = todoDao.findAll()
