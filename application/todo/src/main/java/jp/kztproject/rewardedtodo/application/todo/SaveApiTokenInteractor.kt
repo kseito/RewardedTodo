@@ -9,7 +9,7 @@ class SaveApiTokenInteractor @Inject constructor(private val apiTokenRepository:
     SaveApiTokenUseCase {
 
     override suspend fun execute(tokenValue: String): Result<Unit> = try {
-        val apiToken = ApiToken(tokenValue)
+        val apiToken = ApiToken.create(tokenValue)
         apiTokenRepository.saveToken(apiToken)
     } catch (e: IllegalArgumentException) {
         Result.failure(TokenError.AuthenticationFailed)

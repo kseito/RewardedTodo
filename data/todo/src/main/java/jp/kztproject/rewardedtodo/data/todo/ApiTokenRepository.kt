@@ -22,7 +22,7 @@ class ApiTokenRepository @Inject constructor(@param:Named("encrypted") private v
 
     override suspend fun getToken(): ApiToken? {
         val tokenValue = preferences.getString(EncryptedStore.TODOIST_API_TOKEN, null)
-        return tokenValue?.let { ApiToken(it) }
+        return ApiToken.createSafely(tokenValue)
     }
 
     override suspend fun deleteToken() {

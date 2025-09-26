@@ -12,7 +12,7 @@ class ValidateApiTokenInteractor @Inject constructor() : ValidateApiTokenUseCase
     override suspend fun execute(tokenValue: String): Result<Unit> = try {
         withTimeout(TIMEOUT_MILLIS) {
             // Try to create ApiToken - this validates the format
-            ApiToken(tokenValue)
+            ApiToken.create(tokenValue)
             Result.success(Unit)
         }
     } catch (e: Exception) {
