@@ -47,10 +47,6 @@ class HomeActivity : ComponentActivity() {
                 )
                 settingScreen(
                     todoistAuthFinished = todoistAuthFinished,
-                    onTodoistAuthStartClicked = {
-                        val intent = Intent(context, TodoistAuthActivity::class.java)
-                        launcher.launch(intent)
-                    },
                 )
             }
         }

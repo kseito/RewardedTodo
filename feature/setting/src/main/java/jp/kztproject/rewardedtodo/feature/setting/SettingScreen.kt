@@ -23,29 +23,31 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun SettingScreen(
     todoistAuthFinished: Boolean = false,
-    onTodoistAuthStartClicked: () -> Unit,
     viewModel: SettingViewModel = hiltViewModel(),
 ) {
     val todoistExtensionEnabled = viewModel.hasAccessToken.collectAsState()
-    val onTodoistAuthClearClicked: () -> Unit = {
-        viewModel.clearAccessToken()
-    }
+    val tokenUiState = viewModel.tokenUiState.collectAsState()
+
     if (todoistAuthFinished) {
         viewModel.loadAccessToken()
     }
 
     SettingScreenContent(
         todoistExtensionEnabled.value,
-        onTodoistAuthStartClicked,
-        onTodoistAuthClearClicked,
+        tokenUiState.value,
+        onTokenInputChange = { viewModel.updateTokenInput(it) },
+        onTokenValidate = { viewModel.saveToken() },
+        onTokenDelete = { viewModel.deleteToken() },
     )
 }
 
 @Composable
 private fun SettingScreenContent(
     todoistExtensionEnabled: Boolean,
-    onTodoistAuthStartClicked: () -> Unit,
-    onTodoistAuthClearClicked: () -> Unit,
+    tokenUiState: TokenSettingsUiState,
+    onTokenInputChange: (String) -> Unit,
+    onTokenValidate: () -> Unit,
+    onTokenDelete: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -68,8 +70,10 @@ private fun SettingScreenContent(
 
         TodoistTokenSection(
             isConnected = todoistExtensionEnabled,
-            onTokenValidate = onTodoistAuthStartClicked,
-            onTokenDelete = onTodoistAuthClearClicked,
+            tokenUiState = tokenUiState,
+            onTokenInputChange = onTokenInputChange,
+            onTokenValidate = onTokenValidate,
+            onTokenDelete = onTokenDelete,
         )
     }
 }
@@ -86,12 +90,12 @@ private fun SettingSectionTitle(text: String) {
 @Composable
 private fun TodoistTokenSection(
     isConnected: Boolean,
+    tokenUiState: TokenSettingsUiState,
+    onTokenInputChange: (String) -> Unit,
     onTokenValidate: () -> Unit,
     onTokenDelete: () -> Unit,
 ) {
-    var tokenInput by remember { mutableStateOf("") }
     var isTokenVisible by remember { mutableStateOf(false) }
-    var isLoading by remember { mutableStateOf(false) }
 
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -106,8 +110,8 @@ private fun TodoistTokenSection(
 
         // Token Input Field
         OutlinedTextField(
-            value = tokenInput,
-            onValueChange = { tokenInput = it },
+            value = tokenUiState.tokenInput,
+            onValueChange = onTokenInputChange,
             label = { Text("Todoist API Token") },
             placeholder = { Text("例: 0123456789abcdef...") },
             visualTransformation = if (isTokenVisible) {
@@ -129,8 +133,8 @@ private fun TodoistTokenSection(
                         )
                     }
                     // Clear button
-                    if (tokenInput.isNotEmpty()) {
-                        IconButton(onClick = { tokenInput = "" }) {
+                    if (tokenUiState.tokenInput.isNotEmpty()) {
+                        IconButton(onClick = { onTokenInputChange("") }) {
                             Icon(Icons.Filled.Clear, contentDescription = "Clear token")
                         }
                     }
@@ -138,8 +142,19 @@ private fun TodoistTokenSection(
             },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
-            enabled = !isConnected
+            enabled = !isConnected,
+            isError = tokenUiState.validationError != null
         )
+
+        // Error message
+        if (tokenUiState.validationError != null) {
+            Text(
+                text = tokenUiState.validationError,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+            )
+        }
 
         Spacer(modifier = Modifier.height(8.dp))
 
@@ -151,23 +166,26 @@ private fun TodoistTokenSection(
             if (isConnected) {
                 OutlinedButton(
                     onClick = onTokenDelete,
+                    enabled = !tokenUiState.isLoading,
                     colors = ButtonDefaults.outlinedButtonColors(
                         contentColor = MaterialTheme.colorScheme.error
                     )
                 ) {
-                    Text("連携を解除")
+                    if (tokenUiState.isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(16.dp),
+                            strokeWidth = 2.dp
+                        )
+                    } else {
+                        Text("連携を解除")
+                    }
                 }
             } else {
                 Button(
-                    onClick = {
-                        isLoading = true
-                        onTokenValidate()
-                        // Reset loading state - this would be handled by ViewModel in real implementation
-                        isLoading = false
-                    },
-                    enabled = tokenInput.isNotEmpty() && !isLoading
+                    onClick = onTokenValidate,
+                    enabled = tokenUiState.tokenInput.isNotEmpty() && !tokenUiState.isLoading
                 ) {
-                    if (isLoading) {
+                    if (tokenUiState.isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(16.dp),
                             strokeWidth = 2.dp
@@ -238,8 +256,10 @@ private fun ConnectionStatusCard(
 fun SettingScreenPreview() {
     SettingScreenContent(
         todoistExtensionEnabled = false,
-        onTodoistAuthStartClicked = {},
-        onTodoistAuthClearClicked = {},
+        tokenUiState = TokenSettingsUiState(),
+        onTokenInputChange = {},
+        onTokenValidate = {},
+        onTokenDelete = {},
     )
 }
 
@@ -248,7 +268,9 @@ fun SettingScreenPreview() {
 fun SettingScreenConnectedPreview() {
     SettingScreenContent(
         todoistExtensionEnabled = true,
-        onTodoistAuthStartClicked = {},
-        onTodoistAuthClearClicked = {},
+        tokenUiState = TokenSettingsUiState(hasToken = true, isConnected = true),
+        onTokenInputChange = {},
+        onTokenValidate = {},
+        onTokenDelete = {},
     )
 }
