@@ -94,10 +94,7 @@ private fun TodoistTokenSection(
         modifier = Modifier.fillMaxWidth(),
     ) {
         // Connection Status Card
-        ConnectionStatusCard(
-            isConnected = isConnected,
-            lastSyncTime = if (isConnected) "2時間前" else null,
-        )
+        ConnectionStatusCard(isConnected = isConnected)
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -193,7 +190,7 @@ private fun TodoistTokenSection(
 }
 
 @Composable
-private fun ConnectionStatusCard(isConnected: Boolean, lastSyncTime: String?) {
+private fun ConnectionStatusCard(isConnected: Boolean) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -224,19 +221,10 @@ private fun ConnectionStatusCard(isConnected: Boolean, lastSyncTime: String?) {
                 },
             )
             Spacer(modifier = Modifier.width(12.dp))
-            Column {
-                Text(
-                    text = if (isConnected) "接続済み" else "未接続",
-                    style = MaterialTheme.typography.titleMedium,
-                )
-                lastSyncTime?.let {
-                    Text(
-                        text = "最終同期: $it",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            }
+            Text(
+                text = if (isConnected) "接続済み" else "未接続",
+                style = MaterialTheme.typography.titleMedium,
+            )
         }
     }
 }
