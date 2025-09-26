@@ -116,9 +116,9 @@ private fun TodoistTokenSection(
                         IconButton(onClick = { isTokenVisible = !isTokenVisible }) {
                             Icon(
                                 imageVector = if (isTokenVisible) {
-                                    Icons.Filled.Lock
+                                    Icons.Filled.Visibility
                                 } else {
-                                    Icons.Filled.Edit
+                                    Icons.Filled.VisibilityOff
                                 },
                                 contentDescription = if (isTokenVisible) {
                                     stringResource(
