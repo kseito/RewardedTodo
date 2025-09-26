@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.kztproject.rewardedtodo.application.todo.DeleteApiTokenUseCase
 import jp.kztproject.rewardedtodo.application.todo.GetApiTokenUseCase
 import jp.kztproject.rewardedtodo.application.todo.SaveApiTokenUseCase
-import jp.kztproject.rewardedtodo.application.todo.ValidateApiTokenUseCase
+import jp.kztproject.rewardedtodo.domain.todo.TokenError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,7 +17,6 @@ import javax.inject.Inject
 class SettingViewModel @Inject constructor(
     private val getApiTokenUseCase: GetApiTokenUseCase,
     private val saveApiTokenUseCase: SaveApiTokenUseCase,
-    private val validateApiTokenUseCase: ValidateApiTokenUseCase,
     private val deleteApiTokenUseCase: DeleteApiTokenUseCase,
 ) : ViewModel() {
 
@@ -56,38 +55,25 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch {
             _tokenUiState.value = currentState.copy(isLoading = true, validationError = null)
 
-            try {
-                // Validate token format first
-                val validationResult = validateApiTokenUseCase.execute(currentState.tokenInput)
-                if (validationResult.isFailure) {
-                    _tokenUiState.value = currentState.copy(
-                        isLoading = false,
-                        validationError = TokenValidationError.INVALID_TOKEN_FORMAT,
-                    )
-                    return@launch
-                }
-
-                // Save token
-                val saveResult = saveApiTokenUseCase.execute(currentState.tokenInput)
-                if (saveResult.isSuccess) {
-                    _tokenUiState.value = currentState.copy(
-                        isLoading = false,
-                        hasToken = true,
-                        isConnected = true,
-                        tokenInput = "",
-                        validationError = null,
-                    )
-                    loadAccessToken() // Refresh the main token status
-                } else {
-                    _tokenUiState.value = currentState.copy(
-                        isLoading = false,
-                        validationError = TokenValidationError.FAILED_TO_SAVE_TOKEN,
-                    )
-                }
-            } catch (e: Exception) {
+            val saveResult = saveApiTokenUseCase.execute(currentState.tokenInput)
+            if (saveResult.isSuccess) {
                 _tokenUiState.value = currentState.copy(
                     isLoading = false,
-                    validationError = TokenValidationError.FAILED_TO_SAVE_TOKEN,
+                    hasToken = true,
+                    isConnected = true,
+                    tokenInput = "",
+                    validationError = null,
+                )
+                loadAccessToken() // Refresh the main token status
+            } else {
+                val validationError = when (saveResult.exceptionOrNull()) {
+                    is TokenError.InvalidFormat -> TokenValidationError.INVALID_TOKEN_FORMAT
+                    is TokenError.EmptyToken -> TokenValidationError.TOKEN_EMPTY
+                    else -> TokenValidationError.FAILED_TO_SAVE_TOKEN
+                }
+                _tokenUiState.value = currentState.copy(
+                    isLoading = false,
+                    validationError = validationError,
                 )
             }
         }
