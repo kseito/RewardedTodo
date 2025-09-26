@@ -7,7 +7,6 @@ import jp.kztproject.rewardedtodo.application.todo.DeleteApiTokenUseCase
 import jp.kztproject.rewardedtodo.application.todo.GetApiTokenUseCase
 import jp.kztproject.rewardedtodo.application.todo.SaveApiTokenUseCase
 import jp.kztproject.rewardedtodo.application.todo.ValidateApiTokenUseCase
-import jp.kztproject.rewardedtodo.domain.todo.TokenError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -133,5 +132,5 @@ data class TokenSettingsUiState(
 enum class TokenValidationError {
     TOKEN_EMPTY,
     INVALID_TOKEN_FORMAT,
-    FAILED_TO_SAVE_TOKEN
+    FAILED_TO_SAVE_TOKEN,
 }

@@ -120,7 +120,13 @@ private fun TodoistTokenSection(
                                 } else {
                                     Icons.Filled.Edit
                                 },
-                                contentDescription = if (isTokenVisible) stringResource(R.string.hide_token) else stringResource(R.string.show_token),
+                                contentDescription = if (isTokenVisible) {
+                                    stringResource(
+                                        R.string.hide_token,
+                                    )
+                                } else {
+                                    stringResource(R.string.show_token)
+                                },
                             )
                         }
                         // Clear button
@@ -191,12 +197,10 @@ private fun TodoistTokenSection(
 }
 
 @Composable
-private fun getErrorMessage(error: TokenValidationError): String {
-    return when (error) {
-        TokenValidationError.TOKEN_EMPTY -> stringResource(R.string.error_token_empty)
-        TokenValidationError.INVALID_TOKEN_FORMAT -> stringResource(R.string.error_invalid_token_format)
-        TokenValidationError.FAILED_TO_SAVE_TOKEN -> stringResource(R.string.error_failed_save_token)
-    }
+private fun getErrorMessage(error: TokenValidationError): String = when (error) {
+    TokenValidationError.TOKEN_EMPTY -> stringResource(R.string.error_token_empty)
+    TokenValidationError.INVALID_TOKEN_FORMAT -> stringResource(R.string.error_invalid_token_format)
+    TokenValidationError.FAILED_TO_SAVE_TOKEN -> stringResource(R.string.error_failed_save_token)
 }
 
 @Composable
@@ -232,7 +236,13 @@ private fun ConnectionStatusCard(isConnected: Boolean) {
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                text = if (isConnected) stringResource(R.string.status_connected) else stringResource(R.string.status_disconnected),
+                text = if (isConnected) {
+                    stringResource(
+                        R.string.status_connected,
+                    )
+                } else {
+                    stringResource(R.string.status_disconnected)
+                },
                 style = MaterialTheme.typography.titleMedium,
             )
         }
