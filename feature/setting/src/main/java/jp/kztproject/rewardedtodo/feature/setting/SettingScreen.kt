@@ -98,55 +98,56 @@ private fun TodoistTokenSection(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Token Input Field
-        OutlinedTextField(
-            value = tokenUiState.tokenInput,
-            onValueChange = onTokenInputChange,
-            label = { Text(stringResource(R.string.api_token_label)) },
-            placeholder = { Text(stringResource(R.string.api_token_placeholder)) },
-            visualTransformation = if (isTokenVisible) {
-                VisualTransformation.None
-            } else {
-                PasswordVisualTransformation()
-            },
-            trailingIcon = {
-                Row {
-                    // Visibility toggle
-                    IconButton(onClick = { isTokenVisible = !isTokenVisible }) {
-                        Icon(
-                            imageVector = if (isTokenVisible) {
-                                Icons.Filled.Lock
-                            } else {
-                                Icons.Filled.Edit
-                            },
-                            contentDescription = if (isTokenVisible) stringResource(R.string.hide_token) else stringResource(R.string.show_token),
-                        )
-                    }
-                    // Clear button
-                    if (tokenUiState.tokenInput.isNotEmpty()) {
-                        IconButton(onClick = { onTokenInputChange("") }) {
-                            Icon(Icons.Filled.Clear, contentDescription = stringResource(R.string.clear_token))
+        // Token Input Field - only show when not connected
+        if (!isConnected) {
+            OutlinedTextField(
+                value = tokenUiState.tokenInput,
+                onValueChange = onTokenInputChange,
+                label = { Text(stringResource(R.string.api_token_label)) },
+                placeholder = { Text(stringResource(R.string.api_token_placeholder)) },
+                visualTransformation = if (isTokenVisible) {
+                    VisualTransformation.None
+                } else {
+                    PasswordVisualTransformation()
+                },
+                trailingIcon = {
+                    Row {
+                        // Visibility toggle
+                        IconButton(onClick = { isTokenVisible = !isTokenVisible }) {
+                            Icon(
+                                imageVector = if (isTokenVisible) {
+                                    Icons.Filled.Lock
+                                } else {
+                                    Icons.Filled.Edit
+                                },
+                                contentDescription = if (isTokenVisible) stringResource(R.string.hide_token) else stringResource(R.string.show_token),
+                            )
+                        }
+                        // Clear button
+                        if (tokenUiState.tokenInput.isNotEmpty()) {
+                            IconButton(onClick = { onTokenInputChange("") }) {
+                                Icon(Icons.Filled.Clear, contentDescription = stringResource(R.string.clear_token))
+                            }
                         }
                     }
-                }
-            },
-            modifier = Modifier.fillMaxWidth(),
-            singleLine = true,
-            enabled = !isConnected,
-            isError = tokenUiState.validationError != null,
-        )
-
-        // Error message
-        if (tokenUiState.validationError != null) {
-            Text(
-                text = getErrorMessage(tokenUiState.validationError),
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(start = 16.dp, top = 4.dp),
+                },
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                isError = tokenUiState.validationError != null,
             )
-        }
 
-        Spacer(modifier = Modifier.height(8.dp))
+            // Error message
+            if (tokenUiState.validationError != null) {
+                Text(
+                    text = getErrorMessage(tokenUiState.validationError),
+                    color = MaterialTheme.colorScheme.error,
+                    style = MaterialTheme.typography.bodySmall,
+                    modifier = Modifier.padding(start = 16.dp, top = 4.dp),
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+        }
 
         // Action Button
         Row(
