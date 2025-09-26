@@ -30,13 +30,7 @@ class HomeActivity : ComponentActivity() {
 
         setContent {
             val navController = rememberNavController()
-            val context = LocalContext.current
             var todoistAuthFinished by remember { mutableStateOf(false) }
-            val launcher = rememberLauncherForActivityResult(
-                ActivityResultContracts.StartActivityForResult(),
-            ) {
-                todoistAuthFinished = true
-            }
             NavHost(navController = navController, startDestination = HOME_SCREEN) {
                 homeScreen(
                     onClickSetting = {
