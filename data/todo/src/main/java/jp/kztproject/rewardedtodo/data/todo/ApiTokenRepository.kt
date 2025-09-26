@@ -10,9 +10,8 @@ import javax.inject.Named
 import androidx.core.content.edit
 
 @SuppressLint("ApplySharedPref")
-class ApiTokenRepository @Inject constructor(
-    @param:Named("encrypted") private val preferences: SharedPreferences,
-) : IApiTokenRepository {
+class ApiTokenRepository @Inject constructor(@param:Named("encrypted") private val preferences: SharedPreferences) :
+    IApiTokenRepository {
 
     override suspend fun saveToken(token: ApiToken): Result<Unit> {
         preferences.edit(commit = true) {
@@ -32,8 +31,6 @@ class ApiTokenRepository @Inject constructor(
         }
     }
 
-    override suspend fun hasToken(): Boolean {
-        return preferences.contains(EncryptedStore.TODOIST_API_TOKEN) &&
-            !preferences.getString(EncryptedStore.TODOIST_API_TOKEN, "").isNullOrBlank()
-    }
+    override suspend fun hasToken(): Boolean = preferences.contains(EncryptedStore.TODOIST_API_TOKEN) &&
+        !preferences.getString(EncryptedStore.TODOIST_API_TOKEN, "").isNullOrBlank()
 }

@@ -216,7 +216,7 @@ fun TodoListScreenPreview() {
         },
         object : GetApiTokenUseCase {
             override suspend fun execute(): ApiToken? = null
-        }
+        },
     )
     TodoListScreen(
         viewModel = viewModel,

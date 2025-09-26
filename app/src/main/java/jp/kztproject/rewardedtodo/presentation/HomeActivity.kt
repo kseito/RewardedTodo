@@ -1,6 +1,5 @@
 package jp.kztproject.rewardedtodo.presentation
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -15,7 +14,6 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import jp.kztproject.rewardedtodo.feature.auth.TodoistAuthActivity
 import jp.kztproject.rewardedtodo.feature.setting.SETTING_SCREEN
 import jp.kztproject.rewardedtodo.feature.setting.settingScreen
 

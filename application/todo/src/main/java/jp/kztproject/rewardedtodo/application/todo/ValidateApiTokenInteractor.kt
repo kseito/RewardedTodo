@@ -9,20 +9,19 @@ import java.util.concurrent.TimeoutException
 
 class ValidateApiTokenInteractor @Inject constructor() : ValidateApiTokenUseCase {
 
-    override suspend fun execute(tokenValue: String): Result<Unit> {
-        return try {
-            withTimeout(TIMEOUT_MILLIS) {
-                // Try to create ApiToken - this validates the format
-                ApiToken(tokenValue)
-                Result.success(Unit)
-            }
-        } catch (e: Exception) {
-            when (e) {
-                is TimeoutException,
-                is TimeoutCancellationException ->
-                    Result.failure(TokenError.Timeout)
-                else -> Result.failure(TokenError.NetworkError(e))
-            }
+    override suspend fun execute(tokenValue: String): Result<Unit> = try {
+        withTimeout(TIMEOUT_MILLIS) {
+            // Try to create ApiToken - this validates the format
+            ApiToken(tokenValue)
+            Result.success(Unit)
+        }
+    } catch (e: Exception) {
+        when (e) {
+            is TimeoutException,
+            is TimeoutCancellationException,
+            ->
+                Result.failure(TokenError.Timeout)
+            else -> Result.failure(TokenError.NetworkError(e))
         }
     }
 

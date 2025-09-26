@@ -9,8 +9,6 @@ value class ApiToken(val value: String) {
     }
 
     companion object {
-        private fun isValidFormat(token: String): Boolean {
-            return token.matches(Regex("[0-9a-f]{40}"))
-        }
+        private fun isValidFormat(token: String): Boolean = token.matches(Regex("[0-9a-f]{40}"))
     }
 }

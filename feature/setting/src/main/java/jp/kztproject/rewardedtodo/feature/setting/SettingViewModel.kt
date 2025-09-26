@@ -16,10 +16,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SettingViewModel @Inject constructor(
-        private val getApiTokenUseCase: GetApiTokenUseCase,
-        private val saveApiTokenUseCase: SaveApiTokenUseCase,
-        private val validateApiTokenUseCase: ValidateApiTokenUseCase,
-        private val deleteApiTokenUseCase: DeleteApiTokenUseCase
+    private val getApiTokenUseCase: GetApiTokenUseCase,
+    private val saveApiTokenUseCase: SaveApiTokenUseCase,
+    private val validateApiTokenUseCase: ValidateApiTokenUseCase,
+    private val deleteApiTokenUseCase: DeleteApiTokenUseCase,
 ) : ViewModel() {
 
     private val mutableHasAccessToken = MutableStateFlow(false)
@@ -41,7 +41,7 @@ class SettingViewModel @Inject constructor(
     fun updateTokenInput(token: String) {
         _tokenUiState.value = _tokenUiState.value.copy(
             tokenInput = token,
-            validationError = null
+            validationError = null,
         )
     }
 
@@ -49,7 +49,7 @@ class SettingViewModel @Inject constructor(
         val currentState = _tokenUiState.value
         if (currentState.tokenInput.isBlank()) {
             _tokenUiState.value = currentState.copy(
-                validationError = "Token cannot be empty"
+                validationError = "Token cannot be empty",
             )
             return
         }
@@ -64,7 +64,7 @@ class SettingViewModel @Inject constructor(
                     val error = validationResult.exceptionOrNull() as? TokenError
                     _tokenUiState.value = currentState.copy(
                         isLoading = false,
-                        validationError = error?.message ?: "Invalid token format"
+                        validationError = error?.message ?: "Invalid token format",
                     )
                     return@launch
                 }
@@ -77,20 +77,20 @@ class SettingViewModel @Inject constructor(
                         hasToken = true,
                         isConnected = true,
                         tokenInput = "",
-                        validationError = null
+                        validationError = null,
                     )
                     loadAccessToken() // Refresh the main token status
                 } else {
                     val error = saveResult.exceptionOrNull() as? TokenError
                     _tokenUiState.value = currentState.copy(
                         isLoading = false,
-                        validationError = error?.message ?: "Failed to save token"
+                        validationError = error?.message ?: "Failed to save token",
                     )
                 }
             } catch (e: Exception) {
                 _tokenUiState.value = currentState.copy(
                     isLoading = false,
-                    validationError = "Failed to save token"
+                    validationError = "Failed to save token",
                 )
             }
         }
@@ -107,7 +107,7 @@ class SettingViewModel @Inject constructor(
                 hasToken = false,
                 isConnected = false,
                 tokenInput = "",
-                validationError = null
+                validationError = null,
             )
             loadAccessToken() // Refresh the main token status
         }
@@ -118,7 +118,7 @@ class SettingViewModel @Inject constructor(
             val currentToken = getApiTokenUseCase.execute()
             _tokenUiState.value = _tokenUiState.value.copy(
                 hasToken = currentToken != null,
-                isConnected = currentToken != null
+                isConnected = currentToken != null,
             )
         }
     }
@@ -129,5 +129,5 @@ data class TokenSettingsUiState(
     val hasToken: Boolean = false,
     val isConnected: Boolean = false,
     val isLoading: Boolean = false,
-    val validationError: String? = null
+    val validationError: String? = null,
 )

@@ -1,15 +1,11 @@
 package jp.kztproject.rewardedtodo.feature.setting
 
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.material3.ripple
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -21,10 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
-fun SettingScreen(
-    todoistAuthFinished: Boolean = false,
-    viewModel: SettingViewModel = hiltViewModel(),
-) {
+fun SettingScreen(todoistAuthFinished: Boolean = false, viewModel: SettingViewModel = hiltViewModel()) {
     val todoistExtensionEnabled = viewModel.hasAccessToken.collectAsState()
     val tokenUiState = viewModel.tokenUiState.collectAsState()
 
@@ -98,12 +91,12 @@ private fun TodoistTokenSection(
     var isTokenVisible by remember { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         // Connection Status Card
         ConnectionStatusCard(
             isConnected = isConnected,
-            lastSyncTime = if (isConnected) "2時間前" else null
+            lastSyncTime = if (isConnected) "2時間前" else null,
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -129,7 +122,7 @@ private fun TodoistTokenSection(
                             } else {
                                 Icons.Filled.Edit
                             },
-                            contentDescription = if (isTokenVisible) "Hide token" else "Show token"
+                            contentDescription = if (isTokenVisible) "Hide token" else "Show token",
                         )
                     }
                     // Clear button
@@ -143,7 +136,7 @@ private fun TodoistTokenSection(
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             enabled = !isConnected,
-            isError = tokenUiState.validationError != null
+            isError = tokenUiState.validationError != null,
         )
 
         // Error message
@@ -152,7 +145,7 @@ private fun TodoistTokenSection(
                 text = tokenUiState.validationError,
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(start = 16.dp, top = 4.dp)
+                modifier = Modifier.padding(start = 16.dp, top = 4.dp),
             )
         }
 
@@ -161,20 +154,20 @@ private fun TodoistTokenSection(
         // Action Button
         Row(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.End
+            horizontalArrangement = Arrangement.End,
         ) {
             if (isConnected) {
                 OutlinedButton(
                     onClick = onTokenDelete,
                     enabled = !tokenUiState.isLoading,
                     colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = MaterialTheme.colorScheme.error
-                    )
+                        contentColor = MaterialTheme.colorScheme.error,
+                    ),
                 ) {
                     if (tokenUiState.isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(16.dp),
-                            strokeWidth = 2.dp
+                            strokeWidth = 2.dp,
                         )
                     } else {
                         Text("連携を解除")
@@ -183,12 +176,12 @@ private fun TodoistTokenSection(
             } else {
                 Button(
                     onClick = onTokenValidate,
-                    enabled = tokenUiState.tokenInput.isNotEmpty() && !tokenUiState.isLoading
+                    enabled = tokenUiState.tokenInput.isNotEmpty() && !tokenUiState.isLoading,
                 ) {
                     if (tokenUiState.isLoading) {
                         CircularProgressIndicator(
                             modifier = Modifier.size(16.dp),
-                            strokeWidth = 2.dp
+                            strokeWidth = 2.dp,
                         )
                     } else {
                         Text("接続を確認")
@@ -200,10 +193,7 @@ private fun TodoistTokenSection(
 }
 
 @Composable
-private fun ConnectionStatusCard(
-    isConnected: Boolean,
-    lastSyncTime: String?
-) {
+private fun ConnectionStatusCard(isConnected: Boolean, lastSyncTime: String?) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -211,14 +201,14 @@ private fun ConnectionStatusCard(
                 MaterialTheme.colorScheme.primaryContainer
             } else {
                 MaterialTheme.colorScheme.surfaceVariant
-            }
-        )
+            },
+        ),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
                 imageVector = if (isConnected) {
@@ -231,19 +221,19 @@ private fun ConnectionStatusCard(
                     MaterialTheme.colorScheme.primary
                 } else {
                     MaterialTheme.colorScheme.onSurfaceVariant
-                }
+                },
             )
             Spacer(modifier = Modifier.width(12.dp))
             Column {
                 Text(
                     text = if (isConnected) "接続済み" else "未接続",
-                    style = MaterialTheme.typography.titleMedium
+                    style = MaterialTheme.typography.titleMedium,
                 )
                 lastSyncTime?.let {
                     Text(
                         text = "最終同期: $it",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
                 }
             }

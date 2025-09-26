@@ -15,7 +15,6 @@ import jp.kztproject.rewardedtodo.application.todo.GetApiTokenUseCase
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.Todo
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
@@ -31,7 +30,7 @@ class TodoListViewModel @Inject constructor(
     private val updateTodoUseCase: UpdateTodoUseCase,
     private val deleteTodoUseCase: DeleteTodoUseCase,
     private val completeTodoUseCase: CompleteTodoUseCase,
-    private val getApiTokenUseCase: GetApiTokenUseCase
+    private val getApiTokenUseCase: GetApiTokenUseCase,
 ) : ViewModel() {
 
     val todoList: LiveData<List<Todo>> = getTodoListUseCase.execute()
