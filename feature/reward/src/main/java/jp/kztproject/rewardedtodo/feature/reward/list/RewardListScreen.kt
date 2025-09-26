@@ -36,9 +36,8 @@ import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -132,12 +131,10 @@ private fun RewardListScreen(
     onAddNewRewardClick: () -> Unit,
     onRewardItemClick: (Reward) -> Unit,
 ) {
-    val ticket by viewModel.rewardPoint.observeAsState()
-    val rewards by viewModel.rewardList.observeAsState()
-    val result by viewModel.result.observeAsState()
-    // TODO can use collectAsStateWithLifecycle() if library update
-    // https://qiita.com/dosukoi_android/items/e8bbaa662c52b8e1cc20
-    val obtainedReward by viewModel.obtainedReward.collectAsState()
+    val ticket by viewModel.rewardPoint.collectAsStateWithLifecycle()
+    val rewards by viewModel.rewardList.collectAsStateWithLifecycle()
+    val result by viewModel.result.collectAsStateWithLifecycle()
+    val obtainedReward by viewModel.obtainedReward.collectAsStateWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
@@ -215,7 +212,7 @@ private fun RewardListScreen(
                     Toast.makeText(context, errorMessageId, Toast.LENGTH_LONG).show()
                 },
             )
-            viewModel.result.value = null
+            viewModel.clearResult()
         }
     }
     obtainedReward?.let { it ->
