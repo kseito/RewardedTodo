@@ -1,6 +1,5 @@
 package jp.kztproject.rewardedtodo.presentation.todo
 
-import androidx.compose.foundation.layout.Row
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
