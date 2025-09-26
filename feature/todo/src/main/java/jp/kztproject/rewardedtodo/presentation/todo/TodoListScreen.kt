@@ -54,7 +54,9 @@ import jp.kztproject.rewardedtodo.application.reward.DeleteTodoUseCase
 import jp.kztproject.rewardedtodo.application.reward.FetchTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.GetTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
+import jp.kztproject.rewardedtodo.application.todo.GetApiTokenUseCase
 import jp.kztproject.rewardedtodo.common.ui.CommonAlertDialog
+import jp.kztproject.rewardedtodo.domain.todo.ApiToken
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.Todo
 import jp.kztproject.rewardedtodo.feature.todo.R
@@ -212,6 +214,9 @@ fun TodoListScreenPreview() {
         object : CompleteTodoUseCase {
             override suspend fun execute(todo: Todo) {}
         },
+        object : GetApiTokenUseCase {
+            override suspend fun execute(): ApiToken? = null
+        }
     )
     TodoListScreen(
         viewModel = viewModel,
