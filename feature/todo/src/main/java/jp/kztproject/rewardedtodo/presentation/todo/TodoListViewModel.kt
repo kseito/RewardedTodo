@@ -1,5 +1,6 @@
 package jp.kztproject.rewardedtodo.presentation.todo
 
+import androidx.compose.foundation.layout.Row
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -58,6 +59,7 @@ class TodoListViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                result.value = Result.failure(e)
             }
         }
     }
@@ -73,6 +75,7 @@ class TodoListViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
+                result.value = Result.failure(e)
             }
             _isRefreshing.update { false }
         }
