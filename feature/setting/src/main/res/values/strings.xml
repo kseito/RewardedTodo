@@ -3,4 +3,20 @@
     <string name="settings_title">Setting</string>
     <string name="extensions_section">Extensions</string>
     <string name="todoist_extension_title">Todoist</string>
+
+    <!-- API Token Settings -->
+    <string name="api_token_label">Todoist API Token</string>
+    <string name="api_token_placeholder">Example: 0123456789abcdef...</string>
+    <string name="hide_token">Hide token</string>
+    <string name="show_token">Show token</string>
+    <string name="clear_token">Clear token</string>
+    <string name="disconnect_integration">Disconnect</string>
+    <string name="verify_connection">Verify Connection</string>
+    <string name="status_connected">Connected</string>
+    <string name="status_disconnected">Not Connected</string>
+
+    <!-- Error messages -->
+    <string name="error_token_empty">Token cannot be empty</string>
+    <string name="error_invalid_token_format">Invalid token format</string>
+    <string name="error_failed_save_token">Failed to save token</string>
 </resources>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_title">設定</string>
+    <string name="extensions_section">拡張機能</string>
+    <string name="todoist_extension_title">Todoist</string>
+
+    <!-- API Token Settings -->
+    <string name="api_token_label">Todoist API トークン</string>
+    <string name="api_token_placeholder">例: 0123456789abcdef...</string>
+    <string name="hide_token">トークンを隠す</string>
+    <string name="show_token">トークンを表示</string>
+    <string name="clear_token">トークンをクリア</string>
+    <string name="disconnect_integration">連携を解除</string>
+    <string name="verify_connection">接続を確認</string>
+    <string name="status_connected">接続済み</string>
+    <string name="status_disconnected">未接続</string>
+
+    <!-- Error messages -->
+    <string name="error_token_empty">トークンを入力してください</string>
+    <string name="error_invalid_token_format">無効なトークン形式です</string>
+    <string name="error_failed_save_token">トークンの保存に失敗しました</string>
+</resources>

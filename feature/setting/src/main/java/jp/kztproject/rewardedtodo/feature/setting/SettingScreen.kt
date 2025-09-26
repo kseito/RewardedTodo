@@ -102,8 +102,8 @@ private fun TodoistTokenSection(
         OutlinedTextField(
             value = tokenUiState.tokenInput,
             onValueChange = onTokenInputChange,
-            label = { Text("Todoist API Token") },
-            placeholder = { Text("例: 0123456789abcdef...") },
+            label = { Text(stringResource(R.string.api_token_label)) },
+            placeholder = { Text(stringResource(R.string.api_token_placeholder)) },
             visualTransformation = if (isTokenVisible) {
                 VisualTransformation.None
             } else {
@@ -119,13 +119,13 @@ private fun TodoistTokenSection(
                             } else {
                                 Icons.Filled.Edit
                             },
-                            contentDescription = if (isTokenVisible) "Hide token" else "Show token",
+                            contentDescription = if (isTokenVisible) stringResource(R.string.hide_token) else stringResource(R.string.show_token),
                         )
                     }
                     // Clear button
                     if (tokenUiState.tokenInput.isNotEmpty()) {
                         IconButton(onClick = { onTokenInputChange("") }) {
-                            Icon(Icons.Filled.Clear, contentDescription = "Clear token")
+                            Icon(Icons.Filled.Clear, contentDescription = stringResource(R.string.clear_token))
                         }
                     }
                 }
@@ -139,7 +139,7 @@ private fun TodoistTokenSection(
         // Error message
         if (tokenUiState.validationError != null) {
             Text(
-                text = tokenUiState.validationError,
+                text = getErrorMessage(tokenUiState.validationError),
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
                 modifier = Modifier.padding(start = 16.dp, top = 4.dp),
@@ -167,7 +167,7 @@ private fun TodoistTokenSection(
                             strokeWidth = 2.dp,
                         )
                     } else {
-                        Text("連携を解除")
+                        Text(stringResource(R.string.disconnect_integration))
                     }
                 }
             } else {
@@ -181,11 +181,20 @@ private fun TodoistTokenSection(
                             strokeWidth = 2.dp,
                         )
                     } else {
-                        Text("接続を確認")
+                        Text(stringResource(R.string.verify_connection))
                     }
                 }
             }
         }
+    }
+}
+
+@Composable
+private fun getErrorMessage(error: TokenValidationError): String {
+    return when (error) {
+        TokenValidationError.TOKEN_EMPTY -> stringResource(R.string.error_token_empty)
+        TokenValidationError.INVALID_TOKEN_FORMAT -> stringResource(R.string.error_invalid_token_format)
+        TokenValidationError.FAILED_TO_SAVE_TOKEN -> stringResource(R.string.error_failed_save_token)
     }
 }
 
@@ -222,7 +231,7 @@ private fun ConnectionStatusCard(isConnected: Boolean) {
             )
             Spacer(modifier = Modifier.width(12.dp))
             Text(
-                text = if (isConnected) "接続済み" else "未接続",
+                text = if (isConnected) stringResource(R.string.status_connected) else stringResource(R.string.status_disconnected),
                 style = MaterialTheme.typography.titleMedium,
             )
         }

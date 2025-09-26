@@ -49,7 +49,7 @@ class SettingViewModel @Inject constructor(
         val currentState = _tokenUiState.value
         if (currentState.tokenInput.isBlank()) {
             _tokenUiState.value = currentState.copy(
-                validationError = "Token cannot be empty",
+                validationError = TokenValidationError.TOKEN_EMPTY,
             )
             return
         }
@@ -61,10 +61,9 @@ class SettingViewModel @Inject constructor(
                 // Validate token format first
                 val validationResult = validateApiTokenUseCase.execute(currentState.tokenInput)
                 if (validationResult.isFailure) {
-                    val error = validationResult.exceptionOrNull() as? TokenError
                     _tokenUiState.value = currentState.copy(
                         isLoading = false,
-                        validationError = error?.message ?: "Invalid token format",
+                        validationError = TokenValidationError.INVALID_TOKEN_FORMAT,
                     )
                     return@launch
                 }
@@ -81,16 +80,15 @@ class SettingViewModel @Inject constructor(
                     )
                     loadAccessToken() // Refresh the main token status
                 } else {
-                    val error = saveResult.exceptionOrNull() as? TokenError
                     _tokenUiState.value = currentState.copy(
                         isLoading = false,
-                        validationError = error?.message ?: "Failed to save token",
+                        validationError = TokenValidationError.FAILED_TO_SAVE_TOKEN,
                     )
                 }
             } catch (e: Exception) {
                 _tokenUiState.value = currentState.copy(
                     isLoading = false,
-                    validationError = "Failed to save token",
+                    validationError = TokenValidationError.FAILED_TO_SAVE_TOKEN,
                 )
             }
         }
@@ -129,5 +127,11 @@ data class TokenSettingsUiState(
     val hasToken: Boolean = false,
     val isConnected: Boolean = false,
     val isLoading: Boolean = false,
-    val validationError: String? = null,
+    val validationError: TokenValidationError? = null,
 )
+
+enum class TokenValidationError {
+    TOKEN_EMPTY,
+    INVALID_TOKEN_FORMAT,
+    FAILED_TO_SAVE_TOKEN
+}
