@@ -9,6 +9,7 @@ import dagger.hilt.components.SingletonComponent
     includes = [
         AppModule::class,
         RepositoriesModule::class,
+        UseCaseModule::class,
     ],
 )
 interface AggregatorModule

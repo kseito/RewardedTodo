@@ -34,7 +34,7 @@ class TodoistApiModule {
         val client = OkHttpClient.Builder()
             .addInterceptor(interceptor)
             .addInterceptor { chain ->
-                val token = preferences.getString(EncryptedStore.TODOIST_ACCESS_TOKEN, "")
+                val token = preferences.getString(EncryptedStore.TODOIST_API_TOKEN, "")
                 val request = chain.request().newBuilder()
                     .header("Authorization", "Bearer $token")
                     .build()
