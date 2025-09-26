@@ -9,6 +9,8 @@ plugins {
 
 dependencies {
     implementation(project(path = ":data:auth"))
+    implementation(project(path = ":application:todo"))
+    implementation(project(path = ":domain:todo"))
 
     implementation(libs.core.ktx)
     implementation(libs.material)
