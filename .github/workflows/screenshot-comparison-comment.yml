@@ -93,7 +93,7 @@ jobs:
           body-includes: Screenshot Comparison Results
 
       - name: Add or update comment on PR
-        uses: peter-evans/create-or-update-comment@71345be0265236311c031f5c7866368bd1eff043 # v4
+        uses: peter-evans/create-or-update-comment@e8674b075228eee787fea43ef493e45ece1004c9 # v5
         if: steps.prepare-companion-branch.outputs.comment_content != ''
         with:
           comment-id: ${{ steps.fc.outputs.comment-id }}
