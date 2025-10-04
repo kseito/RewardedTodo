@@ -114,6 +114,7 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.material)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.compose.material.icon.core)
     implementation(libs.navigation.compose)
 
     // Room
