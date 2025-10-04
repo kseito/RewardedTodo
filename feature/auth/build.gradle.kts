@@ -6,13 +6,8 @@ plugins {
 }
 
 android {
-    defaultConfig {
-        buildConfigField("String", "TODOIST_CLIENT_ID", "\"${System.getenv("TODOIST_CLIENT_ID")}\"")
-        buildConfigField("String", "TODOIST_CLIENT_SECRET", "\"${System.getenv("TODOIST_CLIENT_SECRET")}\"")
-    }
     buildFeatures {
         dataBinding = true
-        buildConfig = true
     }
     namespace = "jp.kztproject.rewardedtodo.feature.auth"
 }

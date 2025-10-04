@@ -8,6 +8,7 @@ import jp.kztproject.rewardedtodo.application.reward.DeleteTodoUseCase
 import jp.kztproject.rewardedtodo.application.reward.FetchTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.GetTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
+import jp.kztproject.rewardedtodo.application.todo.GetApiTokenUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -38,6 +39,7 @@ class TodoListViewModelTest :
                     val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
                     val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
                     val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
+                    val getApiTokenUseCase = mockk<GetApiTokenUseCase>(relaxed = true)
 
                     TodoListViewModel(
                         getTodoListUseCase,
@@ -45,6 +47,7 @@ class TodoListViewModelTest :
                         updateTodoListUseCase,
                         deleteTodoUseCase,
                         completeTodoUseCase,
+                        getApiTokenUseCase,
                     )
 
                     advanceUntilIdle()
@@ -61,6 +64,7 @@ class TodoListViewModelTest :
                     val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
                     val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
                     val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
+                    val getApiTokenUseCase = mockk<GetApiTokenUseCase>(relaxed = true)
 
                     val viewModel = TodoListViewModel(
                         getTodoListUseCase,
@@ -68,6 +72,7 @@ class TodoListViewModelTest :
                         updateTodoListUseCase,
                         deleteTodoUseCase,
                         completeTodoUseCase,
+                        getApiTokenUseCase,
                     )
 
                     advanceUntilIdle()

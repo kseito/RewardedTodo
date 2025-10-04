@@ -150,7 +150,7 @@ class TodoRepositoryTest {
 
     private fun useTodoist(flag: Boolean) {
         if (flag) {
-            preferences.edit().putString(EncryptedStore.TODOIST_ACCESS_TOKEN, "test_token").apply()
+            preferences.edit().putString(EncryptedStore.TODOIST_API_TOKEN, "test_token").apply()
         }
     }
 }
