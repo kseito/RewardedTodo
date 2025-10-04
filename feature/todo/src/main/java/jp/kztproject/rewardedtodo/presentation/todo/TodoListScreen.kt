@@ -32,7 +32,6 @@ import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -118,8 +117,8 @@ private fun TodoListScreen(
     onTodoItemClicked: (Todo) -> Unit,
     onTodoUpdateSucceed: () -> Unit,
 ) {
-    val todoList by viewModel.todoList.observeAsState()
-    val result by viewModel.result.observeAsState()
+    val todoList by viewModel.todoList.collectAsStateWithLifecycle()
+    val result by viewModel.result.collectAsStateWithLifecycle()
     val refreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val pullRefreshState = rememberPullRefreshState(
         refreshing = refreshing,
@@ -132,24 +131,22 @@ private fun TodoListScreen(
             .fillMaxSize(),
     ) {
         LazyColumn {
-            todoList?.let {
-                itemsIndexed(
-                    items = it,
-                    key = { _, todo -> todo.id },
-                ) { index, todo ->
-                    TodoListItem(
-                        todo = todo,
-                        onItemClicked = {
-                            onTodoItemClicked(todo)
-                        },
-                        onTodoDone = {
-                            viewModel.completeTodo(todo)
-                        },
-                        modifier = Modifier.animateItem(),
-                    )
-                    if (index < todoList!!.lastIndex) {
-                        Divider()
-                    }
+            itemsIndexed(
+                items = todoList,
+                key = { _, todo -> todo.id },
+            ) { index, todo ->
+                TodoListItem(
+                    todo = todo,
+                    onItemClicked = {
+                        onTodoItemClicked(todo)
+                    },
+                    onTodoDone = {
+                        viewModel.completeTodo(todo)
+                    },
+                    modifier = Modifier.animateItem(),
+                )
+                if (index < todoList.lastIndex) {
+                    Divider()
                 }
             }
         }
@@ -181,7 +178,7 @@ private fun TodoListScreen(
                     CommonAlertDialog(
                         message = stringResource(id = R.string.error_message),
                         onOkClicked = {
-                            viewModel.result.value = null
+                            viewModel.clearResult()
                         },
                     )
                 },
