@@ -40,7 +40,7 @@ class TodoListViewModel @Inject constructor(
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList()
+            initialValue = emptyList(),
         )
 
     private val _result = MutableStateFlow<Result<Unit>?>(null)
