@@ -17,7 +17,6 @@ import androidx.compose.material.Checkbox
 import androidx.compose.material.CheckboxDefaults
 import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetValue
@@ -30,6 +29,7 @@ import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material.ripple
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -154,7 +154,6 @@ private fun TodoListScreen(
         FloatingActionButton(
             onClick = onTodoAddClicked,
             shape = RoundedCornerShape(8.dp),
-            backgroundColor = MaterialTheme.colors.primary,
             modifier = Modifier
                 .padding(24.dp)
                 .align(Alignment.BottomEnd),
