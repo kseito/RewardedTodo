@@ -5,12 +5,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.Button
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.ModalBottomSheetLayout
 import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.OutlinedTextField
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,7 +43,7 @@ fun TodoDetailBottomSheet(
             TodoDetailBottomSheetContent(
                 todo = todo,
                 onTodoSaveSelected = onTodoSaveSelected,
-                onTodoDeleteSelected = onTodoDeleteSelected
+                onTodoDeleteSelected = onTodoDeleteSelected,
             )
         },
     )
@@ -52,8 +52,8 @@ fun TodoDetailBottomSheet(
 @Composable
 private fun TodoDetailBottomSheetContent(
     todo: Todo?,
-    onTodoSaveSelected: (EditingTodo) -> Unit, //TODO create new Domain
-    onTodoDeleteSelected: (EditingTodo) -> Unit
+    onTodoSaveSelected: (EditingTodo) -> Unit, // TODO create new Domain
+    onTodoDeleteSelected: (EditingTodo) -> Unit,
 ) {
     var id: Long? by remember { mutableStateOf(null) }
     var title: String by remember { mutableStateOf("") }
@@ -74,7 +74,7 @@ private fun TodoDetailBottomSheetContent(
     ConstraintLayout(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp)
+            .padding(8.dp),
     ) {
         val (
             titleTextField,
@@ -82,7 +82,7 @@ private fun TodoDetailBottomSheetContent(
             ticketLabelImage,
             ticketInput,
             saveButton,
-            deleteButton
+            deleteButton,
         ) = createRefs()
 
         OutlinedTextField(
@@ -97,7 +97,7 @@ private fun TodoDetailBottomSheetContent(
                 .padding(top = 8.dp, bottom = 8.dp)
                 .constrainAs(titleTextField) {
                     top.linkTo(parent.top)
-                }
+                },
         )
         Text(
             text = stringResource(id = R.string.todo_reward),
@@ -105,7 +105,7 @@ private fun TodoDetailBottomSheetContent(
                 .padding(8.dp)
                 .constrainAs(ticketLabelText) {
                     top.linkTo(titleTextField.bottom)
-                }
+                },
         )
         Image(
             painter = painterResource(id = R.drawable.ic_ticket),
@@ -115,7 +115,7 @@ private fun TodoDetailBottomSheetContent(
                 .constrainAs(ticketLabelImage) {
                     top.linkTo(titleTextField.bottom)
                     start.linkTo(ticketLabelText.end)
-                }
+                },
         )
         NumberPicker(
             state = numberOfTicket,
@@ -125,7 +125,7 @@ private fun TodoDetailBottomSheetContent(
                 .constrainAs(ticketInput) {
                     top.linkTo(titleTextField.bottom)
                     end.linkTo(parent.end)
-                }
+                },
         )
         Button(
             onClick = {
@@ -134,14 +134,14 @@ private fun TodoDetailBottomSheetContent(
                         .copy(
                             id = id,
                             name = title,
-                            numberOfTicketsObtained = numberOfTicket.value
+                            numberOfTicketsObtained = numberOfTicket.value,
                         )
                     onTodoSaveSelected(editingTodo)
                 } ?: run {
                     val editingTodo = EditingTodo(
                         id = id,
                         name = title,
-                        numberOfTicketsObtained = numberOfTicket.value
+                        numberOfTicketsObtained = numberOfTicket.value,
                     )
                     onTodoSaveSelected(editingTodo)
                 }
@@ -150,7 +150,7 @@ private fun TodoDetailBottomSheetContent(
                 .padding(end = 8.dp)
                 .constrainAs(saveButton) {
                     top.linkTo(ticketLabelText.bottom)
-                }
+                },
         ) {
             Text(text = "Save")
         }
@@ -164,7 +164,7 @@ private fun TodoDetailBottomSheetContent(
                     .constrainAs(deleteButton) {
                         top.linkTo(ticketLabelText.bottom)
                         start.linkTo(saveButton.end)
-                    }
+                    },
             ) {
                 Text(text = "Delete")
             }
@@ -178,6 +178,6 @@ fun TodoDetailBottomSheetContentPreview() {
     TodoDetailBottomSheetContent(
         todo = null,
         onTodoSaveSelected = {},
-        onTodoDeleteSelected = {}
+        onTodoDeleteSelected = {},
     )
 }
