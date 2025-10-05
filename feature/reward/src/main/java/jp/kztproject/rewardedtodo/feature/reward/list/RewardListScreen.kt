@@ -12,28 +12,28 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ripple
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Card
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.FloatingActionButton
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.SnackbarData
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.SnackbarHost
-import androidx.compose.material.SnackbarHostState
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.rememberModalBottomSheetState
+import androidx.compose.material3.Card
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarData
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -142,7 +142,7 @@ private fun RewardListScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(MaterialTheme.colors.background),
+            .background(MaterialTheme.colorScheme.background),
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -175,7 +175,6 @@ private fun RewardListScreen(
                     viewModel.startLottery()
                 },
                 shape = RoundedCornerShape(8.dp),
-                backgroundColor = MaterialTheme.colors.primary,
                 modifier = Modifier.padding(bottom = 24.dp),
             ) {
                 Icon(Icons.Filled.Done, contentDescription = "Done")
@@ -190,7 +189,6 @@ private fun RewardListScreen(
                     }
                 }
             },
-            backgroundColor = MaterialTheme.colors.primary,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(24.dp),
@@ -261,30 +259,11 @@ private fun ErrorSnackBar(it: SnackbarData) {
             .fillMaxWidth(),
     ) {
         Text(
-            text = it.message,
+            text = it.visuals.message,
             modifier = Modifier
                 .padding(horizontal = 16.dp, vertical = 8.dp),
         )
     }
-}
-
-@Preview
-@Composable
-fun ErrorSnackBarPreview() {
-    ErrorSnackBar(
-        it = object : SnackbarData {
-            override val actionLabel: String?
-                get() = null
-            override val duration: SnackbarDuration
-                get() = SnackbarDuration.Indefinite
-            override val message: String
-                get() = "Cannot connect Internet."
-
-            override fun dismiss() {}
-
-            override fun performAction() {}
-        },
-    )
 }
 
 // Create preview ViewModel outside the composable function
@@ -345,7 +324,7 @@ private fun RewardList(rewards: List<Reward>?, onRewardItemClick: (Reward) -> Un
             itemsIndexed(it) { index, reward ->
                 RewardItem(reward, onRewardItemClick)
                 if (index < rewards.lastIndex) {
-                    Divider()
+                    HorizontalDivider()
                 }
             }
         }
@@ -394,7 +373,7 @@ private fun RewardItem(reward: Reward, onRewardItemClick: (Reward) -> Unit) {
             ) {
                 Text(
                     text = reward.name.value,
-                    style = MaterialTheme.typography.h4,
+                    style = MaterialTheme.typography.headlineMedium,
                 )
                 Text(
                     text = reward.description.value ?: "",
@@ -406,7 +385,7 @@ private fun RewardItem(reward: Reward, onRewardItemClick: (Reward) -> Unit) {
                 modifier = Modifier
                     .weight(2f)
                     .align(Alignment.CenterVertically),
-                style = MaterialTheme.typography.h5,
+                style = MaterialTheme.typography.headlineSmall,
             )
         }
     }
