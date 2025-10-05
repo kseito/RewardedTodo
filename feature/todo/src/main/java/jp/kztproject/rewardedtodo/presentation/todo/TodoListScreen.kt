@@ -13,23 +13,22 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Checkbox
-import androidx.compose.material.CheckboxDefaults
-import androidx.compose.material.Divider
 import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material.rememberModalBottomSheetState
-import androidx.compose.material.ripple
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -59,7 +58,6 @@ import jp.kztproject.rewardedtodo.domain.todo.ApiToken
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.Todo
 import jp.kztproject.rewardedtodo.feature.todo.R
-import jp.kztproject.rewardedtodo.presentation.reward.list.DarkColorScheme
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -146,7 +144,7 @@ private fun TodoListScreen(
                     modifier = Modifier.animateItem(),
                 )
                 if (index < todoList.lastIndex) {
-                    Divider()
+                    HorizontalDivider()
                 }
             }
         }
@@ -247,9 +245,6 @@ private fun TodoListItem(
                 onTodoDone.invoke(todo)
                 isDone = it
             },
-            colors = CheckboxDefaults.colors(
-                checkedColor = MaterialTheme.colors.primary,
-            ),
             modifier = Modifier.padding(end = 16.dp),
         )
         Column(
@@ -257,8 +252,8 @@ private fun TodoListItem(
         ) {
             Text(
                 text = todo.name,
-                style = MaterialTheme.typography.h5,
-                color = MaterialTheme.colors.onBackground,
+                style = MaterialTheme.typography.headlineSmall,
+                color = MaterialTheme.colorScheme.onBackground,
             )
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -272,7 +267,7 @@ private fun TodoListItem(
                 Text(
                     text = "${todo.numberOfTicketsObtained}",
                     fontSize = 20.sp,
-                    color = MaterialTheme.colors.onBackground,
+                    color = MaterialTheme.colorScheme.onBackground,
                     modifier = Modifier.padding(start = 16.dp),
                 )
             }
@@ -284,21 +279,6 @@ private fun TodoListItem(
 @Composable
 fun TodoListItemPreview() {
     Surface {
-        val todo = Todo(1, 1, "Buy ingredients for dinner", 1, false)
-        TodoListItem(
-            todo = todo,
-            onItemClicked = {},
-            onTodoDone = {},
-        )
-    }
-}
-
-@Preview
-@Composable
-fun DarkModeTodoListItemPreview() {
-    MaterialTheme(
-        colors = DarkColorScheme,
-    ) {
         val todo = Todo(1, 1, "Buy ingredients for dinner", 1, false)
         TodoListItem(
             todo = todo,
