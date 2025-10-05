@@ -1,9 +1,6 @@
 package jp.kztproject.rewardedtodo.presentation.todo
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.kztproject.rewardedtodo.application.reward.CompleteTodoUseCase
@@ -16,11 +13,13 @@ import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.Todo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,14 +32,19 @@ class TodoListViewModel @Inject constructor(
     private val getApiTokenUseCase: GetApiTokenUseCase,
 ) : ViewModel() {
 
-    val todoList: LiveData<List<Todo>> = getTodoListUseCase.execute()
-        .catch {
-            it.printStackTrace()
-            result.value = Result.failure(it)
+    val todoList: StateFlow<List<Todo>> = getTodoListUseCase.execute()
+        .catch { throwable ->
+            throwable.printStackTrace()
+            _result.update { Result.failure(throwable) }
         }
-        .asLiveData()
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList(),
+        )
 
-    val result = MutableLiveData<Result<Unit>?>()
+    private val _result = MutableStateFlow<Result<Unit>?>(null)
+    val result: StateFlow<Result<Unit>?> = _result.asStateFlow()
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
@@ -58,7 +62,7 @@ class TodoListViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                result.value = Result.failure(e)
+                _result.update { Result.failure(e) }
             }
         }
     }
@@ -74,7 +78,7 @@ class TodoListViewModel @Inject constructor(
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
-                result.value = Result.failure(e)
+                _result.update { Result.failure(e) }
             }
             _isRefreshing.update { false }
         }
@@ -83,10 +87,7 @@ class TodoListViewModel @Inject constructor(
     fun updateTodo(todo: EditingTodo) {
         viewModelScope.launch(Dispatchers.Default) {
             val newResult = updateTodoUseCase.execute(todo)
-
-            withContext(Dispatchers.Main) {
-                result.value = newResult
-            }
+            _result.update { newResult }
         }
     }
 
@@ -100,6 +101,10 @@ class TodoListViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.Default) {
             completeTodoUseCase.execute(todo)
         }
+    }
+
+    fun clearResult() {
+        _result.update { null }
     }
 
     private suspend fun checkAuthToken() {
