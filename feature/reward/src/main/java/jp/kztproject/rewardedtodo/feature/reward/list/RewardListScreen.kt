@@ -1,5 +1,3 @@
-@file:OptIn(ExperimentalMaterialApi::class)
-
 package jp.kztproject.rewardedtodo.feature.reward.list
 
 import android.widget.Toast
@@ -15,11 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetState
-import androidx.compose.material.ModalBottomSheetValue
-import androidx.compose.material.rememberModalBottomSheetState
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -30,6 +25,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.ripple
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -74,23 +70,20 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RewardListScreenWithBottomSheet(viewModel: RewardListViewModel = hiltViewModel()) {
-    val bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden)
-    val coroutineScope = rememberCoroutineScope()
+    val sheetState = rememberModalBottomSheetState()
     var selectedReward: Reward? by remember { mutableStateOf(null) }
+    var showBottomSheet by remember { mutableStateOf(false) }
+
     val onRewardItemClick: (Reward) -> Unit = { reward ->
-        coroutineScope.launch {
-            selectedReward = reward
-            bottomSheetState.show()
-        }
+        selectedReward = reward
+        showBottomSheet = true
     }
     val onAddRewardItemClick: () -> Unit = {
-        coroutineScope.launch {
-            selectedReward = null
-            bottomSheetState.show()
-        }
+        selectedReward = null
+        showBottomSheet = true
     }
     val onRewardSaveSelected: (Int?, String?, String?, String?, Boolean) -> Unit =
         { id, title, description, chanceOfWinning, repeat ->
@@ -108,28 +101,31 @@ fun RewardListScreenWithBottomSheet(viewModel: RewardListViewModel = hiltViewMod
         viewModel.deleteReward(reward)
     }
 
-    RewardDetailBottomSheet(
-        bottomSheetState = bottomSheetState,
-        onRewardSaveSelected = onRewardSaveSelected,
-        onRewardDeleteSelected = onRewardDeleteSelected,
-        reward = selectedReward,
-    ) {
+    Box {
         RewardListScreen(
             viewModel = viewModel,
-            bottomSheetState = bottomSheetState,
             onAddNewRewardClick = onAddRewardItemClick,
             onRewardItemClick = onRewardItemClick,
+            onBottomSheetHidden = { showBottomSheet = false },
+        )
+
+        RewardDetailBottomSheet(
+            showBottomSheet = showBottomSheet,
+            onDismissRequest = { showBottomSheet = false },
+            sheetState = sheetState,
+            onRewardSaveSelected = onRewardSaveSelected,
+            onRewardDeleteSelected = onRewardDeleteSelected,
+            reward = selectedReward,
         )
     }
 }
 
 @Composable
-@ExperimentalMaterialApi
 private fun RewardListScreen(
     viewModel: RewardListViewModel,
-    bottomSheetState: ModalBottomSheetState,
     onAddNewRewardClick: () -> Unit,
     onRewardItemClick: (Reward) -> Unit,
+    onBottomSheetHidden: () -> Unit,
 ) {
     val ticket by viewModel.rewardPoint.collectAsStateWithLifecycle()
     val rewards by viewModel.rewardList.collectAsStateWithLifecycle()
@@ -201,9 +197,7 @@ private fun RewardListScreen(
         result?.let {
             it.fold(
                 onSuccess = {
-                    coroutineScope.launch {
-                        bottomSheetState.hide()
-                    }
+                    onBottomSheetHidden()
                 },
                 onFailure = { error ->
                     val errorMessageId = ErrorMessageClassifier(error).messageId
@@ -300,9 +294,9 @@ private val previewViewModel = RewardListViewModel(
 fun RewardListScreenPreview() {
     RewardListScreen(
         viewModel = previewViewModel,
-        bottomSheetState = rememberModalBottomSheetState(ModalBottomSheetValue.Hidden),
         onAddNewRewardClick = {},
         onRewardItemClick = {},
+        onBottomSheetHidden = {},
     )
 }
 

@@ -5,11 +5,11 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,26 +27,28 @@ import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.Todo
 import jp.kztproject.rewardedtodo.feature.todo.R
 
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodoDetailBottomSheet(
+    showBottomSheet: Boolean,
+    onDismissRequest: () -> Unit,
+    sheetState: SheetState,
     todo: Todo?,
-    bottomSheetState: ModalBottomSheetState,
     onTodoSaveSelected: (EditingTodo) -> Unit,
     onTodoDeleteSelected: (EditingTodo) -> Unit,
-    content: @Composable () -> Unit,
 ) {
-    ModalBottomSheetLayout(
-        sheetState = bottomSheetState,
-        content = content,
-        sheetContent = {
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = onDismissRequest,
+            sheetState = sheetState,
+        ) {
             TodoDetailBottomSheetContent(
                 todo = todo,
                 onTodoSaveSelected = onTodoSaveSelected,
                 onTodoDeleteSelected = onTodoDeleteSelected,
             )
-        },
-    )
+        }
+    }
 }
 
 @Composable
