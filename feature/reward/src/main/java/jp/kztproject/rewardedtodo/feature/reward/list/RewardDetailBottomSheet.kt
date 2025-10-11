@@ -1,17 +1,15 @@
-@file:OptIn(ExperimentalMaterialApi::class)
-
 package jp.kztproject.rewardedtodo.feature.reward.list
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.ModalBottomSheetLayout
-import androidx.compose.material.ModalBottomSheetState
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -27,29 +25,30 @@ import androidx.compose.ui.unit.dp
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.presentation.reward.R
 
-@ExperimentalMaterialApi
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RewardDetailBottomSheet(
-    bottomSheetState: ModalBottomSheetState,
+    showBottomSheet: Boolean,
+    onDismissRequest: () -> Unit,
+    sheetState: SheetState,
     reward: Reward?,
     onRewardSaveSelected: (Int?, String, String, String, Boolean) -> Unit,
     onRewardDeleteSelected: (Reward) -> Unit,
-    content: @Composable () -> Unit,
 ) {
-    ModalBottomSheetLayout(
-        sheetState = bottomSheetState,
-        sheetContent = {
+    if (showBottomSheet) {
+        ModalBottomSheet(
+            onDismissRequest = onDismissRequest,
+            sheetState = sheetState,
+        ) {
             RewardDetailBottomSheetContent(
                 reward = reward,
                 onRewardSaveSelected = onRewardSaveSelected,
                 onRewardDeleteSelected = onRewardDeleteSelected,
             )
-        },
-        content = content,
-    )
+        }
+    }
 }
 
-@ExperimentalMaterialApi
 @Composable
 private fun RewardDetailBottomSheetContent(
     reward: Reward?,
