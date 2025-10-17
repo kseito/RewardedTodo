@@ -380,6 +380,7 @@ private fun RewardItem(reward: Reward, onRewardItemClick: (Reward) -> Unit) {
                     .weight(2f)
                     .align(Alignment.CenterVertically),
                 style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.End,
             )
         }
     }
