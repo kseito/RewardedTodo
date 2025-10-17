@@ -106,7 +106,7 @@ fun RewardListScreenWithBottomSheet(viewModel: RewardListViewModel = hiltViewMod
             viewModel = viewModel,
             onAddNewRewardClick = onAddRewardItemClick,
             onRewardItemClick = onRewardItemClick,
-            onBottomSheetHidden = { showBottomSheet = false },
+            onRewardSaveSucceeded = { showBottomSheet = false },
         )
 
         RewardDetailBottomSheet(
@@ -125,7 +125,7 @@ private fun RewardListScreen(
     viewModel: RewardListViewModel,
     onAddNewRewardClick: () -> Unit,
     onRewardItemClick: (Reward) -> Unit,
-    onBottomSheetHidden: () -> Unit,
+    onRewardSaveSucceeded: () -> Unit,
 ) {
     val ticket by viewModel.rewardPoint.collectAsStateWithLifecycle()
     val rewards by viewModel.rewardList.collectAsStateWithLifecycle()
@@ -197,7 +197,7 @@ private fun RewardListScreen(
         result?.let {
             it.fold(
                 onSuccess = {
-                    onBottomSheetHidden()
+                    onRewardSaveSucceeded()
                 },
                 onFailure = { error ->
                     val errorMessageId = ErrorMessageClassifier(error).messageId
@@ -296,7 +296,7 @@ fun RewardListScreenPreview() {
         viewModel = previewViewModel,
         onAddNewRewardClick = {},
         onRewardItemClick = {},
-        onBottomSheetHidden = {},
+        onRewardSaveSucceeded = {},
     )
 }
 
@@ -380,6 +380,7 @@ private fun RewardItem(reward: Reward, onRewardItemClick: (Reward) -> Unit) {
                     .weight(2f)
                     .align(Alignment.CenterVertically),
                 style = MaterialTheme.typography.headlineSmall,
+                textAlign = TextAlign.End,
             )
         }
     }
