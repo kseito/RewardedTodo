@@ -11,16 +11,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.ExperimentalMaterialApi
-import androidx.compose.material.pullrefresh.PullRefreshIndicator
-import androidx.compose.material.pullrefresh.pullRefresh
-import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -58,7 +55,7 @@ import jp.kztproject.rewardedtodo.feature.todo.R
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodoListScreenWithBottomSheet(viewModel: TodoListViewModel = hiltViewModel()) {
     val sheetState = rememberModalBottomSheetState()
@@ -102,7 +99,7 @@ fun TodoListScreenWithBottomSheet(viewModel: TodoListViewModel = hiltViewModel()
     }
 }
 
-@OptIn(ExperimentalMaterialApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TodoListScreen(
     viewModel: TodoListViewModel,
@@ -113,33 +110,34 @@ private fun TodoListScreen(
     val todoList by viewModel.todoList.collectAsStateWithLifecycle()
     val result by viewModel.result.collectAsStateWithLifecycle()
     val refreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
-    val pullRefreshState = rememberPullRefreshState(
-        refreshing = refreshing,
-        onRefresh = { viewModel.refreshTodoList() },
-    )
 
     Box(
-        modifier = Modifier
-            .pullRefresh(pullRefreshState)
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
     ) {
-        LazyColumn {
-            itemsIndexed(
-                items = todoList,
-                key = { _, todo -> todo.id },
-            ) { index, todo ->
-                TodoListItem(
-                    todo = todo,
-                    onItemClicked = {
-                        onTodoItemClicked(todo)
-                    },
-                    onTodoDone = {
-                        viewModel.completeTodo(todo)
-                    },
-                    modifier = Modifier.animateItem(),
-                )
-                if (index < todoList.lastIndex) {
-                    HorizontalDivider()
+        PullToRefreshBox(
+            isRefreshing = refreshing,
+            onRefresh = { viewModel.refreshTodoList() },
+        ) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                itemsIndexed(
+                    items = todoList,
+                    key = { _, todo -> todo.id },
+                ) { index, todo ->
+                    TodoListItem(
+                        todo = todo,
+                        onItemClicked = {
+                            onTodoItemClicked(todo)
+                        },
+                        onTodoDone = {
+                            viewModel.completeTodo(todo)
+                        },
+                        modifier = Modifier.animateItem(),
+                    )
+                    if (index < todoList.lastIndex) {
+                        HorizontalDivider()
+                    }
                 }
             }
         }
@@ -153,12 +151,6 @@ private fun TodoListScreen(
         ) {
             Icon(Icons.Rounded.Add, contentDescription = "Add")
         }
-
-        PullRefreshIndicator(
-            modifier = Modifier.align(Alignment.TopCenter),
-            refreshing = refreshing,
-            state = pullRefreshState,
-        )
 
         result?.let {
             it.fold(
