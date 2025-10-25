@@ -11,7 +11,6 @@ import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
 import jp.kztproject.rewardedtodo.application.todo.GetApiTokenUseCase
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.Todo
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -53,7 +52,7 @@ class TodoListViewModel @Inject constructor(
     val hasAuthToken = _hasAuthToken.asStateFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             checkAuthToken()
 
             try {
@@ -68,7 +67,7 @@ class TodoListViewModel @Inject constructor(
     }
 
     fun refreshTodoList() {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             _isRefreshing.update { true }
             checkAuthToken()
 
@@ -85,20 +84,20 @@ class TodoListViewModel @Inject constructor(
     }
 
     fun updateTodo(todo: EditingTodo) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             val newResult = updateTodoUseCase.execute(todo)
             _result.update { newResult }
         }
     }
 
     fun deleteTodo(todo: EditingTodo) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             deleteTodoUseCase.execute(todo.toTodo())
         }
     }
 
     fun completeTodo(todo: Todo) {
-        viewModelScope.launch(Dispatchers.Default) {
+        viewModelScope.launch {
             completeTodoUseCase.execute(todo)
         }
     }
