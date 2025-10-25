@@ -36,6 +36,11 @@ dependencies {
     kspDebug(libs.showkase.processor)
 
     testImplementation(libs.junit)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.assertj.core)
+    testImplementation(libs.mockk)
 }
 
 android {
