@@ -40,7 +40,6 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(libs.robolectric)
     testImplementation(libs.assertj.core)
-    testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.mockk)
 }
 
