@@ -43,16 +43,8 @@ class SettingViewModelTest {
 
     @Test
     fun `init loads access token and updates hasAccessToken state`() = runTest {
-        // Given
-        val testToken = ApiToken.createSafely("0123456789abcdef0123456789abcdef01234567")
-        coEvery { mockGetApiTokenUseCase.execute() } returns testToken
-
-        // When
-        viewModel = SettingViewModel(
-            mockGetApiTokenUseCase,
-            mockSaveApiTokenUseCase,
-            mockDeleteApiTokenUseCase,
-        )
+        // Given & When
+        setupViewModelWithToken()
 
         // Then
         assertThat(viewModel.hasAccessToken.value).isTrue()
@@ -63,12 +55,7 @@ class SettingViewModelTest {
     @Test
     fun `updateTokenInput updates token input and clears validation error`() = runTest {
         // Given
-        coEvery { mockGetApiTokenUseCase.execute() } returns null
-        viewModel = SettingViewModel(
-            mockGetApiTokenUseCase,
-            mockSaveApiTokenUseCase,
-            mockDeleteApiTokenUseCase,
-        )
+        setupViewModelWithNoInitialToken()
 
         // When
         viewModel.updateTokenInput("new_token")
@@ -81,12 +68,7 @@ class SettingViewModelTest {
     @Test
     fun `saveToken with blank input shows TOKEN_EMPTY error`() = runTest {
         // Given
-        coEvery { mockGetApiTokenUseCase.execute() } returns null
-        viewModel = SettingViewModel(
-            mockGetApiTokenUseCase,
-            mockSaveApiTokenUseCase,
-            mockDeleteApiTokenUseCase,
-        )
+        setupViewModelWithNoInitialToken()
         viewModel.updateTokenInput("   ")
 
         // When
@@ -129,14 +111,9 @@ class SettingViewModelTest {
     @Test
     fun `saveToken with InvalidFormat error shows INVALID_TOKEN_FORMAT error`() = runTest {
         // Given
-        coEvery { mockGetApiTokenUseCase.execute() } returns null
         coEvery { mockSaveApiTokenUseCase.execute("invalid_token") } returns
             Result.failure(TokenError.InvalidFormat)
-        viewModel = SettingViewModel(
-            mockGetApiTokenUseCase,
-            mockSaveApiTokenUseCase,
-            mockDeleteApiTokenUseCase,
-        )
+        setupViewModelWithNoInitialToken()
         viewModel.updateTokenInput("invalid_token")
 
         // When
@@ -152,14 +129,9 @@ class SettingViewModelTest {
     @Test
     fun `saveToken with EmptyToken error shows TOKEN_EMPTY error`() = runTest {
         // Given
-        coEvery { mockGetApiTokenUseCase.execute() } returns null
         coEvery { mockSaveApiTokenUseCase.execute("token") } returns
             Result.failure(TokenError.EmptyToken)
-        viewModel = SettingViewModel(
-            mockGetApiTokenUseCase,
-            mockSaveApiTokenUseCase,
-            mockDeleteApiTokenUseCase,
-        )
+        setupViewModelWithNoInitialToken()
         viewModel.updateTokenInput("token")
 
         // When
@@ -174,14 +146,9 @@ class SettingViewModelTest {
     @Test
     fun `saveToken with unknown error shows FAILED_TO_SAVE_TOKEN error`() = runTest {
         // Given
-        coEvery { mockGetApiTokenUseCase.execute() } returns null
         coEvery { mockSaveApiTokenUseCase.execute("token") } returns
             Result.failure(Exception("Unknown error"))
-        viewModel = SettingViewModel(
-            mockGetApiTokenUseCase,
-            mockSaveApiTokenUseCase,
-            mockDeleteApiTokenUseCase,
-        )
+        setupViewModelWithNoInitialToken()
         viewModel.updateTokenInput("token")
 
         // When
@@ -251,5 +218,25 @@ class SettingViewModelTest {
 
         // Then
         assertThat(viewModel.hasAccessToken.value).isFalse()
+    }
+
+    private fun setupViewModelWithNoInitialToken() {
+        coEvery { mockGetApiTokenUseCase.execute() } returns null
+        viewModel = SettingViewModel(
+            mockGetApiTokenUseCase,
+            mockSaveApiTokenUseCase,
+            mockDeleteApiTokenUseCase,
+        )
+    }
+
+    private fun setupViewModelWithToken() {
+        val testToken = "0123456789abcdef0123456789abcdef01234567"
+        val apiToken = ApiToken.createSafely(testToken)
+        coEvery { mockGetApiTokenUseCase.execute() } returns apiToken
+        viewModel = SettingViewModel(
+            mockGetApiTokenUseCase,
+            mockSaveApiTokenUseCase,
+            mockDeleteApiTokenUseCase,
+        )
     }
 }
