@@ -8,8 +8,10 @@ import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
 import jp.kztproject.rewardedtodo.data.todoist.model.Task
 import jp.kztproject.rewardedtodo.domain.todo.Todo
 import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 import javax.inject.Named
 
@@ -24,51 +26,59 @@ class TodoRepository @Inject constructor(
     }
 
     override suspend fun sync() {
-        if (!preferences.getString(EncryptedStore.TODOIST_API_TOKEN, null).isNullOrEmpty()) {
-            val latestTasks = todoistApi.fetchTasks("today|overdue")
-                .filter { !it.completed }
-            val localTasks = todoDao.findAll()
+        withContext(Dispatchers.IO) {
+            if (!preferences.getString(EncryptedStore.TODOIST_API_TOKEN, null).isNullOrEmpty()) {
+                val latestTasks = todoistApi.fetchTasks("today|overdue")
+                    .filter { !it.completed }
+                val localTasks = todoDao.findAll()
 
-            val localTaskIds = localTasks.map { it.todoistId }
-            latestTasks.forEach { task ->
-                if (localTaskIds.contains(task.id)) {
-                    // Update if both
-                    val todoEntity = todoDao.findBy(task.id)
-                        .copy(name = task.content)
-                    todoDao.insertOrUpdate(todoEntity.resetIsDone())
-                } else {
-                    // Insert if only in Todoist
-                    todoDao.insertOrUpdate(task.convert(false))
+                val localTaskIds = localTasks.map { it.todoistId }
+                latestTasks.forEach { task ->
+                    if (localTaskIds.contains(task.id)) {
+                        // Update if both
+                        val todoEntity = todoDao.findBy(task.id)
+                            .copy(name = task.content)
+                        todoDao.insertOrUpdate(todoEntity.resetIsDone())
+                    } else {
+                        // Insert if only in Todoist
+                        todoDao.insertOrUpdate(task.convert(false))
+                    }
                 }
-            }
-            localTasks.filter { entity ->
-                !latestTasks.map { it.id }.contains(entity.todoistId)
-            }.forEach {
-                if (it.isRepeat) {
-                    todoDao.completeTaskById(it.id)
-                } else {
-                    todoDao.delete(it)
+                localTasks.filter { entity ->
+                    !latestTasks.map { it.id }.contains(entity.todoistId)
+                }.forEach {
+                    if (it.isRepeat) {
+                        todoDao.completeTaskById(it.id)
+                    } else {
+                        todoDao.delete(it)
+                    }
                 }
             }
         }
     }
 
     override suspend fun update(todo: Todo) {
-        todoDao.insertOrUpdate(todo.convert())
+        withContext(Dispatchers.IO) {
+            todoDao.insertOrUpdate(todo.convert())
+        }
     }
 
     override suspend fun complete(todo: Todo) {
-        if (!todo.isRepeat) {
-            todoDao.delete(todo.convert())
-        }
-        todo.todoistId?.let {
-            todoistApi.completeTask(it)
-            todoDao.completeTaskByTodoistId(it)
+        withContext(Dispatchers.IO) {
+            if (!todo.isRepeat) {
+                todoDao.delete(todo.convert())
+            }
+            todo.todoistId?.let {
+                todoistApi.completeTask(it)
+                todoDao.completeTaskByTodoistId(it)
+            }
         }
     }
 
     override suspend fun delete(todo: Todo) {
-        todoDao.delete(todo.convert())
+        withContext(Dispatchers.IO) {
+            todoDao.delete(todo.convert())
+        }
     }
 
     private fun TodoEntity.convert(): Todo = Todo(
