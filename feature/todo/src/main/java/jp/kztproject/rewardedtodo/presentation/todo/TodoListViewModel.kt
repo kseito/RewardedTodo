@@ -92,7 +92,13 @@ class TodoListViewModel @Inject constructor(
 
     fun deleteTodo(todo: EditingTodo) {
         viewModelScope.launch {
-            deleteTodoUseCase.execute(todo.toTodo())
+            try {
+                deleteTodoUseCase.execute(todo.toTodo())
+                _result.update { Result.success(Unit) }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                _result.update { Result.failure(e) }
+            }
         }
     }
 
