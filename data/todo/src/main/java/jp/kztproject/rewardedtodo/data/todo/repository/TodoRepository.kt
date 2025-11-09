@@ -103,7 +103,7 @@ class TodoRepository @Inject constructor(
         todoistId = this.id,
         name = this.content,
         numberOfTicketsObtained = Todo.DEFAULT_NUMBER_OF_TICHKET,
-        isRepeat = this.due.recurring,
+        isRepeat = this.due?.recurring ?: false,
         isDone = isDone,
     )
 
