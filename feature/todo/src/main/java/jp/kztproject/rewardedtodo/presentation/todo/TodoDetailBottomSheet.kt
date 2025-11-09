@@ -46,6 +46,7 @@ fun TodoDetailBottomSheet(
                 todo = todo,
                 onTodoSaveSelected = onTodoSaveSelected,
                 onTodoDeleteSelected = onTodoDeleteSelected,
+                onDismissRequest = onDismissRequest,
             )
         }
     }
@@ -56,6 +57,7 @@ private fun TodoDetailBottomSheetContent(
     todo: Todo?,
     onTodoSaveSelected: (EditingTodo) -> Unit, // TODO create new Domain
     onTodoDeleteSelected: (EditingTodo) -> Unit,
+    onDismissRequest: () -> Unit,
 ) {
     var id: Long? by remember { mutableStateOf(null) }
     var title: String by remember { mutableStateOf("") }
@@ -147,6 +149,7 @@ private fun TodoDetailBottomSheetContent(
                     )
                     onTodoSaveSelected(editingTodo)
                 }
+                onDismissRequest()
             },
             modifier = Modifier
                 .padding(end = 8.dp)
@@ -161,6 +164,7 @@ private fun TodoDetailBottomSheetContent(
                 onClick = {
                     val editingTodo = EditingTodo.from(todo)
                     onTodoDeleteSelected(editingTodo)
+                    onDismissRequest()
                 },
                 modifier = Modifier
                     .constrainAs(deleteButton) {
@@ -181,5 +185,6 @@ fun TodoDetailBottomSheetContentPreview() {
         todo = null,
         onTodoSaveSelected = {},
         onTodoDeleteSelected = {},
+        onDismissRequest = {},
     )
 }
