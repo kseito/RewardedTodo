@@ -89,6 +89,42 @@ class TodoRepositoryTest {
     }
 
     @Test
+    fun takeInTasksWithNullDueFromTodoist() = runTest {
+        useTodoist(true)
+
+        val tasks = listOf(
+            Task(101, "test_content_with_due", false, Due(true)),
+            Task(102, "test_content_without_due", false, null),
+            Task(103, "test_content_with_non_recurring_due", false, Due(false)),
+        )
+        coEvery { api.fetchTasks(any()) } returns tasks
+
+        withContext(Dispatchers.IO) {
+            repository.sync()
+            val actual = repository.findAll().first()
+            assertThat(actual.size).isEqualTo(3)
+            actual[0].run {
+                assertThat(this.id).isEqualTo(1)
+                assertThat(this.todoistId).isEqualTo(101)
+                assertThat(this.name).isEqualTo("test_content_with_due")
+                assertThat(this.isRepeat).isTrue()
+            }
+            actual[1].run {
+                assertThat(this.id).isEqualTo(2)
+                assertThat(this.todoistId).isEqualTo(102)
+                assertThat(this.name).isEqualTo("test_content_without_due")
+                assertThat(this.isRepeat).isFalse()
+            }
+            actual[2].run {
+                assertThat(this.id).isEqualTo(3)
+                assertThat(this.todoistId).isEqualTo(103)
+                assertThat(this.name).isEqualTo("test_content_with_non_recurring_due")
+                assertThat(this.isRepeat).isFalse()
+            }
+        }
+    }
+
+    @Test
     fun ignoreTaskFromTodoist() = runTest {
         useTodoist(true)
 
