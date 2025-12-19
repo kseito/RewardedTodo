@@ -44,12 +44,12 @@ android {
         create("staging") {
             signingConfig = signingConfigs.getByName("staging")
             applicationIdSuffix = ".beta"
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             matchingFallbacks += listOf("debug")
         }
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
