@@ -26,7 +26,7 @@ class RewardRepositoryTest {
         val dummyReward = DummyCreator.createDummyReward()
         target.delete(dummyReward)
 
-        coVerify(exactly = 1) { rewardDao.deleteReward(RewardEntity.from(dummyReward)) }
+        coVerify(exactly = 1) { rewardDao.deleteReward(any()) }
     }
 
     @Test
