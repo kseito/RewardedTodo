@@ -3,6 +3,8 @@ package jp.kztproject.rewardedtodo.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -13,6 +15,7 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.feature.setting.SETTING_SCREEN
 import jp.kztproject.rewardedtodo.feature.setting.settingScreen
+import jp.kztproject.rewardedtodo.presentation.reward.list.RewardedTodoScheme
 
 @AndroidEntryPoint
 class HomeActivity : ComponentActivity() {
@@ -26,17 +29,21 @@ class HomeActivity : ComponentActivity() {
         }
 
         setContent {
-            val navController = rememberNavController()
-            var todoistAuthFinished by remember { mutableStateOf(false) }
-            NavHost(navController = navController, startDestination = HOME_SCREEN) {
-                homeScreen(
-                    onClickSetting = {
-                        navController.navigate(SETTING_SCREEN)
-                    },
-                )
-                settingScreen(
-                    todoistAuthFinished = todoistAuthFinished,
-                )
+            MaterialTheme(
+                colorScheme = RewardedTodoScheme(isDarkTheme = isSystemInDarkTheme())
+            ) {
+                val navController = rememberNavController()
+                var todoistAuthFinished by remember { mutableStateOf(false) }
+                NavHost(navController = navController, startDestination = HOME_SCREEN) {
+                    homeScreen(
+                        onClickSetting = {
+                            navController.navigate(SETTING_SCREEN)
+                        },
+                    )
+                    settingScreen(
+                        todoistAuthFinished = todoistAuthFinished,
+                    )
+                }
             }
         }
     }
