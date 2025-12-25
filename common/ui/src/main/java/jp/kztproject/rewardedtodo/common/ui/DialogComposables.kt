@@ -7,10 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun CommonAlertDialog(
-    message: String,
-    onOkClicked: () -> Unit,
-) {
+fun CommonAlertDialog(message: String, onOkClicked: () -> Unit) {
     AlertDialog(
         text = {
             // TODO Display a message per exception
@@ -22,7 +19,7 @@ fun CommonAlertDialog(
                 onClick = onOkClicked,
                 content = {
                     Text("OK")
-                }
+                },
             )
         },
     )
@@ -33,6 +30,6 @@ fun CommonAlertDialog(
 fun ErrorAlertDialogPreview() {
     CommonAlertDialog(
         message = "Error occurred",
-        onOkClicked = {}
+        onOkClicked = {},
     )
 }

@@ -30,7 +30,7 @@ class HomeActivity : ComponentActivity() {
 
         setContent {
             MaterialTheme(
-                colorScheme = RewardedTodoScheme(isDarkTheme = isSystemInDarkTheme())
+                colorScheme = RewardedTodoScheme(isDarkTheme = isSystemInDarkTheme()),
             ) {
                 val navController = rememberNavController()
                 var todoistAuthFinished by remember { mutableStateOf(false) }
