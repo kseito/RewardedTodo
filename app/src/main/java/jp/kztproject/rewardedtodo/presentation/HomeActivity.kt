@@ -13,9 +13,9 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import jp.kztproject.rewardedtodo.common.ui.theme.RewardedTodoScheme
 import jp.kztproject.rewardedtodo.feature.setting.SETTING_SCREEN
 import jp.kztproject.rewardedtodo.feature.setting.settingScreen
-import jp.kztproject.rewardedtodo.presentation.reward.list.RewardedTodoScheme
 
 @AndroidEntryPoint
 class HomeActivity : ComponentActivity() {
