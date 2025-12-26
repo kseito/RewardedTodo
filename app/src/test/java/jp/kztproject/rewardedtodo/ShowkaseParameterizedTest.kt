@@ -1,6 +1,5 @@
 package jp.kztproject.rewardedtodo
 
-import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import com.airbnb.android.showkase.models.Showkase
@@ -13,7 +12,6 @@ import org.robolectric.ParameterizedRobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.GraphicsMode
 
-@OptIn(ExperimentalMaterialApi::class)
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @RunWith(ParameterizedRobolectricTestRunner::class)
 @Config(sdk = [35])
