@@ -5,10 +5,10 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.draggable
 import androidx.compose.foundation.gestures.rememberDraggableState
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.Icon
-import androidx.compose.material.LocalTextStyle
-import androidx.compose.material.ProvideTextStyle
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.ProvideTextStyle
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
@@ -75,19 +75,20 @@ fun NumberPicker(
                             animationSpec = exponentialDecay(frictionMultiplier = 20f),
                             adjustTarget = { target ->
                                 val coercedTarget = target % halvedNumbersColumnHeightPx
-                                val coercedAnchors = listOf(-halvedNumbersColumnHeightPx, 0f, halvedNumbersColumnHeightPx)
+                                val coercedAnchors =
+                                    listOf(-halvedNumbersColumnHeightPx, 0f, halvedNumbersColumnHeightPx)
                                 val coercedPoint = coercedAnchors.minByOrNull { abs(it - coercedTarget) }!!
                                 val base = halvedNumbersColumnHeightPx * (target / halvedNumbersColumnHeightPx).toInt()
                                 coercedPoint + base
-                            }
+                            },
                         ).endState.value
 
                         state.value = animatedStateValue(endValue)
                         onStateChanged(state.value)
                         animatedOffset.snapTo(0f)
                     }
-                }
-            )
+                },
+            ),
     ) {
         val spacing = 4.dp
 
@@ -98,7 +99,7 @@ fun NumberPicker(
         Box(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
-                .offset { IntOffset(x = 0, y = coercedAnimatedOffset.roundToInt()) }
+                .offset { IntOffset(x = 0, y = coercedAnimatedOffset.roundToInt()) },
         ) {
             val baseLabelModifier = Modifier.align(Alignment.Center)
             ProvideTextStyle(textStyle) {
@@ -106,18 +107,18 @@ fun NumberPicker(
                     text = (animatedStateValue - 1).toString(),
                     modifier = baseLabelModifier
                         .offset(y = -halvedNumbersColumnHeight)
-                        .alpha(coercedAnimatedOffset / halvedNumbersColumnHeightPx)
+                        .alpha(coercedAnimatedOffset / halvedNumbersColumnHeightPx),
                 )
                 Label(
                     text = animatedStateValue.toString(),
                     modifier = baseLabelModifier
-                        .alpha(1 - abs(coercedAnimatedOffset) / halvedNumbersColumnHeightPx)
+                        .alpha(1 - abs(coercedAnimatedOffset) / halvedNumbersColumnHeightPx),
                 )
                 Label(
                     text = (animatedStateValue + 1).toString(),
                     modifier = baseLabelModifier
                         .offset(y = halvedNumbersColumnHeight)
-                        .alpha(-coercedAnimatedOffset / halvedNumbersColumnHeightPx)
+                        .alpha(-coercedAnimatedOffset / halvedNumbersColumnHeightPx),
                 )
             }
         }
@@ -136,7 +137,7 @@ private fun Label(text: String, modifier: Modifier) {
             detectTapGestures(onLongPress = {
                 // FIXME: Empty to disable text selection
             })
-        }
+        },
     )
 }
 
@@ -153,7 +154,7 @@ private suspend fun Animatable<Float, AnimationVector1D>.fling(
         animateTo(
             targetValue = adjustedTarget,
             initialVelocity = initialVelocity,
-            block = block
+            block = block,
         )
     } else {
         animateDecay(
@@ -171,7 +172,7 @@ fun PreviewNumberPicker() {
         NumberPicker(
             state = remember { mutableStateOf(9) },
             range = 0..10,
-            modifier = Modifier.align(Alignment.Center)
+            modifier = Modifier.align(Alignment.Center),
         )
     }
 }
