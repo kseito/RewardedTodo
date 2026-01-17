@@ -1,0 +1,37 @@
+appId: jp.kztproject.rewardedtodo.debug
+tags:
+  - android
+  - rewardedtodo
+---
+- launchApp
+
+# Navigate to Reward tab
+- tapOn:
+    text: "Reward"
+
+# Tap on FloatingActionButton to add a new reward
+- tapOn:
+    text: "Add"
+
+# Wait for bottom sheet to appear
+- assertVisible: "Reward Title"
+
+# Enter reward title
+- tapOn: "Reward Title"
+- inputText: "Test Reward from Maestro"
+
+# Enter reward description
+- tapOn: "Reward Description"
+- inputText: "This is a test reward"
+
+# Enter chance of winning
+- tapOn: "Chance of Winning.*"
+- inputText: "50"
+
+# Tap Save button
+- tapOn: "Save"
+
+# Wait for bottom sheet to close and list to update
+- extendedWaitUntil:
+    visible: "Test Reward from Maestro"
+    timeout: 5000

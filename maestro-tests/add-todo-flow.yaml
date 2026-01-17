@@ -1,0 +1,23 @@
+appId: jp.kztproject.rewardedtodo.debug
+tags:
+  - android
+  - rewardedtodo
+---
+- launchApp
+
+# Tap on FloatingActionButton to add a new task
+- tapOn:
+    text: "Add"
+
+# Wait for bottom sheet to appear
+- assertVisible: "Title"
+
+# Enter task name
+- tapOn: "Title"
+- inputText: "Test Task from Maestro"
+
+# Tap Save button
+- tapOn: "Save"
+
+# Verify the task is added to the list
+- assertVisible: "Test Task from Maestro"
