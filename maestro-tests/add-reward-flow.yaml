@@ -3,6 +3,7 @@ tags:
   - android
   - rewardedtodo
 ---
+- clearState
 - launchApp
 
 # Navigate to Reward tab
