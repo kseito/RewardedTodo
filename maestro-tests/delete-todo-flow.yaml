@@ -1,0 +1,37 @@
+appId: jp.kztproject.rewardedtodo.debug
+tags:
+  - android
+  - rewardedtodo
+---
+- clearState
+- launchApp
+
+# First, add a task to delete
+- tapOn:
+    text: "Add"
+
+# Wait for bottom sheet to appear
+- assertVisible: "Title"
+
+# Enter task name
+- tapOn: "Title"
+- inputText: "Task to Delete"
+
+# Tap Save button
+- tapOn: "Save"
+
+# Verify the task is added to the list
+- assertVisible: "Task to Delete"
+
+# Tap on the task to open bottom sheet
+- tapOn:
+    text: "Task to Delete"
+
+# Wait for bottom sheet to appear
+- assertVisible: "Title"
+
+# Tap Delete button
+- tapOn: "Delete"
+
+# Verify the task is deleted from the list
+- assertNotVisible: "Task to Delete"

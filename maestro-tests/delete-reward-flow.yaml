@@ -1,0 +1,51 @@
+appId: jp.kztproject.rewardedtodo.debug
+tags:
+  - android
+  - rewardedtodo
+---
+- clearState
+- launchApp
+
+# Navigate to Reward tab
+- tapOn:
+    text: "Reward"
+
+# First, add a reward to delete
+- tapOn:
+    text: "Add"
+
+# Wait for bottom sheet to appear
+- assertVisible: "Reward Title"
+
+# Enter reward title
+- tapOn: "Reward Title"
+- inputText: "Reward to Delete"
+
+# Enter reward description
+- tapOn: "Reward Description"
+- inputText: "This reward will be deleted"
+
+# Enter chance of winning
+- tapOn: "Chance of Winning.*"
+- inputText: "10"
+
+# Tap Save button
+- tapOn: "Save"
+
+# Wait for the reward to appear in the list
+- extendedWaitUntil:
+    visible: "Reward to Delete"
+    timeout: 5000
+
+# Tap on the reward to open bottom sheet
+- tapOn:
+    text: "Reward to Delete"
+
+# Wait for bottom sheet to appear
+- assertVisible: "Reward Title"
+
+# Tap Delete button
+- tapOn: "Delete"
+
+# Verify the reward is deleted from the list
+- assertNotVisible: "Reward to Delete"
