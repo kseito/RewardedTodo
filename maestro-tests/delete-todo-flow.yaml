@@ -3,6 +3,7 @@ tags:
   - android
   - rewardedtodo
 ---
+- clearState
 - launchApp
 
 # First, add a task to delete
