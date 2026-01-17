@@ -3,6 +3,7 @@ tags:
   - android
   - rewardedtodo
 ---
+- clearState
 - launchApp
 
 # Tap on FloatingActionButton to add a new task
