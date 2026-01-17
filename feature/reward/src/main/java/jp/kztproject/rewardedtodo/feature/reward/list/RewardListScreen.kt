@@ -92,7 +92,7 @@ fun RewardListScreenWithBottomSheet(viewModel: RewardListViewModel = hiltViewMod
                 id = id,
                 name = title,
                 description = description,
-                probability = if (chanceOfWinning.isNullOrEmpty()) null else chanceOfWinning.toFloat(),
+                probability = chanceOfWinning?.toFloatOrNull(),
                 needRepeat = repeat,
             )
             viewModel.saveReward(reward)
