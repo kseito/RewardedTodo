@@ -2,6 +2,10 @@
     <!-- Reward -->
     <string name="won_reward">You won %s</string>
     <string name="missed_reward">You missed the lottery</string>
+    <string name="batch_lottery_title">10x Lottery Results</string>
+    <string name="batch_lottery_won">Won: %d</string>
+    <string name="batch_lottery_missed">Missed: %d</string>
+    <string name="batch_lottery_button">10x</string>
 
 
     <!-- Reward Add -->
