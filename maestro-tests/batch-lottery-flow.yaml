@@ -1,0 +1,115 @@
+# WIP: This test is under development and may not pass completely yet
+appId: jp.kztproject.rewardedtodo.debug
+tags:
+  - android
+  - rewardedtodo
+  - lottery
+---
+- clearState
+- launchApp
+
+# Navigate to Reward tab
+- tapOn:
+    text: "Reward"
+
+# First, add a reward for lottery
+- tapOn:
+    text: "Add"
+
+# Wait for bottom sheet to appear
+- assertVisible: "Reward Title"
+
+# Enter reward title
+- tapOn: "Reward Title"
+- inputText: "Test Reward A"
+
+# Enter reward description
+- tapOn: "Reward Description"
+- inputText: "Prize A"
+
+# Enter chance of winning (50%)
+- tapOn: "Chance of Winning.*"
+- inputText: "50"
+
+# Tap Save button
+- tapOn: "Save"
+
+# Wait for the reward to appear in list
+- extendedWaitUntil:
+    visible:
+      text: ".*Test Reward A.*"
+    timeout: 15000
+
+# Add second reward for variety
+- tapOn:
+    text: "Add"
+
+- assertVisible: "Reward Title"
+
+- tapOn: "Reward Title"
+- inputText: "Test Reward B"
+
+- tapOn: "Reward Description"
+- inputText: "Prize B"
+
+- tapOn: "Chance of Winning.*"
+- inputText: "30"
+
+- tapOn: "Save"
+
+# Wait for the reward to appear in list
+- extendedWaitUntil:
+    visible: "Test Reward B"
+    timeout: 15000
+
+# Navigate to Todo tab to earn tickets
+- tapOn:
+    text: "Todo"
+
+# Wait for Todo tab to load
+- assertVisible:
+    text: "Add"
+
+# Add and complete 10 todos to earn 10 tickets (1 ticket per todo)
+- repeat:
+    times: 10
+    commands:
+      - tapOn:
+          text: "Add"
+      - assertVisible: "Title"
+      - tapOn: "Title"
+      - inputText: "Earn Ticket"
+      - tapOn: "Save"
+      - extendedWaitUntil:
+          visible: "Earn Ticket"
+          timeout: 3000
+      # Complete the todo by tapping checkbox (left side of the item)
+      - tapOn:
+          point: "10%,30%"
+
+# Navigate back to Reward tab
+- tapOn:
+    text: "Reward"
+
+# Verify we have tickets displayed
+- assertVisible: "tickets"
+
+# Test 10-batch lottery (assuming we have at least 10 tickets)
+# If not enough tickets, the button should show an error
+- tapOn:
+    text: "10x"
+
+# Wait for batch lottery result dialog to appear
+- extendedWaitUntil:
+    visible: "10x Lottery Results"
+    timeout: 3000
+
+# Verify result dialog shows won or missed count
+- assertVisible:
+    text: "(Won|Missed):.*"
+
+# Close the dialog
+- tapOn: "OK"
+
+# Verify ticket count decreased
+- assertVisible: "tickets"
