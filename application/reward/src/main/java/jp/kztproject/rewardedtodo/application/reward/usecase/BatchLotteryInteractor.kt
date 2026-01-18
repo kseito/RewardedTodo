@@ -23,7 +23,7 @@ class BatchLotteryInteractor @Inject constructor(private val ticketRepository: I
         var missCount = 0
 
         repeat(count) {
-            val luckyNumber = (1..Ticket.ISSUE_LIMIT).random()
+            val luckyNumber = (0 until Ticket.ISSUE_LIMIT).random()
             val ticket = lotteryBox.draw(luckyNumber)
             if (ticket is Ticket.Prize) {
                 val reward = rewards.findBy(ticket.rewardId)

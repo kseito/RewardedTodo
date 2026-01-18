@@ -8,11 +8,8 @@ import jp.kztproject.rewardedtodo.domain.reward.Ticket
 import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
 import javax.inject.Inject
 
-class LotteryInteractor @Inject constructor(
-        private val ticketRepository: ITicketRepository
-) : LotteryUseCase {
+class LotteryInteractor @Inject constructor(private val ticketRepository: ITicketRepository) : LotteryUseCase {
     override suspend fun execute(rewards: RewardCollection): Result<Reward?> {
-
         try {
             ticketRepository.consumeTicket()
         } catch (e: LackOfTicketsException) {
@@ -20,7 +17,7 @@ class LotteryInteractor @Inject constructor(
         }
 
         val lotteryBox = LotteryBoxFactory.create(rewards)
-        val luckyNumber = (1..Ticket.ISSUE_LIMIT).random()
+        val luckyNumber = (0 until Ticket.ISSUE_LIMIT).random()
         val ticket = lotteryBox.draw(luckyNumber)
         if (ticket is Ticket.Prize) {
             val reward = rewards.findBy(ticket.rewardId)
