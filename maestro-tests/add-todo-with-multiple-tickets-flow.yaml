@@ -1,0 +1,37 @@
+appId: jp.kztproject.rewardedtodo.debug
+tags:
+  - android
+  - rewardedtodo
+---
+- clearState
+- launchApp
+
+# Tap on FloatingActionButton to add a new task
+- tapOn:
+    text: "Add"
+
+# Wait for bottom sheet to appear
+- assertVisible: "Title"
+
+# Enter task name
+- tapOn: "Title"
+- inputText: "Task with Multiple Tickets"
+- hideKeyboard
+
+# Increase ticket count using NumberPicker
+# Swipe up to increase value to 10 or more
+- swipe:
+    from:
+      text: "ticket_number_picker"
+    direction: UP
+    duration: 500
+
+# Tap Save button
+- tapOn: "Save"
+
+# Verify the task is added to the list
+- assertVisible: "Task with Multiple Tickets"
+
+# Verify ticket count is 10 or more (2+ digits)
+- assertVisible:
+    text: "\\d{2,}"
