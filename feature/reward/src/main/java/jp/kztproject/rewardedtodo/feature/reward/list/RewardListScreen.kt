@@ -357,7 +357,7 @@ fun RewardListScreenPreview() {
 private fun TicketLabel(ticket: Int?, modifier: Modifier = Modifier) {
     Text(
         text = "$ticket tickets",
-        modifier = modifier,
+        modifier = modifier.semantics { contentDescription = "ticket_count" },
         textAlign = TextAlign.Center,
         fontSize = 18.sp,
         color = MaterialTheme.colorScheme.onBackground,

@@ -70,29 +70,47 @@ tags:
 - assertVisible:
     text: "Add"
 
-# Add and complete 10 todos to earn 10 tickets (1 ticket per todo)
-- repeat:
-    times: 10
-    commands:
-      - tapOn:
-          text: "Add"
-      - assertVisible: "Title"
-      - tapOn: "Title"
-      - inputText: "Earn Ticket"
-      - tapOn: "Save"
-      - extendedWaitUntil:
-          visible: "Earn Ticket"
-          timeout: 3000
-      # Complete the todo by tapping checkbox (left side of the item)
-      - tapOn:
-          point: "10%,30%"
+# Add a todo with many tickets at once using NumberPicker
+- tapOn:
+    text: "Add"
+- assertVisible: "Title"
+- tapOn: "Title"
+- inputText: "Earn Tickets"
+- hideKeyboard
+
+# Swipe NumberPicker to set 10+ tickets
+- swipe:
+    from:
+      text: "ticket_number_picker"
+    direction: UP
+    duration: 500
+
+- tapOn: "Save"
+
+# Wait for todo to appear
+- extendedWaitUntil:
+    visible: "Earn Tickets"
+    timeout: 3000
+
+# Complete the todo by tapping checkbox to earn tickets
+- tapOn:
+    text: "todo_checkbox"
+    index: 0
 
 # Navigate back to Reward tab
 - tapOn:
     text: "Reward"
 
-# Verify we have tickets displayed
-- assertVisible: "tickets"
+# Wait for tickets to be displayed
+- extendedWaitUntil:
+    visible:
+      text: ".*tickets.*"
+    timeout: 5000
+
+# Save ticket count before lottery
+- copyTextFrom:
+    text: "ticket_count"
+- evalScript: ${output.ticketsBefore = parseInt(maestro.copiedText)}
 
 # Test 10-batch lottery (assuming we have at least 10 tickets)
 # If not enough tickets, the button should show an error
@@ -111,5 +129,14 @@ tags:
 # Close the dialog
 - tapOn: "OK"
 
-# Verify ticket count decreased
-- assertVisible: "tickets"
+# Wait for ticket count to update
+- extendedWaitUntil:
+    visible:
+      text: ".*tickets.*"
+    timeout: 3000
+
+# Save ticket count after lottery and verify it decreased
+- copyTextFrom:
+    text: "ticket_count"
+- evalScript: ${output.ticketsAfter = parseInt(maestro.copiedText)}
+- assertTrue: ${output.ticketsBefore > output.ticketsAfter}
