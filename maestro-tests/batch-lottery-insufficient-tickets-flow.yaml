@@ -1,4 +1,3 @@
-# WIP: This test is under development and may not pass completely yet
 appId: jp.kztproject.rewardedtodo.debug
 tags:
   - android
@@ -45,7 +44,9 @@ tags:
     timeout: 10000
 
 # Verify we start with 0 tickets
-- assertVisible: "0 tickets"
+- extendedWaitUntil:
+    visible: "0 tickets"
+    timeout: 3000
 
 # Try to perform 10-batch lottery without enough tickets
 - tapOn:
@@ -57,4 +58,6 @@ tags:
     timeout: 3000
 
 # Verify we still have 0 tickets
-- assertVisible: "0 tickets"
+- extendedWaitUntil:
+    visible: "0 tickets"
+    timeout: 3000
