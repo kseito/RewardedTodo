@@ -59,6 +59,7 @@ import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
 import jp.kztproject.rewardedtodo.common.ui.CommonAlertDialog
 import jp.kztproject.rewardedtodo.common.ui.vibrate
 import jp.kztproject.rewardedtodo.common.ui.vibrateRichly
+import jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult
 import jp.kztproject.rewardedtodo.domain.reward.NumberOfTicket
 import jp.kztproject.rewardedtodo.domain.reward.Probability
 import jp.kztproject.rewardedtodo.domain.reward.Reward
@@ -191,7 +192,7 @@ private fun RewardListScreen(
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.semantics { contentDescription = "batch_lottery_button" },
                 ) {
-                    Text(stringResource(id = R.string.batch_lottery_button))
+                    Text(stringResource(id = R.string.batch_lottery_button, BatchLotteryResult.DEFAULT_COUNT))
                 }
             }
         }

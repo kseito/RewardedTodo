@@ -66,7 +66,7 @@ class RewardListViewModel @Inject constructor(
         mutableObtainedReward.value = null
     }
 
-    fun startBatchLottery(count: Int = 10) {
+    fun startBatchLottery(count: Int = BatchLotteryResult.DEFAULT_COUNT) {
         viewModelScope.launch {
             val rewards = RewardCollection(rewardList.value)
             mutableBatchLotteryResult.value = batchLotteryUseCase.execute(rewards, count)

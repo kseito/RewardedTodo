@@ -23,7 +23,7 @@ import jp.kztproject.rewardedtodo.presentation.reward.R
 fun BatchLotteryResultDialog(result: BatchLotteryResult, onDismiss: () -> Unit) {
     AlertDialog(
         title = {
-            Text(text = stringResource(id = R.string.batch_lottery_title))
+            Text(text = stringResource(id = R.string.batch_lottery_title, BatchLotteryResult.DEFAULT_COUNT))
         },
         text = {
             Column {
