@@ -12,6 +12,8 @@ dependencies {
     implementation(libs.datastore.preferences)
 
     testImplementation(libs.junit)
+    testImplementation(libs.truth)
+    testImplementation(libs.coroutines.test)
 
     // Dagger
     implementation(libs.hilt.android)

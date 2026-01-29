@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.kztproject.rewardedtodo.application.reward.model.error.OverMaxRewardsException
+import jp.kztproject.rewardedtodo.application.reward.usecase.BatchLotteryUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
+import jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
@@ -25,6 +27,7 @@ import javax.inject.Inject
 @HiltViewModel
 class RewardListViewModel @Inject constructor(
     private val lotteryUseCase: LotteryUseCase,
+    private val batchLotteryUseCase: BatchLotteryUseCase,
     private val getRewardsUseCase: GetRewardsUseCase,
     private val getPointUseCase: GetPointUseCase,
     private val saveRewardUseCase: SaveRewardUseCase,
@@ -44,6 +47,8 @@ class RewardListViewModel @Inject constructor(
     val result: StateFlow<Result<Unit>?> = mutableResult.asStateFlow()
     private val mutableObtainedReward = MutableStateFlow<Result<Reward?>?>(null)
     val obtainedReward = mutableObtainedReward.asStateFlow()
+    private val mutableBatchLotteryResult = MutableStateFlow<Result<BatchLotteryResult>?>(null)
+    val batchLotteryResult = mutableBatchLotteryResult.asStateFlow()
 
     init {
         loadPoint()
@@ -59,6 +64,18 @@ class RewardListViewModel @Inject constructor(
 
     fun resetObtainedReward() {
         mutableObtainedReward.value = null
+    }
+
+    fun startBatchLottery(count: Int = BatchLotteryResult.DEFAULT_COUNT) {
+        viewModelScope.launch {
+            val rewards = RewardCollection(rewardList.value)
+            mutableBatchLotteryResult.value = batchLotteryUseCase.execute(rewards, count)
+            loadPoint()
+        }
+    }
+
+    fun resetBatchLotteryResult() {
+        mutableBatchLotteryResult.value = null
     }
 
     fun validateRewards(onSuccess: () -> Unit) {

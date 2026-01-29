@@ -1,0 +1,91 @@
+appId: jp.kztproject.rewardedtodo.debug
+tags:
+  - android
+  - rewardedtodo
+  - lottery
+---
+- launchApp:
+    clearState: true
+
+# Navigate to Reward tab
+- tapOn:
+    text: "Reward"
+
+# Add a reward for lottery
+- tapOn:
+    text: "Add"
+
+# Wait for bottom sheet to appear
+- assertVisible: "Reward Title"
+
+# Enter reward title
+- tapOn: "Reward Title"
+- inputText: "Prize Item"
+
+# Enter reward description
+- tapOn: "Reward Description"
+- inputText: "Test item for lottery"
+
+# Enter chance of winning
+- tapOn: "Chance of Winning.*"
+- inputText: "40"
+
+# Tap Save button
+- tapOn: "Save"
+
+# Wait for bottom sheet to close
+- assertNotVisible:
+    text: "Reward Title"
+
+# Wait for the reward to appear
+- extendedWaitUntil:
+    visible: "Prize Item"
+    timeout: 10000
+
+# Navigate to Todo tab to earn 1 ticket
+- tapOn:
+    text: "Todo"
+
+# Wait for Todo tab to load
+- assertVisible:
+    text: "Add"
+
+# Add one todo to earn 1 ticket
+- tapOn:
+    text: "Add"
+- assertVisible: "Title"
+- tapOn: "Title"
+- inputText: "Earn Ticket"
+- tapOn: "Save"
+- extendedWaitUntil:
+    visible: "Earn Ticket"
+    timeout: 3000
+
+# Complete the todo by tapping checkbox
+- tapOn:
+    text: "todo_checkbox"
+    index: 0
+
+# Navigate back to Reward tab
+- tapOn:
+    text: "Reward"
+
+# Verify we have 1 ticket
+- assertVisible: "1 tickets"
+
+# Test single lottery
+# Tap the Done (checkmark) button for single lottery
+- tapOn:
+    text: "single_lottery_button"
+
+# Wait for lottery result dialog (won or missed)
+- extendedWaitUntil:
+    visible:
+      text: "You (won|missed).*"
+    timeout: 3000
+
+# Close the dialog
+- tapOn: "OK"
+
+# Verify ticket was consumed (should be 0 tickets now)
+- assertVisible: "0 tickets"

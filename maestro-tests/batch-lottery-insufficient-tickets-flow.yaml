@@ -1,0 +1,63 @@
+appId: jp.kztproject.rewardedtodo.debug
+tags:
+  - android
+  - rewardedtodo
+  - lottery
+  - error
+---
+- clearState
+- launchApp
+
+# Navigate to Reward tab
+- tapOn:
+    text: "Reward"
+
+# Add a reward for lottery
+- tapOn:
+    text: "Add"
+
+# Wait for bottom sheet to appear
+- assertVisible: "Reward Title"
+
+# Enter reward title
+- tapOn: "Reward Title"
+- inputText: "Test Reward"
+
+# Enter reward description
+- tapOn: "Reward Description"
+- inputText: "Test Prize"
+
+# Enter chance of winning
+- tapOn: "Chance of Winning.*"
+- inputText: "50"
+
+# Tap Save button
+- tapOn: "Save"
+
+# Wait for bottom sheet to close
+- assertNotVisible:
+    text: "Reward Title"
+
+# Wait for the reward to appear
+- extendedWaitUntil:
+    visible: "Test Reward"
+    timeout: 10000
+
+# Verify we start with 0 tickets
+- extendedWaitUntil:
+    visible: "0 tickets"
+    timeout: 3000
+
+# Try to perform 10-batch lottery without enough tickets
+- tapOn:
+    text: "10x"
+
+# Wait for error message to appear
+- extendedWaitUntil:
+    visible: "No lottery tickets"
+    timeout: 3000
+
+# Verify we still have 0 tickets
+- extendedWaitUntil:
+    visible: "0 tickets"
+    timeout: 3000
