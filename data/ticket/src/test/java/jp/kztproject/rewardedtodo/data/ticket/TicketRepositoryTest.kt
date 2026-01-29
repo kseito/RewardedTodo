@@ -79,4 +79,16 @@ class TicketRepositoryTest {
         repository.addTicket(2)
         repository.consumeTickets(5)
     }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `consumeTickets throws IllegalArgumentException when count is zero`() = testScope.runTest {
+        repository.addTicket(5)
+        repository.consumeTickets(0)
+    }
+
+    @Test(expected = IllegalArgumentException::class)
+    fun `consumeTickets throws IllegalArgumentException when count is negative`() = testScope.runTest {
+        repository.addTicket(5)
+        repository.consumeTickets(-1)
+    }
 }

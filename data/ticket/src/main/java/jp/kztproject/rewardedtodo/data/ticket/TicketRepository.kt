@@ -39,6 +39,7 @@ class TicketRepository @Inject constructor(private val datastore: DataStore<Pref
     }
 
     override suspend fun consumeTickets(count: Int) {
+        require(count > 0) { "count must be positive" }
         datastore.edit { settings ->
             val numberOfTicketKey = intPreferencesKey(NUMBER_OF_TICKET)
             val currentNumberOfTicket = settings[numberOfTicketKey] ?: 0
