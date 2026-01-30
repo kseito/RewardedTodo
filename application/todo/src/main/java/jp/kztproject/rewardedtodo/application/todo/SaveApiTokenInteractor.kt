@@ -12,7 +12,7 @@ class SaveApiTokenInteractor @Inject constructor(private val apiTokenRepository:
         val apiToken = ApiToken.create(tokenValue)
         apiTokenRepository.saveToken(apiToken)
     } catch (_: IllegalArgumentException) {
-        Result.failure(TokenError.InvalidFormat)
+        Result.failure(TokenError.InvalidFormat())
     } catch (e: Exception) {
         Result.failure(TokenError.NetworkError(e))
     }

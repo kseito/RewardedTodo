@@ -112,7 +112,7 @@ class SettingViewModelTest {
     fun `saveToken with InvalidFormat error shows INVALID_TOKEN_FORMAT error`() = runTest {
         // Given
         coEvery { mockSaveApiTokenUseCase.execute("invalid_token") } returns
-            Result.failure(TokenError.InvalidFormat)
+            Result.failure(TokenError.InvalidFormat())
         setupViewModelWithNoInitialToken()
         viewModel.updateTokenInput("invalid_token")
 
@@ -130,7 +130,7 @@ class SettingViewModelTest {
     fun `saveToken with EmptyToken error shows TOKEN_EMPTY error`() = runTest {
         // Given
         coEvery { mockSaveApiTokenUseCase.execute("token") } returns
-            Result.failure(TokenError.EmptyToken)
+            Result.failure(TokenError.EmptyToken())
         setupViewModelWithNoInitialToken()
         viewModel.updateTokenInput("token")
 
