@@ -2,6 +2,7 @@ package jp.kztproject.rewardedtodo.feature.reward
 
 import io.mockk.coEvery
 import io.mockk.mockk
+import jp.kztproject.rewardedtodo.application.reward.usecase.BatchLotteryUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
@@ -29,6 +30,8 @@ class RewardListViewModelTest {
 
     private val mockLotteryUseCase = mockk<LotteryUseCase>()
 
+    private val mockBatchLotteryUseCase = mockk<BatchLotteryUseCase>()
+
     private lateinit var viewModel: RewardListViewModel
 
     private val mockGetRewardsUseCase = mockk<GetRewardsUseCase>()
@@ -51,6 +54,7 @@ class RewardListViewModelTest {
 
         viewModel = RewardListViewModel(
             mockLotteryUseCase,
+            mockBatchLotteryUseCase,
             mockGetRewardsUseCase,
             mockGetPointUseCase,
             mockSaveRewardUseCase,

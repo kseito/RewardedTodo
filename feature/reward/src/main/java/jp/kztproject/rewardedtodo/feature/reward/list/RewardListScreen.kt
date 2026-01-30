@@ -42,12 +42,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import jp.kztproject.rewardedtodo.application.reward.usecase.BatchLotteryUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
@@ -56,6 +59,7 @@ import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
 import jp.kztproject.rewardedtodo.common.ui.CommonAlertDialog
 import jp.kztproject.rewardedtodo.common.ui.vibrate
 import jp.kztproject.rewardedtodo.common.ui.vibrateRichly
+import jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult
 import jp.kztproject.rewardedtodo.domain.reward.NumberOfTicket
 import jp.kztproject.rewardedtodo.domain.reward.Probability
 import jp.kztproject.rewardedtodo.domain.reward.Reward
@@ -131,6 +135,7 @@ private fun RewardListScreen(
     val rewards by viewModel.rewardList.collectAsStateWithLifecycle()
     val result by viewModel.result.collectAsStateWithLifecycle()
     val obtainedReward by viewModel.obtainedReward.collectAsStateWithLifecycle()
+    val batchLotteryResult by viewModel.batchLotteryResult.collectAsStateWithLifecycle()
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
@@ -166,14 +171,29 @@ private fun RewardListScreen(
                     .padding(bottom = 8.dp),
             )
 
-            FloatingActionButton(
-                onClick = {
-                    viewModel.startLottery()
-                },
-                shape = RoundedCornerShape(8.dp),
+            Row(
                 modifier = Modifier.padding(bottom = 24.dp),
+                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp),
             ) {
-                Icon(Icons.Filled.Done, contentDescription = "Done")
+                FloatingActionButton(
+                    onClick = {
+                        viewModel.startLottery()
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.semantics { contentDescription = "single_lottery_button" },
+                ) {
+                    Icon(Icons.Filled.Done, contentDescription = "Done")
+                }
+
+                FloatingActionButton(
+                    onClick = {
+                        viewModel.startBatchLottery()
+                    },
+                    shape = RoundedCornerShape(8.dp),
+                    modifier = Modifier.semantics { contentDescription = "batch_lottery_button" },
+                ) {
+                    Text(stringResource(id = R.string.batch_lottery_button, BatchLotteryResult.DEFAULT_COUNT))
+                }
             }
         }
 
@@ -243,6 +263,33 @@ private fun RewardListScreen(
             }
         }
     }
+    batchLotteryResult?.let {
+        if (it.isSuccess) {
+            val result = it.getOrNull()
+            result?.let { batchResult ->
+                context.vibrateRichly()
+
+                BatchLotteryResultDialog(
+                    result = batchResult,
+                    onDismiss = {
+                        viewModel.resetBatchLotteryResult()
+                    },
+                )
+            }
+        } else if (it.isFailure) {
+            it.exceptionOrNull()?.let { error ->
+                val errorMessageId = ErrorMessageClassifier(error).messageId
+                val errorMessage = stringResource(id = errorMessageId)
+                LaunchedEffect(error) {
+                    snackbarHostState.showSnackbar(
+                        message = errorMessage,
+                        actionLabel = null,
+                        duration = SnackbarDuration.Short,
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Composable
@@ -264,6 +311,13 @@ private fun ErrorSnackBar(it: SnackbarData) {
 private val previewViewModel = RewardListViewModel(
     object : LotteryUseCase {
         override suspend fun execute(rewards: RewardCollection): Result<Reward?> = Result.success(null)
+    },
+    object : BatchLotteryUseCase {
+        override suspend fun execute(
+            rewards: RewardCollection,
+            count: Int,
+        ): Result<jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult> =
+            Result.success(jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult(emptyList(), count))
     },
     object : GetRewardsUseCase {
         private val reward = Reward(
@@ -304,10 +358,10 @@ fun RewardListScreenPreview() {
 private fun TicketLabel(ticket: Int?, modifier: Modifier = Modifier) {
     Text(
         text = "$ticket tickets",
-        modifier = modifier,
+        modifier = modifier.semantics { contentDescription = "ticket_count" },
         textAlign = TextAlign.Center,
         fontSize = 18.sp,
-        color = Color.Black,
+        color = MaterialTheme.colorScheme.onBackground,
     )
 }
 

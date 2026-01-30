@@ -1,0 +1,141 @@
+appId: jp.kztproject.rewardedtodo.debug
+tags:
+  - android
+  - rewardedtodo
+  - lottery
+---
+- clearState
+- launchApp
+
+# Navigate to Reward tab
+- tapOn:
+    text: "Reward"
+
+# First, add a reward for lottery
+- tapOn:
+    text: "Add"
+
+# Wait for bottom sheet to appear
+- assertVisible: "Reward Title"
+
+# Enter reward title
+- tapOn: "Reward Title"
+- inputText: "Test Reward A"
+
+# Enter reward description
+- tapOn: "Reward Description"
+- inputText: "Prize A"
+
+# Enter chance of winning (50%)
+- tapOn: "Chance of Winning.*"
+- inputText: "50"
+
+# Tap Save button
+- tapOn: "Save"
+
+# Wait for the reward to appear in list
+- extendedWaitUntil:
+    visible:
+      text: ".*Test Reward A.*"
+    timeout: 15000
+
+# Add second reward for variety
+- tapOn:
+    text: "Add"
+
+- assertVisible: "Reward Title"
+
+- tapOn: "Reward Title"
+- inputText: "Test Reward B"
+
+- tapOn: "Reward Description"
+- inputText: "Prize B"
+
+- tapOn: "Chance of Winning.*"
+- inputText: "30"
+
+- tapOn: "Save"
+
+# Wait for the reward to appear in list
+- extendedWaitUntil:
+    visible: "Test Reward B"
+    timeout: 15000
+
+# Navigate to Todo tab to earn tickets
+- tapOn:
+    text: "Todo"
+
+# Wait for Todo tab to load
+- assertVisible:
+    text: "Add"
+
+# Add a todo with many tickets at once using NumberPicker
+- tapOn:
+    text: "Add"
+- assertVisible: "Title"
+- tapOn: "Title"
+- inputText: "Earn Tickets"
+- hideKeyboard
+
+# Swipe NumberPicker to set 10+ tickets
+- swipe:
+    from:
+      text: "ticket_number_picker"
+    direction: UP
+    duration: 500
+
+- tapOn: "Save"
+
+# Wait for todo to appear
+- extendedWaitUntil:
+    visible: "Earn Tickets"
+    timeout: 3000
+
+# Complete the todo by tapping checkbox to earn tickets
+- tapOn:
+    text: "todo_checkbox"
+    index: 0
+
+# Navigate back to Reward tab
+- tapOn:
+    text: "Reward"
+
+# Wait for tickets to be displayed
+- extendedWaitUntil:
+    visible:
+      text: ".*tickets.*"
+    timeout: 5000
+
+# Save ticket count before lottery
+- copyTextFrom:
+    text: "ticket_count"
+- evalScript: ${output.ticketsBefore = parseInt(maestro.copiedText)}
+
+# Test 10-batch lottery (assuming we have at least 10 tickets)
+# If not enough tickets, the button should show an error
+- tapOn:
+    text: "10x"
+
+# Wait for batch lottery result dialog to appear
+- extendedWaitUntil:
+    visible: "10x Lottery Results"
+    timeout: 3000
+
+# Verify result dialog shows won or missed count
+- assertVisible:
+    text: "(Won|Missed):.*"
+
+# Close the dialog
+- tapOn: "OK"
+
+# Wait for ticket count to update
+- extendedWaitUntil:
+    visible:
+      text: ".*tickets.*"
+    timeout: 3000
+
+# Save ticket count after lottery and verify it decreased
+- copyTextFrom:
+    text: "ticket_count"
+- evalScript: ${output.ticketsAfter = parseInt(maestro.copiedText)}
+- assertTrue: ${output.ticketsBefore > output.ticketsAfter}
