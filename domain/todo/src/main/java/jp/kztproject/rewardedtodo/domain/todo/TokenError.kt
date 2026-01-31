@@ -2,7 +2,9 @@ package jp.kztproject.rewardedtodo.domain.todo
 
 sealed class TokenError : Exception() {
 
-    class InvalidFormat : TokenError()
+    class InvalidFormat : TokenError() {
+        override val message: String = "Invalid token format"
+    }
 
     class EmptyToken : TokenError() {
         override val message: String = "Token cannot be empty"
