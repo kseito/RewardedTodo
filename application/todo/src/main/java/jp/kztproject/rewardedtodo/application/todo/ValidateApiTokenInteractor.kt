@@ -17,7 +17,7 @@ class ValidateApiTokenInteractor @Inject constructor() : ValidateApiTokenUseCase
     } catch (e: Exception) {
         when (e) {
             is TimeoutCancellationException ->
-                Result.failure(TokenError.Timeout)
+                Result.failure(TokenError.Timeout())
             else -> Result.failure(TokenError.NetworkError(e))
         }
     }

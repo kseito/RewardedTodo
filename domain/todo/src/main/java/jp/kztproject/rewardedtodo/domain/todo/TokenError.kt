@@ -2,12 +2,11 @@ package jp.kztproject.rewardedtodo.domain.todo
 
 sealed class TokenError : Exception() {
 
-    data object InvalidFormat : TokenError() {
-        private fun readResolve(): Any = InvalidFormat
+    class InvalidFormat : TokenError() {
+        override val message: String = "Invalid token format"
     }
 
-    data object EmptyToken : TokenError() {
-        private fun readResolve(): Any = EmptyToken
+    class EmptyToken : TokenError() {
         override val message: String = "Token cannot be empty"
     }
 
@@ -15,8 +14,7 @@ sealed class TokenError : Exception() {
         override val message: String = "Network error during token validation: ${cause.message}"
     }
 
-    data object Timeout : TokenError() {
-        private fun readResolve(): Any = Timeout
+    class Timeout : TokenError() {
         override val message: String = "Token validation timed out"
     }
 }
