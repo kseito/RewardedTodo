@@ -18,7 +18,7 @@ class RewardCollection(private val rewards: List<Reward>) {
         while (tickets.size < Ticket.ISSUE_LIMIT) {
             tickets.add(Ticket.Miss)
         }
-        return tickets
+        return tickets.shuffled()
     }
 
     fun findBy(id: RewardId): Reward {
