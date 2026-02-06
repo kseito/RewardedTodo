@@ -1,5 +1,7 @@
 package jp.kztproject.rewardedtodo.domain.reward
 
+import kotlin.math.roundToInt
+
 class RewardCollection(private val rewards: List<Reward>) {
 
     companion object {
@@ -10,7 +12,7 @@ class RewardCollection(private val rewards: List<Reward>) {
     fun createTickets(): List<Ticket> {
         val tickets = mutableListOf<Ticket>()
         rewards.forEach {
-            val numOfTicket = (100 * it.probability.value).toInt()
+            val numOfTicket = (100 * it.probability.value).roundToInt()
             repeat(numOfTicket) { _ -> tickets.add(Ticket.Prize(it.rewardId)) }
         }
         while (tickets.size < Ticket.ISSUE_LIMIT) {
