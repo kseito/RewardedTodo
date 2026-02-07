@@ -8,7 +8,7 @@ class RewardCollection(private val rewards: List<Reward>) {
         const val MAX = 7
     }
 
-    //TODO TicketCollectionの責務にした方が良さそう
+    // TODO TicketCollectionの責務にした方が良さそう
     fun createTickets(): List<Ticket> {
         val tickets = mutableListOf<Ticket>()
         rewards.forEach {
@@ -21,7 +21,5 @@ class RewardCollection(private val rewards: List<Reward>) {
         return tickets.shuffled()
     }
 
-    fun findBy(id: RewardId): Reward {
-        return rewards.first { it.rewardId == id }
-    }
+    fun findBy(id: RewardId): Reward = rewards.first { it.rewardId == id }
 }
