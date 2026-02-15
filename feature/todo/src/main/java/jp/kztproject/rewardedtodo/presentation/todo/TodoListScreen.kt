@@ -181,7 +181,7 @@ fun TodoListScreenPreview() {
         object : GetTodoListUseCase {
             override fun execute(): Flow<List<Todo>> = flowOf(
                 listOf(
-                    Todo(1, 1001, "英語学習", 2, true),
+                    Todo(1, "1001", "英語学習", 2, true),
                 ),
             )
         },
@@ -270,7 +270,7 @@ private fun TodoListItem(
 @Composable
 fun TodoListItemPreview() {
     Surface {
-        val todo = Todo(1, 1, "Buy ingredients for dinner", 1, false)
+        val todo = Todo(1, "1", "Buy ingredients for dinner", 1, false)
         TodoListItem(
             todo = todo,
             onItemClicked = {},

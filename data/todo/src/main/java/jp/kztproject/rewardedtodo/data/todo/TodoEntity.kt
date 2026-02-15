@@ -6,13 +6,12 @@ import androidx.room.PrimaryKey
 @Entity
 data class TodoEntity(
     @PrimaryKey(autoGenerate = true) val id: Long,
-    val todoistId: Long?,
+    val todoistId: String?,
     val name: String,
     val numberOfTicketsObtained: Int,
     val isRepeat: Boolean,
-    val isDone: Boolean
+    val isDone: Boolean,
 ) {
     companion object {
-
     }
 }
