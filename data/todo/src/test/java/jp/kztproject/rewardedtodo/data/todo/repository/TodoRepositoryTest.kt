@@ -60,11 +60,13 @@ class TodoRepositoryTest {
     fun takeInTasksFromTodoist() = runTest {
         useTodoist(true)
 
-        val tasks = Tasks(listOf(
-            Task("101", "test_content", false, Due(true)),
-            Task("102", "test_content", false, Due(true)),
-            Task("103", "test_content", false, Due(false)),
-        ))
+        val tasks = Tasks(
+            listOf(
+                Task("101", "test_content", false, Due(true)),
+                Task("102", "test_content", false, Due(true)),
+                Task("103", "test_content", false, Due(false)),
+            ),
+        )
         coEvery { api.fetchTasks(any()) } returns tasks
 
         withContext(Dispatchers.IO) {
@@ -93,11 +95,13 @@ class TodoRepositoryTest {
     fun takeInTasksWithNullDueFromTodoist() = runTest {
         useTodoist(true)
 
-        val tasks = Tasks(listOf(
-            Task("101", "test_content_with_due", false, Due(true)),
-            Task("102", "test_content_without_due", false, null),
-            Task("103", "test_content_with_non_recurring_due", false, Due(false)),
-        ))
+        val tasks = Tasks(
+            listOf(
+                Task("101", "test_content_with_due", false, Due(true)),
+                Task("102", "test_content_without_due", false, null),
+                Task("103", "test_content_with_non_recurring_due", false, Due(false)),
+            ),
+        )
         coEvery { api.fetchTasks(any()) } returns tasks
 
         withContext(Dispatchers.IO) {
@@ -161,10 +165,12 @@ class TodoRepositoryTest {
                 ),
             )
         }
-        val tasks = Tasks(listOf(
-            Task("101", "test_content1", false, Due(true)),
-            Task("102", "test_content2", false, Due(true)),
-        ))
+        val tasks = Tasks(
+            listOf(
+                Task("101", "test_content1", false, Due(true)),
+                Task("102", "test_content2", false, Due(true)),
+            ),
+        )
         coEvery { api.fetchTasks(any()) } returns tasks
 
         withContext(Dispatchers.IO) {

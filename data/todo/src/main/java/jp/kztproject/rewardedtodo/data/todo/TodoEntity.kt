@@ -10,9 +10,8 @@ data class TodoEntity(
     val name: String,
     val numberOfTicketsObtained: Int,
     val isRepeat: Boolean,
-    val isDone: Boolean
+    val isDone: Boolean,
 ) {
     companion object {
-
     }
 }

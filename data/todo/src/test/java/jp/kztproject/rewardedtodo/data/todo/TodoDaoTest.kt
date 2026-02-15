@@ -21,14 +21,14 @@ class TodoDaoTest {
     private val dummyTodoList = listOf(
         TodoEntity(1, "101", "test 1", 1, isRepeat = true, isDone = false),
         TodoEntity(2, "102", "test 2", 2, isRepeat = true, isDone = false),
-        TodoEntity(3, "103", "test 3", 1, isRepeat = true, isDone = false)
+        TodoEntity(3, "103", "test 3", 1, isRepeat = true, isDone = false),
     )
 
     @Before
     fun setUp() {
         database = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
-            AppDatabase::class.java
+            AppDatabase::class.java,
         )
             .allowMainThreadQueries()
             .build()
