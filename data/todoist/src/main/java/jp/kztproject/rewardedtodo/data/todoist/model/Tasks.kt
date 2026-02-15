@@ -1,3 +1,3 @@
 package jp.kztproject.rewardedtodo.data.todoist.model
 
-data class Tasks(val tasks: List<Task>)
+data class Tasks(val results: List<Task>)
