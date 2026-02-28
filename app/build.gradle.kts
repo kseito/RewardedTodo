@@ -1,9 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.rewardedtodo.android.application.deploygate)
     alias(libs.plugins.roborazzi)
@@ -122,7 +120,7 @@ dependencies {
 
     // Dagger
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     // Retrofit
     implementation(libs.retrofit.core)
@@ -165,9 +163,6 @@ dependencies {
     implementation(project(":domain:todo"))
 }
 
-kapt {
-    correctErrorTypes = true
-}
 
 // TODO: Move to convention plugin
 roborazzi {
