@@ -1,9 +1,7 @@
 
 plugins {
     alias(libs.plugins.rewardedtodo.android.library)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.compose.compiler)
-    alias(libs.plugins.kotlin.kapt)
     alias(libs.plugins.ksp)
 }
 
@@ -27,7 +25,7 @@ dependencies {
 
     //Dagger
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     // Showkase
     debugImplementation(libs.showkase)
