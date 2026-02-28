@@ -3,7 +3,6 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
     alias(libs.plugins.dagger.hilt)
-    alias(libs.plugins.rewardedtodo.android.application.deploygate)
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.rewardedtodo.android.library.detekt)
 }
