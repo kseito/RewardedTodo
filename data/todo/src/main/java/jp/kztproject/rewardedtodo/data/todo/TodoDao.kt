@@ -13,7 +13,7 @@ interface TodoDao {
     fun findAllAsFlow(): Flow<List<TodoEntity>>
 
     @Query("SELECT * FROM TodoEntity WHERE todoistId=:todoistId")
-    suspend fun findBy(todoistId: Long): TodoEntity
+    suspend fun findBy(todoistId: String): TodoEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertOrUpdate(todoEntity: TodoEntity)
@@ -22,7 +22,7 @@ interface TodoDao {
     suspend fun completeTaskById(id: Long)
 
     @Query("UPDATE TodoEntity SET isDone=1 WHERE todoistId=:id ")
-    suspend fun completeTaskByTodoistId(id: Long)
+    suspend fun completeTaskByTodoistId(id: String)
 
     @Delete
     suspend fun delete(todoEntity: TodoEntity)

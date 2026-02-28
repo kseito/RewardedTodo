@@ -2,7 +2,7 @@ package jp.kztproject.rewardedtodo.domain.todo
 
 data class EditingTodo(
     var id: Long? = null,
-    val todoistId: Long? = null,
+    val todoistId: String? = null,
     var name: String = "",
     private var numberOfTicketsObtained: Int = 0,
     private var isRepeat: Boolean = false,

@@ -15,6 +15,7 @@ import jp.kztproject.rewardedtodo.data.todo.TodoEntity
 import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
 import jp.kztproject.rewardedtodo.data.todoist.model.Due
 import jp.kztproject.rewardedtodo.data.todoist.model.Task
+import jp.kztproject.rewardedtodo.data.todoist.model.Tasks
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -59,10 +60,12 @@ class TodoRepositoryTest {
     fun takeInTasksFromTodoist() = runTest {
         useTodoist(true)
 
-        val tasks = listOf(
-            Task(101, "test_content", false, Due(true)),
-            Task(102, "test_content", false, Due(true)),
-            Task(103, "test_content", false, Due(false)),
+        val tasks = Tasks(
+            listOf(
+                Task("101", "test_content", false, Due(true)),
+                Task("102", "test_content", false, Due(true)),
+                Task("103", "test_content", false, Due(false)),
+            ),
         )
         coEvery { api.fetchTasks(any()) } returns tasks
 
@@ -72,17 +75,17 @@ class TodoRepositoryTest {
             assertThat(actual.size).isEqualTo(3)
             actual[0].run {
                 assertThat(this.id).isEqualTo(1)
-                assertThat(this.todoistId).isEqualTo(101)
+                assertThat(this.todoistId).isEqualTo("101")
                 assertThat(this.isRepeat).isTrue()
             }
             actual[1].run {
                 assertThat(this.id).isEqualTo(2)
-                assertThat(this.todoistId).isEqualTo(102)
+                assertThat(this.todoistId).isEqualTo("102")
                 assertThat(this.isRepeat).isTrue()
             }
             actual[2].run {
                 assertThat(this.id).isEqualTo(3)
-                assertThat(this.todoistId).isEqualTo(103)
+                assertThat(this.todoistId).isEqualTo("103")
                 assertThat(this.isRepeat).isFalse()
             }
         }
@@ -92,10 +95,12 @@ class TodoRepositoryTest {
     fun takeInTasksWithNullDueFromTodoist() = runTest {
         useTodoist(true)
 
-        val tasks = listOf(
-            Task(101, "test_content_with_due", false, Due(true)),
-            Task(102, "test_content_without_due", false, null),
-            Task(103, "test_content_with_non_recurring_due", false, Due(false)),
+        val tasks = Tasks(
+            listOf(
+                Task("101", "test_content_with_due", false, Due(true)),
+                Task("102", "test_content_without_due", false, null),
+                Task("103", "test_content_with_non_recurring_due", false, Due(false)),
+            ),
         )
         coEvery { api.fetchTasks(any()) } returns tasks
 
@@ -105,19 +110,19 @@ class TodoRepositoryTest {
             assertThat(actual.size).isEqualTo(3)
             actual[0].run {
                 assertThat(this.id).isEqualTo(1)
-                assertThat(this.todoistId).isEqualTo(101)
+                assertThat(this.todoistId).isEqualTo("101")
                 assertThat(this.name).isEqualTo("test_content_with_due")
                 assertThat(this.isRepeat).isTrue()
             }
             actual[1].run {
                 assertThat(this.id).isEqualTo(2)
-                assertThat(this.todoistId).isEqualTo(102)
+                assertThat(this.todoistId).isEqualTo("102")
                 assertThat(this.name).isEqualTo("test_content_without_due")
                 assertThat(this.isRepeat).isFalse()
             }
             actual[2].run {
                 assertThat(this.id).isEqualTo(3)
-                assertThat(this.todoistId).isEqualTo(103)
+                assertThat(this.todoistId).isEqualTo("103")
                 assertThat(this.name).isEqualTo("test_content_with_non_recurring_due")
                 assertThat(this.isRepeat).isFalse()
             }
@@ -132,7 +137,7 @@ class TodoRepositoryTest {
             dao.insertOrUpdate(
                 TodoEntity(
                     1,
-                    101,
+                    "101",
                     "test_name1",
                     1,
                     isRepeat = true,
@@ -142,7 +147,7 @@ class TodoRepositoryTest {
             dao.insertOrUpdate(
                 TodoEntity(
                     2,
-                    102,
+                    "102",
                     "test_name2",
                     1,
                     isRepeat = true,
@@ -152,7 +157,7 @@ class TodoRepositoryTest {
             dao.insertOrUpdate(
                 TodoEntity(
                     3,
-                    103,
+                    "103",
                     "test_name3",
                     1,
                     isRepeat = true,
@@ -160,9 +165,11 @@ class TodoRepositoryTest {
                 ),
             )
         }
-        val tasks = listOf(
-            Task(101, "test_content1", false, Due(true)),
-            Task(102, "test_content2", false, Due(true)),
+        val tasks = Tasks(
+            listOf(
+                Task("101", "test_content1", false, Due(true)),
+                Task("102", "test_content2", false, Due(true)),
+            ),
         )
         coEvery { api.fetchTasks(any()) } returns tasks
 
@@ -173,12 +180,12 @@ class TodoRepositoryTest {
             assertThat(actual.size).isEqualTo(2)
             actual[0].run {
                 assertThat(this.id).isEqualTo(1)
-                assertThat(this.todoistId).isEqualTo(101)
+                assertThat(this.todoistId).isEqualTo("101")
                 assertThat(this.name).isEqualTo("test_content1")
             }
             actual[1].run {
                 assertThat(this.id).isEqualTo(2)
-                assertThat(this.todoistId).isEqualTo(102)
+                assertThat(this.todoistId).isEqualTo("102")
                 assertThat(this.name).isEqualTo("test_content2")
             }
         }
