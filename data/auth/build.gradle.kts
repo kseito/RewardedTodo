@@ -1,7 +1,5 @@
 plugins {
     alias(libs.plugins.rewardedtodo.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
 }
 
 dependencies {

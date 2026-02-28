@@ -19,9 +19,6 @@ jobs:
     - name: Setup Gradle
       uses: ./.github/actions/setup-gradle
 
-    - name: Download Dependencies
-      run: ./gradlew androidDependencies
-
     - name: Run Tests
       run: ./gradlew testDebugUnitTest
 
