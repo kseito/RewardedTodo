@@ -5,13 +5,6 @@ pluginManagement {
         mavenCentral()
         maven { url = uri("https://plugins.gradle.org/m2/") }
     }
-    resolutionStrategy {
-        eachPlugin {
-            when (requested.id.id) {
-                "com.deploygate" -> useModule("com.deploygate:gradle:${requested.version}")
-            }
-        }
-    }
 }
 
 include(":common:kvs")
