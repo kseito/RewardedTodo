@@ -66,7 +66,7 @@ The project uses 34+ modules organized by domain:
 - **Architecture**: Follow strict layer separation - domain layer has no Android dependencies
 - **Code Style**: Spotless enforces Kotlin code formatting
 - **Branch Strategy**: Feature branches from main, staging deployments from `stg-release/*` branches
-- **CI/CD**: GitHub Actions for testing, screenshot comparison, and DeployGate deployments
+- **CI/CD**: GitHub Actions for testing and screenshot comparison
 
 ## Commit Guideline
 

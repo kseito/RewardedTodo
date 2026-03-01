@@ -56,5 +56,3 @@ The project is organized into the following modules:
 - Use dependency injection with Hilt
 - Keep feature modules independent and reusable
 
-## Deployment
-- Staging builds are deployed to DeployGate from `stg-release/*` branches
