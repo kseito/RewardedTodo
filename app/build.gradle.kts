@@ -21,7 +21,6 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "TODOIST_URL", "\"https://todoist.com\"")
-        buildConfigField("String", "REWARD_LIST_SERVER_URL", "\"https://rewardlist.herokuapp.com\"")
     }
 
 
