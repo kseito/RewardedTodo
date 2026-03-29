@@ -3,7 +3,6 @@ package jp.kztproject.rewardedtodo.data.ticket.network
 import jp.kztproject.rewardedtodo.data.ticket.network.model.ConsumePointRequest
 import jp.kztproject.rewardedtodo.data.ticket.network.model.PointsInfoResponse
 import jp.kztproject.rewardedtodo.data.ticket.network.model.UserMeResponse
-import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -25,5 +24,5 @@ interface RewardServerApi {
         @Path("userId") userId: String,
         @Header("Authorization") authorization: String,
         @Body request: ConsumePointRequest,
-    ): Response<PointsInfoResponse>
+    ): PointsInfoResponse
 }

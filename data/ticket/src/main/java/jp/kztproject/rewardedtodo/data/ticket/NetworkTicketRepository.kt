@@ -6,7 +6,6 @@ import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
-import java.io.IOException
 import javax.inject.Inject
 
 class NetworkTicketRepository @Inject constructor(
@@ -23,37 +22,31 @@ class NetworkTicketRepository @Inject constructor(
     }
 
     override suspend fun consumeTickets(count: Int) {
-        val token = userIdRepository.getToken()
-        val userId = userIdRepository.getUserId()
-        val response = api.consumePoints(userId, "Bearer $token", ConsumePointRequest(count))
-        if (response.code() == 401) {
-            // キャッシュ済み userId のトークンハッシュが未登録の場合、再登録してリトライ
-            userIdRepository.clearUserId()
-            val newUserId = userIdRepository.getUserId()
-            val retryResponse = api.consumePoints(newUserId, "Bearer $token", ConsumePointRequest(count))
-            when {
-                retryResponse.code() == 422 -> throw LackOfTicketsException()
-                !retryResponse.isSuccessful -> throw IOException("Server error: ${retryResponse.code()}")
-            }
-            return
-        }
-        when {
-            response.code() == 422 -> throw LackOfTicketsException()
-            !response.isSuccessful -> throw IOException("Server error: ${response.code()}")
+        withRetryOn401 { userId, token ->
+            api.consumePoints(userId, "Bearer $token", ConsumePointRequest(count))
         }
     }
 
     override suspend fun getNumberOfTicket(): Flow<Int> = flow {
+        val points = withRetryOn401 { userId, token ->
+            api.getPoints(userId, "Bearer $token")
+        }
+        emit(points.availablePoints)
+    }
+
+    private suspend fun <T> withRetryOn401(block: suspend (userId: String, token: String) -> T): T {
         val token = userIdRepository.getToken()
         val userId = userIdRepository.getUserId()
-        try {
-            val response = api.getPoints(userId, "Bearer $token")
-            emit(response.availablePoints)
+        return try {
+            block(userId, token)
         } catch (e: HttpException) {
             if (e.code() == 401) {
+                // キャッシュ済み userId のトークンハッシュが未登録の場合、再登録してリトライ
                 userIdRepository.clearUserId()
                 val newUserId = userIdRepository.getUserId()
-                emit(api.getPoints(newUserId, "Bearer $token").availablePoints)
+                block(newUserId, token)
+            } else if (e.code() == 422) {
+                throw LackOfTicketsException()
             } else {
                 throw e
             }
