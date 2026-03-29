@@ -19,6 +19,9 @@ jobs:
     - name: Setup Gradle
       uses: ./.github/actions/setup-gradle
 
+    - name: Inject secrets into local.properties
+      run: echo "reward.server.url=${{ secrets.REWARD_SERVER_URL }}" >> local.properties
+
     - name: Run Tests
       run: ./gradlew testDebugUnitTest
 

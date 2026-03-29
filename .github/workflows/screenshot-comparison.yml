@@ -27,6 +27,9 @@ jobs:
           workflow: upload_expected_image.yml
           branch: ${{ github.base_ref }}
 
+      - name: Inject secrets into local.properties
+        run: echo "reward.server.url=${{ secrets.REWARD_SERVER_URL }}" >> local.properties
+
       - name: Run screenshot tests
         run: ./gradlew compareRoborazziDebug
 

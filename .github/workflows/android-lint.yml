@@ -16,5 +16,8 @@ jobs:
       - name: Set up JDK
         uses: ./.github/actions/setup-java
 
+      - name: Inject secrets into local.properties
+        run: echo "reward.server.url=${{ secrets.REWARD_SERVER_URL }}" >> local.properties
+
       - name: Run Android Lint
         run: ./gradlew lintDebug

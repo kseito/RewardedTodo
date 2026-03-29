@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
@@ -5,6 +7,12 @@ plugins {
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.rewardedtodo.android.library.detekt)
+}
+
+val localProperties = Properties()
+val localPropertiesFile = rootProject.file("local.properties")
+if (localPropertiesFile.exists()) {
+    localProperties.load(localPropertiesFile.inputStream())
 }
 
 android {
@@ -21,7 +29,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "TODOIST_URL", "\"https://todoist.com\"")
-        buildConfigField("String", "REWARD_LIST_SERVER_URL", "\"https://rewardlist.herokuapp.com\"")
+        buildConfigField("String", "REWARD_SERVER_URL", "\"${localProperties.getProperty("reward.server.url", "")}\"")
     }
 
 
