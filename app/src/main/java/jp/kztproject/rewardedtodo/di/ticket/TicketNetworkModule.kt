@@ -25,11 +25,15 @@ class TicketNetworkModule {
             .addLast(KotlinJsonAdapterFactory())
             .build()
         val client = OkHttpClient.Builder()
-            .addInterceptor(
-                HttpLoggingInterceptor().apply {
-                    level = HttpLoggingInterceptor.Level.BODY
-                },
-            )
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    addInterceptor(
+                        HttpLoggingInterceptor().apply {
+                            level = HttpLoggingInterceptor.Level.BODY
+                        },
+                    )
+                }
+            }
             .build()
         return Retrofit.Builder()
             .baseUrl(BuildConfig.REWARD_SERVER_URL + "/")
