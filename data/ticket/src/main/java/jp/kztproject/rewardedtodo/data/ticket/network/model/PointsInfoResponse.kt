@@ -8,5 +8,5 @@ data class PointsInfoResponse(
     @Json(name = "user_id") val userId: String,
     @Json(name = "total_points") val totalPoints: Int,
     @Json(name = "available_points") val availablePoints: Int,
-    @Json(name = "task_count") val taskCount: Int
+    @Json(name = "task_count") val taskCount: Int,
 )

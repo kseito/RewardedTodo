@@ -54,7 +54,9 @@ class NetworkTicketRepository @Inject constructor(
                 userIdRepository.clearUserId()
                 val newUserId = userIdRepository.getUserId()
                 emit(api.getPoints(newUserId, "Bearer $token").availablePoints)
-            } else throw e
+            } else {
+                throw e
+            }
         }
     }
 }

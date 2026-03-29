@@ -12,20 +12,18 @@ import retrofit2.http.Path
 
 interface RewardServerApi {
     @GET("api/users/me")
-    suspend fun resolveUserId(
-        @Header("Authorization") authorization: String
-    ): UserMeResponse
+    suspend fun resolveUserId(@Header("Authorization") authorization: String): UserMeResponse
 
     @GET("api/points/{userId}")
     suspend fun getPoints(
         @Path("userId") userId: String,
-        @Header("Authorization") authorization: String
+        @Header("Authorization") authorization: String,
     ): PointsInfoResponse
 
     @POST("api/points/{userId}/consume")
     suspend fun consumePoints(
         @Path("userId") userId: String,
         @Header("Authorization") authorization: String,
-        @Body request: ConsumePointRequest
+        @Body request: ConsumePointRequest,
     ): Response<PointsInfoResponse>
 }
