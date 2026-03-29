@@ -231,7 +231,9 @@ private fun RewardListScreen(
         if (it.isSuccess) {
             val reward = it.getOrNull()
             if (reward == null) {
-                context.vibrate()
+                LaunchedEffect(it) {
+                    context.vibrate()
+                }
 
                 CommonAlertDialog(
                     message = stringResource(id = R.string.missed_reward),
@@ -240,7 +242,9 @@ private fun RewardListScreen(
                     },
                 )
             } else {
-                context.vibrateRichly()
+                LaunchedEffect(it) {
+                    context.vibrateRichly()
+                }
 
                 CommonAlertDialog(
                     message = stringResource(R.string.won_reward, reward.name.value),
@@ -267,7 +271,13 @@ private fun RewardListScreen(
         if (it.isSuccess) {
             val result = it.getOrNull()
             result?.let { batchResult ->
-                context.vibrateRichly()
+                LaunchedEffect(it) {
+                    if (batchResult.hasWon) {
+                        context.vibrateRichly()
+                    } else {
+                        context.vibrate()
+                    }
+                }
 
                 BatchLotteryResultDialog(
                     result = batchResult,
