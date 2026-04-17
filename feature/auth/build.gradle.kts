@@ -5,9 +5,6 @@ plugins {
 }
 
 android {
-    buildFeatures {
-        dataBinding = true
-    }
     namespace = "jp.kztproject.rewardedtodo.feature.auth"
 }
 

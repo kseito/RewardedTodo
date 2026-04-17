@@ -82,7 +82,6 @@ android {
     }
 
     buildFeatures {
-        dataBinding = true
         buildConfig = true
     }
     sourceSets {
