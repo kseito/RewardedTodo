@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -33,7 +34,7 @@ class TodoListViewModel @Inject constructor(
 
     val todoList: StateFlow<List<Todo>> = getTodoListUseCase.execute()
         .catch { throwable ->
-            throwable.printStackTrace()
+            Timber.e(throwable)
             _result.update { Result.failure(throwable) }
         }
         .stateIn(
@@ -60,7 +61,7 @@ class TodoListViewModel @Inject constructor(
                     fetchTodoListUseCase.execute()
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Timber.e(e)
                 _result.update { Result.failure(e) }
             }
         }
@@ -76,7 +77,7 @@ class TodoListViewModel @Inject constructor(
                     fetchTodoListUseCase.execute()
                 }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Timber.e(e)
                 _result.update { Result.failure(e) }
             }
             _isRefreshing.update { false }
@@ -96,7 +97,7 @@ class TodoListViewModel @Inject constructor(
                 deleteTodoUseCase.execute(todo.toTodo())
                 _result.update { Result.success(Unit) }
             } catch (e: Exception) {
-                e.printStackTrace()
+                Timber.e(e)
                 _result.update { Result.failure(e) }
             }
         }

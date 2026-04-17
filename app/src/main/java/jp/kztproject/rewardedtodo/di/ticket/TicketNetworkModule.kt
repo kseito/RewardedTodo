@@ -29,6 +29,8 @@ class TicketNetworkModule {
                 if (BuildConfig.DEBUG) {
                     addInterceptor(
                         HttpLoggingInterceptor().apply {
+                            redactHeader("Authorization")
+                            redactHeader("Cookie")
                             level = HttpLoggingInterceptor.Level.BODY
                         },
                     )
