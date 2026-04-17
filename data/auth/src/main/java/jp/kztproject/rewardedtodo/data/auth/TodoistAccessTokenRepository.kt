@@ -1,30 +1,33 @@
 package jp.kztproject.rewardedtodo.data.auth
 
-import android.annotation.SuppressLint
-import android.content.SharedPreferences
-import jp.kztproject.rewardedtodo.common.kvs.EncryptedStore
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import jp.kztproject.rewardedtodo.common.kvs.UserPreferencesKeys
 import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-import javax.inject.Named
 
-@SuppressLint("ApplySharedPref")
 class TodoistAccessTokenRepository @Inject constructor(
     private val api: TodoistApi,
-    @param:Named("encrypted") private val preferences: SharedPreferences,
+    private val dataStore: DataStore<Preferences>,
 ) : ITodoistAccessTokenRepository {
 
     override suspend fun refresh(clientId: String, clientToken: String, code: String) {
         val accessToken = api.fetchAccessToken(clientId, clientToken, code).accessToken
-        preferences.edit()
-            .putString(EncryptedStore.TODOIST_ACCESS_TOKEN, accessToken)
-            .commit()
+        dataStore.edit { preferences ->
+            preferences[UserPreferencesKeys.TODOIST_ACCESS_TOKEN] = accessToken
+        }
     }
 
-    override suspend fun get(): String = preferences.getString(EncryptedStore.TODOIST_ACCESS_TOKEN, "")!!
+    override suspend fun get(): String = dataStore.data
+        .map { it[UserPreferencesKeys.TODOIST_ACCESS_TOKEN].orEmpty() }
+        .first()
 
     override suspend fun clear() {
-        preferences.edit()
-            .remove(EncryptedStore.TODOIST_ACCESS_TOKEN)
-            .commit()
+        dataStore.edit { preferences ->
+            preferences.remove(UserPreferencesKeys.TODOIST_ACCESS_TOKEN)
+        }
     }
 }

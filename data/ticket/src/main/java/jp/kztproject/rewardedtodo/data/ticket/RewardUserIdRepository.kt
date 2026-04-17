@@ -1,33 +1,39 @@
 package jp.kztproject.rewardedtodo.data.ticket
 
-import android.content.SharedPreferences
-import jp.kztproject.rewardedtodo.common.kvs.EncryptedStore
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import jp.kztproject.rewardedtodo.common.kvs.UserPreferencesKeys
 import jp.kztproject.rewardedtodo.data.ticket.network.RewardServerApi
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
-import javax.inject.Named
 
 class RewardUserIdRepository @Inject constructor(
     private val api: RewardServerApi,
-    @param:Named("encrypted") private val preferences: SharedPreferences,
+    private val dataStore: DataStore<Preferences>,
 ) {
-    companion object {
-        private const val KEY_REWARD_USER_ID = "reward_user_id"
-    }
 
-    fun getToken(): String = preferences.getString(EncryptedStore.TODOIST_API_TOKEN, "")!!
+    suspend fun getToken(): String = dataStore.data
+        .map { it[UserPreferencesKeys.TODOIST_API_TOKEN].orEmpty() }
+        .first()
 
     suspend fun getUserId(): String {
-        val cached = preferences.getString(KEY_REWARD_USER_ID, null)
+        val cached = dataStore.data
+            .map { it[UserPreferencesKeys.REWARD_USER_ID] }
+            .first()
         if (cached != null) return cached
 
         val response = api.resolveUserId("Bearer ${getToken()}")
-        preferences.edit()
-            .putString(KEY_REWARD_USER_ID, response.userId)
-            .apply()
+        dataStore.edit { preferences ->
+            preferences[UserPreferencesKeys.REWARD_USER_ID] = response.userId
+        }
         return response.userId
     }
 
-    fun clearUserId() {
-        preferences.edit().remove(KEY_REWARD_USER_ID).apply()
+    suspend fun clearUserId() {
+        dataStore.edit { preferences ->
+            preferences.remove(UserPreferencesKeys.REWARD_USER_ID)
+        }
     }
 }
