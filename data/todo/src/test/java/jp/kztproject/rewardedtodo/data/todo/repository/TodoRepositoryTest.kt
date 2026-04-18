@@ -5,14 +5,9 @@ import io.mockk.mockk
 import io.mockk.unmockkAll
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.emptyPreferences
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import jp.kztproject.rewardedtodo.common.database.DatabaseInitializer
-import jp.kztproject.rewardedtodo.common.kvs.UserPreferencesKeys
 import jp.kztproject.rewardedtodo.data.todo.AppDatabase
 import jp.kztproject.rewardedtodo.data.todo.TodoDao
 import jp.kztproject.rewardedtodo.data.todo.TodoEntity
@@ -20,10 +15,10 @@ import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
 import jp.kztproject.rewardedtodo.data.todoist.model.Due
 import jp.kztproject.rewardedtodo.data.todoist.model.Task
 import jp.kztproject.rewardedtodo.data.todoist.model.Tasks
+import jp.kztproject.rewardedtodo.domain.todo.ApiToken
+import jp.kztproject.rewardedtodo.domain.todo.repository.IApiTokenRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -47,9 +42,9 @@ class TodoRepositoryTest {
     private val dao: TodoDao =
         DatabaseInitializer.init(applicationContext, AppDatabase::class.java, "todo").todoDao()
     private val api: TodoistApi = mockk()
-    private val dataStore: DataStore<Preferences> = FakePreferencesDataStore()
+    private val apiTokenRepository: IApiTokenRepository = mockk()
 
-    private val repository = TodoRepository(dao, api, dataStore)
+    private val repository = TodoRepository(dao, api, apiTokenRepository)
 
     @Before
     fun setup() {
@@ -197,19 +192,12 @@ class TodoRepositoryTest {
         }
     }
 
-    private suspend fun useTodoist(flag: Boolean) {
-        if (flag) {
-            dataStore.edit { it[UserPreferencesKeys.TODOIST_API_TOKEN] = "test_token" }
+    private fun useTodoist(flag: Boolean) {
+        val token = if (flag) {
+            ApiToken.create("0123456789abcdef0123456789abcdef01234567")
+        } else {
+            null
         }
-    }
-
-    private class FakePreferencesDataStore : DataStore<Preferences> {
-        private val state = MutableStateFlow<Preferences>(emptyPreferences())
-        override val data: Flow<Preferences> = state
-        override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences {
-            val updated = transform(state.value)
-            state.value = updated
-            return updated
-        }
+        coEvery { apiTokenRepository.getToken() } returns token
     }
 }

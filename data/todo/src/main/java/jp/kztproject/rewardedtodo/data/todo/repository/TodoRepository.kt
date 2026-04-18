@@ -1,17 +1,14 @@
 package jp.kztproject.rewardedtodo.data.todo.repository
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import jp.kztproject.rewardedtodo.common.kvs.UserPreferencesKeys
 import jp.kztproject.rewardedtodo.data.todo.TodoDao
 import jp.kztproject.rewardedtodo.data.todo.TodoEntity
 import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
 import jp.kztproject.rewardedtodo.data.todoist.model.Task
 import jp.kztproject.rewardedtodo.domain.todo.Todo
+import jp.kztproject.rewardedtodo.domain.todo.repository.IApiTokenRepository
 import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -19,7 +16,7 @@ import javax.inject.Inject
 class TodoRepository @Inject constructor(
     private val todoDao: TodoDao,
     private val todoistApi: TodoistApi,
-    private val dataStore: DataStore<Preferences>,
+    private val apiTokenRepository: IApiTokenRepository,
 ) : ITodoRepository {
 
     override fun findAll(): Flow<List<Todo>> = todoDao.findAllAsFlow().map { list ->
@@ -28,9 +25,7 @@ class TodoRepository @Inject constructor(
 
     override suspend fun sync() {
         withContext(Dispatchers.IO) {
-            val token = dataStore.data
-                .map { it[UserPreferencesKeys.TODOIST_API_TOKEN] }
-                .first()
+            val token = apiTokenRepository.getToken()?.value
             if (!token.isNullOrEmpty()) {
                 val latestTasks = todoistApi.fetchTasks("today|overdue").results
                     .filter { !it.checked }

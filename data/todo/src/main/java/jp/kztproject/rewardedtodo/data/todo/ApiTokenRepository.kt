@@ -32,10 +32,5 @@ class ApiTokenRepository @Inject constructor(private val dataStore: DataStore<Pr
         }
     }
 
-    override suspend fun hasToken(): Boolean {
-        val tokenValue = dataStore.data
-            .map { it[UserPreferencesKeys.TODOIST_API_TOKEN] }
-            .first()
-        return !tokenValue.isNullOrBlank()
-    }
+    override suspend fun hasToken(): Boolean = !getToken()?.value.isNullOrBlank()
 }

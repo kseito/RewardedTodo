@@ -1,7 +1,5 @@
 package jp.kztproject.rewardedtodo.di.auth
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -10,10 +8,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import jp.kztproject.rewardedtodo.BuildConfig
-import jp.kztproject.rewardedtodo.common.kvs.UserPreferencesKeys
 import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import jp.kztproject.rewardedtodo.domain.todo.repository.IApiTokenRepository
 import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -28,7 +24,7 @@ class TodoistApiModule {
     // TODO need to divide
     @Provides
     @Singleton
-    fun provideTodoistService(dataStore: DataStore<Preferences>): TodoistApi {
+    fun provideTodoistService(apiTokenRepository: IApiTokenRepository): TodoistApi {
         // TODO use reflection because codegen is not working.
         val moshi = Moshi.Builder()
             .addLast(KotlinJsonAdapterFactory())
@@ -48,9 +44,7 @@ class TodoistApiModule {
             }
             .addInterceptor { chain ->
                 val token = runBlocking {
-                    dataStore.data
-                        .map { it[UserPreferencesKeys.TODOIST_API_TOKEN].orEmpty() }
-                        .first()
+                    apiTokenRepository.getToken()?.value.orEmpty()
                 }
                 val request = chain.request().newBuilder()
                     .header("Authorization", "Bearer $token")
