@@ -8,6 +8,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import jp.kztproject.rewardedtodo.BuildConfig
 import jp.kztproject.rewardedtodo.common.kvs.EncryptedStore
 import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
 import okhttp3.OkHttpClient
@@ -28,11 +29,18 @@ class TodoistApiModule {
             .addLast(KotlinJsonAdapterFactory())
             .build()
 
-        val interceptor = HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
-        }
         val client = OkHttpClient.Builder()
-            .addInterceptor(interceptor)
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    addInterceptor(
+                        HttpLoggingInterceptor().apply {
+                            redactHeader("Authorization")
+                            redactHeader("Cookie")
+                            level = HttpLoggingInterceptor.Level.BODY
+                        },
+                    )
+                }
+            }
             .addInterceptor { chain ->
                 val token = preferences.getString(EncryptedStore.TODOIST_API_TOKEN, "")
                 val request = chain.request().newBuilder()

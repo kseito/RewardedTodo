@@ -6,7 +6,6 @@ plugins {
 }
 
 dependencies {
-    implementation(project(path = ":data:auth"))
     implementation(project(path = ":application:todo"))
     implementation(project(path = ":domain:todo"))
 
