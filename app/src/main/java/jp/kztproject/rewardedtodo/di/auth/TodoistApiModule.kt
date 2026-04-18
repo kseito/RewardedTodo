@@ -19,6 +19,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import javax.inject.Singleton
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -26,6 +27,7 @@ class TodoistApiModule {
 
     // TODO need to divide
     @Provides
+    @Singleton
     fun provideTodoistService(dataStore: DataStore<Preferences>): TodoistApi {
         // TODO use reflection because codegen is not working.
         val moshi = Moshi.Builder()
