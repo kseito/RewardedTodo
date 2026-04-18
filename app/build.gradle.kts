@@ -141,6 +141,8 @@ dependencies {
     implementation(libs.showkase.annotation)
     kspDebug(libs.showkase.processor)
 
+    implementation(libs.timber)
+
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
     testImplementation(libs.ui.test.junit4)
