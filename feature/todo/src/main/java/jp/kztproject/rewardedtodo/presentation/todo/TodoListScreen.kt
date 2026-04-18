@@ -159,8 +159,7 @@ private fun TodoListScreen(
                 onSuccess = {
                     onTodoUpdateSucceed()
                 },
-                onFailure = { error ->
-                    error.printStackTrace()
+                onFailure = {
                     CommonAlertDialog(
                         message = stringResource(id = R.string.error_message),
                         onOkClicked = {

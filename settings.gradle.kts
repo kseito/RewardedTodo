@@ -8,7 +8,6 @@ pluginManagement {
 }
 
 include(":common:kvs")
-include(":data:auth")
 include(":application:reward")
 include(":test:reward")
 include(":data:reward")
@@ -21,7 +20,6 @@ include(":app")
 include(":data:todoist")
 include(":common:ui")
 include(":feature:setting")
-include(":feature:auth")
 include(":feature:reward")
 include(":application:todo")
 include(":domain:todo")

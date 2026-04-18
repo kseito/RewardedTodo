@@ -7,8 +7,7 @@
 
     <application
         android:name="jp.kztproject.rewardedtodo.MyApplication"
-        android:allowBackup="true"
-        android:fullBackupContent="@xml/backup_rules"
+        android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -22,11 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- TODO: androidx.compose.ui:ui-test-manifest is not working on this repository. -->
-        <activity
-            android:name="androidx.activity.ComponentActivity"
-            android:exported="true" />
     </application>
 
 </manifest>

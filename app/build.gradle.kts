@@ -68,7 +68,6 @@ android {
                 "META-INF/LICENSE.txt",
                 "META-INF/todo_debug.kotlin_module",
                 "META-INF/reward_debug.kotlin_module",
-                "META-INF/auth_debug.kotlin_module",
                 "META-INF/metadata.kotlin_module",
                 "META-INF/metadata.jvm.kotlin_module",
                 "META-INF/kotlinx-metadata-jvm.kotlin_module",
@@ -82,7 +81,6 @@ android {
     }
 
     buildFeatures {
-        dataBinding = true
         buildConfig = true
     }
     sourceSets {
@@ -140,6 +138,8 @@ dependencies {
     implementation(libs.showkase.annotation)
     kspDebug(libs.showkase.processor)
 
+    implementation(libs.timber)
+
     testImplementation(libs.junit)
     testImplementation(libs.robolectric)
     testImplementation(libs.ui.test.junit4)
@@ -151,7 +151,6 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(project(":feature:reward"))
-    implementation(project(":feature:auth"))
     implementation(project(":common:kvs"))
 
     implementation(project(":feature:todo"))
@@ -162,7 +161,6 @@ dependencies {
     implementation(project(":common:ui"))
     implementation(project(":domain:reward"))
     implementation(project(":data:reward"))
-    implementation(project(":data:auth"))
     implementation(project(":data:todoist"))
     implementation(project(":application:reward"))
     implementation(project(":application:todo"))

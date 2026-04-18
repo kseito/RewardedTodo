@@ -6,9 +6,6 @@ plugins {
 }
 
 android {
-    buildFeatures {
-        dataBinding = true
-    }
     namespace = "jp.kztproject.rewardedtodo.feature.todo"
 
     testOptions {
@@ -57,4 +54,6 @@ dependencies {
     debugImplementation(libs.showkase)
     implementation(libs.showkase.annotation)
     kspDebug(libs.showkase.processor)
+
+    implementation(libs.timber)
 }

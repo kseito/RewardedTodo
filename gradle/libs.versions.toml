@@ -43,6 +43,7 @@ spotless_gradle_plugin = "8.4.0"
 roborazzi = "1.59.0"
 detekt = "1.23.8"
 showkase = "1.0.5"
+timber = "5.0.1"
 
 [libraries]
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose" }
@@ -97,6 +98,7 @@ roborazzi-rule = { group = "io.github.takahirom.roborazzi", name = "roborazzi-ju
 showkase = { group = "com.airbnb.android", name = "showkase", version.ref = "showkase" }
 showkase-annotation = { group = "com.airbnb.android", name = "showkase-annotation", version.ref = "showkase" }
 showkase-processor = { group = "com.airbnb.android", name = "showkase-processor", version.ref = "showkase" }
+timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 
 # Plugins
 android-gradle-plugin = { group = "com.android.tools.build", name = "gradle", version.ref = "android-gradle-plugin" }
