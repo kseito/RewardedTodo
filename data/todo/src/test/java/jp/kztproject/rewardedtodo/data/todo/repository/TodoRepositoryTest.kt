@@ -8,7 +8,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
 import com.google.common.truth.Truth.assertThat
 import jp.kztproject.rewardedtodo.common.database.DatabaseInitializer
-import jp.kztproject.rewardedtodo.common.kvs.EncryptedStore
 import jp.kztproject.rewardedtodo.data.todo.AppDatabase
 import jp.kztproject.rewardedtodo.data.todo.TodoDao
 import jp.kztproject.rewardedtodo.data.todo.TodoEntity
@@ -16,6 +15,8 @@ import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
 import jp.kztproject.rewardedtodo.data.todoist.model.Due
 import jp.kztproject.rewardedtodo.data.todoist.model.Task
 import jp.kztproject.rewardedtodo.data.todoist.model.Tasks
+import jp.kztproject.rewardedtodo.domain.todo.ApiToken
+import jp.kztproject.rewardedtodo.domain.todo.repository.IApiTokenRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -41,9 +42,9 @@ class TodoRepositoryTest {
     private val dao: TodoDao =
         DatabaseInitializer.init(applicationContext, AppDatabase::class.java, "todo").todoDao()
     private val api: TodoistApi = mockk()
-    private val preferences = applicationContext.getSharedPreferences("test", Context.MODE_PRIVATE)
+    private val apiTokenRepository: IApiTokenRepository = mockk()
 
-    private val repository = TodoRepository(dao, api, preferences)
+    private val repository = TodoRepository(dao, api, apiTokenRepository)
 
     @Before
     fun setup() {
@@ -192,8 +193,11 @@ class TodoRepositoryTest {
     }
 
     private fun useTodoist(flag: Boolean) {
-        if (flag) {
-            preferences.edit().putString(EncryptedStore.TODOIST_API_TOKEN, "test_token").apply()
+        val token = if (flag) {
+            ApiToken.create("0123456789abcdef0123456789abcdef01234567")
+        } else {
+            null
         }
+        coEvery { apiTokenRepository.getToken() } returns token
     }
 }

@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation(libs.kotlin.stdlib)
+    api(libs.datastore.preferences)
     testImplementation(libs.junit)
 }
 
