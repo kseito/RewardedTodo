@@ -57,6 +57,15 @@ The project uses 34+ modules organized by domain:
 - Screenshot testing with Roborazzi for visual regression testing
 - Test utilities in `/test/` modules (e.g., `DummyCreator` for test data)
 
+## 機能実装時の参照ドキュメント
+
+新しい機能を実装する際は、実装前に以下のドキュメントを読んでください：
+
+- `docs/domain-model.md` - ドメインモデルとビジネスルール
+- `docs/how-to-add-new-feature.md` - 機能追加の手順（レイヤー順・DI登録まで）
+- `docs/module-dependency.md` - モジュール依存関係と禁止ルール
+- `docs/di-setup.md` - Hilt DI構成とファイル配置
+
 ## Development Notes
 
 - **Dependencies**: Use version catalog (`gradle/libs.versions.toml`) for dependency management
