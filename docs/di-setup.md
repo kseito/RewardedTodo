@@ -66,9 +66,10 @@ RewardModule (@SingletonComponent) ※AggregatorModuleとは別系統
 | `TicketNetworkModule` | `RewardServerApi`（Retrofit、Moshi、OkHttp） |
 | `TodoistApiModule` | `TodoistApi`（Retrofit + Bearerトークン自動挿入） |
 
-### FragmentComponent（Fragment毎のインスタンス）
+### ActivityRetainedComponent（ViewModel毎のインスタンス）
 
-ViewModelから利用するUseCaseはFragmentComponentにする。
+`@HiltViewModel` で使うUseCaseは `ActivityRetainedComponent`（または `ViewModelComponent`）にする。
+`FragmentComponent` は `ViewModelComponent` の祖先ではないため、`@HiltViewModel` から注入できない。
 
 | モジュール | バインドするUseCase |
 |-----------|-----------------|
@@ -112,7 +113,7 @@ ViewModelから利用するUseCaseはFragmentComponentにする。
 1. `app/di/{domain}/` ディレクトリを作成
 2. リポジトリのバインドモジュールを作成（`@InstallIn(SingletonComponent::class)`）
 3. DB/APIが必要なら提供モジュールを作成（`@Provides @Singleton`）
-4. UseCase用のバインドモジュールを作成（`@InstallIn(FragmentComponent::class)`）
+4. UseCase用のバインドモジュールを作成（`@InstallIn(ActivityRetainedComponent::class)`）
 5. 集約モジュール（`XxxModule`）を作成し、上記をまとめて `includes` に列挙
 
 詳細な手順は `docs/how-to-add-new-feature.md` を参照。

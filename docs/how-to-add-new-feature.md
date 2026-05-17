@@ -56,7 +56,7 @@ class GetRewardInteractor @Inject constructor(
     private val rewardRepository: IRewardRepository
 ) : GetRewardUseCase {
     override suspend fun execute(id: RewardId): Reward? {
-        return rewardRepository.findBy(id.value)
+        return rewardRepository.findBy(id)
     }
 }
 ```
@@ -76,7 +76,7 @@ class GetRewardInteractor @Inject constructor(
 
 ```kotlin
 // RewardDetailViewModelModule.kt の例
-@InstallIn(FragmentComponent::class)
+@InstallIn(ActivityRetainedComponent::class)
 @Module
 interface RewardDetailViewModelModule {
     @Binds
@@ -93,7 +93,7 @@ interface RewardDetailViewModelModule {
 | スコープ | アノテーション | 使う場面 |
 |---------|-------------|---------|
 | アプリ全体で単一 | `@InstallIn(SingletonComponent::class)` | リポジトリ、DB、APIクライアント |
-| Fragment毎 | `@InstallIn(FragmentComponent::class)` | ViewModel経由で使うUseCase |
+| ViewModel毎 | `@InstallIn(ActivityRetainedComponent::class)` | ViewModel経由で使うUseCase（`@HiltViewModel` は `FragmentComponent` から注入不可） |
 
 **モジュールファイルが存在しない場合**
 
@@ -150,7 +150,7 @@ class RewardDetailViewModel @Inject constructor(
 ```kotlin
 // domain/reward/repository/IRewardRepository.kt
 interface IRewardRepository {
-    suspend fun findBy(id: Int): Reward?
+    suspend fun findBy(id: RewardId): Reward?
     suspend fun newMethod(): SomeType  // ← 追加
     // ...
 }
