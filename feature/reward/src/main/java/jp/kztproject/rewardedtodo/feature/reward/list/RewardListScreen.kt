@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -189,8 +190,9 @@ private fun RewardListScreen(
                 ) {
                     if (isSingleLottering) {
                         CircularProgressIndicator(
-                            modifier = Modifier.padding(8.dp),
+                            modifier = Modifier.size(24.dp),
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            strokeWidth = 2.dp,
                         )
                     } else {
                         Icon(Icons.Filled.Done, contentDescription = "Done")
@@ -206,8 +208,9 @@ private fun RewardListScreen(
                 ) {
                     if (isBatchLottering) {
                         CircularProgressIndicator(
-                            modifier = Modifier.padding(8.dp),
+                            modifier = Modifier.size(24.dp),
                             color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            strokeWidth = 2.dp,
                         )
                     } else {
                         Text(stringResource(id = R.string.batch_lottery_button, BatchLotteryResult.DEFAULT_COUNT))
