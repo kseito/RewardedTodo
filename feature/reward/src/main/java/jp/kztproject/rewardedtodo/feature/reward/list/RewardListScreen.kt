@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -136,6 +137,9 @@ private fun RewardListScreen(
     val result by viewModel.result.collectAsStateWithLifecycle()
     val obtainedReward by viewModel.obtainedReward.collectAsStateWithLifecycle()
     val batchLotteryResult by viewModel.batchLotteryResult.collectAsStateWithLifecycle()
+    val isSingleLottering by viewModel.isSingleLottering.collectAsStateWithLifecycle()
+    val isBatchLottering by viewModel.isBatchLottering.collectAsStateWithLifecycle()
+    val isLottering = isSingleLottering || isBatchLottering
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
@@ -177,22 +181,36 @@ private fun RewardListScreen(
             ) {
                 FloatingActionButton(
                     onClick = {
-                        viewModel.startLottery()
+                        if (!isLottering) viewModel.startLottery()
                     },
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.semantics { contentDescription = "single_lottery_button" },
                 ) {
-                    Icon(Icons.Filled.Done, contentDescription = "Done")
+                    if (isSingleLottering) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.padding(8.dp),
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
+                    } else {
+                        Icon(Icons.Filled.Done, contentDescription = "Done")
+                    }
                 }
 
                 FloatingActionButton(
                     onClick = {
-                        viewModel.startBatchLottery()
+                        if (!isLottering) viewModel.startBatchLottery()
                     },
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.semantics { contentDescription = "batch_lottery_button" },
                 ) {
-                    Text(stringResource(id = R.string.batch_lottery_button, BatchLotteryResult.DEFAULT_COUNT))
+                    if (isBatchLottering) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.padding(8.dp),
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                        )
+                    } else {
+                        Text(stringResource(id = R.string.batch_lottery_button, BatchLotteryResult.DEFAULT_COUNT))
+                    }
                 }
             }
         }
