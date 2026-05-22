@@ -60,8 +60,8 @@ class RewardListViewModel @Inject constructor(
 
     fun startLottery() {
         if (mutableIsSingleLottering.value || mutableIsBatchLottering.value) return
+        mutableIsSingleLottering.value = true
         viewModelScope.launch {
-            mutableIsSingleLottering.value = true
             try {
                 val rewards = RewardCollection(rewardList.value)
                 mutableObtainedReward.value = lotteryUseCase.execute(rewards)
@@ -78,8 +78,8 @@ class RewardListViewModel @Inject constructor(
 
     fun startBatchLottery(count: Int = BatchLotteryResult.DEFAULT_COUNT) {
         if (mutableIsSingleLottering.value || mutableIsBatchLottering.value) return
+        mutableIsBatchLottering.value = true
         viewModelScope.launch {
-            mutableIsBatchLottering.value = true
             try {
                 val rewards = RewardCollection(rewardList.value)
                 mutableBatchLotteryResult.value = batchLotteryUseCase.execute(rewards, count)
