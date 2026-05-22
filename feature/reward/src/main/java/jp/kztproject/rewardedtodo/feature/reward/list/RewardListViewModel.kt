@@ -49,16 +49,26 @@ class RewardListViewModel @Inject constructor(
     val obtainedReward = mutableObtainedReward.asStateFlow()
     private val mutableBatchLotteryResult = MutableStateFlow<Result<BatchLotteryResult>?>(null)
     val batchLotteryResult = mutableBatchLotteryResult.asStateFlow()
+    private val mutableIsSingleLottering = MutableStateFlow(false)
+    val isSingleLottering: StateFlow<Boolean> = mutableIsSingleLottering.asStateFlow()
+    private val mutableIsBatchLottering = MutableStateFlow(false)
+    val isBatchLottering: StateFlow<Boolean> = mutableIsBatchLottering.asStateFlow()
 
     init {
         loadPoint()
     }
 
     fun startLottery() {
+        if (mutableIsSingleLottering.value || mutableIsBatchLottering.value) return
+        mutableIsSingleLottering.value = true
         viewModelScope.launch {
-            val rewards = RewardCollection(rewardList.value)
-            mutableObtainedReward.value = lotteryUseCase.execute(rewards)
-            loadPoint()
+            try {
+                val rewards = RewardCollection(rewardList.value)
+                mutableObtainedReward.value = lotteryUseCase.execute(rewards)
+                loadPoint()
+            } finally {
+                mutableIsSingleLottering.value = false
+            }
         }
     }
 
@@ -67,10 +77,16 @@ class RewardListViewModel @Inject constructor(
     }
 
     fun startBatchLottery(count: Int = BatchLotteryResult.DEFAULT_COUNT) {
+        if (mutableIsSingleLottering.value || mutableIsBatchLottering.value) return
+        mutableIsBatchLottering.value = true
         viewModelScope.launch {
-            val rewards = RewardCollection(rewardList.value)
-            mutableBatchLotteryResult.value = batchLotteryUseCase.execute(rewards, count)
-            loadPoint()
+            try {
+                val rewards = RewardCollection(rewardList.value)
+                mutableBatchLotteryResult.value = batchLotteryUseCase.execute(rewards, count)
+                loadPoint()
+            } finally {
+                mutableIsBatchLottering.value = false
+            }
         }
     }
 

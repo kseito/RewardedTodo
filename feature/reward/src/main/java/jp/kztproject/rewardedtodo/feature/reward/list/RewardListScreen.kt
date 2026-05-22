@@ -10,10 +10,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -70,6 +72,7 @@ import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import jp.kztproject.rewardedtodo.domain.reward.RewardName
 import jp.kztproject.rewardedtodo.feature.reward.detail.ErrorMessageClassifier
 import jp.kztproject.rewardedtodo.presentation.reward.R
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -136,6 +139,9 @@ private fun RewardListScreen(
     val result by viewModel.result.collectAsStateWithLifecycle()
     val obtainedReward by viewModel.obtainedReward.collectAsStateWithLifecycle()
     val batchLotteryResult by viewModel.batchLotteryResult.collectAsStateWithLifecycle()
+    val isSingleLottering by viewModel.isSingleLottering.collectAsStateWithLifecycle()
+    val isBatchLottering by viewModel.isBatchLottering.collectAsStateWithLifecycle()
+    val isLottering = isSingleLottering || isBatchLottering
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
@@ -177,22 +183,38 @@ private fun RewardListScreen(
             ) {
                 FloatingActionButton(
                     onClick = {
-                        viewModel.startLottery()
+                        if (!isLottering) viewModel.startLottery()
                     },
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.semantics { contentDescription = "single_lottery_button" },
                 ) {
-                    Icon(Icons.Filled.Done, contentDescription = "Done")
+                    if (isSingleLottering) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            strokeWidth = 2.dp,
+                        )
+                    } else {
+                        Icon(Icons.Filled.Done, contentDescription = "Done")
+                    }
                 }
 
                 FloatingActionButton(
                     onClick = {
-                        viewModel.startBatchLottery()
+                        if (!isLottering) viewModel.startBatchLottery()
                     },
                     shape = RoundedCornerShape(8.dp),
                     modifier = Modifier.semantics { contentDescription = "batch_lottery_button" },
                 ) {
-                    Text(stringResource(id = R.string.batch_lottery_button, BatchLotteryResult.DEFAULT_COUNT))
+                    if (isBatchLottering) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
+                            strokeWidth = 2.dp,
+                        )
+                    } else {
+                        Text(stringResource(id = R.string.batch_lottery_button, BatchLotteryResult.DEFAULT_COUNT))
+                    }
                 }
             }
         }
@@ -358,6 +380,62 @@ private val previewViewModel = RewardListViewModel(
 fun RewardListScreenPreview() {
     RewardListScreen(
         viewModel = previewViewModel,
+        onAddNewRewardClick = {},
+        onRewardItemClick = {},
+        onRewardSaveSucceeded = {},
+    )
+}
+
+private fun createLotteringPreviewViewModel(): RewardListViewModel = RewardListViewModel(
+    object : LotteryUseCase {
+        override suspend fun execute(rewards: RewardCollection): Result<Reward?> = awaitCancellation()
+    },
+    object : BatchLotteryUseCase {
+        override suspend fun execute(rewards: RewardCollection, count: Int): Result<BatchLotteryResult> =
+            awaitCancellation()
+    },
+    object : GetRewardsUseCase {
+        private val reward = Reward(
+            RewardId(1),
+            RewardName("PS5"),
+            Probability(0.5f),
+            RewardDescription(""),
+            false,
+        )
+
+        override suspend fun execute(): List<Reward> = listOf(reward)
+
+        override suspend fun executeAsFlow(): Flow<List<Reward>> = flowOf(listOf(reward))
+    },
+    object : GetPointUseCase {
+        override suspend fun execute(): Flow<NumberOfTicket> = flowOf(NumberOfTicket(100))
+    },
+    object : SaveRewardUseCase {
+        override suspend fun execute(reward: RewardInput): Result<Unit> = Result.success(Unit)
+    },
+    object : DeleteRewardUseCase {
+        override suspend fun execute(reward: Reward) {}
+    },
+)
+
+@Preview
+@Composable
+fun RewardListScreenSingleLotteringPreview() {
+    val viewModel = remember { createLotteringPreviewViewModel().apply { startLottery() } }
+    RewardListScreen(
+        viewModel = viewModel,
+        onAddNewRewardClick = {},
+        onRewardItemClick = {},
+        onRewardSaveSucceeded = {},
+    )
+}
+
+@Preview
+@Composable
+fun RewardListScreenBatchLotteringPreview() {
+    val viewModel = remember { createLotteringPreviewViewModel().apply { startBatchLottery() } }
+    RewardListScreen(
+        viewModel = viewModel,
         onAddNewRewardClick = {},
         onRewardItemClick = {},
         onRewardSaveSucceeded = {},
