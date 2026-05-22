@@ -71,6 +71,7 @@ import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import jp.kztproject.rewardedtodo.domain.reward.RewardName
 import jp.kztproject.rewardedtodo.feature.reward.detail.ErrorMessageClassifier
 import jp.kztproject.rewardedtodo.presentation.reward.R
+import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -376,6 +377,62 @@ private val previewViewModel = RewardListViewModel(
 fun RewardListScreenPreview() {
     RewardListScreen(
         viewModel = previewViewModel,
+        onAddNewRewardClick = {},
+        onRewardItemClick = {},
+        onRewardSaveSucceeded = {},
+    )
+}
+
+private fun createLotteringPreviewViewModel(): RewardListViewModel = RewardListViewModel(
+    object : LotteryUseCase {
+        override suspend fun execute(rewards: RewardCollection): Result<Reward?> = awaitCancellation()
+    },
+    object : BatchLotteryUseCase {
+        override suspend fun execute(rewards: RewardCollection, count: Int): Result<BatchLotteryResult> =
+            awaitCancellation()
+    },
+    object : GetRewardsUseCase {
+        private val reward = Reward(
+            RewardId(1),
+            RewardName("PS5"),
+            Probability(0.5f),
+            RewardDescription(""),
+            false,
+        )
+
+        override suspend fun execute(): List<Reward> = listOf(reward)
+
+        override suspend fun executeAsFlow(): Flow<List<Reward>> = flowOf(listOf(reward))
+    },
+    object : GetPointUseCase {
+        override suspend fun execute(): Flow<NumberOfTicket> = flowOf(NumberOfTicket(100))
+    },
+    object : SaveRewardUseCase {
+        override suspend fun execute(reward: RewardInput): Result<Unit> = Result.success(Unit)
+    },
+    object : DeleteRewardUseCase {
+        override suspend fun execute(reward: Reward) {}
+    },
+)
+
+@Preview
+@Composable
+fun RewardListScreenSingleLotteringPreview() {
+    val viewModel = remember { createLotteringPreviewViewModel().apply { startLottery() } }
+    RewardListScreen(
+        viewModel = viewModel,
+        onAddNewRewardClick = {},
+        onRewardItemClick = {},
+        onRewardSaveSucceeded = {},
+    )
+}
+
+@Preview
+@Composable
+fun RewardListScreenBatchLotteringPreview() {
+    val viewModel = remember { createLotteringPreviewViewModel().apply { startBatchLottery() } }
+    RewardListScreen(
+        viewModel = viewModel,
         onAddNewRewardClick = {},
         onRewardItemClick = {},
         onRewardSaveSucceeded = {},
