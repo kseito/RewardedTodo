@@ -68,6 +68,11 @@ The project uses 34+ modules organized by domain:
 - **Branch Strategy**: Feature branches from main, staging deployments from `stg-release/*` branches
 - **CI/CD**: GitHub Actions for testing and screenshot comparison
 
+## 開発プロセス
+
+仕様を与えて「仕様書作成 → 実装 → 動作確認 → Draft PR作成」まで一貫して進めるには、`/feature <仕様>` スキルを使う。
+5フェーズ構成で、**仕様書レビュー後**と**PR作成前**の2箇所で承認のため停止する。仕様書は `docs/specs/`（雛形: `docs/specs/_template.md`）に作成される。
+
 ## 機能実装時の参照ドキュメント
 
 新しい機能を実装する際は、実装前に以下のドキュメントを読んでください：
