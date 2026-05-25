@@ -144,12 +144,15 @@ fun findBy(id: Int): Reward?
 - Only commit when:
     - ALL tests are passing
     - ALL compiler/linter warnings have been resolved
-    - Commit messages clearly state whether the commit contains structural or behavioral changes
-- Use [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) for commit message format. Example types:
-    - `feat:` for new features
-    - `fix:` for bug fixes
-    - `docs:` for documentation changes
-    - `refactor:` for code refactoring
-    - `test:` for adding or updating tests
-    - `chore:` for maintenance tasks
-    - See the [specification](https://www.conventionalcommits.org/en/v1.0.0/) for full details.
+- コミットメッセージは **英語の動詞プレフィックス ＋ 日本語の本文** で記述する。粒度は原則「1ファイル1コミット」とし、機能実装・DI設定・テスト・spotless適用は必ず別コミットにする。
+
+| プレフィックス | 用途 | 例 |
+|-------------|------|-----|
+| `Add` | 新規ファイル・機能の追加 | `Add 仕様書テンプレート` |
+| `Update` | 既存機能の変更・改修 | `Update RewardListViewModelに抽選通信中フラグを追加` |
+| `Remove` | コード・ファイルの削除 | `Remove 古い動画アップロード導線` |
+| `Fix` | バグ修正 | `Fix 単体テストがこける問題を修正` |
+| `Clean` | リファクタリング・整理 | `Clean spotless適用` |
+| `Rename` | 名前変更 | `Rename .java to .kt` |
+
+詳細なコミット粒度・実装順序のルールは `/implement` スキルに従う。
