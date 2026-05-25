@@ -61,7 +61,7 @@ Phase 5 PR作成    ─ push して Draft PR を作成
 `/implement` スキルのガイドラインに**厳密に**従う（細粒度コミット・プレフィックス規約）。要点:
 
 - **1ファイル1コミット**を原則とし、機能実装・DI設定・テスト・spotlessは必ず別コミットにする。
-- コミットメッセージは日本語の動詞プレフィックス（`Add` / `Update` / `Remove` / `Fix` / `Clean` / `Rename`）。
+- コミットメッセージは英語の動詞プレフィックス（`Add` / `Update` / `Remove` / `Fix` / `Clean` / `Rename`）＋日本語の本文。
 - Clean Architecture のレイヤー順（Domain → Application → Data → Feature → DI）で積む。
 
 実装の具体手順は `docs/how-to-add-new-feature.md` と `docs/di-setup.md` のチェックリストに従うこと。
@@ -101,7 +101,7 @@ Phase 5 PR作成    ─ push して Draft PR を作成
    - **承認されるまで push しない。**
 2. 承認後、ブランチを push する: `git push -u origin <branch>`
 3. Draft PR を作成する: `gh pr create --draft`
-   - タイトル: 仕様の機能名（Conventional Commits の `feat:` 等を使用）
+   - タイトル: 仕様の機能名を表す簡潔な日本語
    - 本文: 以下を含める
      - `## 概要` — 目的の要約
      - `## 仕様書` — `docs/specs/<file>.md` へのリンク
