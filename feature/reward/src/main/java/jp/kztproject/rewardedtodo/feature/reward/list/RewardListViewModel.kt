@@ -1,5 +1,6 @@
 package jp.kztproject.rewardedtodo.feature.reward.list
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -14,6 +15,7 @@ import jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -108,8 +110,15 @@ class RewardListViewModel @Inject constructor(
 
     fun loadPoint() {
         viewModelScope.launch {
-            getPointUseCase.execute().collect {
-                mutableRewardPoint.value = it.value
+            try {
+                getPointUseCase.execute().collect {
+                    mutableRewardPoint.value = it.value
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                // ネットワーク失敗時はポイント取得を諦め、初期値0のまま画面を表示する
+                Log.w("RewardListViewModel", "Failed to load reward point", e)
             }
         }
     }
