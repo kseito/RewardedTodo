@@ -1,6 +1,5 @@
 package jp.kztproject.rewardedtodo.feature.reward.list
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -117,8 +116,7 @@ class RewardListViewModel @Inject constructor(
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
-                // ネットワーク失敗時はポイント取得を諦め、初期値0のまま画面を表示する
-                Log.w("RewardListViewModel", "Failed to load reward point", e)
+                mutableResult.value = Result.failure(e)
             }
         }
     }
