@@ -14,6 +14,7 @@ import jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -108,8 +109,14 @@ class RewardListViewModel @Inject constructor(
 
     fun loadPoint() {
         viewModelScope.launch {
-            getPointUseCase.execute().collect {
-                mutableRewardPoint.value = it.value
+            try {
+                getPointUseCase.execute().collect {
+                    mutableRewardPoint.value = it.value
+                }
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                mutableResult.value = Result.failure(e)
             }
         }
     }
