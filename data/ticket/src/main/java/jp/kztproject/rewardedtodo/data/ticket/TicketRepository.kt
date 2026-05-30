@@ -20,7 +20,7 @@ import javax.inject.Inject
  * 判定は操作ごとに行う。`Flow` 取得時の判定は取得時点のスナップショットで、連携状態が
  * 途中で変わった場合は再呼び出し（画面再表示）が必要。
  */
-class TicketRepository @Inject constructor(
+class TicketRepository @Inject internal constructor(
     private val localRepository: LocalTicketRepository,
     private val networkRepository: NetworkTicketRepository,
     private val dataStore: DataStore<Preferences>,
