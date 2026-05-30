@@ -73,6 +73,10 @@ The project uses 34+ modules organized by domain:
 仕様を与えて「仕様書作成 → 実装 → 動作確認 → Draft PR作成」まで一貫して進めるには、`/feature <仕様>` スキルを使う。
 5フェーズ構成で、**仕様書レビュー後**と**PR作成前**の2箇所で承認のため停止する。仕様書は `docs/specs/`（雛形: `docs/specs/_template.md`）に作成される。
 
+## レビュー方針
+
+機械の網で防げるものは機械に任せ、人の目は機械が苦手な箇所（仕様・テストのオラクル・不可逆な変更・設計判断）だけに集中させる。詳細は `docs/review-policy.md` を参照。
+
 ## 機能実装時の参照ドキュメント
 
 新しい機能を実装する際は、実装前に以下のドキュメントを読んでください：
@@ -81,6 +85,7 @@ The project uses 34+ modules organized by domain:
 - `docs/how-to-add-new-feature.md` - 機能追加の手順（レイヤー順・DI登録まで）
 - `docs/module-dependency.md` - モジュール依存関係と禁止ルール
 - `docs/di-setup.md` - Hilt DI構成とファイル配置
+- `docs/adr/` - 設計判断の記録（Architecture Decision Records）
 
 ## Naming Conventions
 
