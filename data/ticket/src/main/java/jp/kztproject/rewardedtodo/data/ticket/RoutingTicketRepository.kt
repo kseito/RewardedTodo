@@ -37,16 +37,12 @@ class RoutingTicketRepository @Inject constructor(
         delegate().consumeTickets(count)
     }
 
-    override suspend fun getNumberOfTicket(): Flow<Int> {
-        return delegate().getNumberOfTicket()
-    }
+    override suspend fun getNumberOfTicket(): Flow<Int> = delegate().getNumberOfTicket()
 
-    private suspend fun delegate(): ITicketRepository =
-        if (isTodoistConnected()) networkRepository else localRepository
+    private suspend fun delegate(): ITicketRepository = if (isTodoistConnected()) networkRepository else localRepository
 
-    private suspend fun isTodoistConnected(): Boolean =
-        dataStore.data
-            .map { it[UserPreferencesKeys.TODOIST_API_TOKEN].orEmpty() }
-            .first()
-            .isNotBlank()
+    private suspend fun isTodoistConnected(): Boolean = dataStore.data
+        .map { it[UserPreferencesKeys.TODOIST_API_TOKEN].orEmpty() }
+        .first()
+        .isNotBlank()
 }
