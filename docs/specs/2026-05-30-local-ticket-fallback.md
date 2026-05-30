@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| ステータス | Draft |
+| ステータス | Approved |
 | 作成日 | 2026-05-30 |
 | ブランチ | feature/local-ticket-fallback |
 | 関連Issue/PR | （なし。背景となるPRは #666） |
