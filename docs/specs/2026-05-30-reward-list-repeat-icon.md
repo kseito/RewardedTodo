@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| ステータス | Approved |
+| ステータス | Implemented |
 | 作成日 | 2026-05-30 |
 | ブランチ | feature/reward-list-repeat-icon |
 | 関連Issue/PR | #719（needRepeat=false の当選時自動削除） |
