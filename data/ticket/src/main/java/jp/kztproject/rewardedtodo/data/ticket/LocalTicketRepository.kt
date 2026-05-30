@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class LocalTicketRepository @Inject constructor(private val datastore: DataStore<Preferences>) : ITicketRepository {
+internal class LocalTicketRepository @Inject constructor(private val datastore: DataStore<Preferences>) : ITicketRepository {
 
     companion object {
         private const val NUMBER_OF_TICKET = "number_of_ticket"
