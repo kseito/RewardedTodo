@@ -25,9 +25,14 @@ class LotteryInteractor @Inject constructor(
         val ticket = lotteryBox.draw(luckyNumber)
         if (ticket is Ticket.Prize) {
             val reward = rewards.findBy(ticket.rewardId)
-            // 繰り返し取得不可の報酬は当選で消費されるため削除する
+            // 繰り返し取得不可の報酬は当選で消費されるため削除する。
+            // 削除失敗時はResult.failureにしてUI側で扱えるようにする（executeはResult契約のため）。
             if (!reward.needRepeat) {
-                rewardRepository.delete(reward)
+                try {
+                    rewardRepository.delete(reward)
+                } catch (e: Exception) {
+                    return Result.failure(e)
+                }
             }
             return Result.success(reward)
         }
