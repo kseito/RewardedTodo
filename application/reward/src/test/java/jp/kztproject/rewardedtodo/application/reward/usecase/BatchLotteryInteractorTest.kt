@@ -107,6 +107,26 @@ class BatchLotteryInteractorTest {
     }
 
     @Test
+    fun `returns failure when delete fails for non-repeat reward`() = runTest {
+        coEvery { mockTicketRepository.consumeTickets(any()) } returns Unit
+        val deleteError = RuntimeException("delete failed")
+        coEvery { mockRewardRepository.delete(any()) } throws deleteError
+
+        val reward = Reward(
+            RewardId(1),
+            RewardName("reward1"),
+            Probability(100F),
+            RewardDescription(null),
+            false,
+        )
+        val rewards = RewardCollection(listOf(reward))
+        val result = interactor.execute(rewards, 3)
+
+        assertThat(result.isFailure).isTrue()
+        assertThat(result.exceptionOrNull()).isSameAs(deleteError)
+    }
+
+    @Test
     fun `returns failure when tickets are insufficient`() = runTest {
         coEvery { mockTicketRepository.consumeTickets(any()) } throws LackOfTicketsException()
 
