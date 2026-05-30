@@ -20,7 +20,7 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class RoutingTicketRepositoryTest {
+class TicketRepositoryTest {
 
     @get:Rule
     val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
@@ -30,17 +30,17 @@ class RoutingTicketRepositoryTest {
     private lateinit var dataStore: DataStore<Preferences>
     private lateinit var localRepository: LocalTicketRepository
     private lateinit var networkRepository: NetworkTicketRepository
-    private lateinit var repository: RoutingTicketRepository
+    private lateinit var repository: TicketRepository
 
     @Before
     fun setUp() {
         dataStore = PreferenceDataStoreFactory.create(
             scope = testScope,
-            produceFile = { tmpFolder.newFile("test_routing.preferences_pb") },
+            produceFile = { tmpFolder.newFile("test_ticket_repository.preferences_pb") },
         )
         localRepository = mockk(relaxed = true)
         networkRepository = mockk(relaxed = true)
-        repository = RoutingTicketRepository(localRepository, networkRepository, dataStore)
+        repository = TicketRepository(localRepository, networkRepository, dataStore)
     }
 
     private suspend fun setToken(token: String?) {
