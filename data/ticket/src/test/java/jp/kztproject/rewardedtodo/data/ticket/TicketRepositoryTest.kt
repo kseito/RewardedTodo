@@ -3,10 +3,15 @@ package jp.kztproject.rewardedtodo.data.ticket
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
 import com.google.common.truth.Truth.assertThat
-import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
+import jp.kztproject.rewardedtodo.common.kvs.UserPreferencesKeys
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -23,72 +28,99 @@ class TicketRepositoryTest {
     private val testScope = TestScope()
 
     private lateinit var dataStore: DataStore<Preferences>
+    private lateinit var localRepository: LocalTicketRepository
+    private lateinit var networkRepository: NetworkTicketRepository
     private lateinit var repository: TicketRepository
 
     @Before
     fun setUp() {
         dataStore = PreferenceDataStoreFactory.create(
             scope = testScope,
-            produceFile = { tmpFolder.newFile("test_ticket.preferences_pb") },
+            produceFile = { tmpFolder.newFile("test_ticket_repository.preferences_pb") },
         )
-        repository = TicketRepository(dataStore)
+        localRepository = mockk(relaxed = true)
+        networkRepository = mockk(relaxed = true)
+        repository = TicketRepository(localRepository, networkRepository, dataStore)
+    }
+
+    private suspend fun setToken(token: String?) {
+        dataStore.edit { settings ->
+            if (token == null) {
+                settings.remove(UserPreferencesKeys.TODOIST_API_TOKEN)
+            } else {
+                settings[UserPreferencesKeys.TODOIST_API_TOKEN] = token
+            }
+        }
     }
 
     @Test
-    fun `getNumberOfTicket returns 0 when no tickets exist`() = testScope.runTest {
-        val result = repository.getNumberOfTicket().first()
+    fun `addTicket delegates to local when token is missing`() = testScope.runTest {
+        repository.addTicket(3)
 
-        assertThat(result).isEqualTo(0)
+        coVerify(exactly = 1) { localRepository.addTicket(3) }
+        coVerify(exactly = 0) { networkRepository.addTicket(any()) }
     }
 
     @Test
-    fun `addTicket increases ticket count`() = testScope.runTest {
-        repository.addTicket(5)
+    fun `addTicket delegates to network when token is present`() = testScope.runTest {
+        setToken("dummy-token")
 
-        val result = repository.getNumberOfTicket().first()
-        assertThat(result).isEqualTo(5)
-    }
-
-    @Test
-    fun `consumeTicket decreases ticket count by 1`() = testScope.runTest {
-        repository.addTicket(5)
-
-        repository.consumeTicket()
-
-        val result = repository.getNumberOfTicket().first()
-        assertThat(result).isEqualTo(4)
-    }
-
-    @Test(expected = LackOfTicketsException::class)
-    fun `consumeTicket throws LackOfTicketsException when no tickets`() = testScope.runTest {
-        repository.consumeTicket()
-    }
-
-    @Test
-    fun `consumeTickets decreases ticket count by specified amount`() = testScope.runTest {
-        repository.addTicket(10)
-
-        repository.consumeTickets(3)
-
-        val result = repository.getNumberOfTicket().first()
-        assertThat(result).isEqualTo(7)
-    }
-
-    @Test(expected = LackOfTicketsException::class)
-    fun `consumeTickets throws LackOfTicketsException when not enough tickets`() = testScope.runTest {
         repository.addTicket(2)
+
+        coVerify(exactly = 1) { networkRepository.addTicket(2) }
+        coVerify(exactly = 0) { localRepository.addTicket(any()) }
+    }
+
+    @Test
+    fun `addTicket treats blank token as not connected`() = testScope.runTest {
+        setToken("   ")
+
+        repository.addTicket(1)
+
+        coVerify(exactly = 1) { localRepository.addTicket(1) }
+        coVerify(exactly = 0) { networkRepository.addTicket(any()) }
+    }
+
+    @Test
+    fun `consumeTicket delegates by token presence`() = testScope.runTest {
+        repository.consumeTicket()
+        coVerify(exactly = 1) { localRepository.consumeTicket() }
+
+        setToken("dummy-token")
+        repository.consumeTicket()
+        coVerify(exactly = 1) { networkRepository.consumeTicket() }
+    }
+
+    @Test
+    fun `consumeTickets delegates by token presence`() = testScope.runTest {
         repository.consumeTickets(5)
+        coVerify(exactly = 1) { localRepository.consumeTickets(5) }
+
+        setToken("dummy-token")
+        repository.consumeTickets(7)
+        coVerify(exactly = 1) { networkRepository.consumeTickets(7) }
     }
 
-    @Test(expected = IllegalArgumentException::class)
-    fun `consumeTickets throws IllegalArgumentException when count is zero`() = testScope.runTest {
-        repository.addTicket(5)
-        repository.consumeTickets(0)
+    @Test
+    fun `getNumberOfTicket returns local flow when not connected`() = testScope.runTest {
+        coEvery { localRepository.getNumberOfTicket() } returns flowOf(42)
+
+        val result = repository.getNumberOfTicket().first()
+
+        assertThat(result).isEqualTo(42)
+        coVerify(exactly = 1) { localRepository.getNumberOfTicket() }
+        coVerify(exactly = 0) { networkRepository.getNumberOfTicket() }
     }
 
-    @Test(expected = IllegalArgumentException::class)
-    fun `consumeTickets throws IllegalArgumentException when count is negative`() = testScope.runTest {
-        repository.addTicket(5)
-        repository.consumeTickets(-1)
+    @Test
+    fun `getNumberOfTicket returns network flow when connected`() = testScope.runTest {
+        setToken("dummy-token")
+        coEvery { networkRepository.getNumberOfTicket() } returns flowOf(7)
+
+        val result = repository.getNumberOfTicket().first()
+
+        assertThat(result).isEqualTo(7)
+        coVerify(exactly = 1) { networkRepository.getNumberOfTicket() }
+        coVerify(exactly = 0) { localRepository.getNumberOfTicket() }
     }
 }

@@ -2,57 +2,48 @@ package jp.kztproject.rewardedtodo.data.ticket
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
-import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
+import jp.kztproject.rewardedtodo.common.kvs.UserPreferencesKeys
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class TicketRepository @Inject constructor(private val datastore: DataStore<Preferences>) : ITicketRepository {
-
-    companion object {
-        private const val NUMBER_OF_TICKET = "number_of_ticket"
-
-        // TODO put into domain layer
-        private const val NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY = 1
-    }
+/**
+ * チケットリポジトリの [ITicketRepository] 実装。
+ *
+ * Todoist連携の有無で内部的に振る舞いを切り替える:
+ * - Todoist APIトークン未保存（未連携）: [LocalTicketRepository] に委譲し、ローカル(DataStore)で
+ *   チケットを管理する。
+ * - Todoist APIトークン保存済み（連携済み）: [NetworkTicketRepository] に委譲し、サーバ経由で
+ *   チケットを管理する（加算はTodoist Webhookが担当）。
+ *
+ * 判定は操作ごとに行う。`Flow` 取得時の判定は取得時点のスナップショットで、連携状態が
+ * 途中で変わった場合は再呼び出し（画面再表示）が必要。
+ */
+class TicketRepository @Inject internal constructor(
+    private val localRepository: LocalTicketRepository,
+    private val networkRepository: NetworkTicketRepository,
+    private val dataStore: DataStore<Preferences>,
+) : ITicketRepository {
 
     override suspend fun addTicket(numberOfTicket: Int) {
-        datastore.edit { settings ->
-            val numberOfTicketKey = intPreferencesKey(NUMBER_OF_TICKET)
-            val currentNumberOfTicket = settings[numberOfTicketKey] ?: 0
-            settings[numberOfTicketKey] = currentNumberOfTicket + numberOfTicket
-        }
+        delegate().addTicket(numberOfTicket)
     }
 
     override suspend fun consumeTicket() {
-        datastore.edit { settings ->
-            val numberOfTicketKey = intPreferencesKey(NUMBER_OF_TICKET)
-            val currentNumberOfTicket = settings[numberOfTicketKey] ?: 0
-
-            if (currentNumberOfTicket < NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY) {
-                throw LackOfTicketsException()
-            }
-            settings[numberOfTicketKey] = currentNumberOfTicket - NUMBER_OF_TICKETS_REQUIRED_FOR_LOTTERY
-        }
+        delegate().consumeTicket()
     }
 
     override suspend fun consumeTickets(count: Int) {
-        require(count > 0) { "count must be positive" }
-        datastore.edit { settings ->
-            val numberOfTicketKey = intPreferencesKey(NUMBER_OF_TICKET)
-            val currentNumberOfTicket = settings[numberOfTicketKey] ?: 0
-
-            if (currentNumberOfTicket < count) {
-                throw LackOfTicketsException()
-            }
-            settings[numberOfTicketKey] = currentNumberOfTicket - count
-        }
+        delegate().consumeTickets(count)
     }
 
-    override suspend fun getNumberOfTicket(): Flow<Int> = datastore.data.map { preferences ->
-        val numberOfTicket = intPreferencesKey(NUMBER_OF_TICKET)
-        preferences[numberOfTicket] ?: 0
-    }
+    override suspend fun getNumberOfTicket(): Flow<Int> = delegate().getNumberOfTicket()
+
+    private suspend fun delegate(): ITicketRepository = if (isTodoistConnected()) networkRepository else localRepository
+
+    private suspend fun isTodoistConnected(): Boolean = dataStore.data
+        .map { it[UserPreferencesKeys.TODOIST_API_TOKEN].orEmpty() }
+        .first()
+        .isNotBlank()
 }

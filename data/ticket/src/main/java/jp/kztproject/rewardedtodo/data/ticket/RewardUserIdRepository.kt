@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class RewardUserIdRepository @Inject constructor(
+internal class RewardUserIdRepository @Inject constructor(
     private val api: RewardServerApi,
     private val dataStore: DataStore<Preferences>,
 ) {
