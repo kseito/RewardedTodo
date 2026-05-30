@@ -10,9 +10,9 @@
 |------|--------------|
 | フォーマット・スタイル・命名 | spotless / detekt |
 | シークレット漏洩 | gitleaks（CI）/ GitHub Secret Scanning + Push Protection |
-| 既知脆弱性・危険API | CodeQL / detekt |
+| 既知脆弱性・危険API | CodeQL |
 | 依存ライブラリの更新・脆弱性 | Renovate |
-| リグレッション | ユニットテスト / Roborazzi / Maestro E2E |
+| リグレッション | ユニットテスト / Roborazzi / Maestro E2E（フロー整備済み・CI化予定） |
 
 ## 人間が見る（機械で防ぎにくい）
 
