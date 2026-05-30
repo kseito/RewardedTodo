@@ -10,6 +10,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
+// トークンは平文DataStoreで保存している（暗号化しない）。Android 10+のFBEでat-rest暗号化されるため
+// 非公開・自分専用アプリの脅威モデルでは追加暗号化は不要と判断。詳細は docs/adr/0001-plaintext-token-storage.md
 class ApiTokenRepository @Inject constructor(private val dataStore: DataStore<Preferences>) : IApiTokenRepository {
 
     override suspend fun saveToken(token: ApiToken): Result<Unit> {
