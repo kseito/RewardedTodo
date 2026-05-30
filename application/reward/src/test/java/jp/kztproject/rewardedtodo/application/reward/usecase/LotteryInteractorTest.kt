@@ -98,6 +98,26 @@ class LotteryInteractorTest {
     }
 
     @Test
+    fun shouldReturnFailureWhenDeleteFails() = runTest {
+        coEvery { mockTicketRepository.consumeTicket() } returns Unit
+        val deleteError = RuntimeException("delete failed")
+        coEvery { mockRewardRepository.delete(any()) } throws deleteError
+
+        val reward = Reward(
+            RewardId(1),
+            RewardName("reward1"),
+            Probability(100F),
+            RewardDescription(null),
+            false,
+        )
+        val rewards = RewardCollection(listOf(reward))
+        val response = interactor.execute(rewards)
+
+        assertThat(response.isFailure).isTrue()
+        assertThat(response.exceptionOrNull()).isSameAs(deleteError)
+    }
+
+    @Test
     fun shouldOccurErrorWhenRewardPointIsZero() = runTest {
         coEvery { mockTicketRepository.consumeTicket() } throws LackOfTicketsException()
 
