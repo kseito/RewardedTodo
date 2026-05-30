@@ -9,17 +9,18 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 /**
- * Todoist連携の有無で [LocalTicketRepository] と [NetworkTicketRepository] を切り替えるルータ。
+ * チケットリポジトリの [ITicketRepository] 実装。
  *
- * - Todoist APIトークン未保存（未連携）: [LocalTicketRepository] へ委譲し、ローカル(DataStore)で
+ * Todoist連携の有無で内部的に振る舞いを切り替える:
+ * - Todoist APIトークン未保存（未連携）: [LocalTicketRepository] に委譲し、ローカル(DataStore)で
  *   チケットを管理する。
- * - Todoist APIトークン保存済み（連携済み）: [NetworkTicketRepository] へ委譲し、サーバ経由で
+ * - Todoist APIトークン保存済み（連携済み）: [NetworkTicketRepository] に委譲し、サーバ経由で
  *   チケットを管理する（加算はTodoist Webhookが担当）。
  *
  * 判定は操作ごとに行う。`Flow` 取得時の判定は取得時点のスナップショットで、連携状態が
  * 途中で変わった場合は再呼び出し（画面再表示）が必要。
  */
-class RoutingTicketRepository @Inject constructor(
+class TicketRepository @Inject constructor(
     private val localRepository: LocalTicketRepository,
     private val networkRepository: NetworkTicketRepository,
     private val dataStore: DataStore<Preferences>,
