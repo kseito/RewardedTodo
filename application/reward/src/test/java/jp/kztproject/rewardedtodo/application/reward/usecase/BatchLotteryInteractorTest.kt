@@ -6,6 +6,7 @@ import io.mockk.mockk
 import jp.kztproject.rewardedtodo.data.ticket.ITicketRepository
 import jp.kztproject.rewardedtodo.domain.reward.*
 import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
+import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository
 import kotlinx.coroutines.test.runTest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
@@ -13,8 +14,9 @@ import org.junit.Test
 class BatchLotteryInteractorTest {
 
     private val mockTicketRepository: ITicketRepository = mockk()
+    private val mockRewardRepository: IRewardRepository = mockk()
 
-    private val interactor = BatchLotteryInteractor(mockTicketRepository)
+    private val interactor = BatchLotteryInteractor(mockTicketRepository, mockRewardRepository)
 
     @Test
     fun `returns all wins when probability is 100 percent`() = runTest {
@@ -41,6 +43,46 @@ class BatchLotteryInteractorTest {
     }
 
     @Test
+    fun `does not delete repeat reward even when won multiple times`() = runTest {
+        coEvery { mockTicketRepository.consumeTickets(any()) } returns Unit
+
+        val rewards = RewardCollection(
+            listOf(
+                Reward(
+                    RewardId(1),
+                    RewardName("reward1"),
+                    Probability(100F),
+                    RewardDescription(null),
+                    true,
+                ),
+            ),
+        )
+        interactor.execute(rewards, 3)
+
+        coVerify(exactly = 0) { mockRewardRepository.delete(any()) }
+    }
+
+    @Test
+    fun `deletes non-repeat reward only once even when won multiple times`() = runTest {
+        coEvery { mockTicketRepository.consumeTickets(any()) } returns Unit
+        coEvery { mockRewardRepository.delete(any()) } returns Unit
+
+        val reward = Reward(
+            RewardId(1),
+            RewardName("reward1"),
+            Probability(100F),
+            RewardDescription(null),
+            false,
+        )
+        val rewards = RewardCollection(listOf(reward))
+        val result = interactor.execute(rewards, 3)
+
+        assertThat(result.isSuccess).isTrue()
+        assertThat(result.getOrNull()!!.wonRewards).hasSize(3)
+        coVerify(exactly = 1) { mockRewardRepository.delete(reward) }
+    }
+
+    @Test
     fun `returns all misses when probability is 0 percent`() = runTest {
         coEvery { mockTicketRepository.consumeTickets(any()) } returns Unit
 
@@ -51,7 +93,7 @@ class BatchLotteryInteractorTest {
                     RewardName("reward1"),
                     Probability(0F),
                     RewardDescription(null),
-                    true,
+                    false,
                 ),
             ),
         )
@@ -61,6 +103,27 @@ class BatchLotteryInteractorTest {
         val batchResult = result.getOrNull()!!
         assertThat(batchResult.wonRewards).isEmpty()
         assertThat(batchResult.missCount).isEqualTo(3)
+        coVerify(exactly = 0) { mockRewardRepository.delete(any()) }
+    }
+
+    @Test
+    fun `returns failure when delete fails for non-repeat reward`() = runTest {
+        coEvery { mockTicketRepository.consumeTickets(any()) } returns Unit
+        val deleteError = RuntimeException("delete failed")
+        coEvery { mockRewardRepository.delete(any()) } throws deleteError
+
+        val reward = Reward(
+            RewardId(1),
+            RewardName("reward1"),
+            Probability(100F),
+            RewardDescription(null),
+            false,
+        )
+        val rewards = RewardCollection(listOf(reward))
+        val result = interactor.execute(rewards, 3)
+
+        assertThat(result.isFailure).isTrue()
+        assertThat(result.exceptionOrNull()).isSameAs(deleteError)
     }
 
     @Test
@@ -74,7 +137,7 @@ class BatchLotteryInteractorTest {
                     RewardName("reward1"),
                     Probability(100F),
                     RewardDescription(null),
-                    true,
+                    false,
                 ),
             ),
         )
@@ -82,5 +145,6 @@ class BatchLotteryInteractorTest {
 
         assertThat(result.isFailure).isTrue()
         assertThat(result.exceptionOrNull()).isInstanceOf(LackOfTicketsException::class.java)
+        coVerify(exactly = 0) { mockRewardRepository.delete(any()) }
     }
 }
