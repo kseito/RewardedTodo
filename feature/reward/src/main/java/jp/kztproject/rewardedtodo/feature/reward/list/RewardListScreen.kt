@@ -493,7 +493,7 @@ fun RewardListPreview() {
 }
 
 @Composable
-private fun RewardItem(reward: Reward, onRewardItemClick: (Reward) -> Unit) {
+internal fun RewardItem(reward: Reward, onRewardItemClick: (Reward) -> Unit) {
     Surface {
         Row(
             modifier = Modifier
