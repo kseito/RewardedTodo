@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| ステータス | Approved |
+| ステータス | Implemented |
 | 作成日 | 2026-05-26 |
 | ブランチ | feature/delete-non-repeat-reward |
 | 関連Issue/PR | （なし） |
