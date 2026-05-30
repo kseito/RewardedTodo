@@ -36,10 +36,15 @@ class BatchLotteryInteractor @Inject constructor(
             }
         }
 
-        // 繰り返し取得不可の当選報酬は消費されるため削除する（同一報酬の複数当選は1回だけ削除）
-        wonRewards.filterNot { it.needRepeat }
-            .distinctBy { it.rewardId }
-            .forEach { rewardRepository.delete(it) }
+        // 繰り返し取得不可の当選報酬は消費されるため削除する（同一報酬の複数当選は1回だけ削除）。
+        // 削除失敗時はResult.failureにしてUI側で扱えるようにする（executeはResult契約のため）。
+        try {
+            wonRewards.filterNot { it.needRepeat }
+                .distinctBy { it.rewardId }
+                .forEach { rewardRepository.delete(it) }
+        } catch (e: Exception) {
+            return Result.failure(e)
+        }
 
         return Result.success(BatchLotteryResult(wonRewards, missCount))
     }
