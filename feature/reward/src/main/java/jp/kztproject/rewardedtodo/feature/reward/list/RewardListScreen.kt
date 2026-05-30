@@ -32,6 +32,7 @@ import androidx.compose.material3.ripple
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -507,10 +508,22 @@ private fun RewardItem(reward: Reward, onRewardItemClick: (Reward) -> Unit) {
             Column(
                 modifier = Modifier.weight(8f),
             ) {
-                Text(
-                    text = reward.name.value,
-                    style = MaterialTheme.typography.headlineMedium,
-                )
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = reward.name.value,
+                        style = MaterialTheme.typography.headlineMedium,
+                    )
+                    if (reward.needRepeat) {
+                        Icon(
+                            imageVector = Icons.Filled.Repeat,
+                            contentDescription = "Repeat",
+                            modifier = Modifier
+                                .padding(start = 8.dp)
+                                .size(20.dp),
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                    }
+                }
                 Text(
                     text = reward.description.value ?: "",
                     color = Color.Gray,
@@ -537,6 +550,22 @@ fun RewardItemPreview() {
         Probability(1f),
         RewardDescription("this is very rare"),
         true,
+    )
+    RewardItem(
+        reward = reward,
+        onRewardItemClick = {},
+    )
+}
+
+@Preview
+@Composable
+fun RewardItemNonRepeatPreview() {
+    val reward = Reward(
+        RewardId(1),
+        RewardName("PS5"),
+        Probability(1f),
+        RewardDescription("one-time only"),
+        false,
     )
     RewardItem(
         reward = reward,
