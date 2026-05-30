@@ -512,6 +512,7 @@ internal fun RewardItem(reward: Reward, onRewardItemClick: (Reward) -> Unit) {
                     Text(
                         text = reward.name.value,
                         style = MaterialTheme.typography.headlineMedium,
+                        modifier = Modifier.weight(1f, fill = false),
                     )
                     if (reward.needRepeat) {
                         Icon(
