@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
 import javax.inject.Inject
 
-class NetworkTicketRepository @Inject constructor(
+internal class NetworkTicketRepository @Inject constructor(
     private val api: RewardServerApi,
     private val userIdRepository: RewardUserIdRepository,
 ) : ITicketRepository {
