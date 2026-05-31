@@ -485,4 +485,3 @@ fun RewardListPreview() {
         onRewardItemClick = {},
     )
 }
-
