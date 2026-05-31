@@ -44,3 +44,6 @@ vendor/
 
 # Claude settings
 .claude/settings.local.json
+
+# Roborazzi screenshots (recorded locally / via CI, not source of truth)
+app/screenshots/
