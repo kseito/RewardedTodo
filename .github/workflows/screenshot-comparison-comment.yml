@@ -86,7 +86,6 @@ jobs:
       - name: Find Comment
         uses: peter-evans/find-comment@b30e6a3c0ed37e7c023ccd3f1db5c6c0b0c23aad # v4
         id: fc
-        if: steps.prepare-companion-branch.outputs.comment_content != ''
         with:
           issue-number: ${{ steps.get-pull-request-number.outputs.pull_request_number }}
           comment-author: 'github-actions[bot]'
@@ -100,6 +99,16 @@ jobs:
           issue-number: ${{ steps.get-pull-request-number.outputs.pull_request_number }}
           body: ${{ steps.prepare-companion-branch.outputs.comment_content }}
           edit-mode: replace
+
+      - name: Delete comment when no diff
+        # 差分が無くなったら既存の比較結果コメントを削除する（解消が一目で分かるようにする）
+        if: >
+          steps.collect-compare-images.outputs.screenshot_compare_images == '' &&
+          steps.fc.outputs.comment-id != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api -X DELETE "/repos/${{ github.repository }}/issues/comments/${{ steps.fc.outputs.comment-id }}"
 
       - name: Cleanup outdated companion branches
         run: |
