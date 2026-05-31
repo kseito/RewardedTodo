@@ -508,27 +508,24 @@ internal fun RewardItem(reward: Reward, onRewardItemClick: (Reward) -> Unit) {
             Column(
                 modifier = Modifier.weight(8f),
             ) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = reward.name.value,
-                        style = MaterialTheme.typography.headlineMedium,
-                        modifier = Modifier.weight(1f, fill = false),
-                    )
-                    if (reward.needRepeat) {
-                        Icon(
-                            imageVector = Icons.Filled.Repeat,
-                            contentDescription = "Repeat",
-                            modifier = Modifier
-                                .padding(start = 8.dp)
-                                .size(20.dp),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                    }
-                }
+                Text(
+                    text = reward.name.value,
+                    style = MaterialTheme.typography.headlineMedium,
+                )
                 Text(
                     text = reward.description.value ?: "",
                     color = Color.Gray,
                 )
+                if (reward.needRepeat) {
+                    Icon(
+                        imageVector = Icons.Filled.Repeat,
+                        contentDescription = "Repeat",
+                        modifier = Modifier
+                            .padding(top = 4.dp)
+                            .size(20.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
             }
             Text(
                 text = "${reward.probability.value} %",
