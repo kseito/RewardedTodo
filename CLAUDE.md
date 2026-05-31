@@ -146,6 +146,7 @@ fun findBy(id: Int): Reward?
 
 ## Commit Guideline
 
+- **作業は必ず feature ブランチを切ってから行う。`main` に直接コミットしない。** 気づかず `main` 上で作業・コミットしてしまった場合は、feature ブランチへ切り出して `main` を元のコミットへ巻き戻す。
 - Only commit when:
     - ALL tests are passing
     - ALL compiler/linter warnings have been resolved
