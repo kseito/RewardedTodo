@@ -8,6 +8,12 @@ plugins {
 
 android {
     namespace = "jp.kztproject.rewardedtodo.presentation.reward"
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -23,6 +29,7 @@ dependencies {
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.material3)
     implementation(libs.compose.material.icon.core)
+    implementation(libs.androidx.compose.material.extended)
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.tooling)
     implementation(libs.androidx.compose.livedata)
@@ -53,7 +60,10 @@ dependencies {
     testImplementation(libs.assertj.core)
     testImplementation(libs.androidx.arch.core.testing)
     testImplementation(libs.mockk)
-    implementation(project(path = ":test:reward"))
+    testImplementation(libs.ui.test.junit4)
+    testImplementation(libs.androidx.ui.test.manifest)
+    debugImplementation(libs.androidx.ui.test.manifest)
+    testImplementation(project(path = ":test:reward"))
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.espresso.core)
 
