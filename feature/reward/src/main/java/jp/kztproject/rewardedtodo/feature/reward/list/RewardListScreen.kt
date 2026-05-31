@@ -2,8 +2,6 @@ package jp.kztproject.rewardedtodo.feature.reward.list
 
 import android.widget.Toast
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -25,14 +23,11 @@ import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.material3.ripple
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Done
-import androidx.compose.material.icons.filled.Repeat
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -43,7 +38,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -492,81 +486,3 @@ fun RewardListPreview() {
     )
 }
 
-@Composable
-internal fun RewardItem(reward: Reward, onRewardItemClick: (Reward) -> Unit) {
-    Surface {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = ripple(),
-                    onClick = { onRewardItemClick(reward) },
-                )
-                .padding(16.dp),
-        ) {
-            Column(
-                modifier = Modifier.weight(8f),
-            ) {
-                Text(
-                    text = reward.name.value,
-                    style = MaterialTheme.typography.headlineMedium,
-                )
-                Text(
-                    text = reward.description.value ?: "",
-                    color = Color.Gray,
-                )
-                if (reward.needRepeat) {
-                    Icon(
-                        imageVector = Icons.Filled.Repeat,
-                        contentDescription = "Repeat",
-                        modifier = Modifier
-                            .padding(top = 4.dp)
-                            .size(20.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            }
-            Text(
-                text = "${reward.probability.value} %",
-                modifier = Modifier
-                    .weight(2f)
-                    .align(Alignment.CenterVertically),
-                style = MaterialTheme.typography.headlineSmall,
-                textAlign = TextAlign.End,
-            )
-        }
-    }
-}
-
-@Preview
-@Composable
-fun RewardItemPreview() {
-    val reward = Reward(
-        RewardId(1),
-        RewardName("PS5"),
-        Probability(1f),
-        RewardDescription("this is very rare"),
-        true,
-    )
-    RewardItem(
-        reward = reward,
-        onRewardItemClick = {},
-    )
-}
-
-@Preview
-@Composable
-fun RewardItemNonRepeatPreview() {
-    val reward = Reward(
-        RewardId(1),
-        RewardName("PS5"),
-        Probability(1f),
-        RewardDescription("one-time only"),
-        false,
-    )
-    RewardItem(
-        reward = reward,
-        onRewardItemClick = {},
-    )
-}
