@@ -63,7 +63,7 @@ dependencies {
     testImplementation(libs.ui.test.junit4)
     testImplementation(libs.androidx.ui.test.manifest)
     debugImplementation(libs.androidx.ui.test.manifest)
-    implementation(project(path = ":test:reward"))
+    testImplementation(project(path = ":test:reward"))
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.espresso.core)
 
