@@ -180,7 +180,7 @@ fun TodoListScreenPreview() {
         object : GetTodoListUseCase {
             override fun execute(): Flow<List<Todo>> = flowOf(
                 listOf(
-                    Todo(1, "1001", "英語学習", 2, true),
+                    Todo(1, "1001", "英語学習VRT検証", 2, true),
                 ),
             )
         },
