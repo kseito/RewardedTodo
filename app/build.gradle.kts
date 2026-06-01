@@ -40,6 +40,17 @@ android {
             keyAlias = System.getenv("KEY_ALIAS")
             keyPassword = System.getenv("KEY_PASSWORD")
         }
+        getByName("debug") {
+            // CIで配置した固定keystoreがあればそれで署名し、無ければ
+            // 各自の ~/.android/debug.keystore（AGPデフォルト）を使う
+            val debugKeystore = rootProject.file("debug.keystore")
+            if (debugKeystore.isFile) {
+                storeFile = debugKeystore
+                storePassword = "android"
+                keyAlias = "androiddebugkey"
+                keyPassword = "android"
+            }
+        }
     }
 
     buildTypes {

@@ -2,6 +2,7 @@
 *.apk
 *.ap_
 staging.keystore
+debug.keystore
 
 # Files for the Dalvik VM
 *.dex
