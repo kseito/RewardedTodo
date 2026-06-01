@@ -44,7 +44,7 @@ android {
             // CIで配置した固定keystoreがあればそれで署名し、無ければ
             // 各自の ~/.android/debug.keystore（AGPデフォルト）を使う
             val debugKeystore = rootProject.file("debug.keystore")
-            if (debugKeystore.exists()) {
+            if (debugKeystore.isFile) {
                 storeFile = debugKeystore
                 storePassword = "android"
                 keyAlias = "androiddebugkey"
