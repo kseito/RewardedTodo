@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.rewardedtodo.android.library.detekt)
+    alias(libs.plugins.rewardedtodo.android.jacoco)
 }
 
 val localProperties = Properties()
