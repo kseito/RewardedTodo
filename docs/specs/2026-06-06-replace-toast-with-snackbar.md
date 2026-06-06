@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| ステータス | Draft |
+| ステータス | Implemented |
 | 作成日 | 2026-06-06 |
 | ブランチ | feature/replace-toast-with-snackbar |
 | 関連Issue/PR | （なし） |
@@ -47,10 +47,10 @@ UI表示手段の変更のみで、ドメインモデル・ビジネスルール
 
 ## 6. 受け入れ条件 (Acceptance Criteria)
 
-- [ ] `RewardListScreen.kt` から `android.widget.Toast` の import と `Toast.makeText(...)` 呼び出しが消えている。
-- [ ] 報酬保存失敗時に、既存の `SnackbarHostState` を通じて同じエラーメッセージが SnackBar で表示される。
-- [ ] リポジトリ全体に `Toast` の使用箇所が残っていない。
-- [ ] 既存のユニットテスト・Roborazzi が通る。
+- [x] `RewardListScreen.kt` から `android.widget.Toast` の import と `Toast.makeText(...)` 呼び出しが消えている。
+- [x] 報酬保存失敗時に、既存の `SnackbarHostState` を通じて同じエラーメッセージが SnackBar で表示される。（実機でタイトル未入力エラー「Input title」がSnackBar表示されることを確認）
+- [x] リポジトリ全体に `Toast` の使用箇所が残っていない。
+- [x] 既存のユニットテスト・Roborazzi が通る。
 
 ## 7. テスト方針
 
