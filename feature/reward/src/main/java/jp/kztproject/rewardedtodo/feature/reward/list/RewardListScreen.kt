@@ -1,6 +1,5 @@
 package jp.kztproject.rewardedtodo.feature.reward.list
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -230,18 +229,25 @@ private fun RewardListScreen(
         }
     }
 
-    LaunchedEffect(result) {
-        result?.let {
-            it.fold(
-                onSuccess = {
-                    onRewardSaveSucceeded()
-                },
-                onFailure = { error ->
-                    val errorMessageId = ErrorMessageClassifier(error).messageId
-                    Toast.makeText(context, errorMessageId, Toast.LENGTH_LONG).show()
-                },
-            )
-            viewModel.clearResult()
+    result?.let { res ->
+        if (res.isSuccess) {
+            LaunchedEffect(res) {
+                onRewardSaveSucceeded()
+                viewModel.clearResult()
+            }
+        } else if (res.isFailure) {
+            res.exceptionOrNull()?.let { error ->
+                val errorMessageId = ErrorMessageClassifier(error).messageId
+                val errorMessage = stringResource(id = errorMessageId)
+                LaunchedEffect(res) {
+                    snackbarHostState.showSnackbar(
+                        message = errorMessage,
+                        actionLabel = null,
+                        duration = SnackbarDuration.Short,
+                    )
+                    viewModel.clearResult()
+                }
+            }
         }
     }
     obtainedReward?.let { it ->
