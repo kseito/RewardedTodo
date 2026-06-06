@@ -230,25 +230,27 @@ private fun RewardListScreen(
         }
     }
 
-    result?.let { res ->
-        if (res.isSuccess) {
-            LaunchedEffect(res) {
-                onRewardSaveSucceeded()
-                viewModel.clearResult()
-            }
-        } else if (res.isFailure) {
-            res.exceptionOrNull()?.let { error ->
-                val errorMessageId = ErrorMessageClassifier(error).messageId
-                val errorMessage = stringResource(id = errorMessageId)
-                LaunchedEffect(res) {
-                    snackbarHostState.showSnackbar(
-                        message = errorMessage,
-                        actionLabel = null,
-                        duration = SnackbarDuration.Short,
-                    )
-                    viewModel.clearResult()
-                }
-            }
+    val resultErrorMessage = result?.exceptionOrNull()
+        ?.let { stringResource(id = ErrorMessageClassifier(it).messageId) }
+    LaunchedEffect(result) {
+        result?.let { res ->
+            res.fold(
+                onSuccess = {
+                    onRewardSaveSucceeded()
+                },
+                onFailure = {
+                    resultErrorMessage?.let { message ->
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = message,
+                                actionLabel = null,
+                                duration = SnackbarDuration.Short,
+                            )
+                        }
+                    }
+                },
+            )
+            viewModel.clearResult()
         }
     }
     obtainedReward?.let { it ->
