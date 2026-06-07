@@ -1,6 +1,6 @@
 package jp.kztproject.rewardedtodo.application.reward.usecase
 
-import jp.kztproject.rewardedtodo.data.ticket.ITicketRepository
+import jp.kztproject.rewardedtodo.domain.reward.repository.ITicketRepository
 import jp.kztproject.rewardedtodo.domain.reward.NumberOfTicket
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

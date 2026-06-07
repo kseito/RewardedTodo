@@ -3,7 +3,7 @@ package jp.kztproject.rewardedtodo.application.reward.usecase
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import jp.kztproject.rewardedtodo.data.ticket.ITicketRepository
+import jp.kztproject.rewardedtodo.domain.reward.repository.ITicketRepository
 import jp.kztproject.rewardedtodo.domain.reward.*
 import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
 import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository

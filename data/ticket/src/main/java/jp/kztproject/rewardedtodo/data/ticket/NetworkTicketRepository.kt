@@ -3,6 +3,7 @@ package jp.kztproject.rewardedtodo.data.ticket
 import jp.kztproject.rewardedtodo.data.ticket.network.RewardServerApi
 import jp.kztproject.rewardedtodo.data.ticket.network.model.ConsumePointRequest
 import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
+import jp.kztproject.rewardedtodo.domain.reward.repository.ITicketRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
