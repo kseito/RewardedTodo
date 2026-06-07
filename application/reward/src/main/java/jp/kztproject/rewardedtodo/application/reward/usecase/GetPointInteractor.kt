@@ -8,6 +8,6 @@ import javax.inject.Inject
 
 class GetPointInteractor @Inject constructor(private val ticketRepository: ITicketRepository) : GetPointUseCase {
     override suspend fun execute(): Flow<NumberOfTicket> = ticketRepository.getNumberOfTicket().map {
-        NumberOfTicket(it.toInt())
+        NumberOfTicket(it)
     }
 }
