@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.data.ticket
+package jp.kztproject.rewardedtodo.domain.reward.repository
 
 import kotlinx.coroutines.flow.Flow
 
