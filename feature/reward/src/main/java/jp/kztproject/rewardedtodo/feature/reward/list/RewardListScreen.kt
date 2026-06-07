@@ -1,6 +1,5 @@
 package jp.kztproject.rewardedtodo.feature.reward.list
 
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,6 +22,7 @@ import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material.icons.Icons
@@ -230,15 +230,24 @@ private fun RewardListScreen(
         }
     }
 
+    val resultErrorMessage = result?.exceptionOrNull()
+        ?.let { stringResource(id = ErrorMessageClassifier(it).messageId) }
     LaunchedEffect(result) {
-        result?.let {
-            it.fold(
+        result?.let { res ->
+            res.fold(
                 onSuccess = {
                     onRewardSaveSucceeded()
                 },
-                onFailure = { error ->
-                    val errorMessageId = ErrorMessageClassifier(error).messageId
-                    Toast.makeText(context, errorMessageId, Toast.LENGTH_LONG).show()
+                onFailure = {
+                    resultErrorMessage?.let { message ->
+                        coroutineScope.launch {
+                            snackbarHostState.showSnackbar(
+                                message = message,
+                                actionLabel = null,
+                                duration = SnackbarDuration.Short,
+                            )
+                        }
+                    }
                 },
             )
             viewModel.clearResult()
@@ -332,6 +341,25 @@ private fun ErrorSnackBar(it: SnackbarData) {
                 .padding(horizontal = 16.dp, vertical = 8.dp),
         )
     }
+}
+
+@Preview
+@Composable
+fun ErrorSnackBarPreview() {
+    ErrorSnackBar(
+        object : SnackbarData {
+            override val visuals = object : SnackbarVisuals {
+                override val message = "Input title"
+                override val actionLabel: String? = null
+                override val withDismissAction = false
+                override val duration = SnackbarDuration.Short
+            }
+
+            override fun dismiss() {}
+
+            override fun performAction() {}
+        },
+    )
 }
 
 // Create preview ViewModel outside the composable function
