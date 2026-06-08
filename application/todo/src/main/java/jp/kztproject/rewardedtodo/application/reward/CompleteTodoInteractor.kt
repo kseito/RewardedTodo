@@ -1,6 +1,6 @@
 package jp.kztproject.rewardedtodo.application.reward
 
-import jp.kztproject.rewardedtodo.data.ticket.ITicketRepository
+import jp.kztproject.rewardedtodo.domain.reward.repository.ITicketRepository
 import jp.kztproject.rewardedtodo.domain.todo.Todo
 import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoRepository
 import javax.inject.Inject

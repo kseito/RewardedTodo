@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
+import jp.kztproject.rewardedtodo.domain.reward.repository.ITicketRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

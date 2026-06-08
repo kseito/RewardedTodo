@@ -18,7 +18,6 @@ dependencies {
     testImplementation(project(":test:reward"))
 
     implementation(project(":domain:reward"))
-    implementation(project(":data:ticket"))
 }
 
 android {

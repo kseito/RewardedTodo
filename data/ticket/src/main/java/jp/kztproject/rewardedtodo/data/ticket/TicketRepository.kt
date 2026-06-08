@@ -3,6 +3,7 @@ package jp.kztproject.rewardedtodo.data.ticket
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import jp.kztproject.rewardedtodo.common.kvs.UserPreferencesKeys
+import jp.kztproject.rewardedtodo.domain.reward.repository.ITicketRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map

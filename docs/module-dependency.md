@@ -48,10 +48,9 @@ app
 │                  └────────── common:kvs
 │
 ├── application:reward ──────── domain:reward
-│                  └────────── data:ticket  ※注意: 下記参照
 │
 ├── application:todo ────────── domain:todo
-│                  └────────── data:ticket  ※注意: 下記参照
+│                  └────────── domain:reward
 │
 ├── common:kvs ──────────────── (依存なし)
 ├── common:database ─────────── (依存なし)
@@ -72,23 +71,7 @@ app → 全モジュール (DIバインドのため)
 **禁止されている依存方向**
 - `domain` → 他モジュール（Androidフレームワーク依存も禁止）
 - `feature` → `data`（featureがdata実装に直接依存してはいけない）
-- `application` → `data`（現状は例外あり、後述）
-
----
-
-## 既知のアーキテクチャ上の課題
-
-### application層がdata層に依存している
-
-`application:reward` と `application:todo` が `data:ticket` に依存しており、Clean Architectureの原則から外れている。
-
-```kotlin
-// application/reward/build.gradle.kts
-implementation(project(path = ":data:ticket"))  // ← 本来はdomain層のインターフェース経由にすべき
-```
-
-これはticketリポジトリのドメインインターフェース（`ITicketRepository`）が未整備なことによる暫定的な依存。
-コードベース内にもTODOコメントとして記録されている。
+- `application` → `data`（applicationはdomain層のインターフェース経由でdataを利用する）
 
 ---
 

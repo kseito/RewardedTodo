@@ -3,7 +3,7 @@ package jp.kztproject.rewardedtodo.application.reward.usecase
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
-import jp.kztproject.rewardedtodo.data.ticket.ITicketRepository
+import jp.kztproject.rewardedtodo.domain.reward.repository.ITicketRepository
 import org.junit.Test
 
 class GetPointInteractorTest {
