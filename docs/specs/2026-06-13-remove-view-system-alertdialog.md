@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| ステータス | Approved |
+| ステータス | Implemented |
 | 作成日 | 2026-06-13 |
 | ブランチ | clean/remove-view-system-alertdialog |
 | 関連Issue/PR | （なし） |
