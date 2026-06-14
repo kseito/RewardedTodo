@@ -44,6 +44,7 @@ roborazzi = "1.63.0"
 detekt = "1.23.8"
 showkase = "1.0.5"
 timber = "5.0.1"
+jacoco = "0.8.13"
 
 [libraries]
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "compose" }
@@ -120,3 +121,4 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 rewardedtodo-android-library = { id = "rewardedtodo.android.library" }
 rewardedtodo-android-application-spotless = { id = "rewardedtodo.android.application.spotless" }
 rewardedtodo-android-library-detekt = { id = "rewardedtodo.android.library.detekt" }
+rewardedtodo-android-jacoco = { id = "rewardedtodo.android.jacoco" }
