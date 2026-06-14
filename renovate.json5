@@ -14,7 +14,7 @@
       "description": "Kotlin ecosystem",
       "groupName": "Kotlin ecosystem",
       "matchPackagePatterns": [
-        "^org\\.jetbrains\\.kotlin",
+        "^org\\.jetbrains\\.kotlin($|[^x])",
         "^com\\.google\\.devtools\\.ksp"
       ],
       "minimumReleaseAge": "14 days",
