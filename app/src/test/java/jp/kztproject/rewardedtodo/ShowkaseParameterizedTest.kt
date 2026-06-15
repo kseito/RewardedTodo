@@ -4,6 +4,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onRoot
 import com.airbnb.android.showkase.models.Showkase
 import com.airbnb.android.showkase.models.ShowkaseBrowserComponent
+import com.github.takahirom.roborazzi.RobolectricDeviceQualifiers
 import com.github.takahirom.roborazzi.captureRoboImage
 import org.junit.Rule
 import org.junit.Test
@@ -14,7 +15,7 @@ import org.robolectric.annotation.GraphicsMode
 
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @RunWith(ParameterizedRobolectricTestRunner::class)
-@Config(sdk = [35])
+@Config(sdk = [35], qualifiers = RobolectricDeviceQualifiers.Pixel4a)
 class ShowkaseParameterizedTest(private val testCase: TestCase) {
 
     @get:Rule
