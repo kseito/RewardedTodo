@@ -145,6 +145,10 @@ abstract class AndroidJacocoConventionPlugin @Inject constructor(private val arc
 private val coverageIncludes = listOf("jp/kztproject/**")
 
 private val coverageExclusions = listOf(
+    // 非UI層 (VRT では描画されないため計測対象外にしてノイズを除く)
+    "**/data/**",
+    "**/application/**",
+    "**/domain/**",
     // Android 生成物
     "**/R.class",
     "**/R\$*.class",
