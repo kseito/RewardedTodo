@@ -149,6 +149,7 @@ private val coverageExclusions = listOf(
     "**/data/**",
     "**/application/**",
     "**/domain/**",
+    "**/common/database/**",
     // Android 生成物
     "**/R.class",
     "**/R\$*.class",
