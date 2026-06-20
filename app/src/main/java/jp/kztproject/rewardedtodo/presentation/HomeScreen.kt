@@ -11,6 +11,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -38,6 +39,24 @@ fun HomeScreen(onClickSetting: () -> Unit) {
         currentDestination = it
     }
 
+    HomeScreenContent(
+        currentDestination = currentDestination,
+        topLevelDestinations = topLevelDestinations,
+        onNavigateToDestination = onNavigateToDestination,
+        onClickSetting = onClickSetting,
+    ) { padding ->
+        RewardedTodoApp(padding, navController)
+    }
+}
+
+@Composable
+private fun HomeScreenContent(
+    currentDestination: TopLevelDestination,
+    topLevelDestinations: List<TopLevelDestination>,
+    onNavigateToDestination: (TopLevelDestination) -> Unit,
+    onClickSetting: () -> Unit,
+    content: @Composable (PaddingValues) -> Unit,
+) {
     Scaffold(
         topBar = {
             TopBar(
@@ -49,7 +68,7 @@ fun HomeScreen(onClickSetting: () -> Unit) {
             RewardedTodoBottomBar(topLevelDestinations, onNavigateToDestination)
         },
     ) { padding ->
-        RewardedTodoApp(padding, navController)
+        content(padding)
     }
 }
 
@@ -78,5 +97,39 @@ private fun NavHostController.navigateHome(route: String) {
         }
         launchSingleTop = true
         restoreState = true
+    }
+}
+
+@Composable
+@Preview(name = "TODOタブが選択された状態")
+fun HomeScreenTodoTabPreview() {
+    HomeScreenContent(
+        currentDestination = TopLevelDestination.TODO,
+        topLevelDestinations = TopLevelDestination.entries,
+        onNavigateToDestination = {},
+        onClickSetting = {},
+    ) { padding ->
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(padding),
+        )
+    }
+}
+
+@Composable
+@Preview(name = "REWARDタブが選択された状態")
+fun HomeScreenRewardTabPreview() {
+    HomeScreenContent(
+        currentDestination = TopLevelDestination.REWARD,
+        topLevelDestinations = TopLevelDestination.entries,
+        onNavigateToDestination = {},
+        onClickSetting = {},
+    ) { padding ->
+        Box(
+            Modifier
+                .fillMaxSize()
+                .padding(padding),
+        )
     }
 }
