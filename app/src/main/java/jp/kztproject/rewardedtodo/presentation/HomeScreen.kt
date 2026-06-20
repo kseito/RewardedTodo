@@ -65,7 +65,7 @@ private fun HomeScreenContent(
             )
         },
         bottomBar = {
-            RewardedTodoBottomBar(topLevelDestinations, onNavigateToDestination)
+            RewardedTodoBottomBar(topLevelDestinations, currentDestination, onNavigateToDestination)
         },
     ) { padding ->
         content(padding)
