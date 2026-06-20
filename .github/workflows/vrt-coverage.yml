@@ -1,0 +1,39 @@
+name: vrt-coverage
+
+on:
+  schedule:
+    # 毎週月曜 00:00 UTC (= 月曜 09:00 JST)
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+jobs:
+  vrt-coverage:
+    permissions:
+      contents: read # for checking out the repository
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
+
+      - name: Set up JDK
+        uses: ./.github/actions/setup-java
+
+      - name: Setup Gradle
+        uses: ./.github/actions/setup-gradle
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@40fd30fb8d7440372e1316f5d1809ec01dcd3699 # v4.0.1
+
+      - name: Inject secrets into local.properties
+        run: echo "reward.server.url=${{ secrets.REWARD_SERVER_URL }}" >> local.properties
+
+      - name: Run VRT coverage report
+        run: ./gradlew :app:jacocoVrtReport
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: vrt-coverage-report
+          path: app/build/reports/jacoco/jacocoVrtReport/
+          retention-days: 90

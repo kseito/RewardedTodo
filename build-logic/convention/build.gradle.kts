@@ -32,5 +32,9 @@ gradlePlugin {
             id = "rewardedtodo.android.library.detekt"
             implementationClass = "AndroidLibraryDetektConventionPlugin"
         }
+        register("androidJacoco") {
+            id = "rewardedtodo.android.jacoco"
+            implementationClass = "AndroidJacocoConventionPlugin"
+        }
     }
 }
