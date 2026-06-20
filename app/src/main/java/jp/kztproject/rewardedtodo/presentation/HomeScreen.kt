@@ -7,15 +7,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import jp.kztproject.rewardedtodo.RewardedTodoBottomBar
 import jp.kztproject.rewardedtodo.TopBar
@@ -30,13 +28,16 @@ import jp.kztproject.rewardedtodo.presentation.todo.todoListScreen
 fun HomeScreen(onClickSetting: () -> Unit) {
     val navController = rememberNavController()
     val topLevelDestinations = TopLevelDestination.entries
-    var currentDestination by rememberSaveable { mutableStateOf(TopLevelDestination.TODO) }
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentDestination = when (navBackStackEntry?.destination?.route) {
+        REWARD_SCREEN -> TopLevelDestination.REWARD
+        else -> TopLevelDestination.TODO
+    }
     val onNavigateToDestination: (TopLevelDestination) -> Unit = {
         when (it) {
             TopLevelDestination.TODO -> navController.navigateHome(TODO_SCREEN)
             TopLevelDestination.REWARD -> navController.navigateHome(REWARD_SCREEN)
         }
-        currentDestination = it
     }
 
     HomeScreenContent(
@@ -65,7 +66,7 @@ private fun HomeScreenContent(
             )
         },
         bottomBar = {
-            RewardedTodoBottomBar(topLevelDestinations, onNavigateToDestination)
+            RewardedTodoBottomBar(topLevelDestinations, currentDestination, onNavigateToDestination)
         },
     ) { padding ->
         content(padding)
