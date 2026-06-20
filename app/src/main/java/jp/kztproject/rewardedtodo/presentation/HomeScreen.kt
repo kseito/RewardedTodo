@@ -101,7 +101,7 @@ private fun NavHostController.navigateHome(route: String) {
 }
 
 @Composable
-@Preview(name = "TODOタブが選択された状態")
+@Preview
 fun HomeScreenTodoTabPreview() {
     HomeScreenContent(
         currentDestination = TopLevelDestination.TODO,
@@ -118,7 +118,7 @@ fun HomeScreenTodoTabPreview() {
 }
 
 @Composable
-@Preview(name = "REWARDタブが選択された状態")
+@Preview
 fun HomeScreenRewardTabPreview() {
     HomeScreenContent(
         currentDestination = TopLevelDestination.REWARD,
