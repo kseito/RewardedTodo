@@ -211,8 +211,11 @@ private val coverageExclusions = listOf(
     "**/*ViewModel.*",
     "**/*ViewModel\$*.*",
     // Activity / Navigation / DI / 例外 (UI ではなく VRT で撮影不可)
+    // 内部クラス・ラムダ ($*) も除外して計測対象から確実に外す。
     "**/*Activity.*",
+    "**/*Activity\$*.*",
     "**/*NavigationKt.*",
+    "**/*NavigationKt\$*.*",
     "**/di/**",
     "**/*Exception.*",
     // Android 生成物
