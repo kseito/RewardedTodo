@@ -272,3 +272,61 @@ fun SettingScreenConnectedPreview() {
         onTokenDelete = {},
     )
 }
+
+@Composable
+@Preview(name = "Disconnected State - Token Input Entered")
+fun SettingScreenTokenInputPreview() {
+    SettingScreenContent(
+        todoistExtensionEnabled = false,
+        tokenUiState = TokenSettingsUiState(tokenInput = "sample-token-1234567890"),
+        onTokenInputChange = {},
+        onTokenValidate = {},
+        onTokenDelete = {},
+    )
+}
+
+@Composable
+@Preview(name = "Disconnected State - Validation Error")
+fun SettingScreenValidationErrorPreview() {
+    SettingScreenContent(
+        todoistExtensionEnabled = false,
+        tokenUiState = TokenSettingsUiState(
+            tokenInput = "invalid-token",
+            validationError = TokenValidationError.INVALID_TOKEN_FORMAT,
+        ),
+        onTokenInputChange = {},
+        onTokenValidate = {},
+        onTokenDelete = {},
+    )
+}
+
+@Composable
+@Preview(name = "Disconnected State - Verifying")
+fun SettingScreenVerifyingPreview() {
+    SettingScreenContent(
+        todoistExtensionEnabled = false,
+        tokenUiState = TokenSettingsUiState(
+            tokenInput = "sample-token-1234567890",
+            isLoading = true,
+        ),
+        onTokenInputChange = {},
+        onTokenValidate = {},
+        onTokenDelete = {},
+    )
+}
+
+@Composable
+@Preview(name = "Connected State - Disconnecting")
+fun SettingScreenDisconnectingPreview() {
+    SettingScreenContent(
+        todoistExtensionEnabled = true,
+        tokenUiState = TokenSettingsUiState(
+            hasToken = true,
+            isConnected = true,
+            isLoading = true,
+        ),
+        onTokenInputChange = {},
+        onTokenValidate = {},
+        onTokenDelete = {},
+    )
+}
