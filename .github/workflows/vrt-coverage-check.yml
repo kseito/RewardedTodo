@@ -1,0 +1,40 @@
+name: vrt-coverage-check
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+
+jobs:
+  vrt-coverage-verification:
+    name: Verify VRT coverage
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
+      - name: Set up JDK
+        uses: ./.github/actions/setup-java
+
+      - name: Setup Gradle
+        uses: ./.github/actions/setup-gradle
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@40fd30fb8d7440372e1316f5d1809ec01dcd3699 # v4.0.1
+
+      - name: Inject secrets into local.properties
+        run: echo "reward.server.url=${{ secrets.REWARD_SERVER_URL }}" >> local.properties
+
+      # VRT カバレッジが下限 (INSTRUCTION 60%) を下回ったらマージをブロックする歯止め。
+      # レポートも同時生成し、失敗時に率の内訳を追えるようにする。
+      - name: Verify VRT coverage threshold
+        run: ./gradlew :app:jacocoVrtReport :app:jacocoVrtCoverageVerification
+
+      # 失敗時に率の内訳を確認できるよう、レポートをアーティファクトとして残す。
+      - name: Upload coverage report
+        if: failure()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: vrt-coverage-report
+          path: app/build/reports/jacoco/jacocoVrtReport/
+          retention-days: 30
