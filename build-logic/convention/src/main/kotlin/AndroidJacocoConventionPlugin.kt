@@ -19,6 +19,7 @@ import org.gradle.kotlin.dsl.register
 import org.gradle.kotlin.dsl.withType
 import org.gradle.testing.jacoco.plugins.JacocoPluginExtension
 import org.gradle.testing.jacoco.plugins.JacocoTaskExtension
+import org.gradle.testing.jacoco.tasks.JacocoCoverageVerification
 import org.gradle.testing.jacoco.tasks.JacocoReport
 import java.io.File
 import javax.inject.Inject
@@ -125,6 +126,62 @@ abstract class AndroidJacocoConventionPlugin @Inject constructor(private val arc
                     { _ -> allJars },
                     { _ -> allDirectories },
                 )
+
+            // カバレッジ下限の歯止め。レポートと同じ集約クラスを対象に検証する。
+            // exec/クラスは reportTask と同一だが、scoped artifact の consumer は
+            // タスクごとに必要なため専用の ListProperty を用意する。
+            val verifyJars: ListProperty<RegularFile> = objectFactory.listProperty(RegularFile::class.java)
+            val verifyDirectories: ListProperty<Directory> = objectFactory.listProperty(Directory::class.java)
+
+            val verifyTask = tasks.register("jacocoVrtCoverageVerification", JacocoCoverageVerification::class) {
+                group = "verification"
+                description = "VRT カバレッジが下限を満たすか検証する (INSTRUCTION 60%)"
+                dependsOn("testDebugUnitTest")
+
+                classDirectories.setFrom(
+                    verifyDirectories.map { dirs ->
+                        dirs.map { dir ->
+                            objectFactory.fileTree().setDir(dir)
+                                .include(coverageIncludes)
+                                .exclude(coverageExclusions)
+                        }
+                    },
+                    verifyJars.map { jars ->
+                        jars.map { jar ->
+                            archiveOps.zipTree(jar).matching {
+                                include(coverageIncludes)
+                                exclude(coverageExclusions)
+                            }
+                        }
+                    },
+                )
+
+                executionData.setFrom(
+                    objectFactory.fileTree().setDir(buildDirFile)
+                        .include(
+                            "**/jacoco/testDebugUnitTest.exec",
+                            "**/outputs/unit_test_code_coverage/**/*.exec",
+                        ),
+                )
+
+                violationRules {
+                    rule {
+                        limit {
+                            counter = "INSTRUCTION"
+                            value = "COVEREDRATIO"
+                            minimum = "0.60".toBigDecimal()
+                        }
+                    }
+                }
+            }
+
+            variant.artifacts.forScope(ScopedArtifacts.Scope.ALL)
+                .use(verifyTask)
+                .toGet(
+                    ScopedArtifact.CLASSES,
+                    { _ -> verifyJars },
+                    { _ -> verifyDirectories },
+                )
         }
 
         tasks.withType<Test>().configureEach {
@@ -150,6 +207,14 @@ private val coverageExclusions = listOf(
     "**/application/**",
     "**/domain/**",
     "**/common/database/**",
+    // ViewModel (画面に描画されず VRT では到達しない。網羅は単体テスト側の領分)
+    "**/*ViewModel.*",
+    "**/*ViewModel\$*.*",
+    // Activity / Navigation / DI / 例外 (UI ではなく VRT で撮影不可)
+    "**/*Activity.*",
+    "**/*NavigationKt.*",
+    "**/di/**",
+    "**/*Exception.*",
     // Android 生成物
     "**/R.class",
     "**/R\$*.class",
@@ -163,11 +228,14 @@ private val coverageExclusions = listOf(
     "**/Dagger*Component*.*",
     "**/*_GeneratedInjector.*",
     "**/hilt_aggregated_deps/**",
+    "**/*_HiltComponents*.*",
+    "**/*_ComponentTreeDeps*.*",
     // Room
     "**/*_Impl.*",
     // Showkase / KSP 生成物
     "**/*Showkase*Codegen*.*",
     "**/ShowkaseMetadata*.*",
+    "**/ShowkaseModule*.*",
     // Compose コンパイラ生成の lambda 集約
     "**/ComposableSingletons*.*",
     // VRT テスト本体
