@@ -20,7 +20,7 @@ pre-commit:
         fi
 
 pre-push:
-  parallel: true
+  parallel: false
   commands:
     # 静的解析（全モジュール）。重いので push 前のみ。
     detekt:
