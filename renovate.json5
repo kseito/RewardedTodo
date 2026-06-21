@@ -21,4 +21,8 @@
       "automerge": false
     }
   ],
+  "vulnerabilityAlerts": {
+    "minimumReleaseAge": null,
+    "labels": ["security"]
+  },
 }
