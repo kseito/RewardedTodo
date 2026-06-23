@@ -250,7 +250,7 @@ private fun ConnectionStatusCard(isConnected: Boolean) {
 }
 
 @Composable
-@Preview(name = "Disconnected State")
+@Preview
 fun SettingScreenPreview() {
     SettingScreenContent(
         todoistExtensionEnabled = false,
@@ -262,7 +262,7 @@ fun SettingScreenPreview() {
 }
 
 @Composable
-@Preview(name = "Connected State")
+@Preview
 fun SettingScreenConnectedPreview() {
     SettingScreenContent(
         todoistExtensionEnabled = true,
@@ -274,7 +274,7 @@ fun SettingScreenConnectedPreview() {
 }
 
 @Composable
-@Preview(name = "Disconnected State - Token Input Entered")
+@Preview
 fun SettingScreenTokenInputPreview() {
     SettingScreenContent(
         todoistExtensionEnabled = false,
@@ -286,7 +286,7 @@ fun SettingScreenTokenInputPreview() {
 }
 
 @Composable
-@Preview(name = "Disconnected State - Validation Error")
+@Preview
 fun SettingScreenValidationErrorPreview() {
     SettingScreenContent(
         todoistExtensionEnabled = false,
@@ -301,7 +301,7 @@ fun SettingScreenValidationErrorPreview() {
 }
 
 @Composable
-@Preview(name = "Disconnected State - Verifying")
+@Preview
 fun SettingScreenVerifyingPreview() {
     SettingScreenContent(
         todoistExtensionEnabled = false,
@@ -316,7 +316,7 @@ fun SettingScreenVerifyingPreview() {
 }
 
 @Composable
-@Preview(name = "Connected State - Disconnecting")
+@Preview
 fun SettingScreenDisconnectingPreview() {
     SettingScreenContent(
         todoistExtensionEnabled = true,
