@@ -1,7 +1,7 @@
 name: 技術的負債 / アーキテクチャ改善
 description: リファクタリング・設計改善・非機能要件の課題
 title: "[Tech] "
-labels: ["refactoring"]
+labels: ["tech-debt"]
 body:
   - type: markdown
     attributes:
