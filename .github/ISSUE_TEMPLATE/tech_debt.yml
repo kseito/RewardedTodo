@@ -1,0 +1,82 @@
+name: 技術的負債 / アーキテクチャ改善
+description: リファクタリング・設計改善・非機能要件の課題
+title: "[Tech] "
+labels: ["refactoring"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        アーキテクチャ改善・技術的負債の課題です。「なぜ今やるか」と「完了条件」が明確だと着手しやすくなります。
+
+  - type: input
+    id: target
+    attributes:
+      label: 対象
+      description: 対象のモジュール / クラス / レイヤーを記入してください。
+      placeholder: 例）feature/todo の TodoListViewModel、data 層全体 など
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 現状の問題点
+      description: 今の構造・実装の何がどう良くないかを記入してください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: ideal
+    attributes:
+      label: あるべき姿
+      description: 改善後にどうなっているべきかを記入してください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: 放置した場合の影響（なぜ今やるか）
+      description: 改善しないことで生じるコスト・リスクを記入してください。
+    validations:
+      required: true
+
+  - type: dropdown
+    id: migration
+    attributes:
+      label: 移行方針
+      description: どのように進める想定かを選択してください。
+      options:
+        - 段階的に進める
+        - 一括で対応する
+        - 未定 / 要相談
+    validations:
+      required: false
+
+  - type: textarea
+    id: done
+    attributes:
+      label: 完了条件（Done の定義）
+      description: 何が満たされたら完了とみなすかを記入してください。
+    validations:
+      required: true
+
+  - type: dropdown
+    id: adr
+    attributes:
+      label: ADR が必要か
+      description: 設計判断を伴う場合は docs/adr/ への記録を検討してください。
+      options:
+        - 不要
+        - 必要（設計判断を伴う）
+        - 未定 / 要相談
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 補足情報
+      description: 参考リンク・関連 Issue / PR などがあれば記入してください。
+    validations:
+      required: false
