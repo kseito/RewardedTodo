@@ -1,0 +1,70 @@
+name: バグ報告
+description: アプリの不具合・想定外の挙動を報告する
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        バグ報告ありがとうございます。再現と修正のため、わかる範囲で記入してください。
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: 不具合の概要
+      description: どんな不具合かを簡潔に説明してください。
+      placeholder: 例）報酬の抽選後にアプリがクラッシュする
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 再現手順
+      description: 不具合を再現する手順を順番に記入してください。
+      placeholder: |
+        1. ○○画面を開く
+        2. △△をタップする
+        3. □□が表示される
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待する挙動
+      description: 本来どうなるべきかを記入してください。
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 実際の挙動
+      description: 実際にどうなったかを記入してください。スクリーンショットやログがあれば添付してください。
+    validations:
+      required: true
+
+  - type: input
+    id: app-version
+    attributes:
+      label: アプリのバージョン
+      placeholder: 例）1.2.3
+    validations:
+      required: false
+
+  - type: input
+    id: device
+    attributes:
+      label: 端末 / OSバージョン
+      placeholder: 例）Pixel 8 / Android 15
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: 補足情報
+      description: その他、調査の参考になる情報があれば記入してください。
+    validations:
+      required: false
