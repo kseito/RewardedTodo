@@ -8,8 +8,11 @@ import jp.kztproject.rewardedtodo.application.todo.GetApiTokenUseCase
 import jp.kztproject.rewardedtodo.application.todo.SaveApiTokenUseCase
 import jp.kztproject.rewardedtodo.domain.todo.TokenError
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -20,58 +23,64 @@ class SettingViewModel @Inject constructor(
     private val deleteApiTokenUseCase: DeleteApiTokenUseCase,
 ) : ViewModel() {
 
-    private val mutableHasAccessToken = MutableStateFlow(false)
-    val hasAccessToken: StateFlow<Boolean> = mutableHasAccessToken
+    // トークン入力欄・ローディング・バリデーションエラーなど、ユーザー操作で変わる状態のみ保持する
+    private val editState = MutableStateFlow(TokenEditState())
 
-    private val _tokenUiState = MutableStateFlow(TokenSettingsUiState())
-    val tokenUiState: StateFlow<TokenSettingsUiState> = _tokenUiState.asStateFlow()
+    val hasAccessToken: StateFlow<Boolean> = getApiTokenUseCase.executeAsFlow()
+        .map { it != null }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = false,
+        )
 
-    init {
-        loadAccessToken()
-        loadCurrentToken()
-    }
-
-    fun loadAccessToken() = viewModelScope.launch {
-        val hasApiToken = getApiTokenUseCase.execute() != null
-        mutableHasAccessToken.value = hasApiToken
-    }
+    val tokenUiState: StateFlow<TokenSettingsUiState> = combine(
+        getApiTokenUseCase.executeAsFlow(),
+        editState,
+    ) { token, edit ->
+        TokenSettingsUiState(
+            tokenInput = edit.tokenInput,
+            hasToken = token != null,
+            isConnected = token != null,
+            isLoading = edit.isLoading,
+            validationError = edit.validationError,
+        )
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = TokenSettingsUiState(),
+    )
 
     fun updateTokenInput(token: String) {
-        _tokenUiState.value = _tokenUiState.value.copy(
+        editState.value = editState.value.copy(
             tokenInput = token,
             validationError = null,
         )
     }
 
     fun saveToken() {
-        val currentState = _tokenUiState.value
-        if (currentState.tokenInput.isBlank()) {
-            _tokenUiState.value = currentState.copy(
+        val currentEdit = editState.value
+        if (currentEdit.tokenInput.isBlank()) {
+            editState.value = currentEdit.copy(
                 validationError = TokenValidationError.TOKEN_EMPTY,
             )
             return
         }
 
         viewModelScope.launch {
-            _tokenUiState.value = currentState.copy(isLoading = true, validationError = null)
+            editState.value = currentEdit.copy(isLoading = true, validationError = null)
 
-            val saveResult = saveApiTokenUseCase.execute(currentState.tokenInput)
+            val saveResult = saveApiTokenUseCase.execute(currentEdit.tokenInput)
+            // 保存に成功するとトークンFlowが再emitされ、hasToken/isConnectedは自動更新される
             if (saveResult.isSuccess) {
-                _tokenUiState.value = currentState.copy(
-                    isLoading = false,
-                    hasToken = true,
-                    isConnected = true,
-                    tokenInput = "",
-                    validationError = null,
-                )
-                loadAccessToken() // Refresh the main token status
+                editState.value = TokenEditState()
             } else {
                 val validationError = when (saveResult.exceptionOrNull()) {
                     is TokenError.InvalidFormat -> TokenValidationError.INVALID_TOKEN_FORMAT
                     is TokenError.EmptyToken -> TokenValidationError.TOKEN_EMPTY
                     else -> TokenValidationError.FAILED_TO_SAVE_TOKEN
                 }
-                _tokenUiState.value = currentState.copy(
+                editState.value = currentEdit.copy(
                     isLoading = false,
                     validationError = validationError,
                 )
@@ -81,31 +90,20 @@ class SettingViewModel @Inject constructor(
 
     fun deleteToken() {
         viewModelScope.launch {
-            _tokenUiState.value = _tokenUiState.value.copy(isLoading = true)
+            editState.value = editState.value.copy(isLoading = true)
 
             deleteApiTokenUseCase.execute()
-
-            _tokenUiState.value = _tokenUiState.value.copy(
-                isLoading = false,
-                hasToken = false,
-                isConnected = false,
-                tokenInput = "",
-                validationError = null,
-            )
-            loadAccessToken() // Refresh the main token status
-        }
-    }
-
-    private fun loadCurrentToken() {
-        viewModelScope.launch {
-            val currentToken = getApiTokenUseCase.execute()
-            _tokenUiState.value = _tokenUiState.value.copy(
-                hasToken = currentToken != null,
-                isConnected = currentToken != null,
-            )
+            // 削除でトークンFlowが再emitされ、hasToken/isConnectedは自動更新される
+            editState.value = TokenEditState()
         }
     }
 }
+
+private data class TokenEditState(
+    val tokenInput: String = "",
+    val isLoading: Boolean = false,
+    val validationError: TokenValidationError? = null,
+)
 
 data class TokenSettingsUiState(
     val tokenInput: String = "",
