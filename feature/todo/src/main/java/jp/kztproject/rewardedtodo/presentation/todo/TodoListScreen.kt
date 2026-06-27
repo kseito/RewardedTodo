@@ -198,6 +198,7 @@ fun TodoListScreenPreview() {
         },
         object : GetApiTokenUseCase {
             override suspend fun execute(): ApiToken? = null
+            override fun executeAsFlow(): Flow<ApiToken?> = flowOf(null)
         },
     )
     TodoListScreen(
