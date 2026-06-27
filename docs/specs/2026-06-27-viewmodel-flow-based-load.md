@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| ステータス | Draft |
+| ステータス | Approved |
 | 作成日 | 2026-06-27 |
 | ブランチ | feature/viewmodel-flow-based-load |
 | 関連Issue/PR | #765 |
