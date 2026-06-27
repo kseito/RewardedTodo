@@ -76,9 +76,9 @@ class RewardListViewModelTest {
     }
 
     @Test
-    fun testLoadPoint() = runTest {
-        viewModel.loadPoint()
+    fun testRewardPoint() = runTest {
+        val point = viewModel.rewardPoint.first { it != 0 }
 
-        assertThat(viewModel.rewardPoint.value).isEqualTo(10)
+        assertThat(point).isEqualTo(10)
     }
 }
