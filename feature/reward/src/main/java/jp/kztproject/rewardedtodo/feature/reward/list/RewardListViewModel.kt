@@ -14,19 +14,24 @@ import jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class RewardListViewModel @Inject constructor(
     private val lotteryUseCase: LotteryUseCase,
@@ -44,7 +49,15 @@ class RewardListViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = emptyList(),
     )
-    val rewardPoint: StateFlow<Int> = flow { emitAll(getPointUseCase.execute()) }
+
+    // ポイント再取得を駆動するトリガー。抽選後など、値の変化を能動的に反映したいときに発火する。
+    // ネットワークモードの getNumberOfTicket() はワンショットFlowのため、購読しっぱなしでは
+    // 抽選後に再emitされない。トリガーで再フェッチして両モードに対応する。
+    private val pointRefreshTrigger = MutableSharedFlow<Unit>(replay = 1)
+
+    val rewardPoint: StateFlow<Int> = pointRefreshTrigger
+        .onStart { emit(Unit) }
+        .flatMapLatest { flow { emitAll(getPointUseCase.execute()) } }
         .map { it.value }
         .catch { mutableResult.value = Result.failure(it) }
         .stateIn(
@@ -70,6 +83,7 @@ class RewardListViewModel @Inject constructor(
             try {
                 val rewards = RewardCollection(rewardList.value)
                 mutableObtainedReward.value = lotteryUseCase.execute(rewards)
+                pointRefreshTrigger.tryEmit(Unit)
             } finally {
                 mutableIsSingleLottering.value = false
             }
@@ -87,6 +101,7 @@ class RewardListViewModel @Inject constructor(
             try {
                 val rewards = RewardCollection(rewardList.value)
                 mutableBatchLotteryResult.value = batchLotteryUseCase.execute(rewards, count)
+                pointRefreshTrigger.tryEmit(Unit)
             } finally {
                 mutableIsBatchLottering.value = false
             }
