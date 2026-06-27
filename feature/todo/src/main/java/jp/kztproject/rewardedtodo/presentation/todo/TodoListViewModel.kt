@@ -54,25 +54,29 @@ class TodoListViewModel @Inject constructor(
             initialValue = false,
         )
 
-    // 購読開始時の初回ロードとプルリフレッシュを駆動するトリガー
+    // プルリフレッシュによる手動同期を駆動するトリガー
     private val refreshTrigger = MutableSharedFlow<Unit>(replay = 1)
 
-    val todoList: StateFlow<List<Todo>> = refreshTrigger
-        .onStart { emit(Unit) }
-        .flatMapLatest {
-            flow {
-                _isRefreshing.update { true }
-                try {
-                    if (getApiTokenUseCase.execute() != null) {
-                        fetchTodoListUseCase.execute()
+    // トークン変更を起点にネットワーク同期し、その後DBを継続観測する完全リアクティブな一覧
+    val todoList: StateFlow<List<Todo>> = getApiTokenUseCase.executeAsFlow()
+        .flatMapLatest { token ->
+            refreshTrigger
+                .onStart { emit(Unit) }
+                .flatMapLatest {
+                    flow {
+                        if (token != null) {
+                            _isRefreshing.update { true }
+                            try {
+                                fetchTodoListUseCase.execute()
+                            } catch (e: Exception) {
+                                Timber.e(e)
+                                _result.update { Result.failure(e) }
+                            }
+                            _isRefreshing.update { false }
+                        }
+                        emitAll(getTodoListUseCase.execute())
                     }
-                } catch (e: Exception) {
-                    Timber.e(e)
-                    _result.update { Result.failure(e) }
                 }
-                _isRefreshing.update { false }
-                emitAll(getTodoListUseCase.execute())
-            }
         }
         .catch { throwable ->
             Timber.e(throwable)
