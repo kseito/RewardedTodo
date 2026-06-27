@@ -11,17 +11,25 @@ import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
 import jp.kztproject.rewardedtodo.application.todo.GetApiTokenUseCase
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.Todo
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class TodoListViewModel @Inject constructor(
     private val getTodoListUseCase: GetTodoListUseCase,
@@ -32,7 +40,40 @@ class TodoListViewModel @Inject constructor(
     private val getApiTokenUseCase: GetApiTokenUseCase,
 ) : ViewModel() {
 
-    val todoList: StateFlow<List<Todo>> = getTodoListUseCase.execute()
+    private val _result = MutableStateFlow<Result<Unit>?>(null)
+    val result: StateFlow<Result<Unit>?> = _result.asStateFlow()
+
+    private val _isRefreshing = MutableStateFlow(false)
+    val isRefreshing = _isRefreshing.asStateFlow()
+
+    val hasAuthToken: StateFlow<Boolean> = getApiTokenUseCase.executeAsFlow()
+        .map { it != null }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = false,
+        )
+
+    // 購読開始時の初回ロードとプルリフレッシュを駆動するトリガー
+    private val refreshTrigger = MutableSharedFlow<Unit>(replay = 1)
+
+    val todoList: StateFlow<List<Todo>> = refreshTrigger
+        .onStart { emit(Unit) }
+        .flatMapLatest {
+            flow {
+                _isRefreshing.update { true }
+                try {
+                    if (getApiTokenUseCase.execute() != null) {
+                        fetchTodoListUseCase.execute()
+                    }
+                } catch (e: Exception) {
+                    Timber.e(e)
+                    _result.update { Result.failure(e) }
+                }
+                _isRefreshing.update { false }
+                emitAll(getTodoListUseCase.execute())
+            }
+        }
         .catch { throwable ->
             Timber.e(throwable)
             _result.update { Result.failure(throwable) }
@@ -43,45 +84,8 @@ class TodoListViewModel @Inject constructor(
             initialValue = emptyList(),
         )
 
-    private val _result = MutableStateFlow<Result<Unit>?>(null)
-    val result: StateFlow<Result<Unit>?> = _result.asStateFlow()
-
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing = _isRefreshing.asStateFlow()
-
-    private val _hasAuthToken = MutableStateFlow(false)
-    val hasAuthToken = _hasAuthToken.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            checkAuthToken()
-
-            try {
-                if (_hasAuthToken.value) {
-                    fetchTodoListUseCase.execute()
-                }
-            } catch (e: Exception) {
-                Timber.e(e)
-                _result.update { Result.failure(e) }
-            }
-        }
-    }
-
     fun refreshTodoList() {
-        viewModelScope.launch {
-            _isRefreshing.update { true }
-            checkAuthToken()
-
-            try {
-                if (_hasAuthToken.value) {
-                    fetchTodoListUseCase.execute()
-                }
-            } catch (e: Exception) {
-                Timber.e(e)
-                _result.update { Result.failure(e) }
-            }
-            _isRefreshing.update { false }
-        }
+        refreshTrigger.tryEmit(Unit)
     }
 
     fun updateTodo(todo: EditingTodo) {
@@ -111,10 +115,5 @@ class TodoListViewModel @Inject constructor(
 
     fun clearResult() {
         _result.update { null }
-    }
-
-    private suspend fun checkAuthToken() {
-        val token = getApiTokenUseCase.execute()
-        _hasAuthToken.update { token != null }
     }
 }
