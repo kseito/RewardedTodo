@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| ステータス | Approved |
+| ステータス | Implemented |
 | 作成日 | 2026-06-27 |
 | ブランチ | feature/viewmodel-flow-based-load |
 | 関連Issue/PR | #765 |
@@ -130,3 +130,4 @@ val tokenUiState: StateFlow<TokenSettingsUiState> =
 
 - `SettingScreen` の `todoistAuthFinished` 引数による明示リフレッシュを削除する。OAuth完了時のトークンが同一DataStoreに保存される前提（`SaveApiTokenUseCase` 経由）であれば、Flowが自動反映するため問題ない。OAuth保存経路が別系統の場合は要再検討。
 - `hasAuthToken` は現状UIで未消費だが、内部整合と将来利用のため公開Flowとして残す。
+- `GetApiTokenInteractor.executeAsFlow` の専用ユニットテストは追加していない。`application:todo` モジュールにテスト依存（mockk/coroutines-test）が未設定で、実装が `apiTokenRepository.getTokenAsFlow()` への単純委譲かつ各ViewModelテストで間接的にカバーされるため。テスト基盤を整える際に追加する。
