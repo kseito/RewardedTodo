@@ -5,10 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -33,16 +29,13 @@ class HomeActivity : ComponentActivity() {
                 colorScheme = RewardedTodoScheme(isDarkTheme = isSystemInDarkTheme()),
             ) {
                 val navController = rememberNavController()
-                var todoistAuthFinished by remember { mutableStateOf(false) }
                 NavHost(navController = navController, startDestination = HOME_SCREEN) {
                     homeScreen(
                         onClickSetting = {
                             navController.navigate(SETTING_SCREEN)
                         },
                     )
-                    settingScreen(
-                        todoistAuthFinished = todoistAuthFinished,
-                    )
+                    settingScreen()
                 }
             }
         }
