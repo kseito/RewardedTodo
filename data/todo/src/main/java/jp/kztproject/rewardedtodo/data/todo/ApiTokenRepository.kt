@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import jp.kztproject.rewardedtodo.common.kvs.UserPreferencesKeys
 import jp.kztproject.rewardedtodo.domain.todo.ApiToken
 import jp.kztproject.rewardedtodo.domain.todo.repository.IApiTokenRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -27,6 +28,9 @@ class ApiTokenRepository @Inject constructor(private val dataStore: DataStore<Pr
             .first()
         return ApiToken.createSafely(tokenValue)
     }
+
+    override fun getTokenAsFlow(): Flow<ApiToken?> = dataStore.data
+        .map { ApiToken.createSafely(it[UserPreferencesKeys.TODOIST_API_TOKEN]) }
 
     override suspend fun deleteToken() {
         dataStore.edit { preferences ->
