@@ -11,6 +11,7 @@ import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
 import jp.kztproject.rewardedtodo.application.todo.GetApiTokenUseCase
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.Todo
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -54,8 +55,10 @@ class TodoListViewModel @Inject constructor(
             initialValue = false,
         )
 
-    // プルリフレッシュによる手動同期を駆動するトリガー
-    private val refreshTrigger = MutableSharedFlow<Unit>(replay = 1)
+    // プルリフレッシュによる手動同期を駆動するトリガー。
+    // replay=0 にして、再購読時に過去のリフレッシュ信号が再生され二重fetchになるのを防ぐ。
+    // extraBufferCapacity=1 で購読中の tryEmit を確実にバッファする。
+    private val refreshTrigger = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
 
     // トークン変更を起点にネットワーク同期し、その後DBを継続観測する完全リアクティブな一覧
     val todoList: StateFlow<List<Todo>> = getApiTokenUseCase.executeAsFlow()
@@ -68,19 +71,23 @@ class TodoListViewModel @Inject constructor(
                             _isRefreshing.update { true }
                             try {
                                 fetchTodoListUseCase.execute()
+                            } catch (e: CancellationException) {
+                                throw e
                             } catch (e: Exception) {
                                 Timber.e(e)
                                 _result.update { Result.failure(e) }
+                            } finally {
+                                _isRefreshing.update { false }
                             }
-                            _isRefreshing.update { false }
                         }
                         emitAll(getTodoListUseCase.execute())
                     }
+                        // 1サイクルの失敗で共有ストリームを終わらせない（次のリフレッシュで復帰可能にする）
+                        .catch { throwable ->
+                            Timber.e(throwable)
+                            _result.update { Result.failure(throwable) }
+                        }
                 }
-        }
-        .catch { throwable ->
-            Timber.e(throwable)
-            _result.update { Result.failure(throwable) }
         }
         .stateIn(
             scope = viewModelScope,
