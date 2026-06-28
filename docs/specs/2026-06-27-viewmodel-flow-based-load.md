@@ -45,7 +45,7 @@
 | Domain | domain/todo | `IApiTokenRepository` に `getTokenAsFlow(): Flow<ApiToken?>` を追加 |
 | Application | application/todo | `GetApiTokenUseCase` に `executeAsFlow(): Flow<ApiToken?>` を追加、`GetApiTokenInteractor` で実装 |
 | Data | data/todo | `ApiTokenRepository.getTokenAsFlow()` を DataStore の `data` Flow をmapして実装（`.first()` を使わない） |
-| Feature | feature/todo | `TodoListViewModel`: `init{}` 廃止。`hasAuthToken` をトークンFlowから導出。ネットワーク同期(`fetchTodoListUseCase`)を `refreshTrigger`(`MutableSharedFlow`)＋`onStart`で購読駆動の副作用に。`refreshTodoList()` はトリガーへemit |
+| Feature | feature/todo | `TodoListViewModel`: `init{}` 廃止。トークンFlow(`executeAsFlow`)を起点に `flatMapLatest` でネットワーク同期(`fetchTodoListUseCase`)→DB観測する完全リアクティブ構成に。手動リフレッシュは `refreshTrigger`(`MutableSharedFlow`)＋`onStart`で駆動し、`refreshTodoList()` はトリガーへemit。未使用だった `hasAuthToken` は削除 |
 | Feature | feature/reward | `RewardListViewModel`: `init{ loadPoint() }` 廃止。`rewardPoint` を `getPointUseCase` のFlowから `stateIn(WhileSubscribed)`。抽選後の明示 `loadPoint()` 呼び出しを削除（DataStore Flowが自動emit）。`loadPoint()` メソッド削除 |
 | Feature | feature/setting | `SettingViewModel`: `init{}` 廃止。`hasAccessToken`/`tokenUiState` をトークンFlowと編集用 `MutableStateFlow` の `combine` で合成。保存/削除後の明示 `loadAccessToken()` 呼び出しを削除。`SettingScreen` の `loadAccessToken()` 呼び出しと `loadAccessToken()`/`loadCurrentToken()` を削除 |
 
@@ -82,12 +82,8 @@ val todoList: StateFlow<List<Todo>> = getApiTokenUseCase.executeAsFlow()
             }
     }
     .stateIn(viewModelScope, WhileSubscribed(5000), emptyList())
-
-val hasAuthToken: StateFlow<Boolean> =
-    getApiTokenUseCase.executeAsFlow().map { it != null }
-        .stateIn(viewModelScope, WhileSubscribed(5000), false)
 ```
-トークン変更時・購読開始時・リフレッシュ時にネットワーク同期し、その後DBを継続観測する。再表示時は `WhileSubscribed(5000)` の再購読で再同期される。
+トークン変更時・購読開始時・リフレッシュ時にネットワーク同期し、その後DBを継続観測する。再表示時は `WhileSubscribed(5000)` の再購読で再同期される。トークン有無による取得制御は `todoList` 内の `if (token != null)` 判定と `TodoRepository.sync()` 内の再チェックで完結するため、専用の `hasAuthToken` プロパティは持たない。
 
 **RewardListViewModel**
 
@@ -152,5 +148,5 @@ val tokenUiState: StateFlow<TokenSettingsUiState> =
 ## 8. 未決事項・リスク
 
 - `SettingScreen` の `todoistAuthFinished` 引数による明示リフレッシュを削除する。OAuth完了時のトークンが同一DataStoreに保存される前提（`SaveApiTokenUseCase` 経由）であれば、Flowが自動反映するため問題ない。OAuth保存経路が別系統の場合は要再検討。
-- `hasAuthToken` は現状UIで未消費だが、内部整合と将来利用のため公開Flowとして残す。
+- `hasAuthToken` は導入以来UIで未消費のデッドコードだったため削除した。トークン有無による取得制御は `todoList` 内のインライン判定と `TodoRepository.sync()` の再チェックで担保される。
 - `GetApiTokenInteractor.executeAsFlow` の専用ユニットテストは追加していない。`application:todo` モジュールにテスト依存（mockk/coroutines-test）が未設定で、実装が `apiTokenRepository.getTokenAsFlow()` への単純委譲かつ各ViewModelテストで間接的にカバーされるため。テスト基盤を整える際に追加する。
