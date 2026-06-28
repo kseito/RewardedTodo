@@ -3,12 +3,15 @@ package jp.kztproject.rewardedtodo.data.todo
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.emptyPreferences
 import jp.kztproject.rewardedtodo.common.kvs.UserPreferencesKeys
 import jp.kztproject.rewardedtodo.domain.todo.ApiToken
 import jp.kztproject.rewardedtodo.domain.todo.repository.IApiTokenRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import java.io.IOException
 import javax.inject.Inject
 
 // トークンは平文DataStoreで保存している（暗号化しない）。Android 10+のFBEでat-rest暗号化されるため
@@ -30,6 +33,11 @@ class ApiTokenRepository @Inject constructor(private val dataStore: DataStore<Pr
     }
 
     override fun getTokenAsFlow(): Flow<ApiToken?> = dataStore.data
+        // DataStore読み取り時のIOExceptionでFlowが終了し、購読側のトークン状態更新が
+        // 止まるのを防ぐ。IO以外の例外はそのまま伝播させる。
+        .catch { exception ->
+            if (exception is IOException) emit(emptyPreferences()) else throw exception
+        }
         .map { ApiToken.createSafely(it[UserPreferencesKeys.TODOIST_API_TOKEN]) }
 
     override suspend fun deleteToken() {
