@@ -52,37 +52,60 @@
 ### 設計詳細
 
 **TodoListViewModel**
+
+トークンFlow(`executeAsFlow()`)を最外段の `flatMapLatest` に置き、トークンの保存・削除・OAuthログインなどの変更を検知して一覧を自動再ロードする完全リアクティブ構成にする。内側に手動リフレッシュ用の `refreshTrigger` をネストする。
+
 ```kotlin
-val todoList: StateFlow<List<Todo>> = refreshTrigger
-    .onStart { emit(Unit) }                 // 購読開始で初回同期
-    .flatMapLatest {
-        flow {
-            _isRefreshing.update { true }
-            runCatching {
-                if (getApiTokenUseCase.execute() != null) fetchTodoListUseCase.execute()
-            }.onFailure { e -> Timber.e(e); _result.update { Result.failure(e) } }
-            _isRefreshing.update { false }
-            emitAll(getTodoListUseCase.execute())   // DBを継続観測
-        }
+// replay=0 で再購読時の信号再生による二重fetchを防ぎ、extraBufferCapacity=1 で購読中のtryEmitをバッファ
+private val refreshTrigger = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
+
+val todoList: StateFlow<List<Todo>> = getApiTokenUseCase.executeAsFlow()
+    .flatMapLatest { token ->
+        refreshTrigger
+            .onStart { emit(Unit) }            // 購読開始で初回同期
+            .flatMapLatest {
+                flow {
+                    if (token != null) {
+                        _isRefreshing.update { true }
+                        try {
+                            fetchTodoListUseCase.execute()
+                        } catch (e: CancellationException) {
+                            throw e            // 正常キャンセルは伝播させる
+                        } catch (e: Exception) {
+                            Timber.e(e); _result.update { Result.failure(e) }
+                        } finally {
+                            _isRefreshing.update { false }
+                        }
+                    }
+                    emitAll(getTodoListUseCase.execute())   // DBを継続観測
+                }.catch { ... }                // 1サイクルの失敗で共有ストリームを終わらせない
+            }
     }
-    .catch { ... }
     .stateIn(viewModelScope, WhileSubscribed(5000), emptyList())
 
 val hasAuthToken: StateFlow<Boolean> =
     getApiTokenUseCase.executeAsFlow().map { it != null }
         .stateIn(viewModelScope, WhileSubscribed(5000), false)
 ```
-購読開始時とリフレッシュ時にネットワーク同期し、その後DBを継続観測する。再表示時は `WhileSubscribed(5000)` の再購読で再同期される。
+トークン変更時・購読開始時・リフレッシュ時にネットワーク同期し、その後DBを継続観測する。再表示時は `WhileSubscribed(5000)` の再購読で再同期される。
 
 **RewardListViewModel**
+
+ポイントは `pointRefreshTrigger`(MutableSharedFlow)を起点に `flatMapLatest` で取得する。ネットワークモード(Todoist連携時)の `getNumberOfTicket()` は1回emitして完了するワンショットFlowのため、抽選後に `pointRefreshTrigger.tryEmit(Unit)` を発火して再フェッチする（ローカルモードのDataStore Flowは継続観測で自動更新）。
+
 ```kotlin
-val rewardPoint: StateFlow<Int> =
-    flow { emitAll(getPointUseCase.execute()) }
-        .map { it.value }
-        .catch { mutableResult.value = Result.failure(it) }
-        .stateIn(viewModelScope, WhileSubscribed(5000), 0)
+private val pointRefreshTrigger = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
+
+val rewardPoint: StateFlow<Int> = pointRefreshTrigger
+    .onStart { emit(Unit) }
+    .flatMapLatest {
+        // catchをflatMapLatest内に置き、1回の取得失敗で共有ストリームを終わらせない
+        flow { emitAll(getPointUseCase.execute()) }
+            .map { it.value }
+            .catch { mutableResult.value = Result.failure(it) }
+    }
+    .stateIn(viewModelScope, WhileSubscribed(5000), 0)
 ```
-抽選はチケットDataStoreを更新し、Flowが自動emitするため明示再ロードは不要。
 
 **SettingViewModel**
 ```kotlin
@@ -107,14 +130,14 @@ val tokenUiState: StateFlow<TokenSettingsUiState> =
 
 ## 6. 受け入れ条件 (Acceptance Criteria)
 
-- [ ] 3つのViewModelの `init {}` ブロックが削除されている（データロードの副作用がない）。
-- [ ] `TodoListViewModel`/`SettingViewModel` がトークンを `getApiTokenUseCase.executeAsFlow()` から購読している。
-- [ ] `RewardListViewModel.rewardPoint` が `getPointUseCase` のFlowから `stateIn(WhileSubscribed)` で合成され、抽選後に明示 `loadPoint()` を呼ばずにポイントが更新される。
-- [ ] アプリ起動時にTodo一覧・報酬一覧・ポイント・トークン接続状態が従来通り表示される。
-- [ ] プルリフレッシュ（`refreshTodoList()`）でネットワーク同期が走る。
-- [ ] トークン保存/削除後に接続状態UIが更新される。
-- [ ] 全モジュールのユニットテストがパスする。
-- [ ] Roborazziに意図しない差分が出ない。
+- [x] 3つのViewModelの `init {}` ブロックが削除されている（データロードの副作用がない）。
+- [x] `TodoListViewModel`/`SettingViewModel` がトークンを `getApiTokenUseCase.executeAsFlow()` から購読している。
+- [x] `RewardListViewModel.rewardPoint` が `getPointUseCase` のFlowから `stateIn(WhileSubscribed)` で合成され、抽選後に明示 `loadPoint()` を呼ばずにポイントが更新される（ネットワークモードは `pointRefreshTrigger` 経由で再フェッチ）。
+- [x] アプリ起動時にTodo一覧・報酬一覧・ポイント・トークン接続状態が従来通り表示される。
+- [x] プルリフレッシュ（`refreshTodoList()`）でネットワーク同期が走る。
+- [x] トークン保存/削除後に接続状態UIが更新される。
+- [x] 全モジュールのユニットテストがパスする。
+- [x] Roborazziに意図しない差分が出ない。
 
 ## 7. テスト方針
 
