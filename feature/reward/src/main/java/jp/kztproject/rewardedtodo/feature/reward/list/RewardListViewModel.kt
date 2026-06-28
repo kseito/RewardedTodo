@@ -53,13 +53,19 @@ class RewardListViewModel @Inject constructor(
     // ポイント再取得を駆動するトリガー。抽選後など、値の変化を能動的に反映したいときに発火する。
     // ネットワークモードの getNumberOfTicket() はワンショットFlowのため、購読しっぱなしでは
     // 抽選後に再emitされない。トリガーで再フェッチして両モードに対応する。
-    private val pointRefreshTrigger = MutableSharedFlow<Unit>(replay = 1)
+    // replay=0 にして再購読時の信号再生による二重フェッチを防ぎ、extraBufferCapacity=1 で
+    // 購読中の tryEmit を確実にバッファする。
+    private val pointRefreshTrigger = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
 
     val rewardPoint: StateFlow<Int> = pointRefreshTrigger
         .onStart { emit(Unit) }
-        .flatMapLatest { flow { emitAll(getPointUseCase.execute()) } }
-        .map { it.value }
-        .catch { mutableResult.value = Result.failure(it) }
+        .flatMapLatest {
+            // catch を flatMapLatest 内に置き、1回の取得失敗で共有ストリームを終わらせない。
+            // 外側に置くと例外で StateFlow の収集が止まり、以降のトリガーで復帰できなくなる。
+            flow { emitAll(getPointUseCase.execute()) }
+                .map { it.value }
+                .catch { mutableResult.value = Result.failure(it) }
+        }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
