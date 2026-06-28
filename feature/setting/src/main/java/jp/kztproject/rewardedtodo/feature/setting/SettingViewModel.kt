@@ -7,12 +7,14 @@ import jp.kztproject.rewardedtodo.application.todo.DeleteApiTokenUseCase
 import jp.kztproject.rewardedtodo.application.todo.GetApiTokenUseCase
 import jp.kztproject.rewardedtodo.application.todo.SaveApiTokenUseCase
 import jp.kztproject.rewardedtodo.domain.todo.TokenError
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -80,21 +82,29 @@ class SettingViewModel @Inject constructor(
                     is TokenError.EmptyToken -> TokenValidationError.TOKEN_EMPTY
                     else -> TokenValidationError.FAILED_TO_SAVE_TOKEN
                 }
-                editState.value = currentEdit.copy(
-                    isLoading = false,
-                    validationError = validationError,
-                )
+                // currentEditではなく最新のeditStateを基準に更新し、保存中にユーザーが入力した
+                // 新しいトークンを古い値で上書きしないようにする。
+                editState.update {
+                    it.copy(isLoading = false, validationError = validationError)
+                }
             }
         }
     }
 
     fun deleteToken() {
         viewModelScope.launch {
-            editState.value = editState.value.copy(isLoading = true)
+            editState.update { it.copy(isLoading = true) }
 
-            deleteApiTokenUseCase.execute()
-            // 削除でトークンFlowが再emitされ、hasToken/isConnectedは自動更新される
-            editState.value = TokenEditState()
+            try {
+                deleteApiTokenUseCase.execute()
+                // 削除でトークンFlowが再emitされ、hasToken/isConnectedは自動更新される
+                editState.value = TokenEditState()
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                // 削除に失敗してもローディングは必ず解除し、画面が固まらないようにする
+                editState.update { it.copy(isLoading = false) }
+            }
         }
     }
 }
