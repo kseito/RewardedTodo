@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -54,12 +55,15 @@ class TodoListViewModel @Inject constructor(
     // トークン変更を起点にネットワーク同期し、その後DBを継続観測する完全リアクティブな一覧
     val todoList: StateFlow<List<Todo>> = getApiTokenUseCase.executeAsFlow()
         .flatMapLatest { token ->
+            // 初回ロード(onStart)は false、手動プルリフレッシュ(refreshTrigger)は true。
+            // プルリフレッシュ用スピナーは手動時のみ表示し、初回ロードでは出さない。
             refreshTrigger
-                .onStart { emit(Unit) }
-                .flatMapLatest {
+                .map { true }
+                .onStart { emit(false) }
+                .flatMapLatest { isManualRefresh ->
                     flow {
                         if (token != null) {
-                            _isRefreshing.update { true }
+                            if (isManualRefresh) _isRefreshing.update { true }
                             try {
                                 fetchTodoListUseCase.execute()
                             } catch (e: CancellationException) {
@@ -68,7 +72,7 @@ class TodoListViewModel @Inject constructor(
                                 Timber.e(e)
                                 _result.update { Result.failure(e) }
                             } finally {
-                                _isRefreshing.update { false }
+                                if (isManualRefresh) _isRefreshing.update { false }
                             }
                         }
                         emitAll(getTodoListUseCase.execute())
