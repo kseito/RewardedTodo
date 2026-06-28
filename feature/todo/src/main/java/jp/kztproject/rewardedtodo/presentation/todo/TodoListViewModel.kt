@@ -9,10 +9,12 @@ import jp.kztproject.rewardedtodo.application.reward.FetchTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.GetTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
 import jp.kztproject.rewardedtodo.application.todo.GetApiTokenUseCase
+import jp.kztproject.rewardedtodo.domain.todo.ApiToken
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.Todo
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -54,41 +56,44 @@ class TodoListViewModel @Inject constructor(
 
     // トークン変更を起点にネットワーク同期し、その後DBを継続観測する完全リアクティブな一覧
     val todoList: StateFlow<List<Todo>> = getApiTokenUseCase.executeAsFlow()
-        .flatMapLatest { token ->
-            // 初回ロード(onStart)は false、手動プルリフレッシュ(refreshTrigger)は true。
-            // プルリフレッシュ用スピナーは手動時のみ表示し、初回ロードでは出さない。
-            refreshTrigger
-                .map { true }
-                .onStart { emit(false) }
-                .flatMapLatest { isManualRefresh ->
-                    flow {
-                        if (token != null) {
-                            if (isManualRefresh) _isRefreshing.update { true }
-                            try {
-                                fetchTodoListUseCase.execute()
-                            } catch (e: CancellationException) {
-                                throw e
-                            } catch (e: Exception) {
-                                Timber.e(e)
-                                _result.update { Result.failure(e) }
-                            } finally {
-                                if (isManualRefresh) _isRefreshing.update { false }
-                            }
-                        }
-                        emitAll(getTodoListUseCase.execute())
-                    }
-                        // 1サイクルの失敗で共有ストリームを終わらせない（次のリフレッシュで復帰可能にする）
-                        .catch { throwable ->
-                            Timber.e(throwable)
-                            _result.update { Result.failure(throwable) }
-                        }
-                }
-        }
+        .flatMapLatest { token -> syncThenObserveTodoList(token) }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList(),
         )
+
+    // 初回ロード(onStart)と手動リフレッシュ(refreshTrigger)を契機に同期し、その後DBを観測する。
+    // 初回ロードは false、手動プルリフレッシュは true として扱い、スピナーは手動時のみ表示する。
+    private fun syncThenObserveTodoList(token: ApiToken?): Flow<List<Todo>> = refreshTrigger
+        .map { true }
+        .onStart { emit(false) }
+        .flatMapLatest { isManualRefresh ->
+            flow {
+                if (token != null) syncTodoList(isManualRefresh)
+                emitAll(getTodoListUseCase.execute())
+            }
+                // 1サイクルの失敗で共有ストリームを終わらせない（次のリフレッシュで復帰可能にする）
+                .catch { reportError(it) }
+        }
+
+    private suspend fun syncTodoList(isManualRefresh: Boolean) {
+        if (isManualRefresh) _isRefreshing.update { true }
+        try {
+            fetchTodoListUseCase.execute()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            reportError(e)
+        } finally {
+            if (isManualRefresh) _isRefreshing.update { false }
+        }
+    }
+
+    private fun reportError(throwable: Throwable) {
+        Timber.e(throwable)
+        _result.update { Result.failure(throwable) }
+    }
 
     fun refreshTodoList() {
         refreshTrigger.tryEmit(Unit)
