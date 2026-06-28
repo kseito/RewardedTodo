@@ -14,17 +14,24 @@ import jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
-import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class RewardListViewModel @Inject constructor(
     private val lotteryUseCase: LotteryUseCase,
@@ -42,8 +49,28 @@ class RewardListViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = emptyList(),
     )
-    private val mutableRewardPoint = MutableStateFlow(0)
-    val rewardPoint: StateFlow<Int> = mutableRewardPoint.asStateFlow()
+
+    // ポイント再取得を駆動するトリガー。抽選後など、値の変化を能動的に反映したいときに発火する。
+    // ネットワークモードの getNumberOfTicket() はワンショットFlowのため、購読しっぱなしでは
+    // 抽選後に再emitされない。トリガーで再フェッチして両モードに対応する。
+    // replay=0 にして再購読時の信号再生による二重フェッチを防ぎ、extraBufferCapacity=1 で
+    // 購読中の tryEmit を確実にバッファする。
+    private val pointRefreshTrigger = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
+
+    val rewardPoint: StateFlow<Int> = pointRefreshTrigger
+        .onStart { emit(Unit) }
+        .flatMapLatest {
+            // catch を flatMapLatest 内に置き、1回の取得失敗で共有ストリームを終わらせない。
+            // 外側に置くと例外で StateFlow の収集が止まり、以降のトリガーで復帰できなくなる。
+            flow { emitAll(getPointUseCase.execute()) }
+                .map { it.value }
+                .catch { mutableResult.value = Result.failure(it) }
+        }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = 0,
+        )
     private val mutableResult = MutableStateFlow<Result<Unit>?>(null)
     val result: StateFlow<Result<Unit>?> = mutableResult.asStateFlow()
     private val mutableObtainedReward = MutableStateFlow<Result<Reward?>?>(null)
@@ -55,10 +82,6 @@ class RewardListViewModel @Inject constructor(
     private val mutableIsBatchLottering = MutableStateFlow(false)
     val isBatchLottering: StateFlow<Boolean> = mutableIsBatchLottering.asStateFlow()
 
-    init {
-        loadPoint()
-    }
-
     fun startLottery() {
         if (mutableIsSingleLottering.value || mutableIsBatchLottering.value) return
         mutableIsSingleLottering.value = true
@@ -66,7 +89,7 @@ class RewardListViewModel @Inject constructor(
             try {
                 val rewards = RewardCollection(rewardList.value)
                 mutableObtainedReward.value = lotteryUseCase.execute(rewards)
-                loadPoint()
+                pointRefreshTrigger.tryEmit(Unit)
             } finally {
                 mutableIsSingleLottering.value = false
             }
@@ -84,7 +107,7 @@ class RewardListViewModel @Inject constructor(
             try {
                 val rewards = RewardCollection(rewardList.value)
                 mutableBatchLotteryResult.value = batchLotteryUseCase.execute(rewards, count)
-                loadPoint()
+                pointRefreshTrigger.tryEmit(Unit)
             } finally {
                 mutableIsBatchLottering.value = false
             }
@@ -103,20 +126,6 @@ class RewardListViewModel @Inject constructor(
                 mutableObtainedReward.value = Result.failure(OverMaxRewardsException())
             } else {
                 onSuccess()
-            }
-        }
-    }
-
-    fun loadPoint() {
-        viewModelScope.launch {
-            try {
-                getPointUseCase.execute().collect {
-                    mutableRewardPoint.value = it.value
-                }
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Exception) {
-                mutableResult.value = Result.failure(e)
             }
         }
     }

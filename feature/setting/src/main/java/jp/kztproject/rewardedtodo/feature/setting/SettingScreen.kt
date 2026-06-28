@@ -17,13 +17,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 
 @Composable
-fun SettingScreen(todoistAuthFinished: Boolean = false, viewModel: SettingViewModel = hiltViewModel()) {
+fun SettingScreen(viewModel: SettingViewModel = hiltViewModel()) {
     val todoistExtensionEnabled = viewModel.hasAccessToken.collectAsState()
     val tokenUiState = viewModel.tokenUiState.collectAsState()
-
-    if (todoistAuthFinished) {
-        viewModel.loadAccessToken()
-    }
 
     SettingScreenContent(
         todoistExtensionEnabled.value,
