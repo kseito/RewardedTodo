@@ -24,4 +24,8 @@
       ],
     },
   ],
+  "vulnerabilityAlerts": {
+    "minimumReleaseAge": null,
+    "labels": ["security"]
+  },
 }

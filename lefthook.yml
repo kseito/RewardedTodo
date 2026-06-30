@@ -1,0 +1,30 @@
+# lefthook によるローカル pre-commit / pre-push フック
+# CI（GitHub Actions）の手前に置く早期フィードバック用の関所。
+pre-commit:
+  parallel: false
+  commands:
+    # Kotlin の整形を適用し、修正結果を自動で stage し直す。
+    # spotless は ratchetFrom("origin/main") のため origin/main からの差分だけが対象。
+    spotless:
+      glob: "*.kt"
+      run: ./gradlew spotlessKotlinApply
+      stage_fixed: true
+    # ステージ済み差分にシークレットが含まれていないか検査する。
+    # gitleaks 未インストール時はスキップ（CI 側の gitleaks が最終防壁）。
+    gitleaks:
+      run: >
+        if command -v gitleaks >/dev/null 2>&1; then
+          gitleaks git --pre-commit --staged --redact --verbose;
+        else
+          echo "gitleaks 未インストールのためスキップ（brew install gitleaks で有効化）";
+        fi
+
+pre-push:
+  parallel: false
+  commands:
+    # 静的解析（全モジュール）。重いので push 前のみ。
+    detekt:
+      run: ./gradlew detekt
+    # 整形漏れの最終確認（CI の spotlessKotlinCheck と同等）。
+    spotless-check:
+      run: ./gradlew spotlessKotlinCheck

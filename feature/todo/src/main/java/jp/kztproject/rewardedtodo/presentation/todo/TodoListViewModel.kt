@@ -9,19 +9,31 @@ import jp.kztproject.rewardedtodo.application.reward.FetchTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.GetTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
 import jp.kztproject.rewardedtodo.application.todo.GetApiTokenUseCase
+import jp.kztproject.rewardedtodo.domain.todo.ApiToken
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.Todo
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.emitAll
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
+@OptIn(ExperimentalCoroutinesApi::class)
 @HiltViewModel
 class TodoListViewModel @Inject constructor(
     private val getTodoListUseCase: GetTodoListUseCase,
@@ -32,61 +44,69 @@ class TodoListViewModel @Inject constructor(
     private val getApiTokenUseCase: GetApiTokenUseCase,
 ) : ViewModel() {
 
-    val todoList: StateFlow<List<Todo>> = getTodoListUseCase.execute()
-        .catch { throwable ->
-            Timber.e(throwable)
-            _result.update { Result.failure(throwable) }
-        }
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = emptyList(),
-        )
-
     private val _result = MutableStateFlow<Result<Unit>?>(null)
     val result: StateFlow<Result<Unit>?> = _result.asStateFlow()
 
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
+    // 初回ロード中（一覧データが一度も届いていない状態）を表す。
+    // 中央ローディング表示用で、プルリフレッシュ用の isRefreshing とは別物。
     private val _isInitialLoading = MutableStateFlow(true)
     val isInitialLoading = _isInitialLoading.asStateFlow()
 
-    private val _hasAuthToken = MutableStateFlow(false)
-    val hasAuthToken = _hasAuthToken.asStateFlow()
+    // プルリフレッシュによる手動同期を駆動するトリガー。
+    // replay=0 にして、再購読時に過去のリフレッシュ信号が再生され二重fetchになるのを防ぐ。
+    // extraBufferCapacity=1 で購読中の tryEmit を確実にバッファする。
+    private val refreshTrigger = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
 
-    init {
-        viewModelScope.launch {
-            try {
-                checkAuthToken()
+    // トークン変更を起点にネットワーク同期し、その後DBを継続観測する完全リアクティブな一覧
+    val todoList: StateFlow<List<Todo>> = getApiTokenUseCase.executeAsFlow()
+        .flatMapLatest { token -> syncThenObserveTodoList(token) }
+        // 一覧が初めて届いた時点で初回ロード完了とみなす
+        .onEach { _isInitialLoading.update { false } }
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList(),
+        )
 
-                if (_hasAuthToken.value) {
-                    fetchTodoListUseCase.execute()
-                }
-            } catch (e: Exception) {
-                Timber.e(e)
-                _result.update { Result.failure(e) }
-            } finally {
-                _isInitialLoading.update { false }
+    // 初回ロード(onStart)と手動リフレッシュ(refreshTrigger)を契機に同期し、その後DBを観測する。
+    // 初回ロードは false、手動プルリフレッシュは true として扱い、スピナーは手動時のみ表示する。
+    private fun syncThenObserveTodoList(token: ApiToken?): Flow<List<Todo>> = refreshTrigger
+        .map { true }
+        .onStart { emit(false) }
+        .flatMapLatest { isManualRefresh ->
+            flow {
+                if (token != null) syncTodoList(isManualRefresh)
+                emitAll(getTodoListUseCase.execute())
             }
+                // 1サイクルの失敗で共有ストリームを終わらせない（次のリフレッシュで復帰可能にする）
+                .catch { reportError(it) }
+        }
+
+    private suspend fun syncTodoList(isManualRefresh: Boolean) {
+        if (isManualRefresh) _isRefreshing.update { true }
+        try {
+            fetchTodoListUseCase.execute()
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            reportError(e)
+        } finally {
+            if (isManualRefresh) _isRefreshing.update { false }
         }
     }
 
-    fun refreshTodoList() {
-        viewModelScope.launch {
-            _isRefreshing.update { true }
-            checkAuthToken()
+    private fun reportError(throwable: Throwable) {
+        Timber.e(throwable)
+        _result.update { Result.failure(throwable) }
+        // 一覧が届かないままエラーで終わってもスピナーが残らないようにする
+        _isInitialLoading.update { false }
+    }
 
-            try {
-                if (_hasAuthToken.value) {
-                    fetchTodoListUseCase.execute()
-                }
-            } catch (e: Exception) {
-                Timber.e(e)
-                _result.update { Result.failure(e) }
-            }
-            _isRefreshing.update { false }
-        }
+    fun refreshTodoList() {
+        refreshTrigger.tryEmit(Unit)
     }
 
     fun updateTodo(todo: EditingTodo) {
@@ -116,10 +136,5 @@ class TodoListViewModel @Inject constructor(
 
     fun clearResult() {
         _result.update { null }
-    }
-
-    private suspend fun checkAuthToken() {
-        val token = getApiTokenUseCase.execute()
-        _hasAuthToken.update { token != null }
     }
 }

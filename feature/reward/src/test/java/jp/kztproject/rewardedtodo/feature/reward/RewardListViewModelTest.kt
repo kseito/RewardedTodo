@@ -8,12 +8,14 @@ import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
+import jp.kztproject.rewardedtodo.domain.reward.NumberOfTicket
 import jp.kztproject.rewardedtodo.feature.reward.list.RewardListViewModel
 import jp.kztproject.rewardedtodo.test.reward.DummyCreator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
@@ -76,9 +78,34 @@ class RewardListViewModelTest {
     }
 
     @Test
-    fun testLoadPoint() = runTest {
-        viewModel.loadPoint()
+    fun testRewardPoint() = runTest {
+        val point = viewModel.rewardPoint.first { it != 0 }
 
-        assertThat(viewModel.rewardPoint.value).isEqualTo(10)
+        assertThat(point).isEqualTo(10)
+    }
+
+    @Test
+    fun `rewardPoint refreshes after single lottery`() = runTest {
+        // ネットワークモードのワンショットFlowを模し、execute()呼び出しごとに異なる値を返す
+        coEvery { mockGetPointUseCase.execute() } returnsMany listOf(
+            flowOf(NumberOfTicket(10)),
+            flowOf(NumberOfTicket(9)),
+        )
+        coEvery { mockLotteryUseCase.execute(any()) } returns Result.success(null)
+        viewModel = RewardListViewModel(
+            mockLotteryUseCase,
+            mockBatchLotteryUseCase,
+            mockGetRewardsUseCase,
+            mockGetPointUseCase,
+            mockSaveRewardUseCase,
+            mockDeleteRewardUseCase,
+        )
+        val collector = backgroundScope.launch { viewModel.rewardPoint.collect {} }
+        assertThat(viewModel.rewardPoint.first { it == 10 }).isEqualTo(10)
+
+        viewModel.startLottery()
+
+        assertThat(viewModel.rewardPoint.first { it == 9 }).isEqualTo(9)
+        collector.cancel()
     }
 }
