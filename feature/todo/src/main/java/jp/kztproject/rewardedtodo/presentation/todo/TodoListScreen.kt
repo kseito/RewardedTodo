@@ -44,19 +44,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import jp.kztproject.rewardedtodo.application.reward.CompleteTodoUseCase
-import jp.kztproject.rewardedtodo.application.reward.DeleteTodoUseCase
-import jp.kztproject.rewardedtodo.application.reward.FetchTodoListUseCase
-import jp.kztproject.rewardedtodo.application.reward.GetTodoListUseCase
-import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
-import jp.kztproject.rewardedtodo.application.todo.GetApiTokenUseCase
 import jp.kztproject.rewardedtodo.common.ui.CommonAlertDialog
-import jp.kztproject.rewardedtodo.domain.todo.ApiToken
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.Todo
 import jp.kztproject.rewardedtodo.feature.todo.R
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOf
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -118,6 +109,48 @@ private fun TodoListScreen(
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
+        TodoListContent(
+            todoList = todoList,
+            isInitialLoading = isInitialLoading,
+            isRefreshing = refreshing,
+            onRefresh = { viewModel.refreshTodoList() },
+            onTodoItemClicked = onTodoItemClicked,
+            onTodoDone = { viewModel.completeTodo(it) },
+            onTodoAddClicked = onTodoAddClicked,
+        )
+
+        result?.let {
+            it.fold(
+                onSuccess = {
+                    onTodoUpdateSucceed()
+                },
+                onFailure = {
+                    CommonAlertDialog(
+                        message = stringResource(id = R.string.error_message),
+                        onOkClicked = {
+                            viewModel.clearResult()
+                        },
+                    )
+                },
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TodoListContent(
+    todoList: List<Todo>,
+    isInitialLoading: Boolean,
+    isRefreshing: Boolean,
+    onRefresh: () -> Unit,
+    onTodoItemClicked: (Todo) -> Unit,
+    onTodoDone: (Todo) -> Unit,
+    onTodoAddClicked: () -> Unit,
+) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+    ) {
         when {
             isInitialLoading && todoList.isEmpty() -> {
                 Box(
@@ -134,8 +167,8 @@ private fun TodoListScreen(
 
             else -> {
                 PullToRefreshBox(
-                    isRefreshing = refreshing,
-                    onRefresh = { viewModel.refreshTodoList() },
+                    isRefreshing = isRefreshing,
+                    onRefresh = onRefresh,
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
@@ -164,7 +197,7 @@ private fun TodoListScreen(
                                     onTodoItemClicked(todo)
                                 },
                                 onTodoDone = {
-                                    viewModel.completeTodo(todo)
+                                    onTodoDone(todo)
                                 },
                                 modifier = Modifier.animateItem(),
                             )
@@ -186,58 +219,51 @@ private fun TodoListScreen(
         ) {
             Icon(Icons.Rounded.Add, contentDescription = "Add")
         }
-
-        result?.let {
-            it.fold(
-                onSuccess = {
-                    onTodoUpdateSucceed()
-                },
-                onFailure = {
-                    CommonAlertDialog(
-                        message = stringResource(id = R.string.error_message),
-                        onOkClicked = {
-                            viewModel.clearResult()
-                        },
-                    )
-                },
-            )
-        }
     }
 }
 
-@Preview
+@Preview(name = "TodoList - Initial Loading")
 @Composable
-@Suppress("ViewModelConstructorInComposable")
-fun TodoListScreenPreview() {
-    val viewModel = TodoListViewModel(
-        object : GetTodoListUseCase {
-            override fun execute(): Flow<List<Todo>> = flowOf(
-                listOf(
-                    Todo(1, "1001", "英語学習", 2, true),
-                ),
-            )
-        },
-        object : FetchTodoListUseCase {
-            override suspend fun execute() {}
-        },
-        object : UpdateTodoUseCase {
-            override suspend fun execute(todo: EditingTodo): Result<Unit> = Result.success(Unit)
-        },
-        object : DeleteTodoUseCase {
-            override suspend fun execute(todo: Todo) {}
-        },
-        object : CompleteTodoUseCase {
-            override suspend fun execute(todo: Todo) {}
-        },
-        object : GetApiTokenUseCase {
-            override suspend fun execute(): ApiToken? = null
-        },
-    )
-    TodoListScreen(
-        viewModel = viewModel,
+fun TodoListContentLoadingPreview() {
+    TodoListContent(
+        todoList = emptyList(),
+        isInitialLoading = true,
+        isRefreshing = false,
+        onRefresh = {},
         onTodoItemClicked = {},
+        onTodoDone = {},
         onTodoAddClicked = {},
-        onTodoUpdateSucceed = {},
+    )
+}
+
+@Preview(name = "TodoList - Empty")
+@Composable
+fun TodoListContentEmptyPreview() {
+    TodoListContent(
+        todoList = emptyList(),
+        isInitialLoading = false,
+        isRefreshing = false,
+        onRefresh = {},
+        onTodoItemClicked = {},
+        onTodoDone = {},
+        onTodoAddClicked = {},
+    )
+}
+
+@Preview(name = "TodoList - With Data")
+@Composable
+fun TodoListContentWithDataPreview() {
+    TodoListContent(
+        todoList = listOf(
+            Todo(1, "1001", "英語学習", 2, true),
+            Todo(2, "1002", "ランニング", 1, false),
+        ),
+        isInitialLoading = false,
+        isRefreshing = false,
+        onRefresh = {},
+        onTodoItemClicked = {},
+        onTodoDone = {},
+        onTodoAddClicked = {},
     )
 }
 
