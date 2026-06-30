@@ -222,7 +222,7 @@ private fun TodoListContent(
     }
 }
 
-@Preview(name = "TodoList - Initial Loading")
+@Preview
 @Composable
 fun TodoListContentLoadingPreview() {
     TodoListContent(
@@ -236,7 +236,7 @@ fun TodoListContentLoadingPreview() {
     )
 }
 
-@Preview(name = "TodoList - Empty")
+@Preview
 @Composable
 fun TodoListContentEmptyPreview() {
     TodoListContent(
@@ -250,7 +250,7 @@ fun TodoListContentEmptyPreview() {
     )
 }
 
-@Preview(name = "TodoList - With Data")
+@Preview
 @Composable
 fun TodoListContentWithDataPreview() {
     TodoListContent(
