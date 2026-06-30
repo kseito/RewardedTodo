@@ -49,20 +49,25 @@ class TodoListViewModel @Inject constructor(
     private val _isRefreshing = MutableStateFlow(false)
     val isRefreshing = _isRefreshing.asStateFlow()
 
+    private val _isInitialLoading = MutableStateFlow(true)
+    val isInitialLoading = _isInitialLoading.asStateFlow()
+
     private val _hasAuthToken = MutableStateFlow(false)
     val hasAuthToken = _hasAuthToken.asStateFlow()
 
     init {
         viewModelScope.launch {
-            checkAuthToken()
-
             try {
+                checkAuthToken()
+
                 if (_hasAuthToken.value) {
                     fetchTodoListUseCase.execute()
                 }
             } catch (e: Exception) {
                 Timber.e(e)
                 _result.update { Result.failure(e) }
+            } finally {
+                _isInitialLoading.update { false }
             }
         }
     }
