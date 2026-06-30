@@ -1,6 +1,7 @@
 package jp.kztproject.rewardedtodo.presentation.todo
 
 import io.kotest.core.spec.style.ShouldSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -56,6 +57,63 @@ class TodoListViewModelTest :
 
                     advanceUntilIdle()
                     coVerify(exactly = 1) { fetchTodoListUseCase.execute() }
+                }
+            }
+        }
+
+        context("Initial loading state") {
+            should("be true while initializing and become false after initial load completes") {
+                runTest(testDispatcher) {
+                    val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
+                    val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
+                    val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
+                    val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
+                    val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
+                    val getApiTokenUseCase = mockk<GetApiTokenUseCase>(relaxed = true)
+                    val dummyToken = ApiToken.create("1234567890abcdef1234567890abcdef12345678")
+                    coEvery { getApiTokenUseCase.execute() } returns dummyToken
+
+                    val viewModel = TodoListViewModel(
+                        getTodoListUseCase,
+                        fetchTodoListUseCase,
+                        updateTodoListUseCase,
+                        deleteTodoUseCase,
+                        completeTodoUseCase,
+                        getApiTokenUseCase,
+                    )
+
+                    viewModel.isInitialLoading.value shouldBe true
+
+                    advanceUntilIdle()
+
+                    viewModel.isInitialLoading.value shouldBe false
+                }
+            }
+
+            should("become false even when initial fetch fails") {
+                runTest(testDispatcher) {
+                    val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
+                    val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
+                    val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
+                    val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
+                    val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
+                    val getApiTokenUseCase = mockk<GetApiTokenUseCase>(relaxed = true)
+                    val dummyToken = ApiToken.create("1234567890abcdef1234567890abcdef12345678")
+                    coEvery { getApiTokenUseCase.execute() } returns dummyToken
+                    coEvery { fetchTodoListUseCase.execute() } throws RuntimeException("network error")
+
+                    val viewModel = TodoListViewModel(
+                        getTodoListUseCase,
+                        fetchTodoListUseCase,
+                        updateTodoListUseCase,
+                        deleteTodoUseCase,
+                        completeTodoUseCase,
+                        getApiTokenUseCase,
+                    )
+
+                    advanceUntilIdle()
+
+                    viewModel.isInitialLoading.value shouldBe false
                 }
             }
         }
