@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
@@ -112,33 +113,65 @@ private fun TodoListScreen(
     val todoList by viewModel.todoList.collectAsStateWithLifecycle()
     val result by viewModel.result.collectAsStateWithLifecycle()
     val refreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+    val isInitialLoading by viewModel.isInitialLoading.collectAsStateWithLifecycle()
 
     Box(
         modifier = Modifier.fillMaxSize(),
     ) {
-        PullToRefreshBox(
-            isRefreshing = refreshing,
-            onRefresh = { viewModel.refreshTodoList() },
-        ) {
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                itemsIndexed(
-                    items = todoList,
-                    key = { _, todo -> todo.id },
-                ) { index, todo ->
-                    TodoListItem(
-                        todo = todo,
-                        onItemClicked = {
-                            onTodoItemClicked(todo)
+        when {
+            isInitialLoading && todoList.isEmpty() -> {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.semantics {
+                            contentDescription = "initial_loading_indicator"
                         },
-                        onTodoDone = {
-                            viewModel.completeTodo(todo)
-                        },
-                        modifier = Modifier.animateItem(),
                     )
-                    if (index < todoList.lastIndex) {
-                        HorizontalDivider()
+                }
+            }
+
+            else -> {
+                PullToRefreshBox(
+                    isRefreshing = refreshing,
+                    onRefresh = { viewModel.refreshTodoList() },
+                ) {
+                    LazyColumn(
+                        modifier = Modifier.fillMaxSize(),
+                    ) {
+                        if (todoList.isEmpty()) {
+                            item {
+                                Box(
+                                    modifier = Modifier.fillParentMaxSize(),
+                                    contentAlignment = Alignment.Center,
+                                ) {
+                                    Text(
+                                        text = stringResource(id = R.string.todo_empty_message),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.onBackground,
+                                    )
+                                }
+                            }
+                        }
+                        itemsIndexed(
+                            items = todoList,
+                            key = { _, todo -> todo.id },
+                        ) { index, todo ->
+                            TodoListItem(
+                                todo = todo,
+                                onItemClicked = {
+                                    onTodoItemClicked(todo)
+                                },
+                                onTodoDone = {
+                                    viewModel.completeTodo(todo)
+                                },
+                                modifier = Modifier.animateItem(),
+                            )
+                            if (index < todoList.lastIndex) {
+                                HorizontalDivider()
+                            }
+                        }
                     }
                 }
             }
