@@ -1,0 +1,43 @@
+appId: jp.kztproject.rewardedtodo.debug
+tags:
+  - android
+  - rewardedtodo
+---
+- clearState
+- launchApp
+
+# Add a todo to complete
+- tapOn:
+    text: "Add"
+
+# Wait for bottom sheet to appear
+- assertVisible: "Title"
+
+# Enter task name
+- tapOn: "Title"
+- inputText: "Task to Complete"
+
+# Tap Save button
+- tapOn: "Save"
+
+# Verify the task is added to the list
+- assertVisible: "Task to Complete"
+
+# Complete the todo by tapping checkbox
+- tapOn:
+    text: "todo_checkbox"
+    index: 0
+
+# Non-repeat todo should be removed from the list after completion
+- extendedWaitUntil:
+    notVisible: "Task to Complete"
+    timeout: 5000
+
+# Navigate to Reward tab to verify the ticket was earned
+- tapOn:
+    text: "Reward"
+
+# Verify 1 ticket was earned by completing the todo
+- extendedWaitUntil:
+    visible: "1 tickets"
+    timeout: 5000

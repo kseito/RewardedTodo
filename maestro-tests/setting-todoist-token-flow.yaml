@@ -1,0 +1,51 @@
+appId: jp.kztproject.rewardedtodo.debug
+tags:
+  - android
+  - rewardedtodo
+  - setting
+---
+- clearState
+- launchApp
+
+# Open the setting screen via the gear icon in the top app bar
+# (the icon has no contentDescription, so tap by position: top-right of the app bar)
+- tapOn:
+    point: "93%,9%"
+
+# Verify the setting screen is displayed
+# (text is locale dependent, so match both English and Japanese)
+- assertVisible: "Setting|設定"
+- assertVisible: "Extensions|拡張機能"
+
+# Todoist is not connected right after clearState
+- assertVisible: "Not Connected|未接続"
+
+# Enter a valid Todoist API token (40-char hex string)
+# Note: use uppercase A-F only. On devices with a Japanese IME, lowercase
+# letters and digits typed into this field get converted to full-width
+# characters via romaji composition, while uppercase letters pass through as-is.
+- tapOn: "Todoist API.*"
+- inputText: "ABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCD"
+- hideKeyboard
+
+# Save the token
+- tapOn: "Verify Connection|接続を確認"
+
+# Verify the connection status turns into Connected
+- extendedWaitUntil:
+    visible: "Connected|接続済み"
+    timeout: 5000
+
+# Disconnect the integration
+- tapOn: "Disconnect|連携を解除"
+
+# Verify the connection status turns back into Not Connected
+- extendedWaitUntil:
+    visible: "Not Connected|未接続"
+    timeout: 5000
+
+# Go back to the home screen
+- back
+
+# Verify the Todo tab is displayed again
+- assertVisible: "Todo"
