@@ -178,4 +178,72 @@ class TodoListViewModelTest :
                 }
             }
         }
+
+        context("When the initial load is in flight") {
+            should("keep isInitialLoading true until the list is loaded") {
+                runTest(testDispatcher) {
+                    val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
+                    val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
+                    val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
+                    val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
+                    val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
+                    val getApiTokenUseCase = mockk<GetApiTokenUseCase>(relaxed = true)
+                    val dummyToken = ApiToken.create("1234567890abcdef1234567890abcdef12345678")
+                    every { getApiTokenUseCase.executeAsFlow() } returns flowOf(dummyToken)
+                    every { getTodoListUseCase.execute() } returns flowOf(emptyList())
+                    val fetchGate = CompletableDeferred<Unit>()
+                    coEvery { fetchTodoListUseCase.execute() } coAnswers { fetchGate.await() }
+
+                    val viewModel = TodoListViewModel(
+                        getTodoListUseCase,
+                        fetchTodoListUseCase,
+                        updateTodoListUseCase,
+                        deleteTodoUseCase,
+                        completeTodoUseCase,
+                        getApiTokenUseCase,
+                    )
+
+                    val job = backgroundScope.launch { viewModel.todoList.collect {} }
+                    advanceUntilIdle()
+                    // 初回同期が完了し一覧が届くまでは初回ロード中
+                    assertThat(viewModel.isInitialLoading.value).isTrue()
+
+                    fetchGate.complete(Unit)
+                    advanceUntilIdle()
+                    // 一覧が届いたら初回ロード完了
+                    assertThat(viewModel.isInitialLoading.value).isFalse()
+                    job.cancel()
+                }
+            }
+        }
+
+        context("When there is no auth token") {
+            should("clear isInitialLoading after the list is loaded without fetching") {
+                runTest(testDispatcher) {
+                    val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
+                    val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
+                    val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
+                    val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
+                    val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
+                    val getApiTokenUseCase = mockk<GetApiTokenUseCase>(relaxed = true)
+                    every { getApiTokenUseCase.executeAsFlow() } returns flowOf(null)
+                    every { getTodoListUseCase.execute() } returns flowOf(emptyList())
+
+                    val viewModel = TodoListViewModel(
+                        getTodoListUseCase,
+                        fetchTodoListUseCase,
+                        updateTodoListUseCase,
+                        deleteTodoUseCase,
+                        completeTodoUseCase,
+                        getApiTokenUseCase,
+                    )
+
+                    val job = backgroundScope.launch { viewModel.todoList.collect {} }
+                    advanceUntilIdle()
+                    assertThat(viewModel.isInitialLoading.value).isFalse()
+                    coVerify(exactly = 0) { fetchTodoListUseCase.execute() }
+                    job.cancel()
+                }
+            }
+        }
     })
