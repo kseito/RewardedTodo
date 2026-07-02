@@ -1,0 +1,32 @@
+# プロジェクト独自のdetektルール(:detekt-rules)だけを全モジュールに対して走らせるための最小設定。
+# 既定ルールは既存コードへ一斉適用するとノイズが大きいため、ここではすべて無効化し、
+# `rewardedtodo` ルールセットのみを有効にする。通常の detekt 設定は detekt.yml を参照。
+build:
+  maxIssues: 0
+
+config:
+  validation: false
+
+comments:
+  active: false
+complexity:
+  active: false
+coroutines:
+  active: false
+empty-blocks:
+  active: false
+exceptions:
+  active: false
+naming:
+  active: false
+performance:
+  active: false
+potential-bugs:
+  active: false
+style:
+  active: false
+
+rewardedtodo:
+  active: true
+  NoPreviewName:
+    active: true
