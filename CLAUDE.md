@@ -48,8 +48,8 @@ This Android project implements **Clean Architecture** with a **multi-modular st
 
 ## Module Structure
 
-The project uses 34+ modules organized by domain:
-- Each domain area (reward, todo, auth) has separate modules for domain, application, data, and feature layers
+The project uses 17 modules organized by domain (see `settings.gradle.kts` for the full list):
+- Each domain area (reward, todo) has separate modules for domain, application, data, and feature layers
 - Common modules provide shared functionality
 - Build-logic contains custom Gradle convention plugins
 
