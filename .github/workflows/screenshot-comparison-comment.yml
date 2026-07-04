@@ -40,7 +40,13 @@ jobs:
         name: Get pull request number
         shell: bash
         run: |
-          echo "pull_request_number=$(cat NR)" >> "$GITHUB_OUTPUT"
+          # PR番号は外部入力のため数値のみ許可する
+          nr="$(cat NR)"
+          if ! [[ "$nr" =~ ^[0-9]+$ ]]; then
+            echo "Invalid PR number in NR artifact: $nr" >&2
+            exit 1
+          fi
+          echo "pull_request_number=$nr" >> "$GITHUB_OUTPUT"
 
       - uses: dawidd6/action-download-artifact@b6e2e70617bc3265edd6dab6c906732b2f1ae151 # v21
         with:
@@ -48,8 +54,17 @@ jobs:
           name: screenshot-diff-reports
           path: screenshot-diff-reports
       - id: collect-compare-images
+        shell: bash
         run: |
           files=$(find . -type f -name '*_compare.png' | sort)
+          # ファイルパスは安全な文字のみ許可する
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            if ! printf '%s' "$file" | grep -qE '^[A-Za-z0-9_./-]+$'; then
+              echo "Unsafe file path detected in artifact: $file" >&2
+              exit 1
+            fi
+          done <<< "$files"
           delimiter="$(openssl rand -hex 8)"
           {
             echo "screenshot_compare_images<<${delimiter}"
@@ -62,6 +77,10 @@ jobs:
         if: steps.collect-compare-images.outputs.screenshot_compare_images != ''
         env:
           BRANCH_NAME: companion_${{ github.event.workflow_run.head_branch }}
+          # 外部入力は env 経由で渡す（run: への直接展開を避ける）
+          COMPARE_IMAGES: ${{ steps.collect-compare-images.outputs.screenshot_compare_images }}
+          REPOSITORY: ${{ github.repository }}
+        shell: bash
         run: |
           delimiter="$(openssl rand -hex 8)"
           {
@@ -73,10 +92,10 @@ jobs:
           git branch -D "$BRANCH_NAME" || true
           git checkout --orphan "$BRANCH_NAME"
           git rm -rf .
-          echo "${{ steps.collect-compare-images.outputs.screenshot_compare_images }}" | while read file; do
+          while IFS= read -r file; do
             [ -n "$file" ] && git add "$file"
-            echo "![](https://github.com/${{ github.repository }}/blob/${BRANCH_NAME}/$(echo "${file}" | sed 's|^\./||')?raw=true)" >> "$GITHUB_OUTPUT"
-          done
+            echo "![](https://github.com/${REPOSITORY}/blob/${BRANCH_NAME}/$(echo "${file}" | sed 's|^\./||')?raw=true)" >> "$GITHUB_OUTPUT"
+          done <<< "$COMPARE_IMAGES"
           echo "${delimiter}" >> "$GITHUB_OUTPUT"
           git config --global user.name github-actions[bot]
           git config --global user.email github-actions[bot]@users.noreply.github.com
