@@ -4,7 +4,14 @@
 
 ## 実行方法
 
+テストは**英語ロケール（en_US）のエミュレータ**で実行することを前提とする。
+文言アサートは英語のみで書かれているため、日本語ロケールの端末では
+setting 系フローが失敗する。
+
 ```bash
+# 英語ロケールのエミュレータを起動（Maestro管理のエミュレータを作成・起動）
+maestro start-device --platform android --device-locale en_US
+
 # デバッグアプリをインストール
 ./gradlew installDebug
 
@@ -14,6 +21,8 @@ maestro test maestro-tests/
 # 単一フロー実行
 maestro test maestro-tests/add-todo-flow.yaml
 ```
+
+英語ロケールであれば手元のAVDでもよい（`adb shell am get-config` で `en-rUS` を確認できる）。
 
 > **警告**: 各フローは `clearState` でアプリデータ（Todo・報酬・チケット・APIトークン）を全消去する。
 > 実機の `jp.kztproject.rewardedtodo.debug` に残したいデータがある場合は事前にバックアップすること。
@@ -62,6 +71,6 @@ maestro test maestro-tests/add-todo-flow.yaml
 ## テスト作成時の注意
 
 - **セレクタはテキスト/contentDescription優先**。座標（`point`）指定は画面サイズ・解像度に依存してFlakyになるため使わない
-- **ロケール依存の文言**: settingモジュールのみ `values-ja` があるため、正規表現で日英両対応にする（例: `"Not Connected|未接続"`）
-- **日本語IME端末でのテキスト入力**: パスワード系フィールド（トークン入力欄）は入力がIMEのローマ字変換を通るため、小文字・数字は全角化される。大文字A-Fのみのトークンを使うこと
+- **文言アサートは英語のみで書く**。ロケールは実行環境（en_USエミュレータ）側で固定する。Maestroのロケール指定（`--device-locale`）はエミュレータ専用で、実機やフローYAML内では指定できない
+- **日本語IME端末（実機）で実行する場合の注意**: パスワード系フィールド（トークン入力欄）は入力がIMEのローマ字変換を通るため、小文字・数字は全角化される。トークンは大文字A-Fのみで構成している
 - **テストを通すためにアプリ側のビジネスロジックやデザインを変更しない**。ただし、テストから要素を特定するための識別子（`contentDescription`）の追加は可（例: `repeat_checkbox`, `setting_button`）
