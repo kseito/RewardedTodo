@@ -61,8 +61,7 @@ maestro test maestro-tests/add-todo-flow.yaml
 
 ## テスト作成時の注意
 
-- **セレクタはテキスト/contentDescription優先**。座標（`point`）指定は以下のやむを得ない箇所のみ:
-  - 設定画面の歯車アイコン（contentDescription未設定）: `point: "93%,9%"`
+- **セレクタはテキスト/contentDescription優先**。座標（`point`）指定は画面サイズ・解像度に依存してFlakyになるため使わない
 - **ロケール依存の文言**: settingモジュールのみ `values-ja` があるため、正規表現で日英両対応にする（例: `"Not Connected|未接続"`）
 - **日本語IME端末でのテキスト入力**: パスワード系フィールド（トークン入力欄）は入力がIMEのローマ字変換を通るため、小文字・数字は全角化される。大文字A-Fのみのトークンを使うこと
-- **テストを通すためにアプリ側のソースコードを修正しない**
+- **テストを通すためにアプリ側のビジネスロジックやデザインを変更しない**。ただし、テストから要素を特定するための識別子（`contentDescription`）の追加は可（例: `repeat_checkbox`, `setting_button`）
