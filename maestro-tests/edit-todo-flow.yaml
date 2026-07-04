@@ -1,0 +1,64 @@
+appId: jp.kztproject.rewardedtodo.debug
+tags:
+  - android
+  - rewardedtodo
+---
+- clearState
+- launchApp
+
+# Add a todo to edit
+- tapOn:
+    text: "Add"
+
+# Wait for bottom sheet to appear
+- assertVisible: "Title"
+
+# Enter task name
+- tapOn: "Title"
+- inputText: "Original Task"
+
+# Tap Save button
+- tapOn: "Save"
+
+# Verify the task is added to the list
+- assertVisible: "Original Task"
+
+# Tap on the task to open the detail bottom sheet
+- tapOn:
+    text: "Original Task"
+
+# Wait for bottom sheet to appear (Save button only exists in the sheet)
+- assertVisible: "Save"
+
+# Focus the title text field in the sheet and replace the text
+# (while the modal sheet is open, the list behind it is not accessible,
+#  so this uniquely matches the text field in the sheet)
+- tapOn:
+    text: "Original Task"
+- eraseText
+- inputText: "Updated Task"
+- hideKeyboard
+
+# Increase the ticket count as well using NumberPicker
+- swipe:
+    from:
+      text: "ticket_number_picker"
+    direction: UP
+    duration: 500
+
+# Save the changes
+- tapOn: "Save"
+
+# Verify the updated task name is shown in the list
+- extendedWaitUntil:
+    visible: "Updated Task"
+    timeout: 5000
+
+# Verify the old task name is gone
+- assertNotVisible: "Original Task"
+
+# Verify the updated ticket count (2 or more) is shown in the todo row
+# (the ticket count is rendered right below the todo title)
+- assertVisible:
+    text: "[2-9]|\\d{2,}"
+    below: "Updated Task"
