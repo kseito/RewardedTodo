@@ -123,6 +123,7 @@ private fun TodoListScreen(
             it.fold(
                 onSuccess = {
                     onTodoUpdateSucceed()
+                    viewModel.clearResult()
                 },
                 onFailure = {
                     CommonAlertDialog(
