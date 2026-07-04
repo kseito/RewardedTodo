@@ -8,9 +8,8 @@ tags:
 - launchApp
 
 # Open the setting screen via the gear icon in the top app bar
-# (the icon has no contentDescription, so tap by position: top-right of the app bar)
 - tapOn:
-    point: "93%,9%"
+    text: "setting_button"
 
 # Verify the setting screen is displayed
 # (text is locale dependent, so match both English and Japanese)
