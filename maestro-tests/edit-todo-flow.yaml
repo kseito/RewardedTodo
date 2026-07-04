@@ -57,6 +57,8 @@ tags:
 # Verify the old task name is gone
 - assertNotVisible: "Original Task"
 
-# Verify the updated ticket count (2 or more) is shown
+# Verify the updated ticket count (2 or more) is shown in the todo row
+# (the ticket count is rendered right below the todo title)
 - assertVisible:
     text: "[2-9]|\\d{2,}"
+    below: "Updated Task"
