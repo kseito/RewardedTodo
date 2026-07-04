@@ -12,12 +12,11 @@ tags:
     text: "setting_button"
 
 # Verify the setting screen is displayed
-# (text is locale dependent, so match both English and Japanese)
-- assertVisible: "Setting|設定"
-- assertVisible: "Extensions|拡張機能"
+- assertVisible: "Setting"
+- assertVisible: "Extensions"
 
 # Todoist is not connected right after clearState
-- assertVisible: "Not Connected|未接続"
+- assertVisible: "Not Connected"
 
 # Enter a valid Todoist API token (40-char hex string)
 # Note: use uppercase A-F only. On devices with a Japanese IME, lowercase
@@ -28,19 +27,19 @@ tags:
 - hideKeyboard
 
 # Save the token
-- tapOn: "Verify Connection|接続を確認"
+- tapOn: "Verify Connection"
 
 # Verify the connection status turns into Connected
 - extendedWaitUntil:
-    visible: "Connected|接続済み"
+    visible: "Connected"
     timeout: 5000
 
 # Disconnect the integration
-- tapOn: "Disconnect|連携を解除"
+- tapOn: "Disconnect"
 
 # Verify the connection status turns back into Not Connected
 - extendedWaitUntil:
-    visible: "Not Connected|未接続"
+    visible: "Not Connected"
     timeout: 5000
 
 # Go back to the home screen
