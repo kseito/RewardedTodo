@@ -1,0 +1,78 @@
+name: Claude Auto Implement
+
+# Issue に `claude-auto` ラベルが付いたら、仕様書作成 → 実装 → 検証 → Draft PR 作成までを
+# Claude Code が自動実行する。人間の承認ポイントは Draft PR レビューに一本化する。
+# （ローカルの /feature スキルにある「仕様書レビュー停止」は、仕様書を PR に含めることで代替）
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  implement:
+    name: Claude Auto Implement
+    runs-on: ubuntu-latest
+    # リポジトリオーナーがラベルを付けた場合のみ実行する。
+    # ラベル付与を「着手判断」として明示的に残すため、bug / tech-debt では発火させない。
+    if: |
+      github.event.label.name == 'claude-auto' &&
+      github.actor == github.repository_owner
+    # 同一 Issue に対する多重起動を防ぐ（ラベル付け直し等）
+    concurrency:
+      group: claude-auto-implement-${{ github.event.issue.number }}
+      cancel-in-progress: false
+    timeout-minutes: 90
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      actions: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Set up JDK 17
+        uses: ./.github/actions/setup-java
+
+      - name: Setup Gradle
+        uses: ./.github/actions/setup-gradle
+
+      # Claude がユニットテストを実行できるよう、CI と同じシークレットを注入する
+      - name: Inject secrets into local.properties
+        run: echo "reward.server.url=${{ secrets.REWARD_SERVER_URL }}" >> local.properties
+
+      - name: Run Claude Code
+        uses: anthropics/claude-code-action@a92e7c70a4da9793dc164451d829089dc057a464 # v1.0.159
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          claude_args: |
+            --max-turns 80
+          prompt: |
+            Issue #${{ github.event.issue.number }} の内容を実装し、Draft PR を作成してください。
+
+            ## 手順
+
+            1. Issue #${{ github.event.issue.number }} を `gh issue view` で読み、要求を把握する
+            2. CLAUDE.md と docs/ 配下の関連ドキュメント（domain-model.md, how-to-add-new-feature.md,
+               module-dependency.md, di-setup.md）を読む
+            3. `claude-auto/issue-${{ github.event.issue.number }}` ブランチを main から作成する
+            4. docs/specs/_template.md を雛形に仕様書を docs/specs/ へ作成し、最初にコミットする
+            5. 仕様書に沿って実装する（レイヤー順・命名規則・コミット粒度は CLAUDE.md に従う）
+            6. 以下をすべてパスさせてから push する:
+               - ./gradlew testDebugUnitTest
+               - ./gradlew spotlessCheck
+               - ./gradlew detekt
+            7. Draft PR を作成する。PR 本文には以下を含める:
+               - 仕様書へのリンク
+               - `Closes #${{ github.event.issue.number }}`
+               - 実行した検証コマンドとその結果
+            8. Issue #${{ github.event.issue.number }} に Draft PR の URL をコメントする
+
+            ## 制約
+
+            - main ブランチには直接コミットしない
+            - テストが通らない状態でコミットしない
+            - 判断に迷う仕様上の選択肢があれば、独断で進めず PR 本文に「要判断」として明記する
