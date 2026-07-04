@@ -4,4 +4,5 @@
     <string name="todo_reward">Reward</string>
     <string name="multiplication">x</string>
     <string name="error_message">Error occurred</string>
+    <string name="todo_empty_message">No tasks yet</string>
 </resources>
