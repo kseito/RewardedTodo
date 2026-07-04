@@ -1,0 +1,155 @@
+name: Claude Auto Fix
+
+# claude-auto/ ブランチの PR に対する自動修正ループ。
+# 以下のイベントで発火し、「CI が緑」かつ「未解決レビューコメントなし」になるまで
+# イベント駆動で修正を繰り返す:
+#   - CI（Build / Detekt / Android Lint）の失敗 → 修正して push → CI 再実行 → 失敗ならまた発火
+#   - オーナーのレビュー投稿・レビューコメント → 対応して push・返信 → 再コメントでまた発火
+# 暴走防止:
+#   - CI 失敗起因の修正は [auto-fix] コミットマーカーで数えて最大3回まで
+#   - 古いコミットに対する CI 結果（push 済みの新コミットがある場合）はスキップ
+on:
+  workflow_run:
+    workflows: ["Build", "Detekt", "Android Lint"]
+    types: [completed]
+  pull_request_review:
+    types: [submitted]
+  pull_request_review_comment:
+    types: [created]
+
+jobs:
+  fix:
+    name: Claude Auto Fix
+    runs-on: ubuntu-latest
+    # @claude メンション付きコメントは既存の claude.yml が処理するため除外する
+    if: |
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.conclusion == 'failure' &&
+       startsWith(github.event.workflow_run.head_branch, 'claude-auto/')) ||
+      (github.event_name == 'pull_request_review' &&
+       startsWith(github.event.pull_request.head.ref, 'claude-auto/') &&
+       github.event.review.state != 'approved' &&
+       github.actor == github.repository_owner &&
+       !contains(github.event.review.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' &&
+       startsWith(github.event.pull_request.head.ref, 'claude-auto/') &&
+       github.actor == github.repository_owner &&
+       !contains(github.event.comment.body, '@claude'))
+    # 同一ブランチへの多重起動を直列化する（複数 CI が同時に失敗した場合など）
+    concurrency:
+      group: claude-auto-fix-${{ github.event.workflow_run.head_branch || github.event.pull_request.head.ref }}
+      cancel-in-progress: false
+    timeout-minutes: 60
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      actions: read
+    steps:
+      - name: Resolve target PR
+        id: ctx
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            branch="${{ github.event.workflow_run.head_branch }}"
+            pr_json=$(gh pr list --head "$branch" --state open --json number,headRefOid --jq '.[0]')
+            if [ -z "$pr_json" ] || [ "$pr_json" = "null" ]; then
+              echo "対象の open PR が見つからないためスキップ"
+              echo "proceed=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            pr_number=$(echo "$pr_json" | jq -r '.number')
+            head_sha=$(echo "$pr_json" | jq -r '.headRefOid')
+            # 失敗した CI が古いコミットに対するものならスキップ（新コミットの CI が別途発火する）
+            if [ "$head_sha" != "${{ github.event.workflow_run.head_sha }}" ]; then
+              echo "PR の HEAD が進んでいるため古い CI 結果をスキップ"
+              echo "proceed=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            trigger="ci"
+          else
+            branch="${{ github.event.pull_request.head.ref }}"
+            pr_number="${{ github.event.pull_request.number }}"
+            trigger="review"
+          fi
+          {
+            echo "proceed=true"
+            echo "branch=$branch"
+            echo "pr_number=$pr_number"
+            echo "trigger=$trigger"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Checkout code
+        if: steps.ctx.outputs.proceed == 'true'
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+        with:
+          ref: ${{ steps.ctx.outputs.branch }}
+          fetch-depth: 0
+          persist-credentials: false
+
+      # CI 失敗起因の修正回数を [auto-fix] マーカーで数え、上限で打ち切る
+      - name: Check fix attempt limit
+        id: cap
+        if: steps.ctx.outputs.proceed == 'true' && steps.ctx.outputs.trigger == 'ci'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          count=$(git log origin/main..HEAD --grep='\[auto-fix\]' --oneline | wc -l | tr -d ' ')
+          echo "これまでの自動修正回数: $count"
+          if [ "$count" -ge 3 ]; then
+            gh pr comment "${{ steps.ctx.outputs.pr_number }}" --body \
+              "自動修正の試行回数が上限（3回）に達したため、Claude Auto Fix を停止しました。人間の介入が必要です。"
+            echo "capped=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "capped=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up JDK 17
+        if: steps.ctx.outputs.proceed == 'true' && steps.cap.outputs.capped != 'true'
+        uses: ./.github/actions/setup-java
+
+      - name: Setup Gradle
+        if: steps.ctx.outputs.proceed == 'true' && steps.cap.outputs.capped != 'true'
+        uses: ./.github/actions/setup-gradle
+
+      - name: Inject secrets into local.properties
+        if: steps.ctx.outputs.proceed == 'true' && steps.cap.outputs.capped != 'true'
+        run: echo "reward.server.url=${{ secrets.REWARD_SERVER_URL }}" >> local.properties
+
+      - name: Run Claude Code
+        if: steps.ctx.outputs.proceed == 'true' && steps.cap.outputs.capped != 'true'
+        uses: anthropics/claude-code-action@a92e7c70a4da9793dc164451d829089dc057a464 # v1.0.159
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          claude_args: |
+            --max-turns 50
+          prompt: |
+            PR #${{ steps.ctx.outputs.pr_number }}（ブランチ: ${{ steps.ctx.outputs.branch }}）の
+            未解決事項をすべて解消してください。今回のトリガー: ${{ steps.ctx.outputs.trigger }}
+
+            ## 手順
+
+            1. 失敗している CI チェックを確認する:
+               - `gh pr checks ${{ steps.ctx.outputs.pr_number }}` で失敗を特定し、
+                 `gh run view <run-id> --log-failed` でログを読んで原因を修正する
+            2. 未解決のレビューコメントを確認する:
+               - `gh api graphql` で PR の reviewThreads から isResolved: false のスレッドを取得する
+               - 各コメントに対応し、対応内容をそのスレッドへ返信する（スレッドの resolve は
+                 レビュアーに任せるため自分では行わない）
+               - コメントが質問や意見で、コード変更が不要な場合は返信のみでよい
+            3. 修正後、以下をすべてパスさせてから push する:
+               - ./gradlew testDebugUnitTest
+               - ./gradlew spotlessCheck
+               - ./gradlew detekt
+            4. CI 失敗起因（トリガーが ci）の修正コミットは、メッセージ末尾に `[auto-fix]` を含める
+               （レビュー対応のコミットには付けない）
+
+            ## 制約
+
+            - コミット規約（英語プレフィックス＋日本語本文）は CLAUDE.md に従う
+            - 修正すべきものが何もない場合は、何も push せずその旨を PR にコメントして終了する
+            - レビューコメントの指摘に同意できない場合は、コードを変えず理由をスレッドに返信する
