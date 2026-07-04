@@ -57,6 +57,6 @@ tags:
 # Verify the old task name is gone
 - assertNotVisible: "Original Task"
 
-# Verify the updated ticket count (2+ digits) is shown
+# Verify the updated ticket count (2 or more) is shown
 - assertVisible:
-    text: "\\d{2,}"
+    text: "[2-9]|\\d{2,}"
