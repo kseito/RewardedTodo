@@ -46,6 +46,7 @@
 ```kotlin
 class LotteryInteractorTest {
     private val mockTicketRepository: ITicketRepository = mockk()
+    private val mockRewardRepository: IRewardRepository = mockk()
     private val interactor = LotteryInteractor(mockTicketRepository, mockRewardRepository)
 
     @Test
@@ -148,7 +149,7 @@ VRT は個別のテストを書く方式ではなく、**Showkase + パラメタ
 
 期待画像は Git 管理ではなく **GitHub Actions のアーティファクトで受け渡している**。手動更新は不要で、main へのマージが実質的な「期待画像の更新」になる。
 
-```
+```text
 main へ push（マージ）
   └─ upload_expected_image.yml
        recordRoborazziDebug → アーティファクト expected_screenshots にアップロード
