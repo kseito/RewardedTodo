@@ -465,6 +465,68 @@ fun RewardListScreenBatchLotteringPreview() {
     )
 }
 
+private val emptyPreviewViewModel = RewardListViewModel(
+    object : LotteryUseCase {
+        override suspend fun execute(rewards: RewardCollection): Result<Reward?> = Result.success(null)
+    },
+    object : BatchLotteryUseCase {
+        override suspend fun execute(rewards: RewardCollection, count: Int): Result<BatchLotteryResult> =
+            Result.success(BatchLotteryResult(emptyList(), count))
+    },
+    object : GetRewardsUseCase {
+        override suspend fun execute(): List<Reward> = emptyList()
+
+        override suspend fun executeAsFlow(): Flow<List<Reward>> = flowOf(emptyList())
+    },
+    object : GetPointUseCase {
+        override suspend fun execute(): Flow<NumberOfTicket> = flowOf(NumberOfTicket(0))
+    },
+    object : SaveRewardUseCase {
+        override suspend fun execute(reward: RewardInput): Result<Unit> = Result.success(Unit)
+    },
+    object : DeleteRewardUseCase {
+        override suspend fun execute(reward: Reward) {}
+    },
+)
+
+@Preview
+@Composable
+fun RewardListScreenEmptyPreview() {
+    RewardListScreen(
+        viewModel = emptyPreviewViewModel,
+        onAddNewRewardClick = {},
+        onRewardItemClick = {},
+        onRewardSaveSucceeded = {},
+    )
+}
+
+@Preview
+@Composable
+fun RewardListScreenErrorPreview() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        RewardListScreen(
+            viewModel = previewViewModel,
+            onAddNewRewardClick = {},
+            onRewardItemClick = {},
+            onRewardSaveSucceeded = {},
+        )
+        ErrorSnackBar(
+            object : SnackbarData {
+                override val visuals = object : SnackbarVisuals {
+                    override val message = "抽選に失敗しました"
+                    override val actionLabel: String? = null
+                    override val withDismissAction = false
+                    override val duration = SnackbarDuration.Short
+                }
+
+                override fun dismiss() {}
+
+                override fun performAction() {}
+            },
+        )
+    }
+}
+
 @Composable
 private fun TicketLabel(ticket: Int?, modifier: Modifier = Modifier) {
     Text(
