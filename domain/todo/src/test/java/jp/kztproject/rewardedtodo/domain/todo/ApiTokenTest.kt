@@ -1,8 +1,7 @@
 package jp.kztproject.rewardedtodo.domain.todo
 
-import org.junit.Assert.assertEquals
-import org.junit.Assert.assertNotNull
-import org.junit.Assert.assertNull
+import io.kotest.matchers.nulls.shouldNotBeNull
+import io.kotest.matchers.shouldBe
 import org.junit.Test
 
 class ApiTokenTest {
@@ -12,20 +11,20 @@ class ApiTokenTest {
     @Test
     fun `create succeeds with exact 40-char lowercase hex token`() {
         val apiToken = ApiToken.create(validToken)
-        assertEquals(validToken, apiToken.value)
+        apiToken.value shouldBe validToken
     }
 
     @Test
     fun `create trims surrounding whitespace and newlines from pasted input`() {
         val apiToken = ApiToken.create("  $validToken\n")
-        assertEquals(validToken, apiToken.value)
+        apiToken.value shouldBe validToken
     }
 
     @Test
     fun `create accepts uppercase hex characters`() {
         val upperToken = validToken.uppercase()
         val apiToken = ApiToken.create(upperToken)
-        assertEquals(upperToken, apiToken.value)
+        apiToken.value shouldBe upperToken
     }
 
     @Test(expected = IllegalArgumentException::class)
@@ -46,22 +45,22 @@ class ApiTokenTest {
     @Test
     fun `createSafely returns token when input has surrounding whitespace`() {
         val apiToken = ApiToken.createSafely("\t$validToken ")
-        assertNotNull(apiToken)
-        assertEquals(validToken, apiToken?.value)
+        apiToken.shouldNotBeNull()
+        apiToken.value shouldBe validToken
     }
 
     @Test
     fun `createSafely returns null for null input`() {
-        assertNull(ApiToken.createSafely(null))
+        ApiToken.createSafely(null) shouldBe null
     }
 
     @Test
     fun `createSafely returns null for blank input`() {
-        assertNull(ApiToken.createSafely("   "))
+        ApiToken.createSafely("   ") shouldBe null
     }
 
     @Test
     fun `createSafely returns null for invalid format`() {
-        assertNull(ApiToken.createSafely("not-a-valid-token"))
+        ApiToken.createSafely("not-a-valid-token") shouldBe null
     }
 }

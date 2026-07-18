@@ -3,7 +3,7 @@ package jp.kztproject.rewardedtodo.data.ticket
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
-import com.google.common.truth.Truth.assertThat
+import io.kotest.matchers.shouldBe
 import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -38,7 +38,7 @@ class LocalTicketRepositoryTest {
     fun `getNumberOfTicket returns 0 when no tickets exist`() = testScope.runTest {
         val result = repository.getNumberOfTicket().first()
 
-        assertThat(result).isEqualTo(0)
+        result shouldBe 0
     }
 
     @Test
@@ -46,7 +46,7 @@ class LocalTicketRepositoryTest {
         repository.addTicket(5)
 
         val result = repository.getNumberOfTicket().first()
-        assertThat(result).isEqualTo(5)
+        result shouldBe 5
     }
 
     @Test
@@ -56,7 +56,7 @@ class LocalTicketRepositoryTest {
         repository.consumeTicket()
 
         val result = repository.getNumberOfTicket().first()
-        assertThat(result).isEqualTo(4)
+        result shouldBe 4
     }
 
     @Test(expected = LackOfTicketsException::class)
@@ -71,7 +71,7 @@ class LocalTicketRepositoryTest {
         repository.consumeTickets(3)
 
         val result = repository.getNumberOfTicket().first()
-        assertThat(result).isEqualTo(7)
+        result shouldBe 7
     }
 
     @Test(expected = LackOfTicketsException::class)

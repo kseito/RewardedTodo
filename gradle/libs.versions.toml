@@ -90,6 +90,7 @@ mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 mockwebserver = { group = "com.squareup.okhttp3", name = "mockwebserver", version.ref = "mockwebserver" }
 assertj-core = { group = "org.assertj", name = "assertj-core", version.ref = "assertj" }
 kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
+kotest-assertions-core = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "androidx-junit" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }

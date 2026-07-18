@@ -18,7 +18,7 @@ dependencies {
     implementation(libs.moshi)
 
     testImplementation(libs.junit)
-    testImplementation(libs.truth)
+    testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.mockk)
     testImplementation(libs.mockwebserver)
