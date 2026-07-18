@@ -24,7 +24,7 @@ dependencies {
     implementation(libs.coroutines.adapter)
 
     testImplementation(libs.junit)
-    testImplementation(libs.assertj.core)
+    testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.mockwebserver)
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.test.core)
