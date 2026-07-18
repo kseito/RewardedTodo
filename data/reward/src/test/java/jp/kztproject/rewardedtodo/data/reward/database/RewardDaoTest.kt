@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
 import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldHaveSize
 import io.kotest.matchers.shouldBe
 import jp.kztproject.rewardedtodo.data.reward.database.model.RewardEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -46,7 +47,7 @@ class RewardDaoTest {
         dao.insertReward(testRewards[0])
 
         val rewards = dao.findAll()
-        rewards.size shouldBe 1
+        rewards shouldHaveSize 1
     }
 
     @Test
@@ -56,7 +57,7 @@ class RewardDaoTest {
         dao.deleteReward(testRewards[0])
 
         val rewards = dao.findAll()
-        rewards.size shouldBe 0
+        rewards.shouldBeEmpty()
     }
 
     @Test
@@ -67,7 +68,7 @@ class RewardDaoTest {
         testRewards.forEach { dao.insertReward(it) }
 
         val rewards = dao.findAll()
-        rewards.size shouldBe 3
+        rewards shouldHaveSize 3
         rewards[0].name shouldBe "nintendo switch"
     }
 
@@ -77,7 +78,7 @@ class RewardDaoTest {
         testRewards.forEach { dao.insertReward(it) }
 
         val rewards = dao.findAllAsFlow().take(1).first()
-        rewards.size shouldBe 3
+        rewards shouldHaveSize 3
         rewards[0].name shouldBe "nintendo switch"
     }
 }

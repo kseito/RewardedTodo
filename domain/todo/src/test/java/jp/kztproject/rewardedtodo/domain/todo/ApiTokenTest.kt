@@ -46,7 +46,7 @@ class ApiTokenTest {
     fun `createSafely returns token when input has surrounding whitespace`() {
         val apiToken = ApiToken.createSafely("\t$validToken ")
         apiToken.shouldNotBeNull()
-        apiToken?.value shouldBe validToken
+        apiToken.value shouldBe validToken
     }
 
     @Test
