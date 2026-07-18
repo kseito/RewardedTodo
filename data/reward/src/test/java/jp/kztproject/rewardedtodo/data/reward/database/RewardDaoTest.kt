@@ -3,12 +3,13 @@ package jp.kztproject.rewardedtodo.data.reward.database
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.shouldBe
 import jp.kztproject.rewardedtodo.data.reward.database.model.RewardEntity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.test.runTest
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -24,7 +25,7 @@ class RewardDaoTest {
     private val testRewards = arrayListOf(
         RewardEntity(1, "nintendo switch", 10F, "this is really I want", false),
         RewardEntity(2, "new keyboard", 10F, null, false),
-        RewardEntity(3, "joel robuchon", 10F, null, true)
+        RewardEntity(3, "joel robuchon", 10F, null, true),
     )
 
     @Before
@@ -45,7 +46,7 @@ class RewardDaoTest {
         dao.insertReward(testRewards[0])
 
         val rewards = dao.findAll()
-        assertThat(rewards.size).isEqualTo(1)
+        rewards.size shouldBe 1
     }
 
     @Test
@@ -55,19 +56,19 @@ class RewardDaoTest {
         dao.deleteReward(testRewards[0])
 
         val rewards = dao.findAll()
-        assertThat(rewards.size).isEqualTo(0)
+        rewards.size shouldBe 0
     }
 
     @Test
     fun findAll() {
         val dao = database.rewardDao()
-        assertThat(dao.findAll()).isEmpty()
+        dao.findAll().shouldBeEmpty()
 
         testRewards.forEach { dao.insertReward(it) }
 
         val rewards = dao.findAll()
-        assertThat(rewards.size).isEqualTo(3)
-        assertThat(rewards[0].name).isEqualTo("nintendo switch")
+        rewards.size shouldBe 3
+        rewards[0].name shouldBe "nintendo switch"
     }
 
     @Test
@@ -76,7 +77,7 @@ class RewardDaoTest {
         testRewards.forEach { dao.insertReward(it) }
 
         val rewards = dao.findAllAsFlow().take(1).first()
-        assertThat(rewards.size).isEqualTo(3)
-        assertThat(rewards[0].name).isEqualTo("nintendo switch")
+        rewards.size shouldBe 3
+        rewards[0].name shouldBe "nintendo switch"
     }
 }

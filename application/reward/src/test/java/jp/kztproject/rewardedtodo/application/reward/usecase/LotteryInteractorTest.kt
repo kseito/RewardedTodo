@@ -1,5 +1,8 @@
 package jp.kztproject.rewardedtodo.application.reward.usecase
 
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
+import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -8,7 +11,6 @@ import jp.kztproject.rewardedtodo.domain.reward.*
 import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
 import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository
 import kotlinx.coroutines.test.runTest
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
 class LotteryInteractorTest {
@@ -34,7 +36,7 @@ class LotteryInteractorTest {
             ),
         )
         val response = interactor.execute(rewards).getOrNull()!!
-        assertThat(response.rewardId).isEqualTo(RewardId(1))
+        response.rewardId shouldBe RewardId(1)
         coVerify(exactly = 1) { mockTicketRepository.consumeTicket() }
     }
 
@@ -73,7 +75,7 @@ class LotteryInteractorTest {
         val rewards = RewardCollection(listOf(reward))
         val response = interactor.execute(rewards).getOrNull()!!
 
-        assertThat(response.rewardId).isEqualTo(RewardId(1))
+        response.rewardId shouldBe RewardId(1)
         coVerify(exactly = 1) { mockRewardRepository.delete(reward) }
     }
 
@@ -93,7 +95,7 @@ class LotteryInteractorTest {
             ),
         )
         val response = interactor.execute(rewards).getOrNull()
-        assertThat(response).isNull()
+        response shouldBe null
         coVerify(exactly = 0) { mockRewardRepository.delete(any()) }
     }
 
@@ -113,8 +115,8 @@ class LotteryInteractorTest {
         val rewards = RewardCollection(listOf(reward))
         val response = interactor.execute(rewards)
 
-        assertThat(response.isFailure).isTrue()
-        assertThat(response.exceptionOrNull()).isSameAs(deleteError)
+        response.isFailure shouldBe true
+        response.exceptionOrNull() shouldBeSameInstanceAs deleteError
     }
 
     @Test
@@ -133,7 +135,7 @@ class LotteryInteractorTest {
             ),
         )
         val response = interactor.execute(rewards)
-        assertThat(response.exceptionOrNull()).isInstanceOf(LackOfTicketsException::class.java)
+        response.exceptionOrNull().shouldBeInstanceOf<LackOfTicketsException>()
         coVerify(exactly = 0) { mockRewardRepository.delete(any()) }
     }
 }

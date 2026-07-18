@@ -6,7 +6,7 @@ import io.mockk.unmockkAll
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.test.core.app.ApplicationProvider
-import com.google.common.truth.Truth.assertThat
+import io.kotest.matchers.shouldBe
 import jp.kztproject.rewardedtodo.common.database.DatabaseInitializer
 import jp.kztproject.rewardedtodo.data.todo.AppDatabase
 import jp.kztproject.rewardedtodo.data.todo.TodoDao
@@ -73,21 +73,21 @@ class TodoRepositoryTest {
         withContext(Dispatchers.IO) {
             repository.sync()
             val actual = repository.findAll().first()
-            assertThat(actual.size).isEqualTo(3)
+            actual.size shouldBe 3
             actual[0].run {
-                assertThat(this.id).isEqualTo(1)
-                assertThat(this.todoistId).isEqualTo("101")
-                assertThat(this.isRepeat).isTrue()
+                this.id shouldBe 1
+                this.todoistId shouldBe "101"
+                this.isRepeat shouldBe true
             }
             actual[1].run {
-                assertThat(this.id).isEqualTo(2)
-                assertThat(this.todoistId).isEqualTo("102")
-                assertThat(this.isRepeat).isTrue()
+                this.id shouldBe 2
+                this.todoistId shouldBe "102"
+                this.isRepeat shouldBe true
             }
             actual[2].run {
-                assertThat(this.id).isEqualTo(3)
-                assertThat(this.todoistId).isEqualTo("103")
-                assertThat(this.isRepeat).isFalse()
+                this.id shouldBe 3
+                this.todoistId shouldBe "103"
+                this.isRepeat shouldBe false
             }
         }
     }
@@ -108,24 +108,24 @@ class TodoRepositoryTest {
         withContext(Dispatchers.IO) {
             repository.sync()
             val actual = repository.findAll().first()
-            assertThat(actual.size).isEqualTo(3)
+            actual.size shouldBe 3
             actual[0].run {
-                assertThat(this.id).isEqualTo(1)
-                assertThat(this.todoistId).isEqualTo("101")
-                assertThat(this.name).isEqualTo("test_content_with_due")
-                assertThat(this.isRepeat).isTrue()
+                this.id shouldBe 1
+                this.todoistId shouldBe "101"
+                this.name shouldBe "test_content_with_due"
+                this.isRepeat shouldBe true
             }
             actual[1].run {
-                assertThat(this.id).isEqualTo(2)
-                assertThat(this.todoistId).isEqualTo("102")
-                assertThat(this.name).isEqualTo("test_content_without_due")
-                assertThat(this.isRepeat).isFalse()
+                this.id shouldBe 2
+                this.todoistId shouldBe "102"
+                this.name shouldBe "test_content_without_due"
+                this.isRepeat shouldBe false
             }
             actual[2].run {
-                assertThat(this.id).isEqualTo(3)
-                assertThat(this.todoistId).isEqualTo("103")
-                assertThat(this.name).isEqualTo("test_content_with_non_recurring_due")
-                assertThat(this.isRepeat).isFalse()
+                this.id shouldBe 3
+                this.todoistId shouldBe "103"
+                this.name shouldBe "test_content_with_non_recurring_due"
+                this.isRepeat shouldBe false
             }
         }
     }
@@ -178,16 +178,16 @@ class TodoRepositoryTest {
             repository.sync()
             val actual = repository.findAll().first()
 
-            assertThat(actual.size).isEqualTo(2)
+            actual.size shouldBe 2
             actual[0].run {
-                assertThat(this.id).isEqualTo(1)
-                assertThat(this.todoistId).isEqualTo("101")
-                assertThat(this.name).isEqualTo("test_content1")
+                this.id shouldBe 1
+                this.todoistId shouldBe "101"
+                this.name shouldBe "test_content1"
             }
             actual[1].run {
-                assertThat(this.id).isEqualTo(2)
-                assertThat(this.todoistId).isEqualTo("102")
-                assertThat(this.name).isEqualTo("test_content2")
+                this.id shouldBe 2
+                this.todoistId shouldBe "102"
+                this.name shouldBe "test_content2"
             }
         }
     }

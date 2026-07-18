@@ -1,5 +1,7 @@
 package jp.kztproject.rewardedtodo.feature.setting
 
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.string.shouldBeEmpty
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -18,7 +20,6 @@ import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -73,9 +74,9 @@ class SettingViewModelTest {
         subscribe(viewModel)
 
         // Then
-        assertThat(viewModel.hasAccessToken.value).isTrue()
-        assertThat(viewModel.tokenUiState.value.hasToken).isTrue()
-        assertThat(viewModel.tokenUiState.value.isConnected).isTrue()
+        viewModel.hasAccessToken.value shouldBe true
+        viewModel.tokenUiState.value.hasToken shouldBe true
+        viewModel.tokenUiState.value.isConnected shouldBe true
     }
 
     @Test
@@ -88,8 +89,8 @@ class SettingViewModelTest {
         viewModel.updateTokenInput("new_token")
 
         // Then
-        assertThat(viewModel.tokenUiState.value.tokenInput).isEqualTo("new_token")
-        assertThat(viewModel.tokenUiState.value.validationError).isNull()
+        viewModel.tokenUiState.value.tokenInput shouldBe "new_token"
+        viewModel.tokenUiState.value.validationError shouldBe null
     }
 
     @Test
@@ -103,9 +104,8 @@ class SettingViewModelTest {
         viewModel.saveToken()
 
         // Then
-        assertThat(viewModel.tokenUiState.value.validationError)
-            .isEqualTo(TokenValidationError.TOKEN_EMPTY)
-        assertThat(viewModel.tokenUiState.value.isLoading).isFalse()
+        viewModel.tokenUiState.value.validationError shouldBe TokenValidationError.TOKEN_EMPTY
+        viewModel.tokenUiState.value.isLoading shouldBe false
         coVerify(exactly = 0) { mockSaveApiTokenUseCase.execute(any()) }
     }
 
@@ -125,12 +125,12 @@ class SettingViewModelTest {
         viewModel.saveToken()
 
         // Then
-        assertThat(viewModel.tokenUiState.value.hasToken).isTrue()
-        assertThat(viewModel.tokenUiState.value.isConnected).isTrue()
-        assertThat(viewModel.tokenUiState.value.tokenInput).isEmpty()
-        assertThat(viewModel.tokenUiState.value.validationError).isNull()
-        assertThat(viewModel.tokenUiState.value.isLoading).isFalse()
-        assertThat(viewModel.hasAccessToken.value).isTrue()
+        viewModel.tokenUiState.value.hasToken shouldBe true
+        viewModel.tokenUiState.value.isConnected shouldBe true
+        viewModel.tokenUiState.value.tokenInput.shouldBeEmpty()
+        viewModel.tokenUiState.value.validationError shouldBe null
+        viewModel.tokenUiState.value.isLoading shouldBe false
+        viewModel.hasAccessToken.value shouldBe true
         coVerify { mockSaveApiTokenUseCase.execute(testToken) }
     }
 
@@ -147,10 +147,9 @@ class SettingViewModelTest {
         viewModel.saveToken()
 
         // Then
-        assertThat(viewModel.tokenUiState.value.validationError)
-            .isEqualTo(TokenValidationError.INVALID_TOKEN_FORMAT)
-        assertThat(viewModel.tokenUiState.value.isLoading).isFalse()
-        assertThat(viewModel.tokenUiState.value.hasToken).isFalse()
+        viewModel.tokenUiState.value.validationError shouldBe TokenValidationError.INVALID_TOKEN_FORMAT
+        viewModel.tokenUiState.value.isLoading shouldBe false
+        viewModel.tokenUiState.value.hasToken shouldBe false
     }
 
     @Test
@@ -166,9 +165,8 @@ class SettingViewModelTest {
         viewModel.saveToken()
 
         // Then
-        assertThat(viewModel.tokenUiState.value.validationError)
-            .isEqualTo(TokenValidationError.TOKEN_EMPTY)
-        assertThat(viewModel.tokenUiState.value.isLoading).isFalse()
+        viewModel.tokenUiState.value.validationError shouldBe TokenValidationError.TOKEN_EMPTY
+        viewModel.tokenUiState.value.isLoading shouldBe false
     }
 
     @Test
@@ -184,9 +182,8 @@ class SettingViewModelTest {
         viewModel.saveToken()
 
         // Then
-        assertThat(viewModel.tokenUiState.value.validationError)
-            .isEqualTo(TokenValidationError.FAILED_TO_SAVE_TOKEN)
-        assertThat(viewModel.tokenUiState.value.isLoading).isFalse()
+        viewModel.tokenUiState.value.validationError shouldBe TokenValidationError.FAILED_TO_SAVE_TOKEN
+        viewModel.tokenUiState.value.isLoading shouldBe false
     }
 
     @Test
@@ -201,12 +198,12 @@ class SettingViewModelTest {
         viewModel.deleteToken()
 
         // Then
-        assertThat(viewModel.tokenUiState.value.hasToken).isFalse()
-        assertThat(viewModel.tokenUiState.value.isConnected).isFalse()
-        assertThat(viewModel.tokenUiState.value.tokenInput).isEmpty()
-        assertThat(viewModel.tokenUiState.value.validationError).isNull()
-        assertThat(viewModel.tokenUiState.value.isLoading).isFalse()
-        assertThat(viewModel.hasAccessToken.value).isFalse()
+        viewModel.tokenUiState.value.hasToken shouldBe false
+        viewModel.tokenUiState.value.isConnected shouldBe false
+        viewModel.tokenUiState.value.tokenInput.shouldBeEmpty()
+        viewModel.tokenUiState.value.validationError shouldBe null
+        viewModel.tokenUiState.value.isLoading shouldBe false
+        viewModel.hasAccessToken.value shouldBe false
         coVerify { mockDeleteApiTokenUseCase.execute() }
     }
 
@@ -216,13 +213,13 @@ class SettingViewModelTest {
         tokenFlow.value = null
         viewModel = createViewModel()
         subscribe(viewModel)
-        assertThat(viewModel.hasAccessToken.value).isFalse()
+        viewModel.hasAccessToken.value shouldBe false
 
         // When
         tokenFlow.value = ApiToken.createSafely("0123456789abcdef0123456789abcdef01234567")
 
         // Then
-        assertThat(viewModel.hasAccessToken.value).isTrue()
+        viewModel.hasAccessToken.value shouldBe true
     }
 
     @Test
@@ -231,12 +228,12 @@ class SettingViewModelTest {
         tokenFlow.value = ApiToken.createSafely("0123456789abcdef0123456789abcdef01234567")
         viewModel = createViewModel()
         subscribe(viewModel)
-        assertThat(viewModel.hasAccessToken.value).isTrue()
+        viewModel.hasAccessToken.value shouldBe true
 
         // When
         tokenFlow.value = null
 
         // Then
-        assertThat(viewModel.hasAccessToken.value).isFalse()
+        viewModel.hasAccessToken.value shouldBe false
     }
 }

@@ -1,5 +1,10 @@
 package jp.kztproject.rewardedtodo.application.reward.usecase
 
+import io.kotest.matchers.collections.shouldBeEmpty
+import io.kotest.matchers.collections.shouldHaveSize
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
+import io.kotest.matchers.types.shouldBeSameInstanceAs
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -8,7 +13,6 @@ import jp.kztproject.rewardedtodo.domain.reward.*
 import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
 import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository
 import kotlinx.coroutines.test.runTest
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Test
 
 class BatchLotteryInteractorTest {
@@ -35,10 +39,10 @@ class BatchLotteryInteractorTest {
         )
         val result = interactor.execute(rewards, 3)
 
-        assertThat(result.isSuccess).isTrue()
+        result.isSuccess shouldBe true
         val batchResult = result.getOrNull()!!
-        assertThat(batchResult.wonRewards).hasSize(3)
-        assertThat(batchResult.missCount).isEqualTo(0)
+        batchResult.wonRewards shouldHaveSize 3
+        batchResult.missCount shouldBe 0
         coVerify(exactly = 1) { mockTicketRepository.consumeTickets(3) }
     }
 
@@ -77,8 +81,8 @@ class BatchLotteryInteractorTest {
         val rewards = RewardCollection(listOf(reward))
         val result = interactor.execute(rewards, 3)
 
-        assertThat(result.isSuccess).isTrue()
-        assertThat(result.getOrNull()!!.wonRewards).hasSize(3)
+        result.isSuccess shouldBe true
+        result.getOrNull()!!.wonRewards shouldHaveSize 3
         coVerify(exactly = 1) { mockRewardRepository.delete(reward) }
     }
 
@@ -99,10 +103,10 @@ class BatchLotteryInteractorTest {
         )
         val result = interactor.execute(rewards, 3)
 
-        assertThat(result.isSuccess).isTrue()
+        result.isSuccess shouldBe true
         val batchResult = result.getOrNull()!!
-        assertThat(batchResult.wonRewards).isEmpty()
-        assertThat(batchResult.missCount).isEqualTo(3)
+        batchResult.wonRewards.shouldBeEmpty()
+        batchResult.missCount shouldBe 3
         coVerify(exactly = 0) { mockRewardRepository.delete(any()) }
     }
 
@@ -122,8 +126,8 @@ class BatchLotteryInteractorTest {
         val rewards = RewardCollection(listOf(reward))
         val result = interactor.execute(rewards, 3)
 
-        assertThat(result.isFailure).isTrue()
-        assertThat(result.exceptionOrNull()).isSameAs(deleteError)
+        result.isFailure shouldBe true
+        result.exceptionOrNull() shouldBeSameInstanceAs deleteError
     }
 
     @Test
@@ -143,8 +147,8 @@ class BatchLotteryInteractorTest {
         )
         val result = interactor.execute(rewards, 5)
 
-        assertThat(result.isFailure).isTrue()
-        assertThat(result.exceptionOrNull()).isInstanceOf(LackOfTicketsException::class.java)
+        result.isFailure shouldBe true
+        result.exceptionOrNull().shouldBeInstanceOf<LackOfTicketsException>()
         coVerify(exactly = 0) { mockRewardRepository.delete(any()) }
     }
 }
