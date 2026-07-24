@@ -22,9 +22,11 @@ pre-commit:
 pre-push:
   parallel: false
   commands:
-    # 静的解析（全モジュール）。重いので push 前のみ。
+    # 静的解析。重いので push 前のみ。
+    # detekt は既定設定（detekt.yml）で :app を対象、detektCustomRules は
+    # プロジェクト独自ルール(:detekt-rules)を全モジュールに対して走らせる。
     detekt:
-      run: ./gradlew detekt
+      run: ./gradlew detekt detektCustomRules
     # 整形漏れの最終確認（CI の spotlessKotlinCheck と同等）。
     spotless-check:
       run: ./gradlew spotlessKotlinCheck
