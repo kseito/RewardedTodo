@@ -268,6 +268,28 @@ fun TodoListContentWithDataPreview() {
     )
 }
 
+@Preview
+@Composable
+fun TodoListContentErrorPreview() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        TodoListContent(
+            todoList = listOf(
+                Todo(1, "1001", "英語学習", 2, true),
+            ),
+            isInitialLoading = false,
+            isRefreshing = false,
+            onRefresh = {},
+            onTodoItemClicked = {},
+            onTodoDone = {},
+            onTodoAddClicked = {},
+        )
+        CommonAlertDialog(
+            message = stringResource(id = R.string.error_message),
+            onOkClicked = {},
+        )
+    }
+}
+
 @Composable
 private fun TodoListItem(
     todo: Todo,
