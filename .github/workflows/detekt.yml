@@ -17,4 +17,4 @@ jobs:
         uses: ./.github/actions/setup-java
 
       - name: Run Detekt
-        run: ./gradlew detekt
+        run: ./gradlew detekt detektCustomRules
