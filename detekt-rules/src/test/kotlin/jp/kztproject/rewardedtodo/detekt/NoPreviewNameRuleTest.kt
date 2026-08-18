@@ -21,6 +21,20 @@ class NoPreviewNameRuleTest {
     }
 
     @Test
+    fun `reports @Preview with a positional name argument`() {
+        val code = """
+            annotation class Preview(val name: String = "")
+
+            @Preview("Loading")
+            fun LoadingPreview() {}
+        """.trimIndent()
+
+        val findings = NoPreviewNameRule().lint(code)
+
+        assertThat(findings).hasSize(1)
+    }
+
+    @Test
     fun `does not report a plain @Preview`() {
         val code = """
             annotation class Preview(val name: String = "", val showBackground: Boolean = false)
