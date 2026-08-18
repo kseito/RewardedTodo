@@ -35,7 +35,7 @@ tasks.register<Detekt>("detektCustomRules") {
     config.setFrom(files("$rootDir/detekt-custom.yml"))
     setSource(files(projectDir))
     include("**/*.kt")
-    exclude("**/build/**", "**/build-logic/**", "**/resources/**")
+    exclude("**/build/**", "**/build-logic/**", "**/resources/**", "**/.gradle/**", "**/.git/**", "**/.idea/**")
     reports {
         html.required.set(false)
         xml.required.set(false)
