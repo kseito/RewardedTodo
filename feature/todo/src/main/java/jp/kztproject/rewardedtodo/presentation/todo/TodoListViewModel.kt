@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
@@ -44,16 +43,16 @@ class TodoListViewModel @Inject constructor(
     private val getApiTokenUseCase: GetApiTokenUseCase,
 ) : ViewModel() {
 
-    private val _result = MutableStateFlow<Result<Unit>?>(null)
-    val result: StateFlow<Result<Unit>?> = _result.asStateFlow()
+    val result: StateFlow<Result<Unit>?>
+        field = MutableStateFlow<Result<Unit>?>(null)
 
-    private val _isRefreshing = MutableStateFlow(false)
-    val isRefreshing = _isRefreshing.asStateFlow()
+    val isRefreshing: StateFlow<Boolean>
+        field = MutableStateFlow(false)
 
     // 初回ロード中（一覧データが一度も届いていない状態）を表す。
     // 中央ローディング表示用で、プルリフレッシュ用の isRefreshing とは別物。
-    private val _isInitialLoading = MutableStateFlow(true)
-    val isInitialLoading = _isInitialLoading.asStateFlow()
+    val isInitialLoading: StateFlow<Boolean>
+        field = MutableStateFlow(true)
 
     // プルリフレッシュによる手動同期を駆動するトリガー。
     // replay=0 にして、再購読時に過去のリフレッシュ信号が再生され二重fetchになるのを防ぐ。
@@ -64,7 +63,7 @@ class TodoListViewModel @Inject constructor(
     val todoList: StateFlow<List<Todo>> = getApiTokenUseCase.executeAsFlow()
         .flatMapLatest { token -> syncThenObserveTodoList(token) }
         // 一覧が初めて届いた時点で初回ロード完了とみなす
-        .onEach { _isInitialLoading.update { false } }
+        .onEach { isInitialLoading.update { false } }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
@@ -86,7 +85,7 @@ class TodoListViewModel @Inject constructor(
         }
 
     private suspend fun syncTodoList(isManualRefresh: Boolean) {
-        if (isManualRefresh) _isRefreshing.update { true }
+        if (isManualRefresh) isRefreshing.update { true }
         try {
             fetchTodoListUseCase.execute()
         } catch (e: CancellationException) {
@@ -94,15 +93,15 @@ class TodoListViewModel @Inject constructor(
         } catch (e: Exception) {
             reportError(e)
         } finally {
-            if (isManualRefresh) _isRefreshing.update { false }
+            if (isManualRefresh) isRefreshing.update { false }
         }
     }
 
     private fun reportError(throwable: Throwable) {
         Timber.e(throwable)
-        _result.update { Result.failure(throwable) }
+        result.update { Result.failure(throwable) }
         // 一覧が届かないままエラーで終わってもスピナーが残らないようにする
-        _isInitialLoading.update { false }
+        isInitialLoading.update { false }
     }
 
     fun refreshTodoList() {
@@ -112,7 +111,7 @@ class TodoListViewModel @Inject constructor(
     fun updateTodo(todo: EditingTodo) {
         viewModelScope.launch {
             val newResult = updateTodoUseCase.execute(todo)
-            _result.update { newResult }
+            result.update { newResult }
         }
     }
 
@@ -120,10 +119,10 @@ class TodoListViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 deleteTodoUseCase.execute(todo.toTodo())
-                _result.update { Result.success(Unit) }
+                result.update { Result.success(Unit) }
             } catch (e: Exception) {
                 Timber.e(e)
-                _result.update { Result.failure(e) }
+                result.update { Result.failure(e) }
             }
         }
     }
@@ -135,6 +134,6 @@ class TodoListViewModel @Inject constructor(
     }
 
     fun clearResult() {
-        _result.update { null }
+        result.update { null }
     }
 }

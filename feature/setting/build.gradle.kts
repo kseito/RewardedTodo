@@ -35,7 +35,7 @@ dependencies {
     testImplementation(libs.androidx.test.core)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.robolectric)
-    testImplementation(libs.assertj.core)
+    testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.mockk)
 }
 

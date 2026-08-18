@@ -4,7 +4,7 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
-import com.google.common.truth.Truth.assertThat
+import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -107,7 +107,7 @@ class TicketRepositoryTest {
 
         val result = repository.getNumberOfTicket().first()
 
-        assertThat(result).isEqualTo(42)
+        result shouldBe 42
         coVerify(exactly = 1) { localRepository.getNumberOfTicket() }
         coVerify(exactly = 0) { networkRepository.getNumberOfTicket() }
     }
@@ -119,7 +119,7 @@ class TicketRepositoryTest {
 
         val result = repository.getNumberOfTicket().first()
 
-        assertThat(result).isEqualTo(7)
+        result shouldBe 7
         coVerify(exactly = 1) { networkRepository.getNumberOfTicket() }
         coVerify(exactly = 0) { localRepository.getNumberOfTicket() }
     }
