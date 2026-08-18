@@ -22,7 +22,6 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.core.ktx)
     implementation(libs.material)
-    implementation(libs.navigation.fragment.ktx)
 
     // Jetpack Compose
     implementation(platform(libs.androidx.compose.bom))
