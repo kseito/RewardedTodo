@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.rewardedtodo.android.library)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -37,6 +38,8 @@ dependencies {
     implementation(libs.androidx.compose.livedata)
     implementation(libs.constraintlayout.compose)
     implementation(libs.hilt.navigation.compose)
+    implementation(libs.navigation3.runtime)
+    implementation(libs.kotlinx.serialization.core)
 
     testImplementation(libs.junit)
     testImplementation(libs.kotest.runner.junit5)
