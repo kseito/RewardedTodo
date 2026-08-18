@@ -32,8 +32,10 @@ class NoPreviewNameRule(config: Config = Config.empty) : Rule(config) {
 
         if (annotationEntry.shortName?.asString() != PREVIEW_ANNOTATION) return
 
-        val hasNameArgument = annotationEntry.valueArguments.any { argument ->
-            argument.getArgumentName()?.asName?.asString() == NAME_ARGUMENT
+        // name は @Preview の第一パラメータのため、位置引数で渡せるのは先頭のみ
+        val hasNameArgument = annotationEntry.valueArguments.withIndex().any { (index, argument) ->
+            val argumentName = argument.getArgumentName()?.asName?.asString()
+            argumentName == NAME_ARGUMENT || (argumentName == null && index == 0)
         }
         if (hasNameArgument) {
             report(
