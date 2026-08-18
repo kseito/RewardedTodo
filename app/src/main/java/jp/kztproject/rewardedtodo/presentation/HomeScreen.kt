@@ -6,37 +6,37 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
 import jp.kztproject.rewardedtodo.RewardedTodoBottomBar
 import jp.kztproject.rewardedtodo.TopBar
 import jp.kztproject.rewardedtodo.TopLevelDestination
 
-import jp.kztproject.rewardedtodo.feature.reward.REWARD_SCREEN
+import jp.kztproject.rewardedtodo.feature.reward.RewardListRoute
 import jp.kztproject.rewardedtodo.feature.reward.rewardListScreen
-import jp.kztproject.rewardedtodo.presentation.todo.TODO_SCREEN
+import jp.kztproject.rewardedtodo.presentation.todo.TodoListRoute
 import jp.kztproject.rewardedtodo.presentation.todo.todoListScreen
 
 @Composable
 fun HomeScreen(onClickSetting: () -> Unit) {
-    val navController = rememberNavController()
+    val navigationState = rememberNavigationState(
+        startRoute = TodoListRoute,
+        topLevelRoutes = setOf(TodoListRoute, RewardListRoute),
+    )
+    val navigator = remember(navigationState) { Navigator(navigationState) }
     val topLevelDestinations = TopLevelDestination.entries
-    val navBackStackEntry by navController.currentBackStackEntryAsState()
-    val currentDestination = when (navBackStackEntry?.destination?.route) {
-        REWARD_SCREEN -> TopLevelDestination.REWARD
+    val currentDestination = when (navigationState.topLevelRoute) {
+        RewardListRoute -> TopLevelDestination.REWARD
         else -> TopLevelDestination.TODO
     }
     val onNavigateToDestination: (TopLevelDestination) -> Unit = {
         when (it) {
-            TopLevelDestination.TODO -> navController.navigateHome(TODO_SCREEN)
-            TopLevelDestination.REWARD -> navController.navigateHome(REWARD_SCREEN)
+            TopLevelDestination.TODO -> navigator.navigate(TodoListRoute)
+            TopLevelDestination.REWARD -> navigator.navigate(RewardListRoute)
         }
     }
 
@@ -46,7 +46,7 @@ fun HomeScreen(onClickSetting: () -> Unit) {
         onNavigateToDestination = onNavigateToDestination,
         onClickSetting = onClickSetting,
     ) { padding ->
-        RewardedTodoApp(padding, navController)
+        RewardedTodoApp(padding, navigationState, navigator)
     }
 }
 
@@ -74,30 +74,22 @@ private fun HomeScreenContent(
 }
 
 @Composable
-private fun RewardedTodoApp(padding: PaddingValues, navController: NavHostController) {
+private fun RewardedTodoApp(padding: PaddingValues, navigationState: NavigationState, navigator: Navigator) {
     Box(
         Modifier
             .fillMaxSize()
             .padding(padding),
     ) {
         // TODO apply Theme
-        NavHost(
-            navController = navController,
-            startDestination = TODO_SCREEN,
-        ) {
-            todoListScreen()
-            rewardListScreen()
-        }
-    }
-}
-
-private fun NavHostController.navigateHome(route: String) {
-    this.navigate(route) {
-        popUpTo(this@navigateHome.graph.findStartDestination().id) {
-            saveState = true
-        }
-        launchSingleTop = true
-        restoreState = true
+        NavDisplay(
+            entries = navigationState.toEntries(
+                entryProvider {
+                    todoListScreen()
+                    rewardListScreen()
+                },
+            ),
+            onBack = { navigator.goBack() },
+        )
     }
 }
 
