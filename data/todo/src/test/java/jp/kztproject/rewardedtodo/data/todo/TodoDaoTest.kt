@@ -2,7 +2,7 @@ package jp.kztproject.rewardedtodo.data.todo
 
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import com.google.common.truth.Truth.assertThat
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.take
@@ -45,12 +45,12 @@ class TodoDaoTest {
         dummyTodoList.forEach { dao.insertOrUpdate(it) }
 
         val actual = dao.findAllAsFlow().take(1).first()
-        assertThat(actual.size).isEqualTo(3)
+        actual.size shouldBe 3
         actual[0].run {
-            assertThat(id).isEqualTo(1)
-            assertThat(name).isEqualTo("test 1")
-            assertThat(numberOfTicketsObtained).isEqualTo(1)
-            assertThat(isRepeat).isTrue()
+            id shouldBe 1
+            name shouldBe "test 1"
+            numberOfTicketsObtained shouldBe 1
+            isRepeat shouldBe true
         }
     }
 
@@ -62,9 +62,9 @@ class TodoDaoTest {
         dao.delete(dummyTodoList[0])
 
         val todoList = dao.findAll()
-        assertThat(todoList.size).isEqualTo(2)
-        assertThat(todoList[0].id).isEqualTo(2)
-        assertThat(todoList[1].id).isEqualTo(3)
+        todoList.size shouldBe 2
+        todoList[0].id shouldBe 2
+        todoList[1].id shouldBe 3
     }
 
     @Test
@@ -73,6 +73,6 @@ class TodoDaoTest {
         dao.insertOrUpdate(dummyTodoList[0])
         dao.insertOrUpdate(dummyTodoList[0].copy(name = "test 1 Copy"))
         val actual = dao.findAll()[0]
-        assertThat(actual).isEqualTo(dummyTodoList[0].copy(name = "test 1 Copy"))
+        actual shouldBe dummyTodoList[0].copy(name = "test 1 Copy")
     }
 }

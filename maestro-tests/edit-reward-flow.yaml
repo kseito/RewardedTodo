@@ -1,0 +1,65 @@
+appId: jp.kztproject.rewardedtodo.debug
+tags:
+  - android
+  - rewardedtodo
+---
+- clearState
+- launchApp
+
+# Navigate to Reward tab
+- tapOn:
+    text: "Reward"
+
+# Add a reward to edit (Repeat is left unchecked)
+- tapOn:
+    text: "Add"
+
+# Wait for bottom sheet to appear
+- assertVisible: "Reward Title"
+
+# Enter reward title
+- tapOn: "Reward Title"
+- inputText: "Reward to Edit"
+
+# Enter reward description
+- tapOn: "Reward Description"
+- inputText: "Before editing"
+
+# Enter chance of winning
+- tapOn: "Chance of Winning.*"
+- inputText: "20"
+
+# Tap Save button
+- tapOn: "Save"
+
+# Wait for the reward to appear in the list
+- extendedWaitUntil:
+    visible: "Reward to Edit"
+    timeout: 5000
+
+# The reward has no Repeat icon yet
+- assertNotVisible: "Repeat"
+
+# Tap on the reward to open the detail bottom sheet
+- tapOn:
+    text: "Reward to Edit"
+
+# Wait for bottom sheet to appear
+- assertVisible: "Reward Title"
+
+# Turn on the Repeat checkbox
+- tapOn:
+    text: "repeat_checkbox"
+
+# Save the changes
+- tapOn: "Save"
+
+# Wait for bottom sheet to close
+- assertNotVisible:
+    text: "Reward Title"
+
+# Verify the reward now shows the Repeat icon in the list
+- extendedWaitUntil:
+    visible: "Repeat"
+    timeout: 5000
+- assertVisible: "Reward to Edit"

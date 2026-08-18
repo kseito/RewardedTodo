@@ -13,4 +13,5 @@ dependencies {
     implementation(libs.coroutines.core)
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotest.assertions.core)
 }

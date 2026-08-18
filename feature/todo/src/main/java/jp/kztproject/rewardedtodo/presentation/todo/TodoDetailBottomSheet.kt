@@ -188,3 +188,37 @@ fun TodoDetailBottomSheetContentPreview() {
         onDismissRequest = {},
     )
 }
+
+@Preview
+@Composable
+fun TodoDetailBottomSheetContentEditingPreview() {
+    TodoDetailBottomSheetContent(
+        todo = Todo(
+            id = 1L,
+            todoistId = "abc123",
+            name = "英語学習",
+            numberOfTicketsObtained = 3,
+            isRepeat = false,
+        ),
+        onTodoSaveSelected = {},
+        onTodoDeleteSelected = {},
+        onDismissRequest = {},
+    )
+}
+
+@Preview
+@Composable
+fun TodoDetailBottomSheetContentRepeatPreview() {
+    TodoDetailBottomSheetContent(
+        todo = Todo(
+            id = 2L,
+            todoistId = null,
+            name = "ランニング",
+            numberOfTicketsObtained = 1,
+            isRepeat = true,
+        ),
+        onTodoSaveSelected = {},
+        onTodoDeleteSelected = {},
+        onDismissRequest = {},
+    )
+}

@@ -12,7 +12,7 @@ dependencies {
     implementation(libs.coroutines.adapter)
 
     testImplementation(libs.junit)
-    testImplementation(libs.assertj.core)
+    testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.coroutines.test)
     testImplementation(libs.mockk)
     testImplementation(project(":test:reward"))

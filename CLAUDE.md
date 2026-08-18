@@ -48,15 +48,16 @@ This Android project implements **Clean Architecture** with a **multi-modular st
 
 ## Module Structure
 
-The project uses 34+ modules organized by domain:
-- Each domain area (reward, todo, auth) has separate modules for domain, application, data, and feature layers
+The project uses 17 modules organized by domain (see `settings.gradle.kts` for the full list):
+- Each domain area (reward, todo) has separate modules for domain, application, data, and feature layers
 - Common modules provide shared functionality
 - Build-logic contains custom Gradle convention plugins
 
 ## Testing
 
 - Unit tests are located in each module's `src/test/` directory
-- Uses JUnit, Truth, MockK, and Robolectric for testing
+- Uses JUnit, Kotest (assertions), MockK, and Robolectric for testing
+- アサーションは Kotest の matcher (`shouldBe` 等) に統一する。Truth / AssertJ / JUnit標準assert は使わない
 - Screenshot testing with Roborazzi for visual regression testing
 - Test utilities in `/test/` modules (e.g., `DummyCreator` for test data)
 
@@ -162,3 +163,8 @@ fun findBy(id: Int): Reward?
 | `Rename` | 名前変更 | `Rename .java to .kt` |
 
 詳細なコミット粒度・実装順序のルールは `/implement` スキルに従う。
+
+### PRタイトル
+
+- **PRタイトルは英語プレフィックスを付けず、日本語のみ**で記述する（例: `PRテンプレートを追加`）。コミット件名の `Add`/`Update` などのプレフィックスは付けない。
+- コミット件名をそのまま流用しないこと。単一コミットのPRでも、プレフィックスを外した日本語タイトルを明示的に付ける。

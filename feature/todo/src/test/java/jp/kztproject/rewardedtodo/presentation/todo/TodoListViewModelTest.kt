@@ -1,7 +1,7 @@
 package jp.kztproject.rewardedtodo.presentation.todo
 
-import com.google.common.truth.Truth.assertThat
 import io.kotest.core.spec.style.ShouldSpec
+import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.every
@@ -125,7 +125,7 @@ class TodoListViewModelTest :
                     val job = backgroundScope.launch { viewModel.todoList.collect {} }
                     advanceUntilIdle()
                     // 初回ロードの同期中でもスピナーは出さない
-                    assertThat(viewModel.isRefreshing.value).isFalse()
+                    viewModel.isRefreshing.value shouldBe false
 
                     fetchGate.complete(Unit)
                     advanceUntilIdle()
@@ -164,16 +164,84 @@ class TodoListViewModelTest :
 
                     val job = backgroundScope.launch { viewModel.todoList.collect {} }
                     advanceUntilIdle()
-                    assertThat(viewModel.isRefreshing.value).isFalse()
+                    viewModel.isRefreshing.value shouldBe false
 
                     viewModel.refreshTodoList()
                     advanceUntilIdle()
                     // 手動リフレッシュの同期中はスピナーを表示
-                    assertThat(viewModel.isRefreshing.value).isTrue()
+                    viewModel.isRefreshing.value shouldBe true
 
                     refreshGate.complete(Unit)
                     advanceUntilIdle()
-                    assertThat(viewModel.isRefreshing.value).isFalse()
+                    viewModel.isRefreshing.value shouldBe false
+                    job.cancel()
+                }
+            }
+        }
+
+        context("When the initial load is in flight") {
+            should("keep isInitialLoading true until the list is loaded") {
+                runTest(testDispatcher) {
+                    val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
+                    val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
+                    val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
+                    val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
+                    val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
+                    val getApiTokenUseCase = mockk<GetApiTokenUseCase>(relaxed = true)
+                    val dummyToken = ApiToken.create("1234567890abcdef1234567890abcdef12345678")
+                    every { getApiTokenUseCase.executeAsFlow() } returns flowOf(dummyToken)
+                    every { getTodoListUseCase.execute() } returns flowOf(emptyList())
+                    val fetchGate = CompletableDeferred<Unit>()
+                    coEvery { fetchTodoListUseCase.execute() } coAnswers { fetchGate.await() }
+
+                    val viewModel = TodoListViewModel(
+                        getTodoListUseCase,
+                        fetchTodoListUseCase,
+                        updateTodoListUseCase,
+                        deleteTodoUseCase,
+                        completeTodoUseCase,
+                        getApiTokenUseCase,
+                    )
+
+                    val job = backgroundScope.launch { viewModel.todoList.collect {} }
+                    advanceUntilIdle()
+                    // 初回同期が完了し一覧が届くまでは初回ロード中
+                    viewModel.isInitialLoading.value shouldBe true
+
+                    fetchGate.complete(Unit)
+                    advanceUntilIdle()
+                    // 一覧が届いたら初回ロード完了
+                    viewModel.isInitialLoading.value shouldBe false
+                    job.cancel()
+                }
+            }
+        }
+
+        context("When there is no auth token") {
+            should("clear isInitialLoading after the list is loaded without fetching") {
+                runTest(testDispatcher) {
+                    val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
+                    val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
+                    val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
+                    val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
+                    val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
+                    val getApiTokenUseCase = mockk<GetApiTokenUseCase>(relaxed = true)
+                    every { getApiTokenUseCase.executeAsFlow() } returns flowOf(null)
+                    every { getTodoListUseCase.execute() } returns flowOf(emptyList())
+
+                    val viewModel = TodoListViewModel(
+                        getTodoListUseCase,
+                        fetchTodoListUseCase,
+                        updateTodoListUseCase,
+                        deleteTodoUseCase,
+                        completeTodoUseCase,
+                        getApiTokenUseCase,
+                    )
+
+                    val job = backgroundScope.launch { viewModel.todoList.collect {} }
+                    advanceUntilIdle()
+                    viewModel.isInitialLoading.value shouldBe false
+                    coVerify(exactly = 0) { fetchTodoListUseCase.execute() }
                     job.cancel()
                 }
             }

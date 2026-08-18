@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import org.assertj.core.api.Assertions.assertThat
+import io.kotest.matchers.shouldBe
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -74,14 +74,14 @@ class RewardListViewModelTest {
     @Test
     fun testGetRewards() = runTest {
         val rewardList = viewModel.rewardList.first { it.isNotEmpty() }
-        assertThat(rewardList.size).isEqualTo(1)
+        rewardList.size shouldBe 1
     }
 
     @Test
     fun testRewardPoint() = runTest {
         val point = viewModel.rewardPoint.first { it != 0 }
 
-        assertThat(point).isEqualTo(10)
+        point shouldBe 10
     }
 
     @Test
@@ -101,11 +101,11 @@ class RewardListViewModelTest {
             mockDeleteRewardUseCase,
         )
         val collector = backgroundScope.launch { viewModel.rewardPoint.collect {} }
-        assertThat(viewModel.rewardPoint.first { it == 10 }).isEqualTo(10)
+        viewModel.rewardPoint.first { it == 10 } shouldBe 10
 
         viewModel.startLottery()
 
-        assertThat(viewModel.rewardPoint.first { it == 9 }).isEqualTo(9)
+        viewModel.rewardPoint.first { it == 9 } shouldBe 9
         collector.cancel()
     }
 }

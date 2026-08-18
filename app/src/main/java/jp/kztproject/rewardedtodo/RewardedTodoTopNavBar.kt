@@ -31,7 +31,7 @@ fun TopBar(@StringRes titleResourceId: Int, onSettingClicked: () -> Unit) {
             ) {
                 Icon(
                     imageVector = Icons.Filled.Settings,
-                    contentDescription = null,
+                    contentDescription = "setting_button",
                     tint = MaterialTheme.colorScheme.onPrimary,
                 )
             }
