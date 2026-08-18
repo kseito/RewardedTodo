@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.roborazzi)
     alias(libs.plugins.rewardedtodo.android.library.detekt)
     alias(libs.plugins.rewardedtodo.android.jacoco)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 val localProperties = Properties()
@@ -131,6 +132,10 @@ dependencies {
     implementation(libs.androidx.compose.material3)
     implementation(libs.compose.material.icon.core)
     implementation(libs.navigation.compose)
+    implementation(libs.navigation3.runtime)
+    implementation(libs.navigation3.ui)
+    implementation(libs.lifecycle.viewmodel.navigation3)
+    implementation(libs.kotlinx.serialization.core)
 
     // Room
     implementation(libs.room.runtime)
