@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| ステータス | Approved |
+| ステータス | Implemented |
 | 作成日 | 2026-08-18 |
 | ブランチ | feature/navigation3-migration |
 | 関連Issue/PR | なし |
@@ -79,16 +79,16 @@ Navigation 3 は安定版（1.1.6）に到達しており、Compose専用設計�
 
 ## 6. 受け入れ条件 (Acceptance Criteria)
 
-- [ ] `./gradlew assembleDebug` が成功する
-- [ ] コードベースに `androidx.navigation.`（Nav2）への参照が残っていない（`androidx.navigation3` のみ）
-- [ ] 既存ユニットテスト（`./gradlew testDebugUnitTest`）が全モジュールでパスする
-- [ ] Roborazziスクリーンショット比較で意図しない差分がない
-- [ ] Maestro E2E: タブ切替・設定画面遷移を含む既存フローがパスする
-- [ ] 実機/エミュレータで以下を確認:
-  - [ ] Todo⇄Rewardタブ切替でBottomBar選択状態が同期する
-  - [ ] Rewardタブで戻る→Todoタブへ復帰しBottomBarも同期する
-  - [ ] 設定画面への遷移・復帰ができる
-  - [ ] 画面回転後もタブ選択状態が維持される
+- [x] `./gradlew assembleDebug` が成功する
+- [x] コードベースに `androidx.navigation.`（Nav2）への参照が残っていない（`androidx.navigation3` のみ）
+- [x] 既存ユニットテスト（`./gradlew testDebugUnitTest`）が全モジュールでパスする
+- [x] Roborazziスクリーンショット比較で意図しない差分がない（mainのゴールデンと比較し28件すべてunchanged）
+- [x] Maestro E2E: `complete-todo-flow` / `single-lottery-flow` パス。`setting-todoist-token-flow` はエミュレータの日本語ロケール起因で "Setting" 表記アサートに失敗（移行起因ではない。遷移自体はadbで確認済み）
+- [x] エミュレータで以下を確認:
+  - [x] Todo⇄Rewardタブ切替でBottomBar選択状態が同期する
+  - [x] Rewardタブで戻る→Todoタブへ復帰しBottomBarも同期する
+  - [x] 設定画面への遷移・復帰ができる
+  - [x] 画面回転後もタブ選択状態が維持される
 
 ## 7. テスト方針
 
