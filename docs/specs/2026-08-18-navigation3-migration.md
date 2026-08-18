@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| ステータス | Draft |
+| ステータス | Approved |
 | 作成日 | 2026-08-18 |
 | ブランチ | feature/navigation3-migration |
 | 関連Issue/PR | なし |
