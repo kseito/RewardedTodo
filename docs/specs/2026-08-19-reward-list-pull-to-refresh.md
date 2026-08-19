@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| ステータス | Approved |
+| ステータス | Implemented |
 | 作成日 | 2026-08-19 |
 | ブランチ | feature/reward-list-pull-to-refresh |
 | 関連Issue/PR | なし |
