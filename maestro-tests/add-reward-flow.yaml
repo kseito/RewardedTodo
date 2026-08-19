@@ -38,6 +38,7 @@ tags:
 - tapOn: "Save"
 
 # Wait for bottom sheet to close and list to update
+# NOTE: intentionally broken assertion to verify the CI gate actually fails (temporary)
 - extendedWaitUntil:
-    visible: "Test Reward from Maestro"
+    visible: "INTENTIONALLY BROKEN ASSERTION zzz"
     timeout: 5000
