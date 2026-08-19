@@ -7,7 +7,7 @@ dependencies {
     implementation(libs.coroutines.core)
 
     testImplementation(libs.junit)
-    testImplementation(libs.assertj.core)
+    testImplementation(libs.kotest.assertions.core)
 }
 
 android {

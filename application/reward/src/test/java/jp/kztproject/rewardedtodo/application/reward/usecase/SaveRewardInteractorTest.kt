@@ -9,9 +9,10 @@ import jp.kztproject.rewardedtodo.application.reward.model.error.RewardTitleEmpt
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import jp.kztproject.rewardedtodo.domain.reward.repository.IRewardRepository
 import jp.kztproject.rewardedtodo.test.reward.DummyCreator
+import io.kotest.matchers.shouldBe
+import io.kotest.matchers.types.shouldBeInstanceOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.Before
 import org.junit.Test
 
@@ -26,7 +27,7 @@ class SaveRewardInteractorTest {
         "test_name",
         3f,
         "test_description",
-        false
+        false,
     )
 
     @Before
@@ -38,7 +39,7 @@ class SaveRewardInteractorTest {
     @Test
     fun shouldSuccess_WhenSaveFilledReward() = runTest {
         val actual = interactor.execute(filledReward)
-        assertThat(actual).isEqualTo(Result.success(Unit))
+        actual shouldBe Result.success(Unit)
     }
 
     @Test
@@ -46,7 +47,7 @@ class SaveRewardInteractorTest {
         val rewardInput = filledReward.copy(name = null)
 
         val actual = interactor.execute(rewardInput)
-        assertThat(actual.exceptionOrNull()).isInstanceOf(RewardTitleEmptyException().javaClass)
+        actual.exceptionOrNull().shouldBeInstanceOf<RewardTitleEmptyException>()
     }
 
     @Test
@@ -54,6 +55,6 @@ class SaveRewardInteractorTest {
         val rewardInput = filledReward.copy(probability = null)
 
         val actual = interactor.execute(rewardInput)
-        assertThat(actual.exceptionOrNull()).isInstanceOf(RewardProbabilityEmptyException().javaClass)
+        actual.exceptionOrNull().shouldBeInstanceOf<RewardProbabilityEmptyException>()
     }
 }

@@ -40,7 +40,7 @@ dependencies {
 
     testImplementation(libs.junit)
     testImplementation(libs.kotest.runner.junit5)
-    testImplementation(libs.truth)
+    testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.espresso.core)

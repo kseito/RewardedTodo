@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
@@ -64,58 +63,58 @@ class RewardListViewModel @Inject constructor(
             // 外側に置くと例外で StateFlow の収集が止まり、以降のトリガーで復帰できなくなる。
             flow { emitAll(getPointUseCase.execute()) }
                 .map { it.value }
-                .catch { mutableResult.value = Result.failure(it) }
+                .catch { result.value = Result.failure(it) }
         }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = 0,
         )
-    private val mutableResult = MutableStateFlow<Result<Unit>?>(null)
-    val result: StateFlow<Result<Unit>?> = mutableResult.asStateFlow()
-    private val mutableObtainedReward = MutableStateFlow<Result<Reward?>?>(null)
-    val obtainedReward = mutableObtainedReward.asStateFlow()
-    private val mutableBatchLotteryResult = MutableStateFlow<Result<BatchLotteryResult>?>(null)
-    val batchLotteryResult = mutableBatchLotteryResult.asStateFlow()
-    private val mutableIsSingleLottering = MutableStateFlow(false)
-    val isSingleLottering: StateFlow<Boolean> = mutableIsSingleLottering.asStateFlow()
-    private val mutableIsBatchLottering = MutableStateFlow(false)
-    val isBatchLottering: StateFlow<Boolean> = mutableIsBatchLottering.asStateFlow()
+    val result: StateFlow<Result<Unit>?>
+        field = MutableStateFlow<Result<Unit>?>(null)
+    val obtainedReward: StateFlow<Result<Reward?>?>
+        field = MutableStateFlow<Result<Reward?>?>(null)
+    val batchLotteryResult: StateFlow<Result<BatchLotteryResult>?>
+        field = MutableStateFlow<Result<BatchLotteryResult>?>(null)
+    val isSingleLottering: StateFlow<Boolean>
+        field = MutableStateFlow(false)
+    val isBatchLottering: StateFlow<Boolean>
+        field = MutableStateFlow(false)
 
     fun startLottery() {
-        if (mutableIsSingleLottering.value || mutableIsBatchLottering.value) return
-        mutableIsSingleLottering.value = true
+        if (isSingleLottering.value || isBatchLottering.value) return
+        isSingleLottering.value = true
         viewModelScope.launch {
             try {
                 val rewards = RewardCollection(rewardList.value)
-                mutableObtainedReward.value = lotteryUseCase.execute(rewards)
+                obtainedReward.value = lotteryUseCase.execute(rewards)
                 pointRefreshTrigger.tryEmit(Unit)
             } finally {
-                mutableIsSingleLottering.value = false
+                isSingleLottering.value = false
             }
         }
     }
 
     fun resetObtainedReward() {
-        mutableObtainedReward.value = null
+        obtainedReward.value = null
     }
 
     fun startBatchLottery(count: Int = BatchLotteryResult.DEFAULT_COUNT) {
-        if (mutableIsSingleLottering.value || mutableIsBatchLottering.value) return
-        mutableIsBatchLottering.value = true
+        if (isSingleLottering.value || isBatchLottering.value) return
+        isBatchLottering.value = true
         viewModelScope.launch {
             try {
                 val rewards = RewardCollection(rewardList.value)
-                mutableBatchLotteryResult.value = batchLotteryUseCase.execute(rewards, count)
+                batchLotteryResult.value = batchLotteryUseCase.execute(rewards, count)
                 pointRefreshTrigger.tryEmit(Unit)
             } finally {
-                mutableIsBatchLottering.value = false
+                isBatchLottering.value = false
             }
         }
     }
 
     fun resetBatchLotteryResult() {
-        mutableBatchLotteryResult.value = null
+        batchLotteryResult.value = null
     }
 
     fun validateRewards(onSuccess: () -> Unit) {
@@ -123,7 +122,7 @@ class RewardListViewModel @Inject constructor(
             val rewards = rewardList.value
             if (rewards.size >= RewardCollection.MAX) {
                 // TODO Create error property to show this error
-                mutableObtainedReward.value = Result.failure(OverMaxRewardsException())
+                obtainedReward.value = Result.failure(OverMaxRewardsException())
             } else {
                 onSuccess()
             }
@@ -133,19 +132,19 @@ class RewardListViewModel @Inject constructor(
     fun saveReward(reward: RewardInput) {
         viewModelScope.launch {
             val newResult = saveRewardUseCase.execute(reward)
-            mutableResult.value = newResult
+            result.value = newResult
         }
     }
 
     fun clearResult() {
-        mutableResult.value = null
+        result.value = null
     }
 
     fun deleteReward(reward: Reward) {
         // TODO show confirmation dialog
         viewModelScope.launch {
             deleteRewardUseCase.execute(reward)
-            mutableResult.value = Result.success(Unit)
+            result.value = Result.success(Unit)
         }
     }
 
