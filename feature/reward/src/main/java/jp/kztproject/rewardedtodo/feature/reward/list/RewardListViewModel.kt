@@ -25,6 +25,7 @@ import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -63,7 +64,11 @@ class RewardListViewModel @Inject constructor(
             // 外側に置くと例外で StateFlow の収集が止まり、以降のトリガーで復帰できなくなる。
             flow { emitAll(getPointUseCase.execute()) }
                 .map { it.value }
-                .catch { result.value = Result.failure(it) }
+                .onEach { isRefreshing.value = false }
+                .catch {
+                    result.value = Result.failure(it)
+                    isRefreshing.value = false
+                }
         }
         .stateIn(
             scope = viewModelScope,
@@ -80,6 +85,17 @@ class RewardListViewModel @Inject constructor(
         field = MutableStateFlow(false)
     val isBatchLottering: StateFlow<Boolean>
         field = MutableStateFlow(false)
+    val isRefreshing: StateFlow<Boolean>
+        field = MutableStateFlow(false)
+
+    // プルリフレッシュ。チケット（ポイント）を再取得する。
+    // リワード一覧は Room の Flow を購読しており常に最新が流れてくるため、明示的な再取得は不要。
+    // インジケータは rewardPoint パイプラインの emit / catch で解除される。
+    fun refresh() {
+        if (isRefreshing.value) return
+        isRefreshing.value = true
+        pointRefreshTrigger.tryEmit(Unit)
+    }
 
     fun startLottery() {
         if (isSingleLottering.value || isBatchLottering.value) return
