@@ -9,7 +9,7 @@ tags:
 # Wait for the initial screen to finish rendering; cold start/JIT is slow on CI
 - extendedWaitUntil:
     visible: "Reward"
-    timeout: 120000
+    timeout: 180000
 
 # Tap on FloatingActionButton to add a new task
 - tapOn:
