@@ -14,6 +14,7 @@ import jp.kztproject.rewardedtodo.test.reward.DummyCreator
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.resetMain
@@ -106,6 +107,54 @@ class RewardListViewModelTest {
         viewModel.startLottery()
 
         viewModel.rewardPoint.first { it == 9 } shouldBe 9
+        collector.cancel()
+    }
+
+    @Test
+    fun `refresh re-fetches rewardPoint and clears isRefreshing`() = runTest {
+        coEvery { mockGetPointUseCase.execute() } returnsMany listOf(
+            flowOf(NumberOfTicket(10)),
+            flowOf(NumberOfTicket(12)),
+        )
+        viewModel = RewardListViewModel(
+            mockLotteryUseCase,
+            mockBatchLotteryUseCase,
+            mockGetRewardsUseCase,
+            mockGetPointUseCase,
+            mockSaveRewardUseCase,
+            mockDeleteRewardUseCase,
+        )
+        val collector = backgroundScope.launch { viewModel.rewardPoint.collect {} }
+        viewModel.rewardPoint.first { it == 10 } shouldBe 10
+
+        viewModel.refresh()
+
+        viewModel.rewardPoint.first { it == 12 } shouldBe 12
+        viewModel.isRefreshing.value shouldBe false
+        collector.cancel()
+    }
+
+    @Test
+    fun `isRefreshing clears when point fetch fails on refresh`() = runTest {
+        coEvery { mockGetPointUseCase.execute() } returnsMany listOf(
+            flowOf(NumberOfTicket(10)),
+            flow { throw RuntimeException("network error") },
+        )
+        viewModel = RewardListViewModel(
+            mockLotteryUseCase,
+            mockBatchLotteryUseCase,
+            mockGetRewardsUseCase,
+            mockGetPointUseCase,
+            mockSaveRewardUseCase,
+            mockDeleteRewardUseCase,
+        )
+        val collector = backgroundScope.launch { viewModel.rewardPoint.collect {} }
+        viewModel.rewardPoint.first { it == 10 } shouldBe 10
+
+        viewModel.refresh()
+
+        viewModel.result.first { it != null }?.isFailure shouldBe true
+        viewModel.isRefreshing.value shouldBe false
         collector.cancel()
     }
 }
