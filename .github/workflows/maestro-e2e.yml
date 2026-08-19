@@ -1,0 +1,73 @@
+name: maestro-e2e
+
+on:
+  pull_request:
+    branches:
+      - main
+
+# 同一PRで新しいpushがあれば古い実行をキャンセルする（エミュレータ実行は高コストなため）
+concurrency:
+  group: maestro-e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  maestro-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    env:
+      MAESTRO_VERSION: 2.8.0
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Set up JDK 17
+        uses: ./.github/actions/setup-java
+
+      - name: Setup Gradle
+        uses: ./.github/actions/setup-gradle
+
+      # KVMを有効化してエミュレータのハードウェアアクセラレーションを使う
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Inject secrets into local.properties
+        run: echo "reward.server.url=${{ secrets.REWARD_SERVER_URL }}" >> local.properties
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Install Maestro CLI
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+
+      - name: Run Maestro E2E tests
+        uses: reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d # v2.38.0
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          # 実機相当の解像度にする。既定プロファイルは320x640と小さく、
+          # 報酬追加のBottom Sheetで下部フィールド(Chance of Winning等)が画面外になりフローが失敗する
+          profile: pixel_6
+          # 文言アサートは英語のみ。念のためロケールをログ出力し、debugアプリを入れてからフローを実行する。
+          # android-emulator-runner は script の各行を個別の sh で実行するため、
+          # 複数行のリトライ処理は別スクリプトに切り出して1行で呼び出す。
+          script: |
+            adb shell am get-config | grep -i locale || true
+            ./gradlew installDebug
+            bash .github/scripts/run-maestro-e2e.sh
+
+      - name: Upload Maestro debug output
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: maestro-debug-output
+          path: ~/.maestro/tests
+          retention-days: 30
