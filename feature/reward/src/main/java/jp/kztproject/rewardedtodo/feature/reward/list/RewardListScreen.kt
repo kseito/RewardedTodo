@@ -24,6 +24,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -122,6 +123,7 @@ fun RewardListScreenWithBottomSheet(viewModel: RewardListViewModel = hiltViewMod
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RewardListScreen(
     viewModel: RewardListViewModel,
@@ -136,6 +138,7 @@ private fun RewardListScreen(
     val batchLotteryResult by viewModel.batchLotteryResult.collectAsStateWithLifecycle()
     val isSingleLottering by viewModel.isSingleLottering.collectAsStateWithLifecycle()
     val isBatchLottering by viewModel.isBatchLottering.collectAsStateWithLifecycle()
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val isLottering = isSingleLottering || isBatchLottering
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -152,7 +155,17 @@ private fun RewardListScreen(
             Box(
                 modifier = Modifier.weight(1f),
             ) {
-                RewardList(rewards, onRewardItemClick)
+                PullToRefreshBox(
+                    isRefreshing = isRefreshing,
+                    onRefresh = viewModel::refresh,
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    RewardList(
+                        rewards = rewards,
+                        onRewardItemClick = onRewardItemClick,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
                 SnackbarHost(
                     hostState = snackbarHostState,
                     snackbar = {
@@ -477,8 +490,8 @@ private fun TicketLabel(ticket: Int?, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun RewardList(rewards: List<Reward>?, onRewardItemClick: (Reward) -> Unit) {
-    LazyColumn {
+private fun RewardList(rewards: List<Reward>?, onRewardItemClick: (Reward) -> Unit, modifier: Modifier = Modifier) {
+    LazyColumn(modifier = modifier) {
         rewards?.let {
             itemsIndexed(it) { index, reward ->
                 RewardItem(reward, onRewardItemClick)
