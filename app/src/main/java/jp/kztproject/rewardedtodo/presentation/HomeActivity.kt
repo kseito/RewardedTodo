@@ -6,11 +6,15 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
+import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.runtime.rememberNavBackStack
+import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
+import androidx.navigation3.ui.NavDisplay
 import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.common.ui.theme.RewardedTodoScheme
-import jp.kztproject.rewardedtodo.feature.setting.SETTING_SCREEN
+import jp.kztproject.rewardedtodo.feature.setting.SettingRoute
 import jp.kztproject.rewardedtodo.feature.setting.settingScreen
 
 @AndroidEntryPoint
@@ -28,15 +32,23 @@ class HomeActivity : ComponentActivity() {
             MaterialTheme(
                 colorScheme = RewardedTodoScheme(isDarkTheme = isSystemInDarkTheme()),
             ) {
-                val navController = rememberNavController()
-                NavHost(navController = navController, startDestination = HOME_SCREEN) {
-                    homeScreen(
-                        onClickSetting = {
-                            navController.navigate(SETTING_SCREEN)
-                        },
-                    )
-                    settingScreen()
-                }
+                val backStack = rememberNavBackStack(HomeRoute)
+                NavDisplay(
+                    backStack = backStack,
+                    onBack = { backStack.removeLastOrNull() },
+                    entryDecorators = listOf(
+                        rememberSaveableStateHolderNavEntryDecorator<NavKey>(),
+                        rememberViewModelStoreNavEntryDecorator<NavKey>(),
+                    ),
+                    entryProvider = entryProvider {
+                        homeScreen(
+                            onClickSetting = {
+                                backStack.add(SettingRoute)
+                            },
+                        )
+                        settingScreen()
+                    },
+                )
             }
         }
     }
