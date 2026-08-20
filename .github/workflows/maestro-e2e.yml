@@ -71,3 +71,12 @@ jobs:
           name: maestro-debug-output
           path: ~/.maestro/tests
           retention-days: 30
+
+      # お試し(後で外す): CI上の実動作を可視化する画面録画
+      - name: Upload screen recordings
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: maestro-screen-recordings
+          path: maestro-recordings
+          retention-days: 7

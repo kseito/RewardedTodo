@@ -14,6 +14,23 @@
 # 複数行のこの処理はスクリプトに切り出して1行で呼び出している。
 set -uo pipefail
 
+# --- お試し(後で外す): エミュレータ画面を録画してCI上の実動作を可視化する ---
+# screenrecordは1ファイル最大3分のため、180秒ごとに分割して連続録画する。
+adb shell 'rm -rf /sdcard/rec && mkdir -p /sdcard/rec' || true
+( i=0; while adb shell screenrecord --bit-rate 4000000 --time-limit 180 "/sdcard/rec/part_$(printf '%03d' "$i").mp4"; do i=$((i+1)); done ) &
+REC_LOOP_PID=$!
+stop_recording() {
+  # SIGINTで送るとmp4が正常にファイナライズされる(SIGKILLだと壊れる)
+  adb shell pkill -SIGINT screenrecord 2>/dev/null || true
+  sleep 3
+  kill "$REC_LOOP_PID" 2>/dev/null || true
+  wait "$REC_LOOP_PID" 2>/dev/null || true
+  mkdir -p maestro-recordings
+  adb pull /sdcard/rec/. maestro-recordings/ 2>/dev/null || true
+}
+trap stop_recording EXIT
+# --- ここまでお試し ---
+
 if maestro test maestro-tests/; then
   exit 0
 fi
