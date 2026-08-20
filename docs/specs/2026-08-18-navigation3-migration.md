@@ -75,7 +75,8 @@ Navigation 3 は安定版（1.1.6）に到達しており、Compose専用設計�
 ### 参照した既存コード・資料
 
 - 既存実装: `app/.../HomeActivity.kt`, `HomeScreen.kt`, `HomeNavigation.kt`, 各featureの `*Navigation.kt`
-- 公式移行ガイド・レシピ: `~/.claude/skills/navigation-3/`（migration-guide.md, multiple-backstacks.md, passingarguments.md）
+- 公式移行ガイド: [Navigation 2 to Navigation 3 migration guide](https://developer.android.com/guide/navigation/navigation-3/migration-guide)
+- 公式レシピ集: [android/nav3-recipes](https://github.com/android/nav3-recipes)（multiple back stacks, passing arguments to ViewModels）
 
 ## 6. 受け入れ条件 (Acceptance Criteria)
 
