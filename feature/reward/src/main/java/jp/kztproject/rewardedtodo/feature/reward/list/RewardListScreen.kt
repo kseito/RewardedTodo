@@ -24,6 +24,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -122,6 +123,7 @@ fun RewardListScreenWithBottomSheet(viewModel: RewardListViewModel = hiltViewMod
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun RewardListScreen(
     viewModel: RewardListViewModel,
@@ -136,6 +138,7 @@ private fun RewardListScreen(
     val batchLotteryResult by viewModel.batchLotteryResult.collectAsStateWithLifecycle()
     val isSingleLottering by viewModel.isSingleLottering.collectAsStateWithLifecycle()
     val isBatchLottering by viewModel.isBatchLottering.collectAsStateWithLifecycle()
+    val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val isLottering = isSingleLottering || isBatchLottering
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -152,7 +155,17 @@ private fun RewardListScreen(
             Box(
                 modifier = Modifier.weight(1f),
             ) {
-                RewardList(rewards, onRewardItemClick)
+                PullToRefreshBox(
+                    isRefreshing = isRefreshing,
+                    onRefresh = viewModel::refresh,
+                    modifier = Modifier.fillMaxSize(),
+                ) {
+                    RewardList(
+                        rewards = rewards,
+                        onRewardItemClick = onRewardItemClick,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                }
                 SnackbarHost(
                     hostState = snackbarHostState,
                     snackbar = {
@@ -465,6 +478,68 @@ fun RewardListScreenBatchLotteringPreview() {
     )
 }
 
+private val emptyPreviewViewModel = RewardListViewModel(
+    object : LotteryUseCase {
+        override suspend fun execute(rewards: RewardCollection): Result<Reward?> = Result.success(null)
+    },
+    object : BatchLotteryUseCase {
+        override suspend fun execute(rewards: RewardCollection, count: Int): Result<BatchLotteryResult> =
+            Result.success(BatchLotteryResult(emptyList(), count))
+    },
+    object : GetRewardsUseCase {
+        override suspend fun execute(): List<Reward> = emptyList()
+
+        override suspend fun executeAsFlow(): Flow<List<Reward>> = flowOf(emptyList())
+    },
+    object : GetPointUseCase {
+        override suspend fun execute(): Flow<NumberOfTicket> = flowOf(NumberOfTicket(0))
+    },
+    object : SaveRewardUseCase {
+        override suspend fun execute(reward: RewardInput): Result<Unit> = Result.success(Unit)
+    },
+    object : DeleteRewardUseCase {
+        override suspend fun execute(reward: Reward) {}
+    },
+)
+
+@Preview
+@Composable
+fun RewardListScreenEmptyPreview() {
+    RewardListScreen(
+        viewModel = emptyPreviewViewModel,
+        onAddNewRewardClick = {},
+        onRewardItemClick = {},
+        onRewardSaveSucceeded = {},
+    )
+}
+
+@Preview
+@Composable
+fun RewardListScreenErrorPreview() {
+    Box(modifier = Modifier.fillMaxSize()) {
+        RewardListScreen(
+            viewModel = previewViewModel,
+            onAddNewRewardClick = {},
+            onRewardItemClick = {},
+            onRewardSaveSucceeded = {},
+        )
+        ErrorSnackBar(
+            object : SnackbarData {
+                override val visuals = object : SnackbarVisuals {
+                    override val message = "抽選に失敗しました"
+                    override val actionLabel: String? = null
+                    override val withDismissAction = false
+                    override val duration = SnackbarDuration.Short
+                }
+
+                override fun dismiss() {}
+
+                override fun performAction() {}
+            },
+        )
+    }
+}
+
 @Composable
 private fun TicketLabel(ticket: Int?, modifier: Modifier = Modifier) {
     Text(
@@ -477,8 +552,8 @@ private fun TicketLabel(ticket: Int?, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun RewardList(rewards: List<Reward>?, onRewardItemClick: (Reward) -> Unit) {
-    LazyColumn {
+private fun RewardList(rewards: List<Reward>?, onRewardItemClick: (Reward) -> Unit, modifier: Modifier = Modifier) {
+    LazyColumn(modifier = modifier) {
         rewards?.let {
             itemsIndexed(it) { index, reward ->
                 RewardItem(reward, onRewardItemClick)

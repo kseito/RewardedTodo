@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.dagger.hilt)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -21,7 +22,6 @@ dependencies {
     implementation(libs.kotlin.stdlib)
     implementation(libs.core.ktx)
     implementation(libs.material)
-    implementation(libs.navigation.fragment.ktx)
 
     // Jetpack Compose
     implementation(platform(libs.androidx.compose.bom))
@@ -35,7 +35,8 @@ dependencies {
     implementation(libs.androidx.compose.livedata)
     implementation(libs.constraintlayout.compose)
     implementation(libs.hilt.navigation.compose)
-
+    implementation(libs.navigation3.runtime)
+    implementation(libs.kotlinx.serialization.core)
 
     //Dagger
     implementation(libs.hilt.android)
