@@ -4,8 +4,8 @@ tags:
   - rewardedtodo
   - lottery
 ---
-- launchApp:
-    clearState: true
+- clearState
+- launchApp
 
 # Wait for the initial screen to finish rendering; cold start/JIT is slow on CI
 - extendedWaitUntil:
