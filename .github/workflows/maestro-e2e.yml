@@ -52,7 +52,11 @@ jobs:
         with:
           api-level: 34
           arch: x86_64
-          target: google_apis
+          # AOSP(default)イメージを使う。google_apisはGMS+Pixel Launcherを積み、
+          # cold boot直後のアプリインデックス処理でランチャーがANRし
+          # 「isn't responding」ダイアログが最前面に居座ってMaestroが全滅する。
+          # 本アプリはGMSに非依存なので軽量なAOSPイメージで十分かつ安定する。
+          target: default
           # 実機相当の解像度にする。既定プロファイルは320x640と小さく、
           # 報酬追加のBottom Sheetで下部フィールド(Chance of Winning等)が画面外になりフローが失敗する
           profile: pixel_6
