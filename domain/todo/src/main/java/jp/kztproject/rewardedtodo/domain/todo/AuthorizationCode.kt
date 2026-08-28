@@ -6,13 +6,13 @@ package jp.kztproject.rewardedtodo.domain.todo
 @JvmInline
 value class AuthorizationCode private constructor(val value: String) {
 
-    init {
-        require(value.isNotBlank()) { "Authorization Code cannot be blank" }
-    }
-
     companion object {
 
-        fun create(code: String): AuthorizationCode = AuthorizationCode(code.trim())
+        fun create(code: String): AuthorizationCode {
+            val normalized = code.trim()
+            require(normalized.isNotBlank()) { "Authorization Code cannot be blank" }
+            return AuthorizationCode(normalized)
+        }
 
         fun createSafely(code: String?): AuthorizationCode? {
             val normalized = code?.trim() ?: return null
