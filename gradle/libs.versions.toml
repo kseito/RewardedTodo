@@ -8,6 +8,7 @@ versionName = "0.0.3"
 
 #Libraries
 android-gradle-plugin = "9.3.1"
+androidx-browser = "1.10.0"
 activity-compose = "1.13.0"
 constraintlayout-compose = "1.1.2"
 compose-material = "1.7.8"
@@ -80,6 +81,7 @@ preference = { group = "androidx.preference", name = "preference", version.ref =
 retrofit-core = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 retrofit-moshi = { group = "com.squareup.retrofit2", name = "converter-moshi", version.ref = "retrofit" }
 okhttp-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
+androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "androidx-browser" }
 moshi = { group = "com.squareup.moshi", name = "moshi-kotlin", version.ref = "moshi" }
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room"}
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room"}
