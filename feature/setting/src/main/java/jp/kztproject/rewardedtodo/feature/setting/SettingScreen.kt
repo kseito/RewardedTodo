@@ -7,8 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -17,27 +15,39 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 
 @Composable
-fun SettingScreen(viewModel: SettingViewModel = hiltViewModel()) {
-    val todoistExtensionEnabled = viewModel.hasAccessToken.collectAsState()
-    val tokenUiState = viewModel.tokenUiState.collectAsState()
+fun SettingScreen(authTabLauncher: TodoistAuthTabLauncher, viewModel: SettingViewModel = hiltViewModel()) {
+    val uiState = viewModel.uiState.collectAsState()
+
+    // ViewModelが発行した認可URLをAuth Tabへ渡す
+    LaunchedEffect(authTabLauncher) {
+        viewModel.authorizeRequests.collect { authorizeUrl ->
+            authTabLauncher.launch(authorizeUrl)
+        }
+    }
+
+    // Auth Tabが返したリダイレクト結果をViewModelへ戻す
+    LaunchedEffect(authTabLauncher) {
+        authTabLauncher.results.collect { result ->
+            viewModel.onAuthTabResult(result)
+        }
+    }
 
     SettingScreenContent(
-        todoistExtensionEnabled.value,
-        tokenUiState.value,
-        onTokenInputChange = { viewModel.updateTokenInput(it) },
-        onTokenValidate = { viewModel.saveToken() },
-        onTokenDelete = { viewModel.deleteToken() },
+        uiState = uiState.value,
+        onConnect = {
+            // 非対応ブラウザではAuth Tabが起動できないため、URLを発行する前に弾く
+            if (authTabLauncher.isSupported()) {
+                viewModel.connect()
+            } else {
+                viewModel.onAuthTabUnsupported()
+            }
+        },
+        onDisconnect = { viewModel.disconnect() },
     )
 }
 
 @Composable
-private fun SettingScreenContent(
-    todoistExtensionEnabled: Boolean,
-    tokenUiState: TokenSettingsUiState,
-    onTokenInputChange: (String) -> Unit,
-    onTokenValidate: () -> Unit,
-    onTokenDelete: () -> Unit,
-) {
+private fun SettingScreenContent(uiState: TodoistConnectionUiState, onConnect: () -> Unit, onDisconnect: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -57,12 +67,10 @@ private fun SettingScreenContent(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        TodoistTokenSection(
-            isConnected = todoistExtensionEnabled,
-            tokenUiState = tokenUiState,
-            onTokenInputChange = onTokenInputChange,
-            onTokenValidate = onTokenValidate,
-            onTokenDelete = onTokenDelete,
+        TodoistConnectionSection(
+            uiState = uiState,
+            onConnect = onConnect,
+            onDisconnect = onDisconnect,
         )
     }
 }
@@ -77,115 +85,63 @@ private fun SettingSectionTitle(text: String) {
 }
 
 @Composable
-private fun TodoistTokenSection(
-    isConnected: Boolean,
-    tokenUiState: TokenSettingsUiState,
-    onTokenInputChange: (String) -> Unit,
-    onTokenValidate: () -> Unit,
-    onTokenDelete: () -> Unit,
+private fun TodoistConnectionSection(
+    uiState: TodoistConnectionUiState,
+    onConnect: () -> Unit,
+    onDisconnect: () -> Unit,
 ) {
-    var isTokenVisible by remember { mutableStateOf(false) }
+    Column(modifier = Modifier.fillMaxWidth()) {
+        ConnectionStatusCard(isConnected = uiState.isConnected)
 
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        // Connection Status Card
-        ConnectionStatusCard(isConnected = isConnected)
+        Spacer(modifier = Modifier.height(12.dp))
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Text(
+            text = if (uiState.isConnected) {
+                stringResource(R.string.todoist_disconnect_description)
+            } else {
+                stringResource(R.string.todoist_connect_description)
+            },
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
+        )
 
-        // Token Input Field - only show when not connected
-        if (!isConnected) {
-            OutlinedTextField(
-                value = tokenUiState.tokenInput,
-                onValueChange = onTokenInputChange,
-                label = { Text(stringResource(R.string.api_token_label)) },
-                placeholder = { Text(stringResource(R.string.api_token_placeholder)) },
-                visualTransformation = if (isTokenVisible) {
-                    VisualTransformation.None
-                } else {
-                    PasswordVisualTransformation()
-                },
-                trailingIcon = {
-                    Row {
-                        // Visibility toggle
-                        IconButton(onClick = { isTokenVisible = !isTokenVisible }) {
-                            Icon(
-                                imageVector = if (isTokenVisible) {
-                                    Icons.Filled.Visibility
-                                } else {
-                                    Icons.Filled.VisibilityOff
-                                },
-                                contentDescription = if (isTokenVisible) {
-                                    stringResource(
-                                        R.string.hide_token,
-                                    )
-                                } else {
-                                    stringResource(R.string.show_token)
-                                },
-                            )
-                        }
-                        // Clear button
-                        if (tokenUiState.tokenInput.isNotEmpty()) {
-                            IconButton(onClick = { onTokenInputChange("") }) {
-                                Icon(Icons.Filled.Clear, contentDescription = stringResource(R.string.clear_token))
-                            }
-                        }
-                    }
-                },
-                modifier = Modifier.fillMaxWidth(),
-                singleLine = true,
-                isError = tokenUiState.validationError != null,
-            )
-
-            // Error message
-            if (tokenUiState.validationError != null) {
-                Text(
-                    text = getErrorMessage(tokenUiState.validationError),
-                    color = MaterialTheme.colorScheme.error,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier.padding(start = 16.dp, top = 4.dp),
-                )
-            }
-
+        if (uiState.error != null) {
             Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = getErrorMessage(uiState.error),
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+            )
         }
 
-        // Action Button
+        Spacer(modifier = Modifier.height(12.dp))
+
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End,
         ) {
-            if (isConnected) {
+            if (uiState.isConnected) {
                 OutlinedButton(
-                    onClick = onTokenDelete,
-                    enabled = !tokenUiState.isLoading,
+                    onClick = onDisconnect,
+                    enabled = !uiState.isLoading,
                     colors = ButtonDefaults.outlinedButtonColors(
                         contentColor = MaterialTheme.colorScheme.error,
                     ),
                 ) {
-                    if (tokenUiState.isLoading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(16.dp),
-                            strokeWidth = 2.dp,
-                        )
-                    } else {
-                        Text(stringResource(R.string.disconnect_integration))
-                    }
+                    ButtonContent(
+                        isLoading = uiState.isLoading,
+                        label = stringResource(R.string.disconnect_integration),
+                    )
                 }
             } else {
                 Button(
-                    onClick = onTokenValidate,
-                    enabled = tokenUiState.tokenInput.isNotEmpty() && !tokenUiState.isLoading,
+                    onClick = onConnect,
+                    enabled = !uiState.isLoading,
                 ) {
-                    if (tokenUiState.isLoading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(16.dp),
-                            strokeWidth = 2.dp,
-                        )
-                    } else {
-                        Text(stringResource(R.string.verify_connection))
-                    }
+                    ButtonContent(
+                        isLoading = uiState.isLoading,
+                        label = stringResource(R.string.connect_todoist),
+                    )
                 }
             }
         }
@@ -193,10 +149,26 @@ private fun TodoistTokenSection(
 }
 
 @Composable
-private fun getErrorMessage(error: TokenValidationError): String = when (error) {
-    TokenValidationError.TOKEN_EMPTY -> stringResource(R.string.error_token_empty)
-    TokenValidationError.INVALID_TOKEN_FORMAT -> stringResource(R.string.error_invalid_token_format)
-    TokenValidationError.FAILED_TO_SAVE_TOKEN -> stringResource(R.string.error_failed_save_token)
+private fun ButtonContent(isLoading: Boolean, label: String) {
+    if (isLoading) {
+        CircularProgressIndicator(
+            modifier = Modifier.size(16.dp),
+            strokeWidth = 2.dp,
+        )
+    } else {
+        Text(label)
+    }
+}
+
+@Composable
+private fun getErrorMessage(error: TodoistAuthError): String = when (error) {
+    TodoistAuthError.CANCELED -> stringResource(R.string.error_auth_canceled)
+    TodoistAuthError.VERIFICATION_FAILED -> stringResource(R.string.error_auth_verification_failed)
+    TodoistAuthError.STATE_MISMATCH -> stringResource(R.string.error_auth_state_mismatch)
+    TodoistAuthError.AUTHORIZATION_FAILED -> stringResource(R.string.error_auth_authorization_failed)
+    TodoistAuthError.EXCHANGE_FAILED -> stringResource(R.string.error_auth_exchange_failed)
+    TodoistAuthError.AUTH_TAB_UNSUPPORTED -> stringResource(R.string.error_auth_tab_unsupported)
+    TodoistAuthError.UNKNOWN -> stringResource(R.string.error_auth_unknown)
 }
 
 @Composable
@@ -233,9 +205,7 @@ private fun ConnectionStatusCard(isConnected: Boolean) {
             Spacer(modifier = Modifier.width(12.dp))
             Text(
                 text = if (isConnected) {
-                    stringResource(
-                        R.string.status_connected,
-                    )
+                    stringResource(R.string.status_connected)
                 } else {
                     stringResource(R.string.status_disconnected)
                 },
@@ -249,11 +219,9 @@ private fun ConnectionStatusCard(isConnected: Boolean) {
 @Preview
 fun SettingScreenPreview() {
     SettingScreenContent(
-        todoistExtensionEnabled = false,
-        tokenUiState = TokenSettingsUiState(),
-        onTokenInputChange = {},
-        onTokenValidate = {},
-        onTokenDelete = {},
+        uiState = TodoistConnectionUiState(),
+        onConnect = {},
+        onDisconnect = {},
     )
 }
 
@@ -261,68 +229,28 @@ fun SettingScreenPreview() {
 @Preview
 fun SettingScreenConnectedPreview() {
     SettingScreenContent(
-        todoistExtensionEnabled = true,
-        tokenUiState = TokenSettingsUiState(hasToken = true, isConnected = true),
-        onTokenInputChange = {},
-        onTokenValidate = {},
-        onTokenDelete = {},
+        uiState = TodoistConnectionUiState(isConnected = true),
+        onConnect = {},
+        onDisconnect = {},
     )
 }
 
 @Composable
 @Preview
-fun SettingScreenTokenInputPreview() {
+fun SettingScreenAuthorizingPreview() {
     SettingScreenContent(
-        todoistExtensionEnabled = false,
-        tokenUiState = TokenSettingsUiState(tokenInput = "sample-token-1234567890"),
-        onTokenInputChange = {},
-        onTokenValidate = {},
-        onTokenDelete = {},
+        uiState = TodoistConnectionUiState(isLoading = true),
+        onConnect = {},
+        onDisconnect = {},
     )
 }
 
 @Composable
 @Preview
-fun SettingScreenValidationErrorPreview() {
+fun SettingScreenAuthErrorPreview() {
     SettingScreenContent(
-        todoistExtensionEnabled = false,
-        tokenUiState = TokenSettingsUiState(
-            tokenInput = "invalid-token",
-            validationError = TokenValidationError.INVALID_TOKEN_FORMAT,
-        ),
-        onTokenInputChange = {},
-        onTokenValidate = {},
-        onTokenDelete = {},
-    )
-}
-
-@Composable
-@Preview
-fun SettingScreenVerifyingPreview() {
-    SettingScreenContent(
-        todoistExtensionEnabled = false,
-        tokenUiState = TokenSettingsUiState(
-            tokenInput = "sample-token-1234567890",
-            isLoading = true,
-        ),
-        onTokenInputChange = {},
-        onTokenValidate = {},
-        onTokenDelete = {},
-    )
-}
-
-@Composable
-@Preview
-fun SettingScreenDisconnectingPreview() {
-    SettingScreenContent(
-        todoistExtensionEnabled = true,
-        tokenUiState = TokenSettingsUiState(
-            hasToken = true,
-            isConnected = true,
-            isLoading = true,
-        ),
-        onTokenInputChange = {},
-        onTokenValidate = {},
-        onTokenDelete = {},
+        uiState = TodoistConnectionUiState(error = TodoistAuthError.CANCELED),
+        onConnect = {},
+        onDisconnect = {},
     )
 }
