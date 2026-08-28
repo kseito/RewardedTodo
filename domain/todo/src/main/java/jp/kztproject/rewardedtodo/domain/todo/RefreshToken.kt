@@ -8,13 +8,13 @@ package jp.kztproject.rewardedtodo.domain.todo
 @JvmInline
 value class RefreshToken private constructor(val value: String) {
 
-    init {
-        require(value.isNotBlank()) { "Refresh Token cannot be blank" }
-    }
-
     companion object {
 
-        fun create(token: String): RefreshToken = RefreshToken(token.trim())
+        fun create(token: String): RefreshToken {
+            val normalized = token.trim()
+            require(normalized.isNotBlank()) { "Refresh Token cannot be blank" }
+            return RefreshToken(normalized)
+        }
 
         fun createSafely(token: String?): RefreshToken? {
             val normalized = token?.trim() ?: return null
