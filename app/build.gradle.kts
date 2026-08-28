@@ -32,6 +32,23 @@ android {
 
         buildConfigField("String", "TODOIST_URL", "\"https://todoist.com\"")
         buildConfigField("String", "REWARD_SERVER_URL", "\"${localProperties.getProperty("reward.server.url", "")}\"")
+
+        // Todoist OAuth (公開クライアント / PKCE)。client_secretは持たないため、以下はいずれも秘匿情報ではない。
+        // client_idはOAuth Client ID Metadata DocumentのURLそのもの。
+        buildConfigField("String", "TODOIST_AUTHORIZE_URL", "\"https://todoist.com/oauth/authorize\"")
+        buildConfigField(
+            "String",
+            "TODOIST_CLIENT_ID",
+            "\"https://kseito.github.io/rewardedtodo/oauth/client.json\"",
+        )
+        buildConfigField("String", "TODOIST_REDIRECT_HOST", "\"kseito.github.io\"")
+        buildConfigField("String", "TODOIST_REDIRECT_PATH", "\"/rewardedtodo/oauth/callback\"")
+        buildConfigField(
+            "String",
+            "TODOIST_REDIRECT_URI",
+            "\"https://kseito.github.io/rewardedtodo/oauth/callback\"",
+        )
+        buildConfigField("String", "TODOIST_SCOPE", "\"data:read_write\"")
     }
 
 
@@ -122,6 +139,7 @@ dependencies {
     implementation(libs.material)
     implementation(libs.preference)
     implementation(libs.datastore.preferences)
+    implementation(libs.androidx.browser)
 
     // Jetpack Compose
     implementation(platform(libs.androidx.compose.bom))
