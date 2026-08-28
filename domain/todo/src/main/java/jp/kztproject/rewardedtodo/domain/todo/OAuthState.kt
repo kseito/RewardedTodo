@@ -12,14 +12,14 @@ import java.util.Base64
 @JvmInline
 value class OAuthState private constructor(val value: String) {
 
-    init {
-        require(value.isNotBlank()) { "OAuth state cannot be blank" }
-    }
-
     companion object {
         private const val RANDOM_BYTE_LENGTH = 32
 
-        fun create(value: String): OAuthState = OAuthState(value.trim())
+        fun create(value: String): OAuthState {
+            val normalized = value.trim()
+            require(normalized.isNotBlank()) { "OAuth state cannot be blank" }
+            return OAuthState(normalized)
+        }
 
         fun createSafely(value: String?): OAuthState? {
             val normalized = value?.trim() ?: return null
