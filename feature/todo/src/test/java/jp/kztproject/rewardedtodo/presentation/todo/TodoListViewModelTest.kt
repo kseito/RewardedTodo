@@ -11,8 +11,9 @@ import jp.kztproject.rewardedtodo.application.reward.DeleteTodoUseCase
 import jp.kztproject.rewardedtodo.application.reward.FetchTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.GetTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
-import jp.kztproject.rewardedtodo.application.todo.GetApiTokenUseCase
+import jp.kztproject.rewardedtodo.application.todo.GetTodoistCredentialUseCase
 import jp.kztproject.rewardedtodo.domain.todo.ApiToken
+import jp.kztproject.rewardedtodo.domain.todo.TodoistCredential
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -46,9 +47,10 @@ class TodoListViewModelTest :
                     val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
                     val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
                     val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
-                    val getApiTokenUseCase = mockk<GetApiTokenUseCase>(relaxed = true)
-                    val dummyToken = ApiToken.create("1234567890abcdef1234567890abcdef12345678")
-                    every { getApiTokenUseCase.executeAsFlow() } returns flowOf(dummyToken)
+                    val getTodoistCredentialUseCase = mockk<GetTodoistCredentialUseCase>(relaxed = true)
+                    val dummyCredential =
+                        TodoistCredential(ApiToken.create("1234567890abcdef1234567890abcdef12345678"))
+                    every { getTodoistCredentialUseCase.executeAsFlow() } returns flowOf(dummyCredential)
 
                     val viewModel = TodoListViewModel(
                         getTodoListUseCase,
@@ -56,7 +58,7 @@ class TodoListViewModelTest :
                         updateTodoListUseCase,
                         deleteTodoUseCase,
                         completeTodoUseCase,
-                        getApiTokenUseCase,
+                        getTodoistCredentialUseCase,
                     )
 
                     val job = backgroundScope.launch { viewModel.todoList.collect {} }
@@ -75,9 +77,10 @@ class TodoListViewModelTest :
                     val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
                     val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
                     val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
-                    val getApiTokenUseCase = mockk<GetApiTokenUseCase>(relaxed = true)
-                    val dummyToken = ApiToken.create("1234567890abcdef1234567890abcdef12345678")
-                    every { getApiTokenUseCase.executeAsFlow() } returns flowOf(dummyToken)
+                    val getTodoistCredentialUseCase = mockk<GetTodoistCredentialUseCase>(relaxed = true)
+                    val dummyCredential =
+                        TodoistCredential(ApiToken.create("1234567890abcdef1234567890abcdef12345678"))
+                    every { getTodoistCredentialUseCase.executeAsFlow() } returns flowOf(dummyCredential)
 
                     val viewModel = TodoListViewModel(
                         getTodoListUseCase,
@@ -85,7 +88,7 @@ class TodoListViewModelTest :
                         updateTodoListUseCase,
                         deleteTodoUseCase,
                         completeTodoUseCase,
-                        getApiTokenUseCase,
+                        getTodoistCredentialUseCase,
                     )
 
                     val job = backgroundScope.launch { viewModel.todoList.collect {} }
@@ -107,9 +110,10 @@ class TodoListViewModelTest :
                     val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
                     val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
                     val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
-                    val getApiTokenUseCase = mockk<GetApiTokenUseCase>(relaxed = true)
-                    val dummyToken = ApiToken.create("1234567890abcdef1234567890abcdef12345678")
-                    every { getApiTokenUseCase.executeAsFlow() } returns flowOf(dummyToken)
+                    val getTodoistCredentialUseCase = mockk<GetTodoistCredentialUseCase>(relaxed = true)
+                    val dummyCredential =
+                        TodoistCredential(ApiToken.create("1234567890abcdef1234567890abcdef12345678"))
+                    every { getTodoistCredentialUseCase.executeAsFlow() } returns flowOf(dummyCredential)
                     val fetchGate = CompletableDeferred<Unit>()
                     coEvery { fetchTodoListUseCase.execute() } coAnswers { fetchGate.await() }
 
@@ -119,7 +123,7 @@ class TodoListViewModelTest :
                         updateTodoListUseCase,
                         deleteTodoUseCase,
                         completeTodoUseCase,
-                        getApiTokenUseCase,
+                        getTodoistCredentialUseCase,
                     )
 
                     val job = backgroundScope.launch { viewModel.todoList.collect {} }
@@ -142,9 +146,10 @@ class TodoListViewModelTest :
                     val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
                     val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
                     val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
-                    val getApiTokenUseCase = mockk<GetApiTokenUseCase>(relaxed = true)
-                    val dummyToken = ApiToken.create("1234567890abcdef1234567890abcdef12345678")
-                    every { getApiTokenUseCase.executeAsFlow() } returns flowOf(dummyToken)
+                    val getTodoistCredentialUseCase = mockk<GetTodoistCredentialUseCase>(relaxed = true)
+                    val dummyCredential =
+                        TodoistCredential(ApiToken.create("1234567890abcdef1234567890abcdef12345678"))
+                    every { getTodoistCredentialUseCase.executeAsFlow() } returns flowOf(dummyCredential)
                     val refreshGate = CompletableDeferred<Unit>()
                     var fetchCount = 0
                     coEvery { fetchTodoListUseCase.execute() } coAnswers {
@@ -159,7 +164,7 @@ class TodoListViewModelTest :
                         updateTodoListUseCase,
                         deleteTodoUseCase,
                         completeTodoUseCase,
-                        getApiTokenUseCase,
+                        getTodoistCredentialUseCase,
                     )
 
                     val job = backgroundScope.launch { viewModel.todoList.collect {} }
@@ -187,9 +192,10 @@ class TodoListViewModelTest :
                     val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
                     val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
                     val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
-                    val getApiTokenUseCase = mockk<GetApiTokenUseCase>(relaxed = true)
-                    val dummyToken = ApiToken.create("1234567890abcdef1234567890abcdef12345678")
-                    every { getApiTokenUseCase.executeAsFlow() } returns flowOf(dummyToken)
+                    val getTodoistCredentialUseCase = mockk<GetTodoistCredentialUseCase>(relaxed = true)
+                    val dummyCredential =
+                        TodoistCredential(ApiToken.create("1234567890abcdef1234567890abcdef12345678"))
+                    every { getTodoistCredentialUseCase.executeAsFlow() } returns flowOf(dummyCredential)
                     every { getTodoListUseCase.execute() } returns flowOf(emptyList())
                     val fetchGate = CompletableDeferred<Unit>()
                     coEvery { fetchTodoListUseCase.execute() } coAnswers { fetchGate.await() }
@@ -200,7 +206,7 @@ class TodoListViewModelTest :
                         updateTodoListUseCase,
                         deleteTodoUseCase,
                         completeTodoUseCase,
-                        getApiTokenUseCase,
+                        getTodoistCredentialUseCase,
                     )
 
                     val job = backgroundScope.launch { viewModel.todoList.collect {} }
@@ -225,8 +231,8 @@ class TodoListViewModelTest :
                     val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
                     val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
                     val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
-                    val getApiTokenUseCase = mockk<GetApiTokenUseCase>(relaxed = true)
-                    every { getApiTokenUseCase.executeAsFlow() } returns flowOf(null)
+                    val getTodoistCredentialUseCase = mockk<GetTodoistCredentialUseCase>(relaxed = true)
+                    every { getTodoistCredentialUseCase.executeAsFlow() } returns flowOf(null)
                     every { getTodoListUseCase.execute() } returns flowOf(emptyList())
 
                     val viewModel = TodoListViewModel(
@@ -235,7 +241,7 @@ class TodoListViewModelTest :
                         updateTodoListUseCase,
                         deleteTodoUseCase,
                         completeTodoUseCase,
-                        getApiTokenUseCase,
+                        getTodoistCredentialUseCase,
                     )
 
                     val job = backgroundScope.launch { viewModel.todoList.collect {} }
