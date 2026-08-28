@@ -4,19 +4,20 @@
     <string name="extensions_section">拡張機能</string>
     <string name="todoist_extension_title">Todoist</string>
 
-    <!-- API Token Settings -->
-    <string name="api_token_label">Todoist API トークン</string>
-    <string name="api_token_placeholder">例: 0123456789abcdef...</string>
-    <string name="hide_token">トークンを隠す</string>
-    <string name="show_token">トークンを表示</string>
-    <string name="clear_token">トークンをクリア</string>
+    <!-- Todoist connection -->
+    <string name="connect_todoist">Todoistと連携</string>
     <string name="disconnect_integration">連携を解除</string>
-    <string name="verify_connection">接続を確認</string>
     <string name="status_connected">接続済み</string>
     <string name="status_disconnected">未接続</string>
+    <string name="todoist_connect_description">ブラウザでTodoistにログインするとタスクが同期されます。パスワードがアプリに渡ることはありません。</string>
+    <string name="todoist_disconnect_description">解除するとこの端末からトークンを削除します。Todoist側のアクセス許可はTodoistの「設定 › 連携」から取り消せます。</string>
 
     <!-- Error messages -->
-    <string name="error_token_empty">トークンを入力してください</string>
-    <string name="error_invalid_token_format">無効なトークン形式です</string>
-    <string name="error_failed_save_token">トークンの保存に失敗しました</string>
+    <string name="error_auth_canceled">認証をキャンセルしました</string>
+    <string name="error_auth_verification_failed">リダイレクトを検証できませんでした。もう一度お試しください。</string>
+    <string name="error_auth_state_mismatch">認証を検証できませんでした。もう一度お試しください。</string>
+    <string name="error_auth_authorization_failed">Todoistが認証を拒否しました</string>
+    <string name="error_auth_exchange_failed">アクセストークンを取得できませんでした</string>
+    <string name="error_auth_tab_unsupported">この端末のブラウザはこのログイン方法に対応していません。Chromeを更新してください。</string>
+    <string name="error_auth_unknown">Todoistとの連携に失敗しました</string>
 </resources>
