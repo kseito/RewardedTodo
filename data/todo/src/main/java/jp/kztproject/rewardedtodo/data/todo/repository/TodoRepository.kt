@@ -5,7 +5,7 @@ import jp.kztproject.rewardedtodo.data.todo.TodoEntity
 import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
 import jp.kztproject.rewardedtodo.data.todoist.model.Task
 import jp.kztproject.rewardedtodo.domain.todo.Todo
-import jp.kztproject.rewardedtodo.domain.todo.repository.IApiTokenRepository
+import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoistCredentialRepository
 import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +16,7 @@ import javax.inject.Inject
 class TodoRepository @Inject constructor(
     private val todoDao: TodoDao,
     private val todoistApi: TodoistApi,
-    private val apiTokenRepository: IApiTokenRepository,
+    private val credentialRepository: ITodoistCredentialRepository,
 ) : ITodoRepository {
 
     override fun findAll(): Flow<List<Todo>> = todoDao.findAllAsFlow().map { list ->
@@ -25,8 +25,8 @@ class TodoRepository @Inject constructor(
 
     override suspend fun sync() {
         withContext(Dispatchers.IO) {
-            val token = apiTokenRepository.getToken()?.value
-            if (!token.isNullOrEmpty()) {
+            // 未連携なら同期しない。実際のトークン付与はOkHttpのInterceptorが行う
+            if (credentialRepository.getCredential() != null) {
                 val latestTasks = todoistApi.fetchTasks("today|overdue").results
                     .filter { !it.checked }
                 val localTasks = todoDao.findAll()
