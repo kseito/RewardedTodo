@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "jp.kztproject.rewardedtodo.debug",
+      "sha256_cert_fingerprints": [
+        "A0:D4:D3:50:EC:C0:54:AF:A2:12:A8:24:DC:7A:4F:F1:E5:FA:F0:BC:EE:AD:4A:1D:F8:B7:2E:F6:C5:B5:54:98"
+      ]
+    }
+  }
+]
