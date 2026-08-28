@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| ステータス | Approved |
+| ステータス | Implemented |
 | 作成日 | 2026-08-27 |
 | ブランチ | feature/todoist-oauth |
 | 関連Issue/PR | （なし） |
@@ -21,7 +21,7 @@ Chrome Custom Tabs の **Auth Tab** を使ったブラウザベースの OAuth 2
 - ユーザーが認可すると Auth Tab が自動で閉じ、アプリがアクセストークンを取得・保存して「接続済み」になる
 - ユーザーが認可を拒否／キャンセルした場合、アプリは元の未接続状態のままエラーを表示する
 - アクセストークンの期限が切れた場合、リフレッシュトークンを使って自動的に再取得する（ユーザー操作不要）
-- 「連携を解除」でトークンを Todoist 側で失効（revoke）させたうえで端末から削除する
+- 「連携を解除」で端末からトークンを削除する（Todoist側の失効APIは公開クライアントから呼べないため、Todoist側の取り消しはユーザーがTodoistの設定画面から行う）
 - APIトークンの手入力UIは完全に削除する
 
 ### 非機能要件 / 制約
@@ -86,18 +86,18 @@ Chrome Custom Tabs の **Auth Tab** を使ったブラウザベースの OAuth 2
 
 ## 6. 受け入れ条件 (Acceptance Criteria)
 
-- [ ] 設定画面に APIトークンの入力欄・表示切替・クリアボタンが存在しない
+- [x] 設定画面に APIトークンの入力欄・表示切替・クリアボタンが存在しない
 - [ ] 未接続時に「Todoistと連携」ボタンが表示され、タップすると Auth Tab で Todoist の認可画面が開く
 - [ ] 認可を完了すると Auth Tab が自動で閉じ、カードが「接続済み」に変わる
 - [ ] 認可完了後に Todo 一覧が Todoist のタスクを取得できる
-- [ ] 認可をキャンセルすると「未接続」のままエラーメッセージが表示される
-- [ ] コールバックの `state` が一致しない場合はトークン交換を行わず認証失敗になる
-- [ ] トークン交換リクエストに `client_secret` が含まれず、`code_verifier` が含まれる
+- [x] 認可をキャンセルすると「未接続」のままエラーメッセージが表示される
+- [x] コールバックの `state` が一致しない場合はトークン交換を行わず認証失敗になる
+- [x] トークン交換リクエストに `client_secret` が含まれず、`code_verifier` が含まれる
 - [ ] アクセストークン期限切れ後に API を呼ぶと、自動リフレッシュされてリクエストが成功する
-- [ ] リフレッシュ応答に `refresh_token` が無い場合、直前のリフレッシュトークンが保持される
-- [ ] 「連携を解除」で revoke が呼ばれ、端末からトークンが削除されて「未接続」に戻る
-- [ ] Auth Tab 非対応端末では専用のエラーメッセージが表示される
-- [ ] `client_secret` がリポジトリ内・ビルド成果物のどこにも存在しない
+- [x] リフレッシュ応答に `refresh_token` が無い場合、直前のリフレッシュトークンが保持される
+- [x] 「連携を解除」で端末からトークンが削除されて「未接続」に戻る
+- [x] Auth Tab 非対応端末では専用のエラーメッセージが表示される
+- [x] `client_secret` がリポジトリ内・ビルド成果物のどこにも存在しない
 
 ## 7. テスト方針
 
@@ -108,6 +108,14 @@ Chrome Custom Tabs の **Auth Tab** を使ったブラウザベースの OAuth 2
 | Maestro E2E | 既存の `setting-todoist-token-flow.yaml` はトークン手入力を前提としているため、そのままでは必ず失敗する。**実ブラウザでの Todoist ログインは E2E で完走できない**という制約があるため、置き換え方針（縮小したフローにするか削除するか）は**実装完了後に別途決める**。それまでは既存フローを残したままにする |
 
 ## 8. 未決事項・リスク
+
+- **Todoist側のトークン失効(revoke)はアプリから行えない。** 実装中に判明した制約で、Todoistの失効エンドポイントは
+  `DELETE /api/v1/access_tokens`（`client_secret` がクエリで必須）と `POST /api/v1/revoke`（HTTP Basic
+  `client_id:client_secret` が必須）のいずれも `client_secret` を要求し、秘密鍵を持たない公開クライアントからは
+  呼び出せない。そのため「連携を解除」は端末側のクレデンシャル削除のみとし、Todoist側の取り消しは
+  設定画面の説明文でTodoistの「設定 › 連携」へ誘導する
+- **Auth Tab表示中のプロセス終了に備えて認証セッションを永続化した。** `state` と `code_verifier` をメモリではなく
+  DataStoreに置いている（`TodoistAuthSessionRepository`）。使い切りの値のため成功・失敗いずれの場合も破棄する
 
 - **`kseito.github.io` への反映がユーザー作業になる。** `client.json` / `assetlinks.json` / コールバックページが公開されるまで、実機での認証は完走できない。`docs/oauth/README.md` に配置手順をまとめる
 - **Digital Asset Links に登録する署名鍵は debug のみとする。** 対象は `jp.kztproject.rewardedtodo.debug` / SHA-256 `A0:D4:D3:50:EC:C0:54:AF:A2:12:A8:24:DC:7A:4F:F1:E5:FA:F0:BC:EE:AD:4A:1D:F8:B7:2E:F6:C5:B5:54:98` の1エントリ。GitHub Release で配布中の `debug-0.1.1` の APK を `apksigner verify --print-certs` で検証し、CI の `DEBUG_KEYSTORE_BASE64` がローカルの `~/.android/debug.keystore` と同一鍵であることを確認済みのため、エントリを分ける必要はない。staging / release は今回の対象外
