@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| ステータス | Draft |
+| ステータス | Approved |
 | 作成日 | 2026-08-27 |
 | ブランチ | feature/todoist-oauth |
 | 関連Issue/PR | （なし） |
@@ -105,12 +105,12 @@ Chrome Custom Tabs の **Auth Tab** を使ったブラウザベースの OAuth 2
 |------|------|
 | ユニットテスト | `CodeVerifier` / `CodeChallenge`（S256 の既知ベクタで検証）、`TodoistCredential`（期限判定）、`StartTodoistAuthInteractor`（authorize URL の組み立て）、`CompleteTodoistAuthInteractor`（state 不一致 / 成功 / 交換失敗）、`RefreshTodoistTokenInteractor`（ローテーション / `refresh_token` 省略時の保持）、`DisconnectTodoistInteractor`、`GetValidAccessTokenInteractor`、`TodoistCredentialRepository`、`SettingViewModel` |
 | Roborazzi | `SettingScreen` の Preview を差し替え。旧6枚（`SettingScreenTokenInputPreview` / `SettingScreenValidationErrorPreview` / `SettingScreenVerifyingPreview` など）を削除し、未接続・接続済み・認証中・認証エラーの4枚を記録し直す |
-| Maestro E2E | `setting-todoist-token-flow.yaml` を `setting-todoist-oauth-flow.yaml` に置き換える。**実ブラウザでの Todoist ログインは E2E で完走できない**ため、検証範囲は「設定画面を開く → 未接続表示 → 『Todoistと連携』ボタンが存在する → 戻る」までに縮小する。認可完了以降は手動確認で担保する |
+| Maestro E2E | 既存の `setting-todoist-token-flow.yaml` はトークン手入力を前提としているため、そのままでは必ず失敗する。**実ブラウザでの Todoist ログインは E2E で完走できない**という制約があるため、置き換え方針（縮小したフローにするか削除するか）は**実装完了後に別途決める**。それまでは既存フローを残したままにする |
 
 ## 8. 未決事項・リスク
 
 - **`kseito.github.io` への反映がユーザー作業になる。** `client.json` / `assetlinks.json` / コールバックページが公開されるまで、実機での認証は完走できない。`docs/oauth/README.md` に配置手順をまとめる
-- **Digital Asset Links に登録する署名鍵。** debug（`jp.kztproject.rewardedtodo.debug`, ローカルの `~/.android/debug.keystore`）と staging（`jp.kztproject.rewardedtodo.beta`）の SHA-256 を登録する。CI が配置する `debug.keystore` は手元に無いため CI 上での認証完走は対象外
-- **release ビルドの署名設定が未定。** `app/build.gradle.kts` の release buildType に `signingConfig` が無く、フィンガープリントが確定していないため assetlinks.json には含めない
+- **Digital Asset Links に登録する署名鍵は debug のみとする。** 対象は `jp.kztproject.rewardedtodo.debug` / SHA-256 `A0:D4:D3:50:EC:C0:54:AF:A2:12:A8:24:DC:7A:4F:F1:E5:FA:F0:BC:EE:AD:4A:1D:F8:B7:2E:F6:C5:B5:54:98` の1エントリ。GitHub Release で配布中の `debug-0.1.1` の APK を `apksigner verify --print-certs` で検証し、CI の `DEBUG_KEYSTORE_BASE64` がローカルの `~/.android/debug.keystore` と同一鍵であることを確認済みのため、エントリを分ける必要はない。staging / release は今回の対象外
+- **フィンガープリントの公開は問題ない。** `assetlinks.json` に載るのは署名証明書の SHA-256 であって秘密鍵ではなく、APK から誰でも算出できる公開情報。keystore 本体は `.gitignore` 済みで、CI は GitHub Secrets 経由
 - **Auth Tab のフォールバック。** Chrome 137 未満では `isAuthTabSupported()` が false となり連携できない。手入力の代替導線は設けない方針のため、該当端末は実質的に Todoist 連携を利用できない
 - **API のバージョン差異。** `TodoistApi` は `api/v1/*` を使うが、認可・トークンエンドポイントは `oauth/*`（バージョン無し）。Retrofit の baseUrl は `https://api.todoist.com/` のまま両方に対応できる
