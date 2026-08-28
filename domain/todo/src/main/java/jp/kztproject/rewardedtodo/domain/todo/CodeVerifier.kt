@@ -13,13 +13,6 @@ import java.util.Base64
 @JvmInline
 value class CodeVerifier private constructor(val value: String) {
 
-    init {
-        require(value.length in MIN_LENGTH..MAX_LENGTH) {
-            "Code verifier length must be between $MIN_LENGTH and $MAX_LENGTH"
-        }
-        require(value.all { it in ALLOWED_CHARACTERS }) { "Code verifier contains unreserved characters only" }
-    }
-
     /** S256方式で対応するcode_challengeを導出する。 */
     fun toCodeChallenge(): CodeChallenge = CodeChallenge.s256(this)
 
@@ -29,13 +22,19 @@ value class CodeVerifier private constructor(val value: String) {
         private const val MAX_LENGTH = 128
         private const val RANDOM_BYTE_LENGTH = 32
         private val ALLOWED_CHARACTERS =
-            ('A'..'Z') + ('a'..'z') + ('0'..'9') + listOf('-', '.', '_', '~')
+            (('A'..'Z') + ('a'..'z') + ('0'..'9') + listOf('-', '.', '_', '~')).toSet()
 
-        fun create(value: String): CodeVerifier = CodeVerifier(value)
+        fun create(value: String): CodeVerifier {
+            require(value.length in MIN_LENGTH..MAX_LENGTH) {
+                "Code verifier length must be between $MIN_LENGTH and $MAX_LENGTH"
+            }
+            require(value.all { it in ALLOWED_CHARACTERS }) { "Code verifier must contain unreserved characters only" }
+            return CodeVerifier(value)
+        }
 
         fun createSafely(value: String?): CodeVerifier? {
             if (value == null) return null
-            return runCatching { CodeVerifier(value) }.getOrNull()
+            return runCatching { create(value) }.getOrNull()
         }
 
         /** 32バイトの乱数から43文字のcode_verifierを生成する。 */
