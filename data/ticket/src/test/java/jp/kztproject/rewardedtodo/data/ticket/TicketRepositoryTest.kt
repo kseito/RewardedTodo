@@ -46,9 +46,9 @@ class TicketRepositoryTest {
     private suspend fun setToken(token: String?) {
         dataStore.edit { settings ->
             if (token == null) {
-                settings.remove(UserPreferencesKeys.TODOIST_API_TOKEN)
+                settings.remove(UserPreferencesKeys.TODOIST_ACCESS_TOKEN)
             } else {
-                settings[UserPreferencesKeys.TODOIST_API_TOKEN] = token
+                settings[UserPreferencesKeys.TODOIST_ACCESS_TOKEN] = token
             }
         }
     }
