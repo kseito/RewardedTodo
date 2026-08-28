@@ -17,6 +17,9 @@ dependencies {
     implementation(libs.core.ktx)
 
     testImplementation(libs.junit)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.mockk)
+    testImplementation(libs.coroutines.test)
 
     //Dagger
     implementation(libs.hilt.android)
