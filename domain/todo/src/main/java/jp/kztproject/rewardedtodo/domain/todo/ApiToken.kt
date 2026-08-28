@@ -1,17 +1,19 @@
 package jp.kztproject.rewardedtodo.domain.todo
 
+/**
+ * Todoistのアクセストークン。
+ *
+ * かつては開発者向けAPIトークンの40桁hexを前提に検証していたが、OAuthで発行される
+ * アクセストークンの書式はTodoist側の裁量で変わりうるため、空でないことのみを検証する。
+ */
 @JvmInline
 value class ApiToken private constructor(val value: String) {
 
     init {
         require(value.isNotBlank()) { "API Token cannot be blank" }
-        require(isValidFormat(value)) { "Invalid API Token format" }
     }
 
     companion object {
-        private val TOKEN_REGEX = Regex("[0-9a-fA-F]{40}")
-
-        private fun isValidFormat(token: String): Boolean = token.matches(TOKEN_REGEX)
 
         /**
          * Creates an ApiToken from a trusted token string.
@@ -24,14 +26,8 @@ value class ApiToken private constructor(val value: String) {
          * Returns null if the token is invalid, avoiding exceptions.
          */
         fun createSafely(token: String?): ApiToken? {
-            if (token == null) return null
-            val normalized = token.trim()
-            if (normalized.isBlank()) return null
-            return if (isValidFormat(normalized)) {
-                ApiToken(normalized)
-            } else {
-                null
-            }
+            val normalized = token?.trim() ?: return null
+            return if (normalized.isBlank()) null else ApiToken(normalized)
         }
     }
 }
