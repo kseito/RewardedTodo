@@ -79,17 +79,15 @@ class TodoistApiModule {
         Authenticator {
 
         override fun authenticate(route: okhttp3.Route?, response: Response): Request? {
-            val failedToken = response.request.header(AUTHORIZATION_HEADER) ?: return null
+            val failedToken = response.request.header(AUTHORIZATION_HEADER)
+            val refreshedToken = failedToken
+                ?.let { runBlocking { refreshTodoistTokenUseCase.execute().getOrNull() } }
+                ?.let { "Bearer ${it.value}" }
 
-            val refreshedToken = runBlocking { refreshTodoistTokenUseCase.execute().getOrNull() } ?: return null
-
-            val newHeader = "Bearer ${refreshedToken.value}"
-            // 同じトークンで送り直しても再び401になるだけなので諦める
-            if (newHeader == failedToken) return null
-
-            return response.request.newBuilder()
-                .header(AUTHORIZATION_HEADER, newHeader)
-                .build()
+            // 同じトークンで送り直しても再び401になるだけなので、変化が無ければ諦める
+            return refreshedToken
+                ?.takeIf { it != failedToken }
+                ?.let { response.request.newBuilder().header(AUTHORIZATION_HEADER, it).build() }
         }
     }
 
