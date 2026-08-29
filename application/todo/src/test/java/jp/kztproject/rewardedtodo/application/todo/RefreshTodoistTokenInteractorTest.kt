@@ -13,6 +13,9 @@ import jp.kztproject.rewardedtodo.domain.todo.TodoistCredential
 import jp.kztproject.rewardedtodo.domain.todo.TokenError
 import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoistAuthRepository
 import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoistCredentialRepository
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -108,5 +111,31 @@ class RefreshTodoistTokenInteractorTest {
         interactor.execute().exceptionOrNull().shouldBeInstanceOf<TokenError.RefreshFailed>()
 
         coVerify(exactly = 0) { credentialRepository.saveCredential(any()) }
+    }
+
+    @Test
+    fun `execute refreshes only once when concurrent requests hit an expired token`() = runTest {
+        // 保存した内容が次のgetCredentialに見えるようにして、実際の順序依存を再現する
+        var stored: TodoistCredential? = expiredCredential()
+        coEvery { credentialRepository.getCredential() } answers { stored }
+        coEvery { credentialRepository.saveCredential(any()) } answers { stored = firstArg() }
+        coEvery { authRepository.refreshCredential(refreshToken) } coAnswers {
+            // 通信中に後続のリクエストが追いついてくる状況を作る
+            delay(1_000L)
+            Result.success(
+                TodoistCredential(
+                    accessToken = ApiToken.create("refreshed-access"),
+                    refreshToken = RefreshToken.create("rotated-refresh"),
+                    expiresAt = now + 3_600_000L,
+                ),
+            )
+        }
+
+        val results = List(5) { async { interactor.execute() } }.awaitAll()
+
+        // Mutexが無いと5本とも通信し、ローテーションで互いのリフレッシュトークンを無効化する
+        coVerify(exactly = 1) { authRepository.refreshCredential(any()) }
+        // 待たされた側はロック取得後に再確認し、更新済みのトークンを共有する
+        results.forEach { it.getOrThrow().value shouldBe "refreshed-access" }
     }
 }
