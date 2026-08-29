@@ -76,6 +76,7 @@ Chrome Custom Tabs の **Auth Tab** を使ったブラウザベースの OAuth 2
 | Application | `application/todo` | `SaveApiTokenUseCase` / `ValidateApiTokenUseCase` とその Interactor を**削除**。`StartTodoistAuthUseCase`・`CompleteTodoistAuthUseCase`・`RefreshTodoistTokenUseCase`・`DisconnectTodoistUseCase`・`GetValidAccessTokenUseCase` とその Interactor を追加。`GetApiTokenUseCase` は credential 参照へ変更 |
 | Data | `data/todoist` | `TodoistAuthApi`（`POST oauth/access_token` / `POST api/v1/revoke`）と `TokenResponse` DTO を追加 |
 | Data | `data/todo` | `ApiTokenRepository` を `TodoistCredentialRepository` にリネームし access/refresh/expiresAt を保存。`TodoistAuthRepository`（`ITodoistAuthRepository` 実装）を追加 |
+| Application | `application/todo` | `TodoistAuthSessionStore` を追加（`state` / `code_verifier` のメモリ保持。永続化しないため domain のIFと data の実装は持たない） |
 | Data | `common/kvs` | `TODOIST_REFRESH_TOKEN` / `TODOIST_TOKEN_EXPIRES_AT` キーを追加。未使用の `TODOIST_API_TOKEN` を削除し `TODOIST_ACCESS_TOKEN` に一本化 |
 | Feature | `feature/setting` | `SettingScreen` から入力系UIを削除し連携ボタンへ置換。`SettingViewModel` を OAuth フローに合わせて書き換え。`TodoistAuthTabLauncher` インターフェースと `TodoistAuthTabResult` を定義（`androidx.browser` には依存させない） |
 | App | `app` | `androidx.browser:browser` を追加。`HomeActivity` で `AuthTabIntent.registerActivityResultLauncher` を登録し `TodoistAuthTabLauncher` を実装、`settingScreen()` へ受け渡す。`BuildConfig` に `TODOIST_CLIENT_ID` / `TODOIST_REDIRECT_URI` / `TODOIST_AUTHORIZE_URL` / `TODOIST_SCOPE` を追加 |
@@ -103,7 +104,7 @@ Chrome Custom Tabs の **Auth Tab** を使ったブラウザベースの OAuth 2
 
 | 種別 | 対象 |
 |------|------|
-| ユニットテスト | `CodeVerifier` / `CodeChallenge`（S256 の既知ベクタで検証）、`TodoistCredential`（期限判定）、`StartTodoistAuthInteractor`（authorize URL の組み立て）、`CompleteTodoistAuthInteractor`（state 不一致 / 成功 / 交換失敗）、`RefreshTodoistTokenInteractor`（ローテーション / `refresh_token` 省略時の保持）、`DisconnectTodoistInteractor`、`GetValidAccessTokenInteractor`、`TodoistCredentialRepository`、`SettingViewModel` |
+| ユニットテスト | `TodoistAuthSessionStore`（Interactorテストでモックせず実物を使う）、`CodeVerifier` / `CodeChallenge`（S256 の既知ベクタで検証）、`TodoistCredential`（期限判定）、`StartTodoistAuthInteractor`（authorize URL の組み立て）、`CompleteTodoistAuthInteractor`（state 不一致 / 成功 / 交換失敗）、`RefreshTodoistTokenInteractor`（ローテーション / `refresh_token` 省略時の保持）、`DisconnectTodoistInteractor`、`GetValidAccessTokenInteractor`、`TodoistCredentialRepository`、`SettingViewModel` |
 | Roborazzi | `SettingScreen` の Preview を差し替え。旧6枚（`SettingScreenTokenInputPreview` / `SettingScreenValidationErrorPreview` / `SettingScreenVerifyingPreview` など）を削除し、未接続・接続済み・認証中・認証エラーの4枚を記録し直す |
 | Maestro E2E | 既存の `setting-todoist-token-flow.yaml` はトークン手入力を前提としているため、そのままでは必ず失敗する。**実ブラウザでの Todoist ログインは E2E で完走できない**という制約があるため、置き換え方針（縮小したフローにするか削除するか）は**実装完了後に別途決める**。それまでは既存フローを残したままにする |
 
@@ -114,8 +115,10 @@ Chrome Custom Tabs の **Auth Tab** を使ったブラウザベースの OAuth 2
   `client_id:client_secret` が必須）のいずれも `client_secret` を要求し、秘密鍵を持たない公開クライアントからは
   呼び出せない。そのため「連携を解除」は端末側のクレデンシャル削除のみとし、Todoist側の取り消しは
   設定画面の説明文でTodoistの「設定 › 連携」へ誘導する
-- **Auth Tab表示中のプロセス終了に備えて認証セッションを永続化した。** `state` と `code_verifier` をメモリではなく
-  DataStoreに置いている（`TodoistAuthSessionRepository`）。使い切りの値のため成功・失敗いずれの場合も破棄する
+- **認証セッションはメモリ保持とする（永続化しない）。** `state` と `code_verifier` は `TodoistAuthSessionStore`
+  （`@Singleton` / `@Volatile`）がメモリ上に持つ。Auth Tabからは通常すぐ戻るため、バックグラウンド中の
+  プロセス終了で失われる確率は低く、失われても state 照合に失敗して「もう一度お試しください」と表示される
+  だけで復帰できる。永続化のコストに見合わないと判断した。使い切りの値のため成功・失敗いずれの場合も破棄する
 
 - **`kseito.github.io` への反映がユーザー作業になる。** `client.json` / `assetlinks.json` / コールバックページが公開されるまで、実機での認証は完走できない。`docs/oauth/README.md` に配置手順をまとめる
 - **Digital Asset Links に登録する署名鍵は debug のみとする。** 対象は `jp.kztproject.rewardedtodo.debug` / SHA-256 `A0:D4:D3:50:EC:C0:54:AF:A2:12:A8:24:DC:7A:4F:F1:E5:FA:F0:BC:EE:AD:4A:1D:F8:B7:2E:F6:C5:B5:54:98` の1エントリ。GitHub Release で配布中の `debug-0.1.1` の APK を `apksigner verify --print-certs` で検証し、CI の `DEBUG_KEYSTORE_BASE64` がローカルの `~/.android/debug.keystore` と同一鍵であることを確認済みのため、エントリを分ける必要はない。staging / release は今回の対象外
