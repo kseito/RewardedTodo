@@ -74,7 +74,7 @@ Chrome Custom Tabs の **Auth Tab** を使ったブラウザベースの OAuth 2
 |---------|-----------|---------|
 | Domain | `domain/todo` | `TodoistCredential` / `RefreshToken` / `AuthorizationCode` / `CodeVerifier` / `CodeChallenge` / `OAuthState` を追加。`ApiToken` の書式検証を緩和。`ITodoistAuthRepository` を追加。`IApiTokenRepository` を `ITodoistCredentialRepository` にリネームし credential 単位のAPIへ変更。`TokenError` に OAuth 用のケースを追加 |
 | Application | `application/todo` | `SaveApiTokenUseCase` / `ValidateApiTokenUseCase` とその Interactor を**削除**。`StartTodoistAuthUseCase`・`CompleteTodoistAuthUseCase`・`RefreshTodoistTokenUseCase`・`DisconnectTodoistUseCase`・`GetValidAccessTokenUseCase` とその Interactor を追加。`GetApiTokenUseCase` は credential 参照へ変更 |
-| Data | `data/todoist` | `TodoistAuthApi`（`POST oauth/access_token` / `POST api/v1/revoke`）と `TokenResponse` DTO を追加 |
+| Data | `data/todoist` | `TodoistAuthApi`（`POST oauth/access_token` の交換とリフレッシュ）と `TokenResponse` DTO を追加。失効(revoke)は公開クライアントから呼べないため持たない |
 | Data | `data/todo` | `ApiTokenRepository` を `TodoistCredentialRepository` にリネームし access/refresh/expiresAt を保存。`TodoistAuthRepository`（`ITodoistAuthRepository` 実装）を追加 |
 | Application | `application/todo` | `TodoistAuthSessionStore` を追加（`state` / `code_verifier` のメモリ保持。永続化しないため domain のIFと data の実装は持たない） |
 | Data | `common/kvs` | `TODOIST_REFRESH_TOKEN` / `TODOIST_TOKEN_EXPIRES_AT` キーを追加。未使用の `TODOIST_API_TOKEN` を削除し `TODOIST_ACCESS_TOKEN` に一本化 |
