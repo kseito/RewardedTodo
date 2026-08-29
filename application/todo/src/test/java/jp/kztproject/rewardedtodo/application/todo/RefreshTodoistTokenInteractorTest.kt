@@ -7,7 +7,6 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import io.mockk.slot
 import jp.kztproject.rewardedtodo.domain.todo.ApiToken
-import jp.kztproject.rewardedtodo.domain.todo.CurrentTimeProvider
 import jp.kztproject.rewardedtodo.domain.todo.RefreshToken
 import jp.kztproject.rewardedtodo.domain.todo.TodoistCredential
 import jp.kztproject.rewardedtodo.domain.todo.TokenError
@@ -23,12 +22,8 @@ class RefreshTodoistTokenInteractorTest {
 
     private val authRepository = mockk<ITodoistAuthRepository>()
     private val credentialRepository = mockk<ITodoistCredentialRepository>(relaxed = true)
-    private var now = 1_000_000L
-    private val interactor = RefreshTodoistTokenInteractor(
-        authRepository,
-        credentialRepository,
-        CurrentTimeProvider { now },
-    )
+    private val now = 1_000_000L
+    private val interactor = RefreshTodoistTokenInteractor(authRepository, credentialRepository)
 
     private val refreshToken = RefreshToken.create("refresh-token")
 
@@ -71,17 +66,22 @@ class RefreshTodoistTokenInteractorTest {
     }
 
     @Test
-    fun `execute skips the network call when the credential is still valid`() = runTest {
-        // ロック待ちの間に別のリクエストがリフレッシュを終えていた場合に二重更新しない
-        coEvery { credentialRepository.getCredential() } returns TodoistCredential(
-            accessToken = ApiToken.create("still-valid"),
+    fun `execute refreshes even when the stored token has not expired locally`() = runTest {
+        // 401は「ローカルの期限内でもサーバーが拒否した」という意味。ここで期限を見て
+        // 早期returnすると同じトークンを返してしまい、Authenticatorの再送が止まる
+        val notExpired = TodoistCredential(
+            accessToken = ApiToken.create("not-expired-access"),
             refreshToken = refreshToken,
             expiresAt = now + 3_600_000L,
         )
+        coEvery { credentialRepository.getCredential() } returns notExpired
+        coEvery { authRepository.refreshCredential(refreshToken) } returns Result.success(
+            TodoistCredential(ApiToken.create("new-access"), refreshToken, expiresAt = now + 3_600_000L),
+        )
 
-        interactor.execute().getOrThrow().value shouldBe "still-valid"
+        interactor.execute().getOrThrow().value shouldBe "new-access"
 
-        coVerify(exactly = 0) { authRepository.refreshCredential(any()) }
+        coVerify(exactly = 1) { authRepository.refreshCredential(refreshToken) }
     }
 
     @Test
