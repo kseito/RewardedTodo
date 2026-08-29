@@ -5,21 +5,20 @@ import jp.kztproject.rewardedtodo.domain.todo.CodeVerifier
 import jp.kztproject.rewardedtodo.domain.todo.OAuthState
 import jp.kztproject.rewardedtodo.domain.todo.TodoistAuthSession
 import jp.kztproject.rewardedtodo.domain.todo.TodoistOAuthConfig
-import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoistAuthSessionRepository
 import java.net.URLEncoder
 import javax.inject.Inject
 
 class StartTodoistAuthInteractor @Inject constructor(
     private val config: TodoistOAuthConfig,
-    private val authSessionRepository: ITodoistAuthSessionRepository,
+    private val authSessionStore: TodoistAuthSessionStore,
 ) : StartTodoistAuthUseCase {
 
     override suspend fun execute(): Result<String> = runCatching {
         val codeVerifier = CodeVerifier.generate()
         val state = OAuthState.generate()
 
-        // リダイレクトが返るまで保持する。Auth Tab表示中にプロセスが死んでも継続できるよう先に保存する
-        authSessionRepository.saveSession(TodoistAuthSession(state = state, codeVerifier = codeVerifier))
+        // リダイレクトが返るまでメモリ上に保持する
+        authSessionStore.save(TodoistAuthSession(state = state, codeVerifier = codeVerifier))
 
         buildAuthorizeUrl(state, codeVerifier.toCodeChallenge())
     }
