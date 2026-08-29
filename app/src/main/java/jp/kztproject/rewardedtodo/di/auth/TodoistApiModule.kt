@@ -80,8 +80,11 @@ class TodoistApiModule {
 
         override fun authenticate(route: okhttp3.Route?, response: Response): Request? {
             val failedToken = response.request.header(AUTHORIZATION_HEADER)
-            val refreshedToken = failedToken
-                ?.let { runBlocking { refreshTodoistTokenUseCase.execute().getOrNull() } }
+            // 再送した結果がまた401なら諦める。リフレッシュのたびにトークンは変わるので、
+            // 値の比較だけでは再送を無限に繰り返してしまう
+            if (failedToken == null || response.priorResponse != null) return null
+
+            val refreshedToken = runBlocking { refreshTodoistTokenUseCase.execute().getOrNull() }
                 ?.let { "Bearer ${it.value}" }
 
             // 同じトークンで送り直しても再び401になるだけなので、変化が無ければ諦める
