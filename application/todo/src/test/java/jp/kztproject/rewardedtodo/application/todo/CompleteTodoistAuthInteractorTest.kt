@@ -13,7 +13,6 @@ import jp.kztproject.rewardedtodo.domain.todo.TodoistAuthSession
 import jp.kztproject.rewardedtodo.domain.todo.TodoistCredential
 import jp.kztproject.rewardedtodo.domain.todo.TokenError
 import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoistAuthRepository
-import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoistAuthSessionRepository
 import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoistCredentialRepository
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -21,10 +20,10 @@ import org.junit.Test
 class CompleteTodoistAuthInteractorTest {
 
     private val authRepository = mockk<ITodoistAuthRepository>()
-    private val authSessionRepository = mockk<ITodoistAuthSessionRepository>(relaxed = true)
+    private val authSessionStore = TodoistAuthSessionStore()
     private val credentialRepository = mockk<ITodoistCredentialRepository>(relaxed = true)
     private val interactor =
-        CompleteTodoistAuthInteractor(authRepository, authSessionRepository, credentialRepository)
+        CompleteTodoistAuthInteractor(authRepository, authSessionStore, credentialRepository)
 
     private val codeVerifier = CodeVerifier.generate()
     private val session = TodoistAuthSession(state = OAuthState.create("issued-state"), codeVerifier = codeVerifier)
@@ -32,7 +31,7 @@ class CompleteTodoistAuthInteractorTest {
 
     @Test
     fun `execute exchanges the code and saves the credential`() = runTest {
-        coEvery { authSessionRepository.getSession() } returns session
+        authSessionStore.save(session)
         coEvery { authRepository.exchangeCodeForCredential(any(), any()) } returns Result.success(credential)
 
         val result = interactor.execute("https://example.com/oauth/callback?code=auth-code&state=issued-state")
@@ -43,12 +42,12 @@ class CompleteTodoistAuthInteractorTest {
         }
         coVerify { credentialRepository.saveCredential(credential) }
         // 認可コードもverifierも使い切りのため破棄する
-        coVerify { authSessionRepository.clearSession() }
+        authSessionStore.get() shouldBe null
     }
 
     @Test
     fun `execute rejects a redirect whose state does not match the issued one`() = runTest {
-        coEvery { authSessionRepository.getSession() } returns session
+        authSessionStore.save(session)
 
         val result = interactor.execute("https://example.com/oauth/callback?code=auth-code&state=forged-state")
 
@@ -59,8 +58,6 @@ class CompleteTodoistAuthInteractorTest {
 
     @Test
     fun `execute rejects a redirect when no session is pending`() = runTest {
-        coEvery { authSessionRepository.getSession() } returns null
-
         val result = interactor.execute("https://example.com/oauth/callback?code=auth-code&state=issued-state")
 
         result.exceptionOrNull().shouldBeInstanceOf<TokenError.StateMismatch>()
@@ -69,7 +66,7 @@ class CompleteTodoistAuthInteractorTest {
 
     @Test
     fun `execute reports the error returned by the authorization screen`() = runTest {
-        coEvery { authSessionRepository.getSession() } returns session
+        authSessionStore.save(session)
 
         val result = interactor.execute("https://example.com/oauth/callback?error=access_denied")
 
@@ -80,7 +77,7 @@ class CompleteTodoistAuthInteractorTest {
 
     @Test
     fun `execute fails when the redirect carries no authorization code`() = runTest {
-        coEvery { authSessionRepository.getSession() } returns session
+        authSessionStore.save(session)
 
         val result = interactor.execute("https://example.com/oauth/callback?state=issued-state")
 
@@ -89,7 +86,7 @@ class CompleteTodoistAuthInteractorTest {
 
     @Test
     fun `execute wraps a token exchange failure and clears the session`() = runTest {
-        coEvery { authSessionRepository.getSession() } returns session
+        authSessionStore.save(session)
         coEvery { authRepository.exchangeCodeForCredential(any(), any()) } returns
             Result.failure(IllegalStateException("bad_authorization_code"))
 
@@ -97,6 +94,6 @@ class CompleteTodoistAuthInteractorTest {
 
         result.exceptionOrNull().shouldBeInstanceOf<TokenError.ExchangeFailed>()
         coVerify(exactly = 0) { credentialRepository.saveCredential(any()) }
-        coVerify { authSessionRepository.clearSession() }
+        authSessionStore.get() shouldBe null
     }
 }
