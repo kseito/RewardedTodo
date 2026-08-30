@@ -1,0 +1,10 @@
+{
+  "client_id": "https://kseito.github.io/rewardedtodo/oauth/client.json",
+  "client_name": "RewardedTodo",
+  "client_uri": "https://github.com/kseito/RewardedTodo",
+  "redirect_uris": ["https://kseito.github.io/rewardedtodo/oauth/callback"],
+  "token_endpoint_auth_method": "none",
+  "grant_types": ["authorization_code", "refresh_token"],
+  "response_types": ["code"],
+  "scope": "data:read_write"
+}

@@ -5,6 +5,25 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
 
+    <!--
+        Android 11+のパッケージ可視性フィルタ対策。これが無いと CustomTabsClient の
+        resolveActivity / resolveService が常に空を返し、Chromeのバージョンに関わらず
+        getPackageName が null、isAuthTabSupported が false になる。
+        androidx.browser のAARはこの宣言を持たないため、アプリ側で宣言する必要がある。
+    -->
+    <queries>
+        <!-- 既定ブラウザの解決 -->
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <category android:name="android.intent.category.BROWSABLE"/>
+            <data android:scheme="https"/>
+        </intent>
+        <!-- Custom Tabs / Auth Tab の対応可否の判定 -->
+        <intent>
+            <action android:name="android.support.customtabs.action.CustomTabsService"/>
+        </intent>
+    </queries>
+
     <application
         android:name="jp.kztproject.rewardedtodo.MyApplication"
         android:allowBackup="false"

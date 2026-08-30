@@ -15,7 +15,7 @@ internal class RewardUserIdRepository @Inject constructor(
 ) {
 
     suspend fun getToken(): String = dataStore.data
-        .map { it[UserPreferencesKeys.TODOIST_API_TOKEN].orEmpty() }
+        .map { it[UserPreferencesKeys.TODOIST_ACCESS_TOKEN].orEmpty() }
         .first()
 
     suspend fun getUserId(): String {

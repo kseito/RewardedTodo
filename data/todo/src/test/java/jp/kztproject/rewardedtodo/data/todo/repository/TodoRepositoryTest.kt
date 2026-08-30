@@ -16,7 +16,8 @@ import jp.kztproject.rewardedtodo.data.todoist.model.Due
 import jp.kztproject.rewardedtodo.data.todoist.model.Task
 import jp.kztproject.rewardedtodo.data.todoist.model.Tasks
 import jp.kztproject.rewardedtodo.domain.todo.ApiToken
-import jp.kztproject.rewardedtodo.domain.todo.repository.IApiTokenRepository
+import jp.kztproject.rewardedtodo.domain.todo.TodoistCredential
+import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoistCredentialRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -42,9 +43,9 @@ class TodoRepositoryTest {
     private val dao: TodoDao =
         DatabaseInitializer.init(applicationContext, AppDatabase::class.java, "todo").todoDao()
     private val api: TodoistApi = mockk()
-    private val apiTokenRepository: IApiTokenRepository = mockk()
+    private val credentialRepository: ITodoistCredentialRepository = mockk()
 
-    private val repository = TodoRepository(dao, api, apiTokenRepository)
+    private val repository = TodoRepository(dao, api, credentialRepository)
 
     @Before
     fun setup() {
@@ -193,11 +194,11 @@ class TodoRepositoryTest {
     }
 
     private fun useTodoist(flag: Boolean) {
-        val token = if (flag) {
-            ApiToken.create("0123456789abcdef0123456789abcdef01234567")
+        val credential = if (flag) {
+            TodoistCredential(ApiToken.create("0123456789abcdef0123456789abcdef01234567"))
         } else {
             null
         }
-        coEvery { apiTokenRepository.getToken() } returns token
+        coEvery { credentialRepository.getCredential() } returns credential
     }
 }

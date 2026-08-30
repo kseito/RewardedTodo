@@ -8,8 +8,7 @@ import jp.kztproject.rewardedtodo.application.reward.DeleteTodoUseCase
 import jp.kztproject.rewardedtodo.application.reward.FetchTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.GetTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
-import jp.kztproject.rewardedtodo.application.todo.GetApiTokenUseCase
-import jp.kztproject.rewardedtodo.domain.todo.ApiToken
+import jp.kztproject.rewardedtodo.application.todo.GetTodoistCredentialUseCase
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.Todo
 import kotlinx.coroutines.CancellationException
@@ -20,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
@@ -40,7 +40,7 @@ class TodoListViewModel @Inject constructor(
     private val updateTodoUseCase: UpdateTodoUseCase,
     private val deleteTodoUseCase: DeleteTodoUseCase,
     private val completeTodoUseCase: CompleteTodoUseCase,
-    private val getApiTokenUseCase: GetApiTokenUseCase,
+    private val getTodoistCredentialUseCase: GetTodoistCredentialUseCase,
 ) : ViewModel() {
 
     val result: StateFlow<Result<Unit>?>
@@ -59,9 +59,12 @@ class TodoListViewModel @Inject constructor(
     // extraBufferCapacity=1 で購読中の tryEmit を確実にバッファする。
     private val refreshTrigger = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
 
-    // トークン変更を起点にネットワーク同期し、その後DBを継続観測する完全リアクティブな一覧
-    val todoList: StateFlow<List<Todo>> = getApiTokenUseCase.executeAsFlow()
-        .flatMapLatest { token -> syncThenObserveTodoList(token) }
+    // 連携状態の変化を起点にネットワーク同期し、その後DBを継続観測する完全リアクティブな一覧。
+    // アクセストークンは1時間ごとにリフレッシュされるため、値そのものではなく連携の有無だけを見る
+    val todoList: StateFlow<List<Todo>> = getTodoistCredentialUseCase.executeAsFlow()
+        .map { it != null }
+        .distinctUntilChanged()
+        .flatMapLatest { isConnected -> syncThenObserveTodoList(isConnected) }
         // 一覧が初めて届いた時点で初回ロード完了とみなす
         .onEach { isInitialLoading.update { false } }
         .stateIn(
@@ -72,12 +75,12 @@ class TodoListViewModel @Inject constructor(
 
     // 初回ロード(onStart)と手動リフレッシュ(refreshTrigger)を契機に同期し、その後DBを観測する。
     // 初回ロードは false、手動プルリフレッシュは true として扱い、スピナーは手動時のみ表示する。
-    private fun syncThenObserveTodoList(token: ApiToken?): Flow<List<Todo>> = refreshTrigger
+    private fun syncThenObserveTodoList(isConnected: Boolean): Flow<List<Todo>> = refreshTrigger
         .map { true }
         .onStart { emit(false) }
         .flatMapLatest { isManualRefresh ->
             flow {
-                if (token != null) syncTodoList(isManualRefresh)
+                if (isConnected) syncTodoList(isManualRefresh)
                 emitAll(getTodoListUseCase.execute())
             }
                 // 1サイクルの失敗で共有ストリームを終わらせない（次のリフレッシュで復帰可能にする）

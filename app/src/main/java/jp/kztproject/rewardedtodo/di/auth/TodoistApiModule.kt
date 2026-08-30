@@ -8,10 +8,14 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import jp.kztproject.rewardedtodo.BuildConfig
+import jp.kztproject.rewardedtodo.application.todo.GetValidAccessTokenUseCase
+import jp.kztproject.rewardedtodo.application.todo.RefreshTodoistTokenUseCase
 import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
-import jp.kztproject.rewardedtodo.domain.todo.repository.IApiTokenRepository
 import kotlinx.coroutines.runBlocking
+import okhttp3.Authenticator
 import okhttp3.OkHttpClient
+import okhttp3.Request
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -24,7 +28,10 @@ class TodoistApiModule {
     // TODO need to divide
     @Provides
     @Singleton
-    fun provideTodoistService(apiTokenRepository: IApiTokenRepository): TodoistApi {
+    fun provideTodoistService(
+        getValidAccessTokenUseCase: GetValidAccessTokenUseCase,
+        refreshTodoistTokenUseCase: RefreshTodoistTokenUseCase,
+    ): TodoistApi {
         // TODO use reflection because codegen is not working.
         val moshi = Moshi.Builder()
             .addLast(KotlinJsonAdapterFactory())
@@ -43,14 +50,14 @@ class TodoistApiModule {
                 }
             }
             .addInterceptor { chain ->
-                val token = runBlocking {
-                    apiTokenRepository.getToken()?.value.orEmpty()
-                }
-                val request = chain.request().newBuilder()
-                    .header("Authorization", "Bearer $token")
-                    .build()
+                // 期限切れならここでリフレッシュされる。未連携ならヘッダを付けずに送る
+                val token = runBlocking { getValidAccessTokenUseCase.execute() }
+                val request = token
+                    ?.let { chain.request().newBuilder().header(AUTHORIZATION_HEADER, "Bearer ${it.value}").build() }
+                    ?: chain.request()
                 chain.proceed(request)
             }
+            .authenticator(TodoistTokenAuthenticator(refreshTodoistTokenUseCase))
             .build()
 
         return Retrofit.Builder()
@@ -60,5 +67,34 @@ class TodoistApiModule {
             .addCallAdapterFactory(CoroutineCallAdapterFactory())
             .build()
             .create(TodoistApi::class.java)
+    }
+
+    /**
+     * 401を受けたときにアクセストークンを再取得してリクエストを1度だけ再送する。
+     *
+     * 有効期限より先にトークンが失効した場合（Todoist側で連携を取り消した等）の受け皿で、
+     * 通常の期限切れはInterceptor側で先回りしてリフレッシュされる。
+     */
+    private class TodoistTokenAuthenticator(private val refreshTodoistTokenUseCase: RefreshTodoistTokenUseCase) :
+        Authenticator {
+
+        override fun authenticate(route: okhttp3.Route?, response: Response): Request? {
+            val failedToken = response.request.header(AUTHORIZATION_HEADER)
+            // 再送した結果がまた401なら諦める。リフレッシュのたびにトークンは変わるので、
+            // 値の比較だけでは再送を無限に繰り返してしまう
+            if (failedToken == null || response.priorResponse != null) return null
+
+            val refreshedToken = runBlocking { refreshTodoistTokenUseCase.execute().getOrNull() }
+                ?.let { "Bearer ${it.value}" }
+
+            // 同じトークンで送り直しても再び401になるだけなので、変化が無ければ諦める
+            return refreshedToken
+                ?.takeIf { it != failedToken }
+                ?.let { response.request.newBuilder().header(AUTHORIZATION_HEADER, it).build() }
+        }
+    }
+
+    private companion object {
+        const val AUTHORIZATION_HEADER = "Authorization"
     }
 }

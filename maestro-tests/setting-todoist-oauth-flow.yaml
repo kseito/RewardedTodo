@@ -1,0 +1,40 @@
+appId: jp.kztproject.rewardedtodo.debug
+tags:
+  - android
+  - rewardedtodo
+  - setting
+---
+# Todoist連携のブラウザ認証は、実ブラウザでのTodoistログインが必要なためE2Eでは完走できない。
+# ここでは「連携の入口が正しく出ていること」と「トークン手入力UIが残っていないこと」までを検証し、
+# 認可完了以降（接続済み表示・タスク同期・連携解除）は手動確認で担保する。
+- clearState
+- launchApp
+
+# Wait for the initial screen to finish rendering; cold start/JIT is slow on CI
+- extendedWaitUntil:
+    visible: "Reward"
+    timeout: 180000
+
+# Open the setting screen via the gear icon in the top app bar
+- tapOn:
+    text: "setting_button"
+
+# Verify the setting screen is displayed
+- assertVisible: "Setting"
+- assertVisible: "Extensions"
+
+# Todoist is not connected right after clearState
+- assertVisible: "Not Connected"
+
+# The browser-based sign-in is the only entry point
+- assertVisible: "Connect to Todoist"
+
+# The manual API token input must be gone
+- assertNotVisible: "Todoist API.*"
+- assertNotVisible: "Verify Connection"
+
+# Go back to the home screen
+- back
+
+# Verify the Todo tab is displayed again
+- assertVisible: "Todo"

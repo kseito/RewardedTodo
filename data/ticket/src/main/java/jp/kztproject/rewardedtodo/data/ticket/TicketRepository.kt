@@ -44,7 +44,7 @@ class TicketRepository @Inject internal constructor(
     private suspend fun delegate(): ITicketRepository = if (isTodoistConnected()) networkRepository else localRepository
 
     private suspend fun isTodoistConnected(): Boolean = dataStore.data
-        .map { it[UserPreferencesKeys.TODOIST_API_TOKEN].orEmpty() }
+        .map { it[UserPreferencesKeys.TODOIST_ACCESS_TOKEN].orEmpty() }
         .first()
         .isNotBlank()
 }
