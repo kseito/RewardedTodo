@@ -16,7 +16,7 @@ internal fun Project.configureKotlinAndroid(commonExtension: CommonExtension) {
 
     configure<KotlinAndroidProjectExtension> {
         compilerOptions.apply {
-            jvmToolchain(17)
+            jvmToolchain(libs.findVersion("jvmToolchain").get().requiredVersion.toInt())
         }
     }
 }
