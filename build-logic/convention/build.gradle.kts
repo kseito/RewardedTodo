@@ -7,7 +7,7 @@ group = "jp.kztproject.rewardedtodo.buildlogic"
 
 kotlin {
     compilerOptions {
-        jvmToolchain(17)
+        jvmToolchain(libs.versions.jvmToolchain.get().toInt())
     }
 }
 
