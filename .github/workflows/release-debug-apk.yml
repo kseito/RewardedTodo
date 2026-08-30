@@ -3,13 +3,23 @@ name: Release Debug APK
 on:
   workflow_dispatch:
     inputs:
-      tag:
-        description: 'Release tag name (e.g. debug-1.0.0)'
-        required: true
-        type: string
+      bump:
+        description: '最新の debug-x.y.z から上げる桁'
+        required: false
+        default: 'patch'
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
 
 permissions:
   contents: write
+
+# タグの採番とリリース作成の間に別の実行が割り込むと同じ番号を取り合うため直列化する
+concurrency:
+  group: release-debug-apk
+  cancel-in-progress: false
 
 jobs:
   release-debug-apk:
@@ -18,6 +28,47 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - name: Resolve release tag
+        id: resolve-tag
+        env:
+          BUMP: ${{ inputs.bump }}
+        run: |
+          set -euo pipefail
+
+          # リリース未作成のタグも採番対象に含めるためタグ側を参照する。
+          # gh release list は取得件数に上限があり、リリースの無いタグも見えない。
+          # debug- が付かない過去のタグは運用対象外なので参照しない。
+          tags=$(git ls-remote --tags --refs origin 'refs/tags/debug-*' | sed 's|.*refs/tags/||')
+
+          # grep の「該当なし」だけを許容する。git ls-remote の失敗は set -e で落とす
+          latest=$(printf '%s\n' "${tags}" \
+            | { grep -E '^debug-[0-9]+\.[0-9]+\.[0-9]+$' || true; } \
+            | sed 's/^debug-//' \
+            | sort -t. -k1,1n -k2,2n -k3,3n \
+            | tail -n 1)
+
+          if [ -z "${latest}" ]; then
+            next="0.1.0"
+          else
+            IFS=. read -r major minor patch <<< "${latest}"
+            case "${BUMP}" in
+              major) next="$((major + 1)).0.0" ;;
+              minor) next="${major}.$((minor + 1)).0" ;;
+              *)     next="${major}.${minor}.$((patch + 1))" ;;
+            esac
+          fi
+          tag="debug-${next}"
+
+          # gh release create は既存タグがあればそれを再利用し --target を無視するため、
+          # リリースの有無ではなくタグの有無で判定する
+          if printf '%s\n' "${tags}" | grep -qxF "${tag}"; then
+            echo "Error: tag ${tag} already exists" >&2
+            exit 1
+          fi
+
+          echo "tag=${tag}" >> "$GITHUB_OUTPUT"
+          echo "🏷️ Release tag: ${tag}" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Set up JDK 17
         uses: ./.github/actions/setup-java
@@ -37,9 +88,10 @@ jobs:
       - name: Create GitHub Release with debug APK
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.resolve-tag.outputs.tag }}
         run: |
-          gh release create "${{ inputs.tag }}" \
+          gh release create "${TAG}" \
             app/build/outputs/apk/debug/app-debug.apk \
-            --title "${{ inputs.tag }}" \
+            --title "${TAG}" \
             --generate-notes \
             --target "${{ github.sha }}"
