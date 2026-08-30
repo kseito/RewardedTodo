@@ -16,6 +16,11 @@ on:
 permissions:
   contents: write
 
+# タグの採番とリリース作成の間に別の実行が割り込むと同じ番号を取り合うため直列化する
+concurrency:
+  group: release-debug-apk
+  cancel-in-progress: false
+
 jobs:
   release-debug-apk:
     runs-on: ubuntu-latest
@@ -27,16 +32,21 @@ jobs:
       - name: Resolve release tag
         id: resolve-tag
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           BUMP: ${{ inputs.bump }}
         run: |
           set -euo pipefail
 
-          latest=$(gh release list --limit 200 --json tagName --jq '.[].tagName' \
-            | grep -E '^debug-[0-9]+\.[0-9]+\.[0-9]+$' \
+          # リリース未作成のタグも採番対象に含めるためタグ側を参照する。
+          # gh release list は取得件数に上限があり、リリースの無いタグも見えない。
+          # debug- が付かない過去のタグは運用対象外なので参照しない。
+          tags=$(git ls-remote --tags --refs origin 'refs/tags/debug-*' | sed 's|.*refs/tags/||')
+
+          # grep の「該当なし」だけを許容する。git ls-remote の失敗は set -e で落とす
+          latest=$(printf '%s\n' "${tags}" \
+            | { grep -E '^debug-[0-9]+\.[0-9]+\.[0-9]+$' || true; } \
             | sed 's/^debug-//' \
             | sort -t. -k1,1n -k2,2n -k3,3n \
-            | tail -n 1 || true)
+            | tail -n 1)
 
           if [ -z "${latest}" ]; then
             next="0.1.0"
@@ -50,8 +60,10 @@ jobs:
           fi
           tag="debug-${next}"
 
-          if gh release view "${tag}" >/dev/null 2>&1; then
-            echo "Error: release ${tag} already exists" >&2
+          # gh release create は既存タグがあればそれを再利用し --target を無視するため、
+          # リリースの有無ではなくタグの有無で判定する
+          if printf '%s\n' "${tags}" | grep -qxF "${tag}"; then
+            echo "Error: tag ${tag} already exists" >&2
             exit 1
           fi
 
