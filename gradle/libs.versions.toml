@@ -3,6 +3,7 @@
 androidTargetSdkVersion = "37"
 androidCompileSdkVersion = "37"
 androidMinSdkVersion = "31"
+jvmToolchain = "21"
 versionCode = "1"
 versionName = "0.0.3"
 
