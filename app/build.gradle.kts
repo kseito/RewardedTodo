@@ -92,7 +92,7 @@ android {
     }
 
     kotlin {
-        jvmToolchain(17)
+        jvmToolchain(libs.versions.jvmToolchain.get().toInt())
     }
     packaging {
         resources {
