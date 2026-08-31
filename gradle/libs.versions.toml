@@ -8,7 +8,7 @@ versionCode = "1"
 versionName = "0.0.3"
 
 #Libraries
-android-gradle-plugin = "9.3.1"
+android-gradle-plugin = "9.3.2"
 androidx-browser = "1.10.0"
 activity-compose = "1.13.0"
 constraintlayout-compose = "1.1.2"
