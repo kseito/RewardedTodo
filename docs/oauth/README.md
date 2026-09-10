@@ -70,8 +70,8 @@ gh release download debug-0.1.1 --repo kseito/RewardedTodo --pattern "*.apk"
 apksigner verify --print-certs app-debug.apk | grep "SHA-256"
 ```
 
-staging (`jp.kztproject.rewardedtodo.beta`) や release ビルドで認証を使う場合は、
-それぞれの `package_name` とフィンガープリントをエントリとして追加する必要がある。
+release ビルドで認証を使う場合は、その `package_name` とフィンガープリントをエントリとして
+追加する必要がある（staging配信は廃止済みのため対象外）。
 
 ## メタデータ文書の更新について
 
