@@ -3,6 +3,10 @@ name: screenshot-comparison
 on:
   pull_request:
     branches: [ main, master, develop, feature/adjust-screenshot ]
+    # ドキュメントのみの変更ではスクリーンショット比較を実行しない
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
 
 jobs:
   screenshot-comparison:
