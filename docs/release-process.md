@@ -33,23 +33,6 @@
 
 タグ採番とリリース作成の間に別の実行が割り込むと同じ番号を取り合うため、`concurrency` グループ `release-debug-apk` で直列化している（`cancel-in-progress: false`）。
 
-### 必要な Repository Secrets
-
-| Secret | 用途 |
-|--------|------|
-| `REWARD_SERVER_URL` | チケット取得APIのベースURL。`local.properties` 経由で `BuildConfig.REWARD_SERVER_URL` に入る |
-| `DEBUG_KEYSTORE_BASE64` | debug署名鍵。base64デコードしてリポジトリルートの `debug.keystore` に配置する |
-
-`GITHUB_TOKEN` はActionsが自動で払い出すため設定不要。
-
-### 署名鍵を変更してはいけない
-
-`app/build.gradle.kts` の debug `signingConfig` は、リポジトリルートに `debug.keystore` があればそれを使い、無ければ各自の `~/.android/debug.keystore`（AGPの既定）にフォールバックする。CIでは前者に固定される。
-
-この鍵のSHA-256フィンガープリントは Todoist OAuth の Digital Asset Links に登録されており、**鍵を差し替えると配布済み・新規どちらのAPKでも認証が通らなくなる**。変更が必要な場合は `docs/oauth/README.md` の手順に従って `docs/oauth/well-known/assetlinks.json` も更新する。
-
-なお debug ビルドは `applicationIdSuffix = ".debug"` が付き、パッケージ名は `jp.kztproject.rewardedtodo.debug` になる。release ビルドとは別アプリ扱いなので端末上で共存できる。
-
 ## バージョニング規則
 
 バージョン番号は**2系統あり、現状は連動していない**。
@@ -68,19 +51,6 @@
 - `major`: 破壊的変更（データ移行を伴う変更など）
 
 リポジトリには `0.0.2` / `0.0.3` や `day1` / `first-tag` といった古いタグも残っているが、これらは旧運用の名残であり採番の対象外である。
-
-### アプリバージョン
-
-`versionName` / `versionCode` は `gradle/libs.versions.toml` の `versionName` / `versionCode` を `app/build.gradle.kts` が参照している。Play配信を行っていないため現在は更新していないが、ストア配信を始める場合は `versionCode` の単調増加が必須になる。
-
-## release ビルドを配布する場合に必要になること
-
-現時点では未整備のため、実施する際は以下が必要になる。
-
-1. release用の `signingConfig` と署名鍵の管理方法（GitHub Secrets等）を決める
-2. `app/build.gradle.kts` の release buildType に `signingConfig` を設定する
-3. Todoist OAuth を release ビルドで使うなら、`docs/oauth/well-known/assetlinks.json` に `jp.kztproject.rewardedtodo` と release 鍵のフィンガープリントを追加する（現在は debug の1エントリのみ）
-4. 配布経路（Play Console / GitHub Release）に応じたワークフローを用意する
 
 ## 関連ドキュメント
 
