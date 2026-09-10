@@ -12,8 +12,6 @@
 | Google Play | 未整備 |
 | release ビルドの配布 | 未整備（署名設定が無く、`assembleRelease` は `app-release-unsigned.apk` を出力する） |
 
-`stg-release/*` ブランチによるstaging配信は廃止済みで、buildType・署名設定・ワークフローのいずれもリポジトリに存在しない。
-
 ## デバッグAPKをリリースする
 
 ### 手順
