@@ -1,8 +1,10 @@
 # Built application files
 *.apk
 *.ap_
-staging.keystore
-debug.keystore
+
+# Signing keys (debug.keystore はCIが配置する。keystore本体はコミットしない)
+*.keystore
+*.jks
 
 # Files for the Dalvik VM
 *.dex
