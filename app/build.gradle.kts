@@ -53,12 +53,6 @@ android {
 
 
     signingConfigs {
-        create("staging") {
-            storeFile = rootProject.file("staging.keystore")
-            storePassword = System.getenv("STORE_PASSWORD")
-            keyAlias = System.getenv("KEY_ALIAS")
-            keyPassword = System.getenv("KEY_PASSWORD")
-        }
         getByName("debug") {
             // CIで配置した固定keystoreがあればそれで署名し、無ければ
             // 各自の ~/.android/debug.keystore（AGPデフォルト）を使う
@@ -75,14 +69,6 @@ android {
     buildTypes {
         getByName("debug") {
             applicationIdSuffix = ".debug"
-        }
-        create("staging") {
-            signingConfig = signingConfigs.getByName("staging")
-            applicationIdSuffix = ".beta"
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-            matchingFallbacks += listOf("debug")
         }
         getByName("release") {
             isMinifyEnabled = true
