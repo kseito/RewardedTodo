@@ -4,6 +4,10 @@ on:
   pull_request:
     branches:
       - main
+    # ドキュメントのみの変更ではエミュレータを起動しない
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
 
 # 同一PRで新しいpushがあれば古い実行をキャンセルする（エミュレータ実行は高コストなため）
 concurrency:
