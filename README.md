@@ -57,6 +57,7 @@ Detailed documentation is available in the `docs/` directory:
 - [`docs/module-dependency.md`](docs/module-dependency.md) - Module dependencies and forbidden rules
 - [`docs/di-setup.md`](docs/di-setup.md) - Hilt DI structure and file layout
 - [`docs/review-policy.md`](docs/review-policy.md) - Review policy
+- [`docs/release-process.md`](docs/release-process.md) - Release procedure and versioning rules
 - [`docs/adr/`](docs/adr) - Architecture Decision Records
 - [`docs/specs/`](docs/specs) - Feature specifications
 
