@@ -1,4 +1,4 @@
-# ADR-0001: Todoist APIトークンを平文DataStoreで保存する
+# ADR-0002: Todoist APIトークンを平文DataStoreで保存する
 
 | 項目 | 内容 |
 |------|------|
