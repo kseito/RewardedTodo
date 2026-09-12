@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    通信先の信頼アンカーをシステムCAのみに限定する。
+
+    minSdk 31 では既定でもユーザー追加CAは信頼されないが、既定に依存せず明示することで
+    端末に細工されたCAを経由したMITMを防ぐ意図をコード上に残す。
+    証明書ピンニング(pin-set)は採用していない。ピンの期限切れがストア更新まで復旧不能な
+    通信断を招くうえ、通信先の証明書ローテーションを自プロジェクトで制御できないため。
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <domain-config>
+        <domain includeSubdomains="true">api.todoist.com</domain>
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </domain-config>
+</network-security-config>
