@@ -58,6 +58,7 @@ Detailed documentation is available in the `docs/` directory:
 - [`docs/di-setup.md`](docs/di-setup.md) - Hilt DI structure and file layout
 - [`docs/review-policy.md`](docs/review-policy.md) - Review policy
 - [`docs/release-process.md`](docs/release-process.md) - Release procedure and versioning rules
+- [`docs/ci-cd.md`](docs/ci-cd.md) - CI/CD workflows, required secrets and merge gates
 - [`docs/adr/`](docs/adr) - Architecture Decision Records
 - [`docs/specs/`](docs/specs) - Feature specifications
 
