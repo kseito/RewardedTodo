@@ -12,7 +12,7 @@
 | ユニットテスト | domain / application / data / feature の各ロジック | JVM（一部 Robolectric） | `unit-test.yml`（PR時） |
 | VRT（Roborazzi） | Compose UI の見た目 | JVM + Robolectric | `screenshot-comparison.yml`（PR時） |
 | VRTカバレッジ | VRT が UI コードをどれだけ網羅しているか | JVM + JaCoCo | `vrt-coverage-check.yml`（PR時）/ `vrt-coverage.yml`（週次） |
-| E2E（Maestro） | 実機/エミュレータ上の主要フロー | エミュレータ | 未CI化（`maestro-tests/` にフロー整備済み） |
+| E2E（Maestro） | 実機/エミュレータ上の主要フロー | エミュレータ | `maestro-e2e.yml`（PR時） |
 
 ---
 
