@@ -1,8 +1,7 @@
 # CI/CD ワークフロー一覧
 
 `.github/workflows/` にある全14ワークフローの目的・トリガー・ゲート内容をまとめる。
-[レビュー方針](review-policy.md) の「機械に任せる」を実際に担保しているのがこれらのワークフローであり、
-fork や新しい開発環境で同じゲートを再現するために必要な Secrets もここに記載する。
+[レビュー方針](review-policy.md) の「機械に任せる」を実際に担保しているのがこれらのワークフローである。
 
 ---
 
@@ -59,20 +58,6 @@ fork や新しい開発環境で同じゲートを再現するために必要な
 
 ---
 
-## 必要な Secrets
-
-| Secret | 使うワークフロー | 未設定時に起きること |
-|---|---|---|
-| `REWARD_SERVER_URL` | `unit-test.yml`, `android-lint.yml`, `codeql.yml`, `screenshot-comparison.yml`, `vrt-coverage.yml`, `vrt-coverage-check.yml`, `maestro-e2e.yml`, `release-debug-apk.yml` | `local.properties` に空の値が書かれ、`BuildConfig.REWARD_SERVER_URL` が空文字になる。ビルド自体は通るが Retrofit の baseUrl が `/` だけになり、チケット取得APIを触る経路が実行時に失敗する（`app/src/main/java/jp/kztproject/rewardedtodo/di/ticket/TicketNetworkModule.kt`）|
-| `DEBUG_KEYSTORE_BASE64` | `release-debug-apk.yml` | `debug.keystore` が生成されず APK ビルドが失敗する。base64 エンコードした debug keystore を入れる |
-| `CLAUDE_CODE_OAUTH_TOKEN` | `claude.yml` | `@claude` コメントに反応しなくなる。CI のゲートには影響しない |
-
-`GITHUB_TOKEN` は GitHub Actions が自動発行するため設定不要。
-
-`REWARD_SERVER_URL` はローカル開発では `local.properties` に直接書く。詳細は [セットアップ](setup.md) を参照。
-
----
-
 ## レビュー方針との対応
 
 [レビュー方針](review-policy.md) の「機械に任せる」表と、それを担保するワークフローの対応は以下の通り。
@@ -92,29 +77,7 @@ fork や新しい開発環境で同じゲートを再現するために必要な
 
 ---
 
-## 共通アクションと実行コストの制御
-
-### 共通アクション
-
-JDK と Gradle のセットアップは composite action に切り出し、必要なワークフローから共有している。
-
-| アクション | 内容 |
-|---|---|
-| `.github/actions/setup-java` | Temurin JDK 21 をセットアップし、Gradle のキャッシュを有効化する（`java-version` / `distribution` / `cache` は入力で上書きできる。`reviewdog-suggester.yml` は `cache: ''` を渡してキャッシュを無効化している）|
-| `.github/actions/setup-gradle` | `gradle/actions/setup-gradle` を Gradle home キャッシュのクリーンアップ有効で実行する |
-
-外部アクションは（`codeql.yml` の `actions/checkout@v7` を除き）すべてコミットSHAでピン留めしている。
-
-### 実行コストの制御
-
-| 仕組み | 対象 | 内容 |
-|---|---|---|
-| `paths-ignore` | `maestro-e2e.yml`, `screenshot-comparison.yml` | `docs/**` と `**/*.md` のみの変更ではエミュレータ／VRT を動かさない |
-| `concurrency`（キャンセルあり）| `maestro-e2e.yml`, `upload_expected_image.yml`, `screenshot-comparison-comment.yml` | 同一 ref で新しい実行が始まったら古い実行をキャンセルする |
-| `concurrency`（直列化）| `release-debug-apk.yml` | タグ採番とリリース作成が割り込まれないよう `cancel-in-progress: false` で直列化する |
-| `timeout-minutes` | `maestro-e2e.yml`（60分）, `upload_expected_image.yml`（60分）, `screenshot-comparison-comment.yml`（2分） | ハングした実行を打ち切る |
-
-### E2E 実行の注意点
+## E2E 実行の注意点
 
 `maestro-e2e.yml` はエミュレータ固有の不安定さに対処するため、実行を `.github/scripts/run-maestro-e2e.sh` に切り出している。
 
@@ -122,16 +85,6 @@ JDK と Gradle のセットアップは composite action に切り出し、必�
 - 一括実行が失敗したらスイート全体を1回だけリトライする
 - `hide_error_dialogs=1` でクラッシュ／ANR ダイアログを抑止する（ランチャーの ANR ダイアログが最前面に残ると全フローが失敗する）
 - エミュレータイメージは `google_apis` ではなく AOSP（`default`）を使う。本アプリは GMS に依存しないため、軽量な AOSP イメージのほうが安定する
-
----
-
-## fork・新環境で再現する
-
-1. Secrets に `REWARD_SERVER_URL` を設定する。空のままでもビルドは通るが、チケット取得APIを触る経路が実行時に失敗するため VRT / E2E が通らない。
-2. `main` に一度 push して `upload_expected_image.yml` を走らせ、基準画像 artifact を作る。これが無いと `screenshot-comparison.yml` は基準画像のダウンロードで失敗する。
-3. 必須チェックを揃えるなら、`main` のブランチ保護に上記5件のチェック名を登録する。
-4. `@claude` を使うなら `CLAUDE_CODE_OAUTH_TOKEN`、debug APK を配布するなら `DEBUG_KEYSTORE_BASE64` を追加する。
-5. Renovate は GitHub App のインストールが別途必要（設定は `renovate.json5`）。
 
 ---
 
