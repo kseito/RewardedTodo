@@ -38,26 +38,6 @@
 
 ---
 
-## マージをブロックするチェック
-
-`main` のブランチ保護で必須チェックに設定されているのは以下の5件のみ。
-
-| 必須チェック名 | 実体 |
-|---|---|
-| `build` | `unit-test.yml` |
-| `Run Android Lint` | `android-lint.yml` |
-| `Run Detekt` | `detekt.yml` |
-| `Run Gitleaks` | `gitleaks.yml` |
-| `runner / suggester / spotless` | `reviewdog-suggester.yml` |
-
-`screenshot-comparison` / `maestro-e2e` / `vrt-coverage-check` は PR で実行されるが必須チェックには入っていないため、
-赤でもマージは機械的にはブロックされない。結果を見て判断する運用になっている。
-
-なお `main` は force push とブランチ削除を禁止し、管理者にも保護を適用する（`enforce_admins`）設定になっている。
-必須レビュー数は 0 で、レビュー承認はマージの条件になっていない。
-
----
-
 ## レビュー方針との対応
 
 [レビュー方針](review-policy.md) の「機械に任せる」表と、それを担保するワークフローの対応は以下の通り。
