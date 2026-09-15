@@ -1,23 +1,39 @@
-# ADR-XXXX: <決定の要約>
+---
+# MADR Minimal の front matter。任意項目は削除してよい。
+status: "proposed | rejected | accepted | deprecated | superseded by [ADR-0002](0002-example.md)"
+date: YYYY-MM-DD # 最後に更新した日
+decision-makers: 決定に関わった人
+---
 
-| 項目 | 内容 |
-|------|------|
-| ステータス | Proposed / Accepted / Superseded |
-| 決定日 | YYYY-MM-DD |
-| 関連 | （PR / Issue / 上書き元ADR があれば） |
+# <短いタイトル: 解いた課題と採った解決策がわかるもの>
 
-## 背景
+<!--
+本リポジトリのADRは MADR (Markdown Any Decision Records) の Minimal template に従う。
+https://adr.github.io/madr/
 
-何を決める必要があったか。前提となる状況・制約を1〜3文で。
+- ファイル名は `NNNN-title-with-dashes.md`（連番4桁 + 英小文字ケバブケース）
+- 見出し（Context and Problem Statement / Considered Options / Decision Outcome）は
+  MADR の英語表記をそのまま使い、本文は日本語で書く
+- 必要なら MADR の full template にある任意セクション
+  （`### Consequences`、`## Decision Drivers`、`## Pros and Cons of the Options` 等）を追加してよい
+-->
 
-## 決定
+## Context and Problem Statement
 
-どうすることにしたか。1〜2文で言い切る。
+何を決める必要があったか。前提となる状況・制約を2〜3文で。
+関連するIssue/PR・コード上の該当箇所へのリンクがあれば添える。
 
-## 理由
+## Considered Options
 
-なぜその選択にしたか。検討した代替案と、それを採らなかった理由を含める。
+* <選択肢1のタイトル>
+* <選択肢2のタイトル>
+* <選択肢3のタイトル>
 
-## 結果・トレードオフ
+## Decision Outcome
 
-この決定で受け入れたリスク・制約。再評価が必要になる条件（前提が崩れる条件）があれば書く。
+Chosen option: "<選択肢1のタイトル>", なぜならば<採用理由>。
+
+### Consequences <!-- 任意セクション。トレードオフや再評価条件があれば書く -->
+
+* 受け入れたリスク・制約
+* 再評価が必要になる条件（前提が崩れる条件）
