@@ -1,6 +1,6 @@
 # Todoist OAuth 用の公開ファイル
 
-TodoistのブラウザベースOAuth認証には、**アプリの外（HTTPSで公開されたドメイン）に置くファイル**が3つ必要になる。
+TodoistのブラウザベースOAuth認証には、**アプリの外（HTTPSで公開されたドメイン）に置くファイル**が4つ必要になる。
 このディレクトリはその配置用ファイルの原本で、実際の公開は `kseito/kseito.github.io` リポジトリへのコピーで行う。
 
 これらのファイルが公開されるまで、実機での認証は完走しない。
@@ -18,6 +18,7 @@ TodoistのブラウザベースOAuth認証には、**アプリの外（HTTPSで�
 | このリポジトリ | 公開先パス | 公開URL |
 |---|---|---|
 | `docs/oauth/rewardedtodo/oauth/client.json` | `rewardedtodo/oauth/client.json` | `https://kseito.github.io/rewardedtodo/oauth/client.json` |
+| `docs/oauth/rewardedtodo/oauth/logo.png` | `rewardedtodo/oauth/logo.png` | `https://kseito.github.io/rewardedtodo/oauth/logo.png` |
 | `docs/oauth/rewardedtodo/oauth/callback/index.html` | `rewardedtodo/oauth/callback/index.html` | `https://kseito.github.io/rewardedtodo/oauth/callback` |
 | `docs/oauth/well-known/assetlinks.json` | `.well-known/assetlinks.json` | `https://kseito.github.io/.well-known/assetlinks.json` |
 
@@ -26,6 +27,7 @@ TodoistのブラウザベースOAuth認証には、**アプリの外（HTTPSで�
 REWARDED_TODO=~/AndroidStudioProjects/RewardedTodo
 mkdir -p rewardedtodo/oauth/callback .well-known
 cp "$REWARDED_TODO/docs/oauth/rewardedtodo/oauth/client.json"          rewardedtodo/oauth/client.json
+cp "$REWARDED_TODO/docs/oauth/rewardedtodo/oauth/logo.png"             rewardedtodo/oauth/logo.png
 cp "$REWARDED_TODO/docs/oauth/rewardedtodo/oauth/callback/index.html"  rewardedtodo/oauth/callback/index.html
 cp "$REWARDED_TODO/docs/oauth/well-known/assetlinks.json"              .well-known/assetlinks.json
 ```
@@ -40,6 +42,9 @@ cp "$REWARDED_TODO/docs/oauth/well-known/assetlinks.json"              .well-kno
 curl -sS -w "\n%{http_code}\n" https://kseito.github.io/rewardedtodo/oauth/client.json
 curl -sS -w "\n%{http_code}\n" https://kseito.github.io/.well-known/assetlinks.json
 curl -sS -o /dev/null -w "%{http_code}\n" https://kseito.github.io/rewardedtodo/oauth/callback
+
+# ロゴは 200 かつ Content-Type が image/png であること
+curl -sS -o /dev/null -w "%{http_code} %{content_type}\n" https://kseito.github.io/rewardedtodo/oauth/logo.png
 
 # Googleのアセットリンク検証APIでも確認できる
 curl -sS "https://digitalassetlinks.googleapis.com/v1/statements:list\

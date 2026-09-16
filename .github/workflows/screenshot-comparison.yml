@@ -21,7 +21,7 @@ jobs:
         uses: ./.github/actions/setup-gradle
 
       - name: Setup Android SDK
-        uses: android-actions/setup-android@40fd30fb8d7440372e1316f5d1809ec01dcd3699 # v4.0.1
+        uses: ./.github/actions/setup-android
 
       - name: Download reference images
         uses: dawidd6/action-download-artifact@d63b86af1b34672e53c440b1b83979861906bad7 # v24
