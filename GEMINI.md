@@ -62,6 +62,7 @@ The project uses 34+ modules organized by domain:
 新しい機能を実装する際は、実装前に以下のドキュメントを読んでください：
 
 - `docs/domain-model.md` - ドメインモデルとビジネスルール
+- `docs/external-integration.md` - 外部システム（Todoist / Reward Server）との契約
 - `docs/how-to-add-new-feature.md` - 機能追加の手順（レイヤー順・DI登録まで）
 - `docs/module-dependency.md` - モジュール依存関係と禁止ルール
 - `docs/di-setup.md` - Hilt DI構成とファイル配置
