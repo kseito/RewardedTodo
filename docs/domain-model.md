@@ -4,6 +4,7 @@
 
 RewardedTodoは「Todoを完了するとチケット（ポイント）を獲得し、チケットを使って報酬の抽選ができる」アプリ。
 Todoの管理にはTodoist APIを活用しており、チケットの加算はサーバーサイドのWebhookが行う。
+外部システムとの契約（エンドポイント・認証・Webhookの仕様）は [external-integration.md](external-integration.md) を参照。
 
 ---
 
