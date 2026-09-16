@@ -71,5 +71,5 @@ The project uses 34+ modules organized by domain:
 - **Dependencies**: Use version catalog (`gradle/libs.versions.toml`) for dependency management
 - **Architecture**: Follow strict layer separation - domain layer has no Android dependencies
 - **Code Style**: Spotless enforces Kotlin code formatting
-- **Branch Strategy**: Feature branches from main. `stg-release/*` によるstaging配信は廃止済み（staging buildType / 署名設定もリポジトリには存在しない）
+- **Branch Strategy**: Feature branches from main
 - **CI/CD**: GitHub Actions for testing and screenshot comparison

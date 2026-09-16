@@ -66,7 +66,7 @@ The project uses 17 modules organized by domain (see `settings.gradle.kts` for t
 - **Dependencies**: Use version catalog (`gradle/libs.versions.toml`) for dependency management
 - **Architecture**: Follow strict layer separation - domain layer has no Android dependencies
 - **Code Style**: Spotless enforces Kotlin code formatting
-- **Branch Strategy**: GitHub Flow - feature branches from main. `stg-release/*` によるstaging配信は廃止済み（staging buildType / 署名設定もリポジトリには存在しない）
+- **Branch Strategy**: GitHub Flow - feature branches from main
 - **CI/CD**: GitHub Actions for testing and screenshot comparison
 
 ## 開発プロセス
@@ -86,7 +86,7 @@ The project uses 17 modules organized by domain (see `settings.gradle.kts` for t
 - `docs/how-to-add-new-feature.md` - 機能追加の手順（レイヤー順・DI登録まで）
 - `docs/module-dependency.md` - モジュール依存関係と禁止ルール
 - `docs/di-setup.md` - Hilt DI構成とファイル配置
-- `docs/adr/` - 設計判断の記録（Architecture Decision Records）
+- `docs/adr/` - 設計判断の記録（Architecture Decision Records）。[MADR](https://adr.github.io/madr/) の Minimal template に従って書く（雛形: `docs/adr/_template.md`、ファイル名: `NNNN-title-with-dashes.md`）
 
 ## Naming Conventions
 
