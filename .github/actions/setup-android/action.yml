@@ -3,8 +3,6 @@ description: 'Setup the Android SDK with default configuration for this project'
 
 inputs:
   packages:
-    # setup-android のデフォルト値 `tools platform-tools` に含まれる `tools` は
-    # SDK リポジトリから取得できず sdkmanager が失敗するため、platform-tools のみを既定とする。
     description: 'Android SDK packages to install'
     required: false
     default: 'platform-tools'
