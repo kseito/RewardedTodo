@@ -12,7 +12,7 @@
 | ユニットテスト | domain / application / data / feature の各ロジック | JVM（一部 Robolectric） | `unit-test.yml`（PR時） |
 | VRT（Roborazzi） | Compose UI の見た目 | JVM + Robolectric | `screenshot-comparison.yml`（PR時） |
 | VRTカバレッジ | VRT が UI コードをどれだけ網羅しているか | JVM + JaCoCo | `vrt-coverage-check.yml`（PR時）/ `vrt-coverage.yml`（週次） |
-| E2E（Maestro） | 実機/エミュレータ上の主要フロー | エミュレータ | 未CI化（`maestro-tests/` にフロー整備済み） |
+| E2E（Maestro） | 実機/エミュレータ上の主要フロー | エミュレータ | `maestro-e2e.yml`（PR時） |
 
 ---
 
@@ -214,5 +214,5 @@ VRT で描画されないコードはノイズになるため除外済み：
 
 ## E2E テスト（Maestro）
 
-主要ユーザーフローの E2E テストは `maestro-tests/` に YAML フローとして整備済み（CI 化は未対応）。
+主要ユーザーフローの E2E テストは `maestro-tests/` に YAML フローとして整備済みで、PR 時に `maestro-e2e.yml` がエミュレータ上で一括実行する（詳細は [CI/CD ワークフロー一覧](ci-cd.md)）。
 作成・実行方法は `/maestro-e2e` スキルを参照。
