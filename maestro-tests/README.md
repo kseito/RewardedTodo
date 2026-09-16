@@ -68,6 +68,14 @@ maestro test maestro-tests/add-todo-flow.yaml
 - **Todoist同期（Pull-to-Refresh）**: 実際のTodoistアカウントとネットワークが必要なため対象外
 - **タブ切り替え**: 各フロー内でTodo⇔Reward間の遷移を暗黙的に検証済み
 
+## フロー命名規約
+
+- ファイル名は小文字のkebab-caseで、必ず `-flow.yaml` を末尾に付ける
+- `-flow` より前には、検証するユーザー操作またはシナリオを簡潔に表す名前を付ける
+- 通常フローの派生ケースは、対象フロー名の後ろに条件を追加する
+
+例: `add-todo-flow.yaml`、`batch-lottery-insufficient-tickets-flow.yaml`、`keep-repeat-reward-flow.yaml`
+
 ## テスト作成時の注意
 
 - **セレクタはテキスト/contentDescription優先**。座標（`point`）指定は画面サイズ・解像度に依存してFlakyになるため使わない
