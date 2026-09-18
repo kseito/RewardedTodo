@@ -1,6 +1,6 @@
 ---
 name: grilling
-description: Grill the user relentlessly about a plan, decision, or idea. Use when the user wants to stress-test their thinking, or uses any 'grill' trigger phrases.
+description: Stress-test a plan, design decision, or idea through relentless rounds of questions. Invoke manually with /grilling.
 disable-model-invocation: true
 ---
 
