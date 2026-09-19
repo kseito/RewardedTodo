@@ -1,0 +1,13 @@
+{
+  "priority": 10,
+  "request": {
+    "method": "GET",
+    "urlPath": "/todoist/api/v1/tasks/filter"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "results": []
+    }
+  }
+}

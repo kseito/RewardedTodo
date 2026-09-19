@@ -1,0 +1,12 @@
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/reward/api/users/me"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "user_id": "mock-user-id"
+    }
+  }
+}
