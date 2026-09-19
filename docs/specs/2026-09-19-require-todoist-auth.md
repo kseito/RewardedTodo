@@ -5,7 +5,7 @@
 | ステータス | Draft |
 | 作成日 | 2026-09-19 |
 | ブランチ | feature/require-todoist-auth |
-| 関連Issue/PR | 前提PR: #927 (E2E用のモックサーバーを追加) |
+| 関連Issue/PR | Issue: #929 / 前提PR: #927 (E2E用のモックサーバーを追加) |
 
 ## 1. 背景・目的
 
