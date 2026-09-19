@@ -44,7 +44,10 @@ jobs:
         run: echo "reward.server.url=${{ secrets.REWARD_SERVER_URL }}" >> local.properties
 
       - name: Build debug APK
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleDebug -PuseMockServer=true
+
+      - name: Start WireMock
+        run: bash .github/scripts/start-wiremock.sh
 
       - name: Install Maestro CLI
         run: |
@@ -69,7 +72,7 @@ jobs:
           # 複数行のリトライ処理は別スクリプトに切り出して1行で呼び出す。
           script: |
             adb shell am get-config | grep -i locale || true
-            ./gradlew installDebug
+            ./gradlew installDebug -PuseMockServer=true
             bash .github/scripts/run-maestro-e2e.sh
 
       - name: Upload Maestro debug output
