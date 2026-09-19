@@ -40,6 +40,7 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "TODOIST_URL", "\"https://todoist.com\"")
+        buildConfigField("boolean", "USE_MOCK_SERVER", useMockServer.toString())
         buildConfigField("String", "TODOIST_API_URL", "\"$todoistApiUrl\"")
         buildConfigField("String", "REWARD_SERVER_URL", "\"$rewardServerUrl\"")
 
@@ -115,6 +116,7 @@ android {
         getByName("test") {
             java.srcDirs("src/test/kotlin")
         }
+
     }
     namespace = "jp.kztproject.rewardedtodo"
     testOptions {
@@ -202,3 +204,4 @@ dependencies {
 roborazzi {
     outputDir.set(file("screenshots"))
 }
+
