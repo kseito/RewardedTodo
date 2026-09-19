@@ -4,6 +4,7 @@ tags:
   - rewardedtodo
   - lottery
 ---
+- runScript: stubs/earn-ten-tickets.js
 - clearState
 - launchApp
 
@@ -11,6 +12,8 @@ tags:
 - extendedWaitUntil:
     visible: "Reward"
     timeout: 180000
+
+- runFlow: subflows/authenticate.yaml
 
 # Navigate to Reward tab
 - tapOn:
@@ -66,44 +69,8 @@ tags:
     visible: "Test Reward B"
     timeout: 15000
 
-# Navigate to Todo tab to earn tickets
-- tapOn:
-    text: "Todo"
-
-# Wait for Todo tab to load
-- assertVisible:
-    text: "Add"
-
-# Add a todo with many tickets at once using NumberPicker
-- tapOn:
-    text: "Add"
-- assertVisible: "Title"
-- tapOn: "Title"
-- inputText: "Earn Tickets"
-- hideKeyboard
-
-# Swipe NumberPicker to set 10+ tickets
-- swipe:
-    from:
-      text: "ticket_number_picker"
-    direction: UP
-    duration: 500
-
-- tapOn: "Save"
-
-# Wait for todo to appear
-- extendedWaitUntil:
-    visible: "Earn Tickets"
-    timeout: 3000
-
-# Complete the todo by tapping checkbox to earn tickets
-- tapOn:
-    text: "todo_checkbox"
-    index: 0
-
-# Navigate back to Reward tab
-- tapOn:
-    text: "Reward"
+# フェイクが配信したタスクを完了してチケットを得る
+- runFlow: subflows/earn-tickets.yaml
 
 # Wait for tickets to be displayed
 - extendedWaitUntil:

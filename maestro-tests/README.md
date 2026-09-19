@@ -12,8 +12,11 @@ setting 系フローが失敗する。
 # 英語ロケールのエミュレータを起動（Maestro管理のエミュレータを作成・起動）
 maestro start-device --platform android --device-locale en_US
 
-# デバッグアプリをインストール
-./gradlew installDebug
+# フェイクバックエンドを起動（詳細は wiremock/README.md）
+bash .github/scripts/start-wiremock.sh
+
+# フェイクを向いたデバッグアプリをインストール
+./gradlew installDebug -PuseMockServer=true
 
 # 全フロー実行
 maestro test maestro-tests/
@@ -21,6 +24,10 @@ maestro test maestro-tests/
 # 単一フロー実行
 maestro test maestro-tests/add-todo-flow.yaml
 ```
+
+各フローはTodoist連携済みを前提とする。`-PuseMockServer=true` でビルドすると認可がブラウザを介さず完了するため、`subflows/authenticate.yaml` を呼ぶだけで連携済みの状態を作れる。
+
+`subflows/` と `stubs/` はフォルダ指定の実行対象に含まれない（Maestroはサブフォルダを再帰しない）。
 
 英語ロケールであれば手元のAVDでもよい（`adb shell am get-config` で `en-rUS` を確認できる）。
 
@@ -36,7 +43,7 @@ maestro test maestro-tests/add-todo-flow.yaml
 | `add-todo-flow` | Todoを追加できる |
 | `add-todo-with-multiple-tickets-flow` | チケット枚数を増やしてTodoを追加できる |
 | `edit-todo-flow` | 既存Todoのタイトルとチケット枚数を変更できる |
-| `complete-todo-flow` | Todo完了でリストから消え、チケットを獲得する |
+| `complete-todo-flow` | Todoist由来のTodoを完了するとリストから消え、サーバーがチケットを加算する |
 | `delete-todo-flow` | Todoを削除できる |
 
 ### Reward
