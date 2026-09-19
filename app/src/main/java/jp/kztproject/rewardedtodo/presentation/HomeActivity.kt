@@ -14,7 +14,7 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.common.ui.theme.RewardedTodoScheme
-import jp.kztproject.rewardedtodo.presentation.auth.AuthTabTodoistAuthTabLauncher
+import jp.kztproject.rewardedtodo.presentation.auth.createTodoistAuthTabLauncher
 import jp.kztproject.rewardedtodo.feature.setting.SettingRoute
 import jp.kztproject.rewardedtodo.feature.setting.settingScreen
 
@@ -22,7 +22,7 @@ import jp.kztproject.rewardedtodo.feature.setting.settingScreen
 class HomeActivity : ComponentActivity() {
 
     // ActivityResultLauncherの登録はSTARTED以降だと例外になるため、フィールド初期化時に生成する
-    private val todoistAuthTabLauncher = AuthTabTodoistAuthTabLauncher(this)
+    private val todoistAuthTabLauncher = createTodoistAuthTabLauncher(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
