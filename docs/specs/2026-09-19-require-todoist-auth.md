@@ -5,7 +5,7 @@
 | ステータス | Draft |
 | 作成日 | 2026-09-19 |
 | ブランチ | feature/require-todoist-auth |
-| 関連Issue/PR | Issue: #929 / 前提PR: #927 (E2E用のモックサーバーを追加) |
+| 関連Issue/PR | Issue: #929 / 前提PR: #927 (E2E用のフェイクバックエンドを追加) |
 
 ## 1. 背景・目的
 
@@ -27,7 +27,7 @@ Todoist認証を必須にし、未連携では何も操作できないように�
 
 - リリースビルドに認証をスキップする導線を置かない
 - ローカルフォールバック（未連携時にローカルでチケットを管理する仕組み）を削除する。`docs/specs/2026-05-30-local-ticket-fallback.md` は無効になる
-- E2Eはモックサーバー（`test:mockserver`, PR #927）経由で認証を通す。CIのエミュレータにはAuth Tab要件のChrome 137+が存在しないため、実ブラウザによる認可はE2Eの対象外とする
+- E2Eは別プロセスのフェイクバックエンド（WireMock, PR #927）を相手に動かす。CIのエミュレータにはAuth Tab要件のChrome 137+が存在しないため、実ブラウザによる認可はE2Eの対象外とする
 
 ## 3. 画面・UX
 
@@ -130,7 +130,7 @@ Todoist認証を必須にし、未連携では何も操作できないように�
 |------|------|
 | ユニットテスト | 新規: `AuthViewModel`（認可URL発行 / Auth Tab結果の各分岐 / エラーマッピング）、`ClearLocalDataInteractor`（3種のデータが消えること、失敗しても例外を投げないこと）<br>更新: `CompleteTodoistAuthInteractorTest`（削除が呼ばれること）、`SettingViewModelTest`（ログアウトのみに縮小）、`TodoListViewModelTest`（失効時に `result` へ例外が載ること）<br>削除: `TicketRepositoryTest`, `LocalTicketRepositoryTest` |
 | Roborazzi | `AuthScreen` に `@Preview` を3つ追加（初期 / ローディング / エラー）。`SettingScreen` の未接続系Preview 2つを削除。`detekt-rules` の `NoPreviewNameRule` に従い `name` は付けない |
-| Maestro E2E | 新規: 認証ゲートが表示されることを検証するフロー1本<br>更新: 既存13フローの冒頭にモックサーバー経由の認証プロローグを追加<br>`maestro-e2e.yml` に `-PuseMockServer=true` でのビルドと `:test:mockserver:run` の起動を追加 |
+| Maestro E2E | 新規: 認証ゲートが表示されることを検証するフロー1本<br>更新: 既存13フローに認証プロローグを追加し、Todo系・抽選系はフェイクが返すタスクを使う形へ書き換える（後述）<br>`maestro-e2e.yml` に `-PuseMockServer=true` でのビルドと `start-wiremock.sh` の実行を追加 |
 
 アサーションはKotestのmatcher（`shouldBe` 等）に統一する。
 
@@ -143,18 +143,53 @@ CIのエミュレータを実測した結果、Auth Tabの要件（Chrome 137+�
 | `target: default`（現行CI） | 未インストール | 0件 |
 | `target: google_apis` | 113.0.5672.136 | 1件 |
 
-このため、debugソースセットに `MockTodoistAuthTabLauncher` を置き、`TodoistAuthTabLauncher` の実装を差し替える。認可URLから `state` を取り出して `https://kseito.github.io/rewardedtodo/oauth/callback?code=dummy&state=<state>` を合成し、ブラウザを介さずに `Succeeded` を返す。トークン交換以降はモックサーバーが応答するため、`CompleteTodoistAuthInteractor` からゲート遷移、各機能までの経路はE2Eで検証できる。
+このため、debugソースセットに `MockTodoistAuthTabLauncher` を置き、`TodoistAuthTabLauncher` の実装を差し替える。認可URLから `state` を取り出して `https://kseito.github.io/rewardedtodo/oauth/callback?code=dummy&state=<state>` を合成し、ブラウザを介さずに `Succeeded` を返す。トークン交換以降はフェイクバックエンドが応答するため、`CompleteTodoistAuthInteractor` からゲート遷移、各機能までの経路はE2Eで検証できる。
 
 Auth Tabのブラウザ往復のみ手動確認の対象として残る。
+
+### 既存フローの書き換え
+
+現在のE2Eフローは、チケットを**アプリ内で作ったTodoを完了して**稼いでいる。
+
+```
+complete-todo-flow:   Todo作成 → 完了 → "1 tickets"
+single-lottery-flow:  Todo作成 → 完了 → "1 tickets" → 単発抽選 → "0 tickets"
+```
+
+この経路は本変更で成立しなくなる。アプリ内で作ったTodoは `todoistId` を持たないため `TodoRepository.complete()` がTodoist APIを呼ばず、`NetworkTicketRepository.addTicket()` は no-op（実サーバーではTodoist Webhookが加算する）だからである。つまりこれらのフローは、削除される振る舞いを検証している。
+
+書き換え後はこうなる。
+
+1. フェイクがタスク一覧を返す → アプリが同期してTodoが並ぶ
+2. 完了すると、アプリが実際に `POST /todoist/api/v1/tasks/{id}/close` を送る
+3. フェイクがWebhookの代わりにポイントを加算する
+4. Reward画面に反映され、抽選で消費できる
+
+本番と同じ経路を通るため、現在より忠実なE2Eになる。
+
+### フェイクバックエンドの使い方
+
+PR #927 で用意したWireMockを別プロセスで起動する。スタブは二層構成になっている。
+
+| 層 | 置き場所 | 効き方 |
+|---|---|---|
+| 既定 | `maestro-tests/wiremock/mappings/*.json` | 起動時に読み込まれ全フローに効く。タスク一覧は空、ポイントは0、消費は422 |
+| フロー固有 | `maestro-tests/stubs/*.js` | 冒頭の `runScript` で登録し、既定を上書きする |
+
+既定スタブは `priority: 10` で優先度を下げてあるため、フローが登録したスタブが勝ち、その状態を抜けると既定へ戻る。バックエンドを気にしないフロー（報酬のCRUDなど）はスタブを書かずに動く。
+
+状態の変化はWireMockのScenarioで表現する。ポイント残数の増減にカスタム拡張は不要であることを実機で確認済み。
+
+`/__admin/requests/count` でリクエストを検証できるため、「チェックを押した結果として実際に `close` が送られたか」をフローからassertする。
 
 ## 8. 未決事項・リスク
 
 - `IAccountCacheRepository` の配置を `domain/reward` と想定しているが、`docs/module-dependency.md` の依存方向と突き合わせて実装時に調整する可能性がある
-- `complete-todo-flow` は「Todo完了でチケットを獲得する」を検証しているが、ローカル作成のTodoは `todoistId` を持たずTodoist APIを呼ばないため、モックサーバーがポイント加算を検知できない。管理API（`POST /__admin/points`）で事前条件を組み立てる必要がある
+- 「アプリ内でTodoを作る」導線は認証必須化後もUIとして残るが、そのTodoを完了してもチケットは得られない（サーバーがTodoist経由でしか加算しないため）。この導線自体を残すかは本変更の対象外とし、別途検討する
 - ADRは作成しない。未連携フォールバックを持たない判断の根拠はPR説明文に残す
 
 ## 9. ドキュメント更新
 
 - 新規: 本仕様書
 - 削除: `docs/specs/2026-05-30-local-ticket-fallback.md`
-- 更新: `docs/module-dependency.md`（`feature:auth` と `test:mockserver` の追加）、`docs/domain-model.md`（連携必須化とチケット管理の変更）、`maestro-tests/README.md`（モックサーバー前提の実行手順）
+- 更新: `docs/module-dependency.md`（`feature:auth` の追加）、`docs/domain-model.md`（連携必須化とチケット管理の変更）、`maestro-tests/README.md`（フェイクバックエンド前提の実行手順とフロー一覧の更新）
