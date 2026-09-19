@@ -53,6 +53,7 @@ Detailed documentation is available in the `docs/` directory:
 
 - [`docs/setup.md`](docs/setup.md) - Development environment setup guide
 - [`docs/domain-model.md`](docs/domain-model.md) - Domain model and business rules
+- [`docs/external-integration.md`](docs/external-integration.md) - Contracts with external systems (Todoist / Reward Server)
 - [`docs/how-to-add-new-feature.md`](docs/how-to-add-new-feature.md) - Step-by-step guide for adding new use cases
 - [`docs/module-dependency.md`](docs/module-dependency.md) - Module dependencies and forbidden rules
 - [`docs/di-setup.md`](docs/di-setup.md) - Hilt DI structure and file layout
