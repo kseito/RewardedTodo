@@ -1,6 +1,6 @@
 appId: jp.kztproject.rewardedtodo.debug
 ---
-# Todoist連携を済ませる。`-PuseMockServer=true` でビルドしたアプリでは、
+# Todoist連携を済ませる。`e2e` ビルドタイプでビルドしたアプリでは、
 # 認可はブラウザを介さずMockTodoistAuthTabLauncherが即座に成功を返す。
 #
 # 連携の入口は認証必須化(#929)で設定画面から起動時の認証画面へ移る。
