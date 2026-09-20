@@ -17,14 +17,8 @@ if (localPropertiesFile.exists()) {
     localProperties.load(localPropertiesFile.inputStream())
 }
 
-val useMockServer = providers.gradleProperty("useMockServer").orNull.toBoolean()
+// E2E用のフェイクバックエンド。エミュレータから見たホストのアドレス。
 val mockServerUrl = "http://10.0.2.2:8080"
-
-val todoistApiUrl = if (useMockServer) "$mockServerUrl/todoist/" else "https://api.todoist.com/"
-val todoistAuthorizeUrl =
-    if (useMockServer) "$mockServerUrl/todoist/oauth/authorize" else "https://todoist.com/oauth/authorize"
-val rewardServerUrl =
-    if (useMockServer) "$mockServerUrl/reward" else localProperties.getProperty("reward.server.url", "")
 
 android {
     //noinspection GradleDependency
@@ -40,13 +34,16 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "TODOIST_URL", "\"https://todoist.com\"")
-        buildConfigField("boolean", "USE_MOCK_SERVER", useMockServer.toString())
-        buildConfigField("String", "TODOIST_API_URL", "\"$todoistApiUrl\"")
-        buildConfigField("String", "REWARD_SERVER_URL", "\"$rewardServerUrl\"")
+        buildConfigField("String", "TODOIST_API_URL", "\"https://api.todoist.com/\"")
+        buildConfigField(
+            "String",
+            "REWARD_SERVER_URL",
+            "\"${localProperties.getProperty("reward.server.url", "")}\"",
+        )
 
         // Todoist OAuth (公開クライアント / PKCE)。client_secretは持たないため、以下はいずれも秘匿情報ではない。
         // client_idはOAuth Client ID Metadata DocumentのURLそのもの。
-        buildConfigField("String", "TODOIST_AUTHORIZE_URL", "\"$todoistAuthorizeUrl\"")
+        buildConfigField("String", "TODOIST_AUTHORIZE_URL", "\"https://todoist.com/oauth/authorize\"")
         buildConfigField(
             "String",
             "TODOIST_CLIENT_ID",
@@ -80,6 +77,15 @@ android {
     buildTypes {
         getByName("debug") {
             applicationIdSuffix = ".debug"
+        }
+        // E2E専用。フェイクバックエンドを向き、認可をブラウザ無しで完了させる実装を持つ。
+        // debugとは別のビルドタイプにすることで、配布されるdebug APKにモックが入らない。
+        create("e2e") {
+            initWith(getByName("debug"))
+            matchingFallbacks += "debug"
+            buildConfigField("String", "TODOIST_API_URL", "\"$mockServerUrl/todoist/\"")
+            buildConfigField("String", "TODOIST_AUTHORIZE_URL", "\"$mockServerUrl/todoist/oauth/authorize\"")
+            buildConfigField("String", "REWARD_SERVER_URL", "\"$mockServerUrl/reward\"")
         }
         getByName("release") {
             isMinifyEnabled = true
