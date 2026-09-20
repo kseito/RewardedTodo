@@ -19,7 +19,7 @@ appId: jp.kztproject.rewardedtodo.debug
 # プルリフレッシュで再取得する。完了通知がサーバーへ届くのを待つ必要があるため、
 # 残数が増えるまで引き直しを繰り返す。
 - repeat:
-    times: 10
+    times: 3
     while:
       visible: "0 tickets"
     commands:
