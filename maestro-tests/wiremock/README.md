@@ -19,11 +19,13 @@ bash .github/scripts/start-wiremock.sh
 | エミュレータ上のアプリ | `http://10.0.2.2:8080` |
 | Maestroのスクリプト | `http://localhost:8080` |
 
-アプリをこのサーバーに向けるには `-PuseMockServer=true` を付けてビルドする。
+アプリをこのサーバーに向けるには `e2e` ビルドタイプを使う。
 
 ```bash
-./gradlew installDebug -PuseMockServer=true
+./gradlew installE2e
 ```
+
+URLは `app/build.gradle.kts` の `e2e` ビルドタイプで定義している。`debug` / `release` は本番のURLを向く。
 
 ## パスの割り当て
 

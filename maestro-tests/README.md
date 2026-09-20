@@ -15,8 +15,8 @@ maestro start-device --platform android --device-locale en_US
 # フェイクバックエンドを起動（詳細は wiremock/README.md）
 bash .github/scripts/start-wiremock.sh
 
-# フェイクを向いたデバッグアプリをインストール
-./gradlew installDebug -PuseMockServer=true
+# E2E用ビルドをインストール（フェイクを向き、認可をブラウザ無しで完了する）
+./gradlew installE2e
 
 # 全フロー実行
 maestro test maestro-tests/
@@ -25,7 +25,9 @@ maestro test maestro-tests/
 maestro test maestro-tests/add-todo-flow.yaml
 ```
 
-各フローはTodoist連携済みを前提とする。`-PuseMockServer=true` でビルドすると認可がブラウザを介さず完了するため、`subflows/authenticate.yaml` を呼ぶだけで連携済みの状態を作れる。
+各フローはTodoist連携済みを前提とする。`e2e` ビルドタイプでは認可がブラウザを介さず完了するため、`subflows/authenticate.yaml` を呼ぶだけで連携済みの状態を作れる。
+
+このモック実装は `app/src/e2e/` にしか存在しないため、配布される `debug` / `release` のAPKには含まれない。
 
 `subflows/` と `stubs/` はフォルダ指定の実行対象に含まれない（Maestroはサブフォルダを再帰しない）。
 
