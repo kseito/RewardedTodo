@@ -111,6 +111,18 @@ Todoist認証を必須にし、未連携では何も操作できないように�
 - `GetValidAccessTokenUseCase` が null を返したら Interceptor が `TodoistUnauthorizedException` を投げる
 - 対象はTodoist APIのみ。Rewardサーバー側は既存の `withRetryOn401` のままとする
 
+### チケット残数の再取得
+
+ローカルフォールバックの削除にあわせて、チケット残数の更新契機を見直す必要がある。
+
+`NetworkTicketRepository.getNumberOfTicket()` はワンショットのFlowで、`RewardListViewModel.rewardPoint` は `SharingStarted.WhileSubscribed(5000)` で購読している。そのため **Todoタブでタスクを完了してすぐReward タブへ戻ると、残数が再取得されず古い値が表示される**。5秒以上離れて購読が切れた場合か、プルリフレッシュしたときだけ最新化される。
+
+`LocalTicketRepository` ではDataStoreのFlowが変更のたびに再emitするため、この差は露見していなかった。ローカルフォールバックを削除すると、ネットワーク経由の挙動が唯一の挙動になる。ユーザーから見ると「タスクを完了したのにチケットが増えていない」画面になる。
+
+`RewardListViewModel` には抽選後に `pointRefreshTrigger` を発火させる仕組みが既にある。同じトリガーをReward画面の表示時にも発火させるのが素直な修正。
+
+この挙動はE2Eをフェイクバックエンド相手に動かして判明した（PR #927）。現在のE2Eはプルリフレッシュを挟んで回避しているため、修正後はその回避ステップ（`maestro-tests/subflows/earn-tickets.yaml`）を外す。
+
 ## 6. 受け入れ条件 (Acceptance Criteria)
 
 - [ ] 未連携の状態でアプリを起動すると認証画面が表示され、Todo / Reward / 設定のいずれにも到達できない
@@ -123,6 +135,7 @@ Todoist認証を必須にし、未連携では何も操作できないように�
 - [ ] ログアウト後に再認証してもReward一覧は残っている
 - [ ] 未連携状態でチケットを取得・消費する経路がコード上に存在しない（`LocalTicketRepository` が削除されている）
 - [ ] トークンが失効した状態でTodo一覧を更新すると、認証画面へ戻らずSnackbarが表示され、「設定を開く」で設定画面へ遷移できる
+- [ ] Todoタブでタスクを完了した直後にReward タブへ切り替えると、プルリフレッシュせずにチケット残数が増えている
 
 ## 7. テスト方針
 
@@ -130,7 +143,7 @@ Todoist認証を必須にし、未連携では何も操作できないように�
 |------|------|
 | ユニットテスト | 新規: `AuthViewModel`（認可URL発行 / Auth Tab結果の各分岐 / エラーマッピング）、`ClearLocalDataInteractor`（3種のデータが消えること、失敗しても例外を投げないこと）<br>更新: `CompleteTodoistAuthInteractorTest`（削除が呼ばれること）、`SettingViewModelTest`（ログアウトのみに縮小）、`TodoListViewModelTest`（失効時に `result` へ例外が載ること）<br>削除: `TicketRepositoryTest`, `LocalTicketRepositoryTest` |
 | Roborazzi | `AuthScreen` に `@Preview` を3つ追加（初期 / ローディング / エラー）。`SettingScreen` の未接続系Preview 2つを削除。`detekt-rules` の `NoPreviewNameRule` に従い `name` は付けない |
-| Maestro E2E | 新規: 認証ゲートが表示されることを検証するフロー1本<br>更新: 既存13フローに認証プロローグを追加し、Todo系・抽選系はフェイクが返すタスクを使う形へ書き換える（後述）<br>`maestro-e2e.yml` に `-PuseMockServer=true` でのビルドと `start-wiremock.sh` の実行を追加 |
+| Maestro E2E | 新規: 認証ゲートが表示されることを検証するフロー1本<br>更新: 既存13フローに認証プロローグを追加し、Todo系・抽選系はフェイクが返すタスクを使う形へ書き換える（後述）<br>`maestro-e2e.yml` に `-PuseMockServer=true` でのビルドと `start-wiremock.sh` の実行を追加<br>チケット残数の再取得を直したら `subflows/earn-tickets.yaml` のプルリフレッシュを外す |
 
 アサーションはKotestのmatcher（`shouldBe` 等）に統一する。
 
