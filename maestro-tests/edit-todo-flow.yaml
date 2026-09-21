@@ -8,10 +8,6 @@ tags:
 - launchApp
 
 # Wait for the initial screen to finish rendering; cold start/JIT is slow on CI
-- extendedWaitUntil:
-    visible: "Reward"
-    timeout: 180000
-
 - runFlow: subflows/authenticate.yaml
 
 # Add a todo to edit
