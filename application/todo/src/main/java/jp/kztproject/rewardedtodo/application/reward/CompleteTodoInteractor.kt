@@ -12,8 +12,7 @@ class CompleteTodoInteractor @Inject constructor(
 
     override suspend fun execute(todo: Todo) {
         todoRepository.complete(todo)
-        // Todoist未連携時はローカルへ加算、連携時はNetworkTicketRepositoryがno-op（サーバWebhook加算）。
-        // 振り分けは ITicketRepository の実装である TicketRepository が担う。
+        // 加算はサーバー側のTodoist Webhookが行うため、アプリからの呼び出しは何もしない。
         ticketRepository.addTicket(todo.numberOfTicketsObtained)
     }
 }

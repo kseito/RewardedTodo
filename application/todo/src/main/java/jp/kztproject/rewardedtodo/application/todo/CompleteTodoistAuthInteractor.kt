@@ -13,6 +13,7 @@ class CompleteTodoistAuthInteractor @Inject constructor(
     private val authRepository: ITodoistAuthRepository,
     private val authSessionStore: TodoistAuthSessionStore,
     private val credentialRepository: ITodoistCredentialRepository,
+    private val clearLocalDataUseCase: ClearLocalDataUseCase,
 ) : CompleteTodoistAuthUseCase {
 
     override suspend fun execute(redirectUri: String): Result<Unit> {
@@ -41,6 +42,9 @@ class CompleteTodoistAuthInteractor @Inject constructor(
 
         return authRepository.exchangeCodeForCredential(code, session.codeVerifier)
             .mapCatching { credential ->
+                // クレデンシャルを保存する前に消す。保存した時点で連携済みとみなして同期が走るため、
+                // 後から消すと取り込んだばかりのTodoまで巻き込む
+                clearLocalDataUseCase.execute()
                 credentialRepository.saveCredential(credential)
                 // 認可コードもcode_verifierも使い切りのため、成功したら必ず破棄する
                 authSessionStore.clear()
