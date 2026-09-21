@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="auth_app_name">RewardedTodo</string>
+    <string name="auth_description">Todoistのタスクを片付けると抽選券がたまり、自分で決めたごほうびが当たります。まずはTodoistと連携してください。</string>
+    <string name="auth_connect_button">Todoistと連携</string>
+
+    <!-- Error messages -->
+    <string name="error_auth_canceled">認証をキャンセルしました</string>
+    <string name="error_auth_verification_failed">リダイレクトを検証できませんでした。もう一度お試しください。</string>
+    <string name="error_auth_state_mismatch">認証を検証できませんでした。もう一度お試しください。</string>
+    <string name="error_auth_authorization_failed">Todoistが認証を拒否しました</string>
+    <string name="error_auth_exchange_failed">アクセストークンを取得できませんでした</string>
+    <string name="error_auth_tab_unsupported">この端末のブラウザはこのログイン方法に対応していません。Chromeを更新してください。</string>
+    <string name="error_auth_unknown">Todoistとの連携に失敗しました</string>
+</resources>
