@@ -11,6 +11,7 @@ dependencies {
 
     implementation(project(path = ":domain:reward"))
     implementation(project(path = ":domain:todo"))
+    implementation(libs.timber)
 
     implementation(libs.kotlin.stdlib)
 
