@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| ステータス | Draft |
+| ステータス | Implemented |
 | 作成日 | 2026-09-19 |
 | ブランチ | feature/require-todoist-auth |
 | 関連Issue/PR | Issue: #929 / 前提PR: #927 (E2E用のフェイクバックエンドを追加) |
