@@ -1,4 +1,4 @@
-package jp.kztproject.rewardedtodo.feature.setting
+package jp.kztproject.rewardedtodo.feature.auth
 
 import kotlinx.coroutines.flow.Flow
 
