@@ -8,6 +8,7 @@
 | `feature:reward` | 報酬画面（ViewModel + UI） |
 | `feature:todo` | Todo画面（ViewModel + UI） |
 | `feature:setting` | 設定画面（ViewModel + UI） |
+| `feature:auth` | Todoist認証画面（ViewModel + UI）とAuth Tabの境界 |
 | `application:reward` | 報酬ユースケース（インターフェース + Interactor） |
 | `application:todo` | TodoユースケースとTodoistトークン管理 |
 | `domain:reward` | 報酬エンティティ、リポジトリインターフェース |
@@ -36,6 +37,8 @@ app
 │                  └────────── common:ui
 │
 ├── feature:setting ─────────── application:todo
+│
+├── feature:auth ────────────── application:todo
 │                  └────────── domain:todo
 │
 ├── data:reward ─────────────── domain:reward
