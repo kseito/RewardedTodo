@@ -17,6 +17,9 @@ if (localPropertiesFile.exists()) {
     localProperties.load(localPropertiesFile.inputStream())
 }
 
+// E2E用のフェイクバックエンド。エミュレータから見たホストのアドレス。
+val mockServerUrl = "http://10.0.2.2:8080"
+
 android {
     //noinspection GradleDependency
     compileSdk = libs.versions.androidCompileSdkVersion.get().toInt()
@@ -31,7 +34,12 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "TODOIST_URL", "\"https://todoist.com\"")
-        buildConfigField("String", "REWARD_SERVER_URL", "\"${localProperties.getProperty("reward.server.url", "")}\"")
+        buildConfigField("String", "TODOIST_API_URL", "\"https://api.todoist.com/\"")
+        buildConfigField(
+            "String",
+            "REWARD_SERVER_URL",
+            "\"${localProperties.getProperty("reward.server.url", "")}\"",
+        )
 
         // Todoist OAuth (公開クライアント / PKCE)。client_secretは持たないため、以下はいずれも秘匿情報ではない。
         // client_idはOAuth Client ID Metadata DocumentのURLそのもの。
@@ -70,6 +78,15 @@ android {
         getByName("debug") {
             applicationIdSuffix = ".debug"
         }
+        // E2E専用。フェイクバックエンドを向き、認可をブラウザ無しで完了させる実装を持つ。
+        // debugとは別のビルドタイプにすることで、配布されるdebug APKにモックが入らない。
+        create("e2e") {
+            initWith(getByName("debug"))
+            matchingFallbacks += "debug"
+            buildConfigField("String", "TODOIST_API_URL", "\"$mockServerUrl/todoist/\"")
+            buildConfigField("String", "TODOIST_AUTHORIZE_URL", "\"$mockServerUrl/todoist/oauth/authorize\"")
+            buildConfigField("String", "REWARD_SERVER_URL", "\"$mockServerUrl/reward\"")
+        }
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
@@ -105,6 +122,7 @@ android {
         getByName("test") {
             java.srcDirs("src/test/kotlin")
         }
+
     }
     namespace = "jp.kztproject.rewardedtodo"
     testOptions {
@@ -192,3 +210,4 @@ dependencies {
 roborazzi {
     outputDir.set(file("screenshots"))
 }
+

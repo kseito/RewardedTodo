@@ -3,6 +3,7 @@ tags:
   - android
   - rewardedtodo
 ---
+- runScript: stubs/reset.js
 - clearState
 - launchApp
 
@@ -10,6 +11,8 @@ tags:
 - extendedWaitUntil:
     visible: "Reward"
     timeout: 180000
+
+- runFlow: subflows/authenticate.yaml
 
 # Tap on FloatingActionButton to add a new task
 - tapOn:

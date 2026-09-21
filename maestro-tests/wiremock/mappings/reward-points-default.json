@@ -1,0 +1,16 @@
+{
+  "priority": 10,
+  "request": {
+    "method": "GET",
+    "urlPathPattern": "/reward/api/points/[^/]+"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "user_id": "mock-user-id",
+      "total_points": 0,
+      "available_points": 0,
+      "task_count": 0
+    }
+  }
+}

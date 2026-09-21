@@ -20,8 +20,21 @@ allprojects {
     }
 }
 
+val wiremock: Configuration by configurations.creating {
+    isTransitive = false
+}
+
 dependencies {
     detektPlugins(project(":detekt-rules"))
+    wiremock(libs.wiremock.standalone)
+}
+
+tasks.register<Sync>("syncWireMockJar") {
+    description = "E2E用のWireMock standalone jarを build/wiremock/ へ配置する"
+    group = "verification"
+    from(wiremock)
+    into(layout.buildDirectory.dir("wiremock"))
+    rename { "wiremock-standalone.jar" }
 }
 
 // 既定の detekt は :app のみを対象にしているため、プロジェクト独自ルール

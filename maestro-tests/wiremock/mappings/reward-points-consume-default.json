@@ -1,0 +1,13 @@
+{
+  "priority": 10,
+  "request": {
+    "method": "POST",
+    "urlPathPattern": "/reward/api/points/[^/]+/consume"
+  },
+  "response": {
+    "status": 422,
+    "jsonBody": {
+      "error": "not enough points"
+    }
+  }
+}

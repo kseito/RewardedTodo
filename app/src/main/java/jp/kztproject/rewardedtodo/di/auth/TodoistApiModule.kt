@@ -61,7 +61,7 @@ class TodoistApiModule {
             .build()
 
         return Retrofit.Builder()
-            .baseUrl("https://api.todoist.com")
+            .baseUrl(BuildConfig.TODOIST_API_URL)
             .client(client)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .addCallAdapterFactory(CoroutineCallAdapterFactory())

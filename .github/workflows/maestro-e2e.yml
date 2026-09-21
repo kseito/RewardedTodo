@@ -44,7 +44,10 @@ jobs:
         run: echo "reward.server.url=${{ secrets.REWARD_SERVER_URL }}" >> local.properties
 
       - name: Build debug APK
-        run: ./gradlew assembleDebug
+        run: ./gradlew assembleE2e
+
+      - name: Start WireMock
+        run: bash .github/scripts/start-wiremock.sh
 
       - name: Install Maestro CLI
         run: |
@@ -64,12 +67,12 @@ jobs:
           # 実機相当の解像度にする。既定プロファイルは320x640と小さく、
           # 報酬追加のBottom Sheetで下部フィールド(Chance of Winning等)が画面外になりフローが失敗する
           profile: pixel_6
-          # 文言アサートは英語のみ。念のためロケールをログ出力し、debugアプリを入れてからフローを実行する。
+          # 文言アサートは英語のみ。念のためロケールをログ出力し、e2eアプリを入れてからフローを実行する。
           # android-emulator-runner は script の各行を個別の sh で実行するため、
           # 複数行のリトライ処理は別スクリプトに切り出して1行で呼び出す。
           script: |
             adb shell am get-config | grep -i locale || true
-            ./gradlew installDebug
+            ./gradlew installE2e
             bash .github/scripts/run-maestro-e2e.sh
 
       - name: Upload Maestro debug output

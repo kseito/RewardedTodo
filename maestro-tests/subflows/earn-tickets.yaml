@@ -1,0 +1,33 @@
+appId: jp.kztproject.rewardedtodo.debug
+---
+# フェイクが配信した "Earn Ticket" タスクを完了し、サーバーが加算したチケットを受け取る。
+- tapOn:
+    text: "Todo"
+- extendedWaitUntil:
+    visible: "Earn Ticket"
+    timeout: 15000
+- tapOn:
+    text: "todo_checkbox"
+    index: 0
+- extendedWaitUntil:
+    notVisible: "Earn Ticket"
+    timeout: 15000
+- tapOn:
+    text: "Reward"
+
+# サーバー経由のチケット残数はワンショット取得で、タブを戻っただけでは引き直されない。
+# プルリフレッシュで再取得する。完了通知がサーバーへ届くのを待つ必要があるため、
+# 残数が増えるまで引き直しを繰り返す。
+- repeat:
+    times: 3
+    while:
+      visible: "0 tickets"
+    commands:
+      - swipe:
+          start: 50%, 35%
+          end: 50%, 75%
+          duration: 500
+      - waitForAnimationToEnd:
+          timeout: 3000
+
+- assertNotVisible: "0 tickets"

@@ -1,0 +1,16 @@
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/todoist/oauth/access_token"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "access_token": "mock-access-token",
+      "token_type": "Bearer",
+      "expires_in": 3600,
+      "refresh_token": "mock-refresh-token",
+      "scope": "data:read_write"
+    }
+  }
+}

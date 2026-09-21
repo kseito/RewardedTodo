@@ -3,6 +3,8 @@ tags:
   - android
   - rewardedtodo
 ---
+# Todoistから同期したタスクを完了すると、サーバーがポイントを加算しチケットが増える。
+- runScript: stubs/complete-todo.js
 - clearState
 - launchApp
 
@@ -11,38 +13,24 @@ tags:
     visible: "Reward"
     timeout: 180000
 
-# Add a todo to complete
-- tapOn:
-    text: "Add"
+- runFlow: subflows/authenticate.yaml
 
-# Wait for bottom sheet to appear
-- assertVisible: "Title"
+# Todoistから同期されたタスクが一覧に出る
+- extendedWaitUntil:
+    visible: "Task to Complete"
+    timeout: 15000
 
-# Enter task name
-- tapOn: "Title"
-- inputText: "Task to Complete"
-
-# Tap Save button
-- tapOn: "Save"
-
-# Verify the task is added to the list
-- assertVisible: "Task to Complete"
-
-# Complete the todo by tapping checkbox
+# 完了するとリストから消える
 - tapOn:
     text: "todo_checkbox"
     index: 0
-
-# Non-repeat todo should be removed from the list after completion
 - extendedWaitUntil:
     notVisible: "Task to Complete"
-    timeout: 5000
+    timeout: 10000
 
-# Navigate to Reward tab to verify the ticket was earned
+# サーバーがポイントを加算した結果が反映される
 - tapOn:
     text: "Reward"
-
-# Verify 1 ticket was earned by completing the todo
 - extendedWaitUntil:
     visible: "1 tickets"
-    timeout: 5000
+    timeout: 10000
