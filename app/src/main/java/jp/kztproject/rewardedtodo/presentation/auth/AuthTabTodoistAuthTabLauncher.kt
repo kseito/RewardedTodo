@@ -7,8 +7,8 @@ import androidx.browser.auth.AuthTabIntent
 import androidx.browser.customtabs.CustomTabsClient
 import androidx.core.net.toUri
 import jp.kztproject.rewardedtodo.BuildConfig
-import jp.kztproject.rewardedtodo.feature.setting.TodoistAuthTabLauncher
-import jp.kztproject.rewardedtodo.feature.setting.TodoistAuthTabResult
+import jp.kztproject.rewardedtodo.feature.auth.TodoistAuthTabLauncher
+import jp.kztproject.rewardedtodo.feature.auth.TodoistAuthTabResult
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.receiveAsFlow
