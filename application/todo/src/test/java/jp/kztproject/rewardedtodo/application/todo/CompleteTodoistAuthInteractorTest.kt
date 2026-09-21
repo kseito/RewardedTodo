@@ -22,8 +22,13 @@ class CompleteTodoistAuthInteractorTest {
     private val authRepository = mockk<ITodoistAuthRepository>()
     private val authSessionStore = TodoistAuthSessionStore()
     private val credentialRepository = mockk<ITodoistCredentialRepository>(relaxed = true)
-    private val interactor =
-        CompleteTodoistAuthInteractor(authRepository, authSessionStore, credentialRepository)
+    private val clearLocalDataUseCase = mockk<ClearLocalDataUseCase>(relaxed = true)
+    private val interactor = CompleteTodoistAuthInteractor(
+        authRepository,
+        authSessionStore,
+        credentialRepository,
+        clearLocalDataUseCase,
+    )
 
     private val codeVerifier = CodeVerifier.generate()
     private val session = TodoistAuthSession(state = OAuthState.create("issued-state"), codeVerifier = codeVerifier)
