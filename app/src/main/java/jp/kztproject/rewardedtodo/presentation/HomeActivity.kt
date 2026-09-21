@@ -6,6 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
@@ -43,12 +45,14 @@ class HomeActivity : ComponentActivity() {
         }
 
         setContent {
-            val startDestination = startDestinationViewModel.startDestination.value ?: return@setContent
+            // StateFlowの値を直接読むと再コンポーズが起きず、判定が終わっても画面が空のままになる
+            val startDestination by startDestinationViewModel.startDestination.collectAsState()
+            val destination = startDestination ?: return@setContent
 
             MaterialTheme(
                 colorScheme = RewardedTodoScheme(isDarkTheme = isSystemInDarkTheme()),
             ) {
-                val startRoute: NavKey = when (startDestination) {
+                val startRoute: NavKey = when (destination) {
                     StartDestination.AUTH -> AuthRoute
                     StartDestination.HOME -> HomeRoute
                 }
