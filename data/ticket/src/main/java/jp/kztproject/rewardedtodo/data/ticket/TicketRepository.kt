@@ -1,50 +1,62 @@
 package jp.kztproject.rewardedtodo.data.ticket
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import jp.kztproject.rewardedtodo.common.kvs.UserPreferencesKeys
+import jp.kztproject.rewardedtodo.data.ticket.network.RewardServerApi
+import jp.kztproject.rewardedtodo.data.ticket.network.model.ConsumePointRequest
+import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
 import jp.kztproject.rewardedtodo.domain.reward.repository.ITicketRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flow
+import retrofit2.HttpException
 import javax.inject.Inject
 
 /**
- * チケットリポジトリの [ITicketRepository] 実装。
+ * チケット（ポイント）の [ITicketRepository] 実装。
  *
- * Todoist連携の有無で内部的に振る舞いを切り替える:
- * - Todoist APIトークン未保存（未連携）: [LocalTicketRepository] に委譲し、ローカル(DataStore)で
- *   チケットを管理する。
- * - Todoist APIトークン保存済み（連携済み）: [NetworkTicketRepository] に委譲し、サーバ経由で
- *   チケットを管理する（加算はTodoist Webhookが担当）。
- *
- * 判定は操作ごとに行う。`Flow` 取得時の判定は取得時点のスナップショットで、連携状態が
- * 途中で変わった場合は再呼び出し（画面再表示）が必要。
+ * 残数の管理はRewardサーバーが行う。加算はサーバー側のTodoist Webhookが担当するため、
+ * アプリからは消費と取得だけを行う。
  */
 class TicketRepository @Inject internal constructor(
-    private val localRepository: LocalTicketRepository,
-    private val networkRepository: NetworkTicketRepository,
-    private val dataStore: DataStore<Preferences>,
+    private val api: RewardServerApi,
+    private val userIdRepository: RewardUserIdRepository,
 ) : ITicketRepository {
 
     override suspend fun addTicket(numberOfTicket: Int) {
-        delegate().addTicket(numberOfTicket)
+        // サーバー側の Todoist Webhook がポイントを加算するため、アプリ側では何もしない
     }
 
     override suspend fun consumeTicket() {
-        delegate().consumeTicket()
+        consumeTickets(1)
     }
 
     override suspend fun consumeTickets(count: Int) {
-        delegate().consumeTickets(count)
+        withRetryOn401 { userId, token ->
+            api.consumePoints(userId, "Bearer $token", ConsumePointRequest(count))
+        }
     }
 
-    override suspend fun getNumberOfTicket(): Flow<Int> = delegate().getNumberOfTicket()
+    override suspend fun getNumberOfTicket(): Flow<Int> = flow {
+        val points = withRetryOn401 { userId, token ->
+            api.getPoints(userId, "Bearer $token")
+        }
+        emit(points.availablePoints)
+    }
 
-    private suspend fun delegate(): ITicketRepository = if (isTodoistConnected()) networkRepository else localRepository
-
-    private suspend fun isTodoistConnected(): Boolean = dataStore.data
-        .map { it[UserPreferencesKeys.TODOIST_ACCESS_TOKEN].orEmpty() }
-        .first()
-        .isNotBlank()
+    private suspend fun <T> withRetryOn401(block: suspend (userId: String, token: String) -> T): T {
+        val token = userIdRepository.getToken()
+        val userId = userIdRepository.getUserId()
+        return try {
+            block(userId, token)
+        } catch (e: HttpException) {
+            if (e.code() == 401) {
+                // キャッシュ済み userId のトークンハッシュが未登録の場合、再登録してリトライ
+                userIdRepository.clearUserId()
+                val newUserId = userIdRepository.getUserId()
+                block(newUserId, token)
+            } else if (e.code() == 422) {
+                throw LackOfTicketsException()
+            } else {
+                throw e
+            }
+        }
+    }
 }
