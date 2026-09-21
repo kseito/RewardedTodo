@@ -46,7 +46,7 @@ fun HomeScreen(onClickSetting: () -> Unit) {
         onNavigateToDestination = onNavigateToDestination,
         onClickSetting = onClickSetting,
     ) { padding ->
-        RewardedTodoApp(padding, navigationState, navigator)
+        RewardedTodoApp(padding, navigationState, navigator, onClickSetting)
     }
 }
 
@@ -74,7 +74,12 @@ private fun HomeScreenContent(
 }
 
 @Composable
-private fun RewardedTodoApp(padding: PaddingValues, navigationState: NavigationState, navigator: Navigator) {
+private fun RewardedTodoApp(
+    padding: PaddingValues,
+    navigationState: NavigationState,
+    navigator: Navigator,
+    onOpenSetting: () -> Unit,
+) {
     Box(
         Modifier
             .fillMaxSize()
@@ -84,7 +89,7 @@ private fun RewardedTodoApp(padding: PaddingValues, navigationState: NavigationS
         NavDisplay(
             entries = navigationState.toEntries(
                 entryProvider {
-                    todoListScreen()
+                    todoListScreen(onOpenSetting = onOpenSetting)
                     rewardListScreen()
                 },
             ),
