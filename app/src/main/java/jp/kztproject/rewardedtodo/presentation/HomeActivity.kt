@@ -3,8 +3,10 @@ package jp.kztproject.rewardedtodo.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.viewmodel.navigation3.rememberViewModelStoreNavEntryDecorator
 import androidx.navigation3.runtime.NavKey
@@ -14,9 +16,11 @@ import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
 import dagger.hilt.android.AndroidEntryPoint
 import jp.kztproject.rewardedtodo.common.ui.theme.RewardedTodoScheme
-import jp.kztproject.rewardedtodo.presentation.auth.createTodoistAuthTabLauncher
+import jp.kztproject.rewardedtodo.feature.auth.AuthRoute
+import jp.kztproject.rewardedtodo.feature.auth.authScreen
 import jp.kztproject.rewardedtodo.feature.setting.SettingRoute
 import jp.kztproject.rewardedtodo.feature.setting.settingScreen
+import jp.kztproject.rewardedtodo.presentation.auth.createTodoistAuthTabLauncher
 
 @AndroidEntryPoint
 class HomeActivity : ComponentActivity() {
@@ -24,8 +28,14 @@ class HomeActivity : ComponentActivity() {
     // ActivityResultLauncherの登録はSTARTED以降だと例外になるため、フィールド初期化時に生成する
     private val todoistAuthTabLauncher = createTodoistAuthTabLauncher(this)
 
+    private val startDestinationViewModel: StartDestinationViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
+
+        // 判定が終わる前に描画すると、ホーム画面が一瞬見えてから認証画面に差し替わる
+        splashScreen.setKeepOnScreenCondition { startDestinationViewModel.startDestination.value == null }
 
         WindowInsetsControllerCompat(window, window.decorView).apply {
             isAppearanceLightStatusBars = false
@@ -33,10 +43,23 @@ class HomeActivity : ComponentActivity() {
         }
 
         setContent {
+            val startDestination = startDestinationViewModel.startDestination.value ?: return@setContent
+
             MaterialTheme(
                 colorScheme = RewardedTodoScheme(isDarkTheme = isSystemInDarkTheme()),
             ) {
-                val backStack = rememberNavBackStack(HomeRoute)
+                val startRoute: NavKey = when (startDestination) {
+                    StartDestination.AUTH -> AuthRoute
+                    StartDestination.HOME -> HomeRoute
+                }
+                val backStack = rememberNavBackStack(startRoute)
+
+                // 認証画面とホーム画面は行き来させない。戻るボタンで逆戻りしないよう積み直す
+                fun replaceStackWith(route: NavKey) {
+                    backStack.clear()
+                    backStack.add(route)
+                }
+
                 NavDisplay(
                     backStack = backStack,
                     onBack = { backStack.removeLastOrNull() },
@@ -45,12 +68,16 @@ class HomeActivity : ComponentActivity() {
                         rememberViewModelStoreNavEntryDecorator<NavKey>(),
                     ),
                     entryProvider = entryProvider {
-                        homeScreen(
-                            onClickSetting = {
-                                backStack.add(SettingRoute)
-                            },
+                        authScreen(
+                            authTabLauncher = todoistAuthTabLauncher,
+                            onAuthenticated = { replaceStackWith(HomeRoute) },
                         )
-                        settingScreen(authTabLauncher = todoistAuthTabLauncher)
+                        homeScreen(
+                            onClickSetting = { backStack.add(SettingRoute) },
+                        )
+                        settingScreen(
+                            onLoggedOut = { replaceStackWith(AuthRoute) },
+                        )
                     },
                 )
             }
