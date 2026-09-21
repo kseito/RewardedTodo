@@ -76,14 +76,14 @@ Todoist認証を必須にし、未連携では何も操作できないように�
 |---------|-----------|---------|
 | Domain | domain/todo | `TodoistUnauthorizedException` 追加。`ITodoRepository.deleteAll()` 追加 |
 | Domain | domain/reward | `IAccountCacheRepository` 追加（チケット残数とユーザーIDキャッシュの削除） |
-| Application | application/todo | `ClearLocalDataUseCase` / `ClearLocalDataInteractor` 新設。`CompleteTodoistAuthInteractor` がクレデンシャル保存直後に呼ぶ |
+| Application | application/todo | `ClearLocalDataUseCase` / `ClearLocalDataInteractor` 新設。`CompleteTodoistAuthInteractor` がクレデンシャル保存の直前に呼ぶ |
 | Data | data/todo | `TodoRepository.sync()` の未連携ガードを削除。`deleteAll()` 実装 |
-| Data | data/ticket | `LocalTicketRepository` 削除。`TicketRepository` の委譲分岐を削除。`IAccountCacheRepository` 実装 |
+| Data | data/ticket | `LocalTicketRepository` と委譲していた `TicketRepository` を削除し、`NetworkTicketRepository` を `TicketRepository` にリネーム。`IAccountCacheRepository` 実装 |
 | Feature | feature/auth（新設） | `AuthRoute` / `AuthScreen` / `AuthViewModel`。`feature:setting` から `TodoistAuthTabLauncher` / `TodoistAuthTabResult` / `TodoistAuthError` を移設 |
 | Feature | feature/setting | 接続系を削除。`SettingViewModel` は `DisconnectTodoistUseCase` のみ。ログアウト確認ダイアログを追加 |
 | Feature | feature/todo | 失効時のSnackbarと「設定を開く」アクション |
 | App | app | `HomeActivity` で開始ルートを切り替え。SplashScreen導入。`MockTodoistAuthTabLauncher`（debugのみ） |
-| DI | app/di | `ITicketRepository` を `NetworkTicketRepository` に直接バインド。`ClearLocalDataUseCase` / `IAccountCacheRepository` のバインド追加 |
+| DI | app/di | `ClearLocalDataUseCase` / `IAccountCacheRepository` のバインド追加。`ITicketRepository` のバインドは実装のリネームだけなので変更なし |
 
 ### ゲートの実装方針
 
@@ -105,6 +105,10 @@ Todoist認証を必須にし、未連携では何も操作できないように�
 - 発火条件は「未認証 → 認証への遷移のたび」。ログアウト後の再認証でも削除される。判定フラグは持たない
 - 削除に失敗しても認証は成功扱いとし、Timberにログを残す
 
+クレデンシャルを保存すると `TodoListViewModel` が連携済みとみなして同期を始めるため、削除は保存の**前**に行う。後にすると、取り込んだばかりのTodoist由来のTodoまで削除してしまう。
+
+チケットの実装は `LocalTicketRepository` が消えると1つだけになるため、`NetworkTicketRepository` を `TicketRepository` にリネームして1本に畳む。`Network` の接頭辞はローカル実装と区別するためのもので、区別が無くなれば情報を持たない。`TicketRepository` は元から公開クラスなので、DIのバインドは変更不要。
+
 ### 失効時の方針
 
 - クレデンシャルは破棄しない。認証画面へも戻さない
@@ -115,7 +119,7 @@ Todoist認証を必須にし、未連携では何も操作できないように�
 
 ローカルフォールバックの削除にあわせて、チケット残数の更新契機を見直す必要がある。
 
-`NetworkTicketRepository.getNumberOfTicket()` はワンショットのFlowで、`RewardListViewModel.rewardPoint` は `SharingStarted.WhileSubscribed(5000)` で購読している。そのため **Todoタブでタスクを完了してすぐReward タブへ戻ると、残数が再取得されず古い値が表示される**。5秒以上離れて購読が切れた場合か、プルリフレッシュしたときだけ最新化される。
+`TicketRepository.getNumberOfTicket()` はワンショットのFlowで、`RewardListViewModel.rewardPoint` は `SharingStarted.WhileSubscribed(5000)` で購読している。そのため **Todoタブでタスクを完了してすぐReward タブへ戻ると、残数が再取得されず古い値が表示される**。5秒以上離れて購読が切れた場合か、プルリフレッシュしたときだけ最新化される。
 
 `LocalTicketRepository` ではDataStoreのFlowが変更のたびに再emitするため、この差は露見していなかった。ローカルフォールバックを削除すると、ネットワーク経由の挙動が唯一の挙動になる。ユーザーから見ると「タスクを完了したのにチケットが増えていない」画面になる。
 
@@ -169,7 +173,7 @@ complete-todo-flow:   Todo作成 → 完了 → "1 tickets"
 single-lottery-flow:  Todo作成 → 完了 → "1 tickets" → 単発抽選 → "0 tickets"
 ```
 
-この経路は本変更で成立しなくなる。アプリ内で作ったTodoは `todoistId` を持たないため `TodoRepository.complete()` がTodoist APIを呼ばず、`NetworkTicketRepository.addTicket()` は no-op（実サーバーではTodoist Webhookが加算する）だからである。つまりこれらのフローは、削除される振る舞いを検証している。
+この経路は本変更で成立しなくなる。アプリ内で作ったTodoは `todoistId` を持たないため `TodoRepository.complete()` がTodoist APIを呼ばず、`TicketRepository.addTicket()` は no-op（実サーバーではTodoist Webhookが加算する）だからである。つまりこれらのフローは、削除される振る舞いを検証している。
 
 書き換え後はこうなる。
 
