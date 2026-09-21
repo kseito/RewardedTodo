@@ -13,4 +13,7 @@ interface ITodoRepository {
     suspend fun complete(todo: Todo)
 
     suspend fun delete(todo: Todo)
+
+    /** ローカルに保持しているTodoをすべて削除する。連携アカウントの切り替え時に使う。 */
+    suspend fun deleteAll()
 }
