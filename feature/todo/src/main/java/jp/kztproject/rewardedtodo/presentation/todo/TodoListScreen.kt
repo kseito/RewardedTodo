@@ -19,6 +19,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -26,6 +29,7 @@ import androidx.compose.material3.ripple
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import jp.kztproject.rewardedtodo.domain.todo.exception.TodoistUnauthorizedException
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.kztproject.rewardedtodo.common.ui.CommonAlertDialog
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
@@ -51,7 +56,7 @@ import jp.kztproject.rewardedtodo.feature.todo.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TodoListScreenWithBottomSheet(viewModel: TodoListViewModel = hiltViewModel()) {
+fun TodoListScreenWithBottomSheet(onOpenSetting: () -> Unit, viewModel: TodoListViewModel = hiltViewModel()) {
     val sheetState = rememberModalBottomSheetState()
     var selectedTodo: Todo? by remember { mutableStateOf(null) }
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -80,6 +85,7 @@ fun TodoListScreenWithBottomSheet(viewModel: TodoListViewModel = hiltViewModel()
             onTodoItemClicked = onTodoItemClicked,
             onTodoAddClicked = onTodoAddClicked,
             onTodoUpdateSucceed = onTodoUpdateSucceed,
+            onOpenSetting = onOpenSetting,
         )
 
         TodoDetailBottomSheet(
@@ -100,11 +106,13 @@ private fun TodoListScreen(
     onTodoAddClicked: () -> Unit,
     onTodoItemClicked: (Todo) -> Unit,
     onTodoUpdateSucceed: () -> Unit,
+    onOpenSetting: () -> Unit,
 ) {
     val todoList by viewModel.todoList.collectAsStateWithLifecycle()
     val result by viewModel.result.collectAsStateWithLifecycle()
     val refreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val isInitialLoading by viewModel.isInitialLoading.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -119,21 +127,44 @@ private fun TodoListScreen(
             onTodoAddClicked = onTodoAddClicked,
         )
 
-        result?.let {
-            it.fold(
+        result?.let { outcome ->
+            outcome.fold(
                 onSuccess = {
                     onTodoUpdateSucceed()
                     viewModel.clearResult()
                 },
-                onFailure = {
-                    CommonAlertDialog(
-                        message = stringResource(id = R.string.error_message),
-                        onOkClicked = {
-                            viewModel.clearResult()
-                        },
-                    )
+                onFailure = { cause ->
+                    // 失効は設定画面へ誘導する必要があるため、他のエラーと扱いを分ける
+                    if (cause !is TodoistUnauthorizedException) {
+                        CommonAlertDialog(
+                            message = stringResource(id = R.string.error_message),
+                            onOkClicked = {
+                                viewModel.clearResult()
+                            },
+                        )
+                    }
                 },
             )
+        }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter),
+        )
+    }
+
+    val unauthorizedMessage = stringResource(id = R.string.error_todoist_unauthorized)
+    val openSettingLabel = stringResource(id = R.string.open_setting)
+    LaunchedEffect(result) {
+        val cause = result?.exceptionOrNull()
+        if (cause is TodoistUnauthorizedException) {
+            val action = snackbarHostState.showSnackbar(
+                message = unauthorizedMessage,
+                actionLabel = openSettingLabel,
+                withDismissAction = true,
+            )
+            viewModel.clearResult()
+            if (action == SnackbarResult.ActionPerformed) onOpenSetting()
         }
     }
 }
