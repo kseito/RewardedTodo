@@ -3,51 +3,38 @@ package jp.kztproject.rewardedtodo.feature.setting
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 @Composable
-fun SettingScreen(authTabLauncher: TodoistAuthTabLauncher, viewModel: SettingViewModel = hiltViewModel()) {
-    val uiState = viewModel.uiState.collectAsState()
+fun SettingScreen(onLoggedOut: () -> Unit, viewModel: SettingViewModel = hiltViewModel()) {
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // ViewModelが発行した認可URLをAuth Tabへ渡す
-    LaunchedEffect(authTabLauncher) {
-        viewModel.authorizeRequests.collect { authorizeUrl ->
-            authTabLauncher.launch(authorizeUrl)
-        }
-    }
-
-    // Auth Tabが返したリダイレクト結果をViewModelへ戻す
-    LaunchedEffect(authTabLauncher) {
-        authTabLauncher.results.collect { result ->
-            viewModel.onAuthTabResult(result)
-        }
+    LaunchedEffect(Unit) {
+        viewModel.loggedOut.collect { onLoggedOut() }
     }
 
     SettingScreenContent(
-        uiState = uiState.value,
-        onConnect = {
-            // 非対応ブラウザではAuth Tabが起動できないため、URLを発行する前に弾く
-            if (authTabLauncher.isSupported()) {
-                viewModel.connect()
-            } else {
-                viewModel.onAuthTabUnsupported()
-            }
-        },
-        onDisconnect = { viewModel.disconnect() },
+        uiState = uiState,
+        onRequestLogout = { viewModel.requestLogout() },
+        onConfirmLogout = { viewModel.logout() },
+        onDismissLogout = { viewModel.dismissLogoutConfirmation() },
     )
 }
 
 @Composable
-private fun SettingScreenContent(uiState: TodoistConnectionUiState, onConnect: () -> Unit, onDisconnect: () -> Unit) {
+private fun SettingScreenContent(
+    uiState: SettingUiState,
+    onRequestLogout: () -> Unit,
+    onConfirmLogout: () -> Unit,
+    onDismissLogout: () -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -63,44 +50,14 @@ private fun SettingScreenContent(uiState: TodoistConnectionUiState, onConnect: (
 
         HorizontalDivider(Modifier.padding(vertical = 8.dp))
 
-        SettingSectionTitle(text = stringResource(R.string.extensions_section))
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        TodoistConnectionSection(
-            uiState = uiState,
-            onConnect = onConnect,
-            onDisconnect = onDisconnect,
+        Text(
+            text = stringResource(R.string.account_section),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = 8.dp),
         )
-    }
-}
-
-@Composable
-private fun SettingSectionTitle(text: String) {
-    Text(
-        text = text,
-        style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier.padding(bottom = 8.dp),
-    )
-}
-
-@Composable
-private fun TodoistConnectionSection(
-    uiState: TodoistConnectionUiState,
-    onConnect: () -> Unit,
-    onDisconnect: () -> Unit,
-) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        ConnectionStatusCard(isConnected = uiState.isConnected)
-
-        Spacer(modifier = Modifier.height(12.dp))
 
         Text(
-            text = if (uiState.isConnected) {
-                stringResource(R.string.todoist_disconnect_description)
-            } else {
-                stringResource(R.string.todoist_connect_description)
-            },
+            text = stringResource(R.string.logout_description),
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
@@ -108,7 +65,7 @@ private fun TodoistConnectionSection(
         if (uiState.error != null) {
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = getErrorMessage(uiState.error),
+                text = stringResource(R.string.error_logout_failed),
                 color = MaterialTheme.colorScheme.error,
                 style = MaterialTheme.typography.bodySmall,
             )
@@ -120,137 +77,78 @@ private fun TodoistConnectionSection(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.End,
         ) {
-            if (uiState.isConnected) {
-                OutlinedButton(
-                    onClick = onDisconnect,
-                    enabled = !uiState.isLoading,
-                    colors = ButtonDefaults.outlinedButtonColors(
-                        contentColor = MaterialTheme.colorScheme.error,
-                    ),
-                ) {
-                    ButtonContent(
-                        isLoading = uiState.isLoading,
-                        label = stringResource(R.string.disconnect_integration),
+            OutlinedButton(
+                onClick = onRequestLogout,
+                enabled = !uiState.isLoading,
+                colors = ButtonDefaults.outlinedButtonColors(
+                    contentColor = MaterialTheme.colorScheme.error,
+                ),
+            ) {
+                if (uiState.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(16.dp),
+                        strokeWidth = 2.dp,
                     )
-                }
-            } else {
-                Button(
-                    onClick = onConnect,
-                    enabled = !uiState.isLoading,
-                ) {
-                    ButtonContent(
-                        isLoading = uiState.isLoading,
-                        label = stringResource(R.string.connect_todoist),
-                    )
+                } else {
+                    Text(stringResource(R.string.logout))
                 }
             }
         }
     }
-}
 
-@Composable
-private fun ButtonContent(isLoading: Boolean, label: String) {
-    if (isLoading) {
-        CircularProgressIndicator(
-            modifier = Modifier.size(16.dp),
-            strokeWidth = 2.dp,
-        )
-    } else {
-        Text(label)
+    if (uiState.isConfirmingLogout) {
+        LogoutConfirmationDialog(onConfirm = onConfirmLogout, onDismiss = onDismissLogout)
     }
 }
 
 @Composable
-private fun getErrorMessage(error: TodoistAuthError): String = when (error) {
-    TodoistAuthError.CANCELED -> stringResource(R.string.error_auth_canceled)
-    TodoistAuthError.VERIFICATION_FAILED -> stringResource(R.string.error_auth_verification_failed)
-    TodoistAuthError.STATE_MISMATCH -> stringResource(R.string.error_auth_state_mismatch)
-    TodoistAuthError.AUTHORIZATION_FAILED -> stringResource(R.string.error_auth_authorization_failed)
-    TodoistAuthError.EXCHANGE_FAILED -> stringResource(R.string.error_auth_exchange_failed)
-    TodoistAuthError.AUTH_TAB_UNSUPPORTED -> stringResource(R.string.error_auth_tab_unsupported)
-    TodoistAuthError.UNKNOWN -> stringResource(R.string.error_auth_unknown)
-}
-
-@Composable
-private fun ConnectionStatusCard(isConnected: Boolean) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = if (isConnected) {
-                MaterialTheme.colorScheme.primaryContainer
-            } else {
-                MaterialTheme.colorScheme.surfaceVariant
-            },
-        ),
-    ) {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                imageVector = if (isConnected) {
-                    Icons.Filled.CheckCircle
-                } else {
-                    Icons.Filled.Warning
-                },
-                contentDescription = null,
-                tint = if (isConnected) {
-                    MaterialTheme.colorScheme.primary
-                } else {
-                    MaterialTheme.colorScheme.onSurfaceVariant
-                },
-            )
-            Spacer(modifier = Modifier.width(12.dp))
-            Text(
-                text = if (isConnected) {
-                    stringResource(R.string.status_connected)
-                } else {
-                    stringResource(R.string.status_disconnected)
-                },
-                style = MaterialTheme.typography.titleMedium,
-            )
-        }
-    }
+private fun LogoutConfirmationDialog(onConfirm: () -> Unit, onDismiss: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text(stringResource(R.string.logout_confirmation_title)) },
+        text = { Text(stringResource(R.string.logout_confirmation_message)) },
+        confirmButton = {
+            TextButton(onClick = onConfirm) {
+                Text(stringResource(R.string.logout))
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text(stringResource(R.string.cancel))
+            }
+        },
+    )
 }
 
 @Composable
 @Preview
 fun SettingScreenPreview() {
     SettingScreenContent(
-        uiState = TodoistConnectionUiState(),
-        onConnect = {},
-        onDisconnect = {},
+        uiState = SettingUiState(),
+        onRequestLogout = {},
+        onConfirmLogout = {},
+        onDismissLogout = {},
     )
 }
 
 @Composable
 @Preview
-fun SettingScreenConnectedPreview() {
+fun SettingScreenLoggingOutPreview() {
     SettingScreenContent(
-        uiState = TodoistConnectionUiState(isConnected = true),
-        onConnect = {},
-        onDisconnect = {},
+        uiState = SettingUiState(isLoading = true),
+        onRequestLogout = {},
+        onConfirmLogout = {},
+        onDismissLogout = {},
     )
 }
 
 @Composable
 @Preview
-fun SettingScreenAuthorizingPreview() {
+fun SettingScreenLogoutConfirmationPreview() {
     SettingScreenContent(
-        uiState = TodoistConnectionUiState(isLoading = true),
-        onConnect = {},
-        onDisconnect = {},
-    )
-}
-
-@Composable
-@Preview
-fun SettingScreenAuthErrorPreview() {
-    SettingScreenContent(
-        uiState = TodoistConnectionUiState(error = TodoistAuthError.CANCELED),
-        onConnect = {},
-        onDisconnect = {},
+        uiState = SettingUiState(isConfirmingLogout = true),
+        onRequestLogout = {},
+        onConfirmLogout = {},
+        onDismissLogout = {},
     )
 }
