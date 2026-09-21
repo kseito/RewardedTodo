@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object SettingRoute : NavKey
 
-fun EntryProviderScope<NavKey>.settingScreen(authTabLauncher: TodoistAuthTabLauncher) {
+fun EntryProviderScope<NavKey>.settingScreen(onLoggedOut: () -> Unit) {
     entry<SettingRoute> {
-        SettingScreen(authTabLauncher = authTabLauncher)
+        SettingScreen(onLoggedOut = onLoggedOut)
     }
 }
