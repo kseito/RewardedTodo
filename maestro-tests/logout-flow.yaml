@@ -1,0 +1,33 @@
+appId: jp.kztproject.rewardedtodo.debug
+tags:
+  - android
+  - rewardedtodo
+  - auth
+---
+# 設定画面からログアウトすると認証画面へ戻る。
+- runScript: stubs/reset.js
+- clearState
+- launchApp
+- runFlow: subflows/authenticate.yaml
+
+- tapOn:
+    text: "setting_button"
+- assertVisible: "Setting"
+
+# 接続系のUIは残っていない
+- assertNotVisible: "Connect to Todoist"
+- assertNotVisible: "Not Connected"
+
+# 確認ダイアログを挟む
+- tapOn: "Log out"
+- assertVisible: "Log out of Todoist?"
+- tapOn: "Cancel"
+- assertVisible: "Setting"
+
+# 確定すると認証画面へ戻る
+- tapOn: "Log out"
+- assertVisible: "Log out of Todoist?"
+- tapOn: "Log out"
+- extendedWaitUntil:
+    visible: "Connect to Todoist"
+    timeout: 30000
