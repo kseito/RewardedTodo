@@ -7,6 +7,7 @@ import jp.kztproject.rewardedtodo.application.todo.GetTodoistCredentialUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -24,7 +25,10 @@ class StartDestinationViewModel @Inject constructor(getTodoistCredentialUseCase:
 
     init {
         viewModelScope.launch {
-            val credential = getTodoistCredentialUseCase.execute()
+            // 読み取れなければ未連携として扱う。ここで落とすと判定が終わらず起動できなくなる
+            val credential = runCatching { getTodoistCredentialUseCase.execute() }
+                .onFailure { Timber.e(it, "Failed to read the Todoist credential") }
+                .getOrNull()
             startDestination.value = if (credential != null) StartDestination.HOME else StartDestination.AUTH
         }
     }
