@@ -43,20 +43,18 @@ class TicketRepository @Inject internal constructor(
 
     private suspend fun <T> withRetryOn401(block: suspend (userId: String, token: String) -> T): T {
         val token = userIdRepository.getToken()
-        val userId = userIdRepository.getUserId()
         return try {
-            block(userId, token)
-        } catch (e: HttpException) {
-            if (e.code() == 401) {
-                // キャッシュ済み userId のトークンハッシュが未登録の場合、再登録してリトライ
+            try {
+                block(userIdRepository.getUserId(), token)
+            } catch (e: HttpException) {
+                if (e.code() != 401) throw e
+                // キャッシュ済み userId のトークンハッシュが未登録の場合、再登録して1度だけ再送する
                 userIdRepository.clearUserId()
-                val newUserId = userIdRepository.getUserId()
-                block(newUserId, token)
-            } else if (e.code() == 422) {
-                throw LackOfTicketsException()
-            } else {
-                throw e
+                block(userIdRepository.getUserId(), token)
             }
+        } catch (e: HttpException) {
+            // 再送の結果も同じ変換に通す。ここを通さないと残数不足が呼び出し元で判別できない
+            if (e.code() == 422) throw LackOfTicketsException() else throw e
         }
     }
 }
