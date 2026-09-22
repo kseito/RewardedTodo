@@ -183,6 +183,8 @@ dependencies {
     testImplementation(libs.ui.test.junit4)
     testImplementation(libs.espresso.core)
     testImplementation(libs.coroutines.test)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.mockk)
     testImplementation(libs.roborazzi)
     testImplementation(libs.roborazzi.compose)
     testImplementation(libs.roborazzi.rule)
