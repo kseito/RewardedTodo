@@ -82,7 +82,7 @@ Todoist認証を必須にし、未連携では何も操作できないように�
 | Feature | feature/auth（新設） | `AuthRoute` / `AuthScreen` / `AuthViewModel`。`feature:setting` から `TodoistAuthTabLauncher` / `TodoistAuthTabResult` / `TodoistAuthError` を移設 |
 | Feature | feature/setting | 接続系を削除。`SettingViewModel` は `DisconnectTodoistUseCase` のみ。ログアウト確認ダイアログを追加 |
 | Feature | feature/todo | 失効時のSnackbarと「設定を開く」アクション |
-| App | app | `HomeActivity` で開始ルートを切り替え。SplashScreen導入。`MockTodoistAuthTabLauncher`（debugのみ） |
+| App | app | `HomeActivity` で開始ルートを切り替え。SplashScreen導入。`MockTodoistAuthTabLauncher`（e2eビルドタイプのみ） |
 | DI | app/di | `ClearLocalDataUseCase` / `IAccountCacheRepository` のバインド追加。`ITicketRepository` のバインドは実装のリネームだけなので変更なし |
 
 ### ゲートの実装方針
@@ -160,7 +160,7 @@ CIのエミュレータを実測した結果、Auth Tabの要件（Chrome 137+�
 | `target: default`（現行CI） | 未インストール | 0件 |
 | `target: google_apis` | 113.0.5672.136 | 1件 |
 
-このため、debugソースセットに `MockTodoistAuthTabLauncher` を置き、`TodoistAuthTabLauncher` の実装を差し替える。認可URLから `state` を取り出して `https://kseito.github.io/rewardedtodo/oauth/callback?code=dummy&state=<state>` を合成し、ブラウザを介さずに `Succeeded` を返す。トークン交換以降はフェイクバックエンドが応答するため、`CompleteTodoistAuthInteractor` からゲート遷移、各機能までの経路はE2Eで検証できる。
+このため、`e2e` ビルドタイプのソースセットに `MockTodoistAuthTabLauncher` を置き、`TodoistAuthTabLauncher` の実装を差し替える。認可URLから `state` を取り出して `https://kseito.github.io/rewardedtodo/oauth/callback?code=dummy&state=<state>` を合成し、ブラウザを介さずに `Succeeded` を返す。トークン交換以降はフェイクバックエンドが応答するため、`CompleteTodoistAuthInteractor` からゲート遷移、各機能までの経路はE2Eで検証できる。
 
 Auth Tabのブラウザ往復のみ手動確認の対象として残る。
 
