@@ -3,33 +3,22 @@ tags:
   - android
   - rewardedtodo
 ---
-- runScript: stubs/reset.js
+# Todoistから同期したTodoのタイトルとチケット枚数を編集できる。
+- runScript: stubs/one-todo.js
 - clearState
 - launchApp
 
 # Wait for the initial screen to finish rendering; cold start/JIT is slow on CI
 - runFlow: subflows/authenticate.yaml
 
-# Add a todo to edit
-- tapOn:
-    text: "Add"
-
-# Wait for bottom sheet to appear
-- assertVisible: "Title"
-
-# Enter task name
-- tapOn: "Title"
-- inputText: "Original Task"
-
-# Tap Save button
-- tapOn: "Save"
-
-# Verify the task is added to the list
-- assertVisible: "Original Task"
+# Todoistから同期されたタスクが一覧に出る
+- extendedWaitUntil:
+    visible: "Synced Task"
+    timeout: 15000
 
 # Tap on the task to open the detail bottom sheet
 - tapOn:
-    text: "Original Task"
+    text: "Synced Task"
 
 # Wait for bottom sheet to appear (Save button only exists in the sheet)
 - assertVisible: "Save"
@@ -38,7 +27,7 @@ tags:
 # (while the modal sheet is open, the list behind it is not accessible,
 #  so this uniquely matches the text field in the sheet)
 - tapOn:
-    text: "Original Task"
+    text: "Synced Task"
 - eraseText
 - inputText: "Updated Task"
 - hideKeyboard
@@ -59,7 +48,7 @@ tags:
     timeout: 5000
 
 # Verify the old task name is gone
-- assertNotVisible: "Original Task"
+- assertNotVisible: "Synced Task"
 
 # Verify the updated ticket count (2 or more) is shown in the todo row
 # (the ticket count is rendered right below the todo title)
