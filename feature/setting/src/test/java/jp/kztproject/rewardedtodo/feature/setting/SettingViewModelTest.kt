@@ -7,8 +7,6 @@ import io.mockk.mockk
 import jp.kztproject.rewardedtodo.application.todo.DisconnectTodoistUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -58,16 +56,25 @@ class SettingViewModelTest {
     }
 
     @Test
-    fun `ログアウトすると連携解除が呼ばれ完了が通知される`() = runTest {
+    fun `ログアウトすると連携解除が呼ばれ完了が状態に載る`() = runTest {
         coEvery { mockDisconnectTodoistUseCase.execute() } returns Result.success(Unit)
         viewModel.requestLogout()
-        val loggedOut = async { viewModel.loggedOut.first() }
 
         viewModel.logout()
 
-        loggedOut.await()
         coVerify(exactly = 1) { mockDisconnectTodoistUseCase.execute() }
+        viewModel.uiState.value.isLoggedOut shouldBe true
         viewModel.uiState.value.isConfirmingLogout shouldBe false
+    }
+
+    @Test
+    fun `ログアウト完了を消費すると状態から消える`() = runTest {
+        coEvery { mockDisconnectTodoistUseCase.execute() } returns Result.success(Unit)
+        viewModel.logout()
+
+        viewModel.consumeLoggedOut()
+
+        viewModel.uiState.value.isLoggedOut shouldBe false
     }
 
     @Test
