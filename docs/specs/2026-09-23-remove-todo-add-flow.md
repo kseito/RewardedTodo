@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| ステータス | Draft |
+| ステータス | Approved |
 | 作成日 | 2026-09-23 |
 | ブランチ | feature/remove-todo-add-flow |
 | 関連Issue/PR | Issue: #938 / 前提PR: #934 (Todoist認証の必須化) |
