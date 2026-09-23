@@ -41,10 +41,11 @@ fun AuthScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    // ViewModelが発行した認可URLをAuth Tabへ渡す
-    LaunchedEffect(authTabLauncher) {
-        viewModel.authorizeRequests.collect { authorizeUrl ->
+    // ViewModelが発行した認可URLをAuth Tabへ渡し、渡し終えたら状態から消す
+    LaunchedEffect(uiState.authorizeUrl) {
+        uiState.authorizeUrl?.let { authorizeUrl ->
             authTabLauncher.launch(authorizeUrl)
+            viewModel.consumeAuthorizeUrl()
         }
     }
 
@@ -55,8 +56,11 @@ fun AuthScreen(
         }
     }
 
-    LaunchedEffect(Unit) {
-        viewModel.authenticated.collect { onAuthenticated() }
+    LaunchedEffect(uiState.isAuthenticated) {
+        if (uiState.isAuthenticated) {
+            onAuthenticated()
+            viewModel.consumeAuthenticated()
+        }
     }
 
     AuthScreenContent(
