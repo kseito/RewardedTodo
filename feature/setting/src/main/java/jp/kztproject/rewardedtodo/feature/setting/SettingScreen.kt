@@ -16,8 +16,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 fun SettingScreen(onLoggedOut: () -> Unit, viewModel: SettingViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        viewModel.loggedOut.collect { onLoggedOut() }
+    LaunchedEffect(uiState.isLoggedOut) {
+        if (uiState.isLoggedOut) {
+            onLoggedOut()
+            viewModel.consumeLoggedOut()
+        }
     }
 
     SettingScreenContent(
