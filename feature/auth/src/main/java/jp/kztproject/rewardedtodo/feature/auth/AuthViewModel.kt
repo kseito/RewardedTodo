@@ -6,15 +6,19 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.kztproject.rewardedtodo.application.todo.CompleteTodoistAuthUseCase
 import jp.kztproject.rewardedtodo.application.todo.StartTodoistAuthUseCase
 import jp.kztproject.rewardedtodo.domain.todo.TokenError
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+/**
+ * 認可URLの発行と連携完了は、いずれも[uiState]の更新として表す。
+ *
+ * ViewModelのイベントを Channel で流すと、ViewModel が画面より長生きしたときに配送が保証されない。
+ * 画面が処理し終えたら consume 系のメソッドで状態を戻す。
+ * https://developer.android.com/topic/architecture/ui-layer/events
+ */
 @HiltViewModel
 class AuthViewModel @Inject constructor(
     private val startTodoistAuthUseCase: StartTodoistAuthUseCase,
@@ -24,22 +28,14 @@ class AuthViewModel @Inject constructor(
     val uiState: StateFlow<AuthUiState>
         field = MutableStateFlow(AuthUiState())
 
-    // 認可URLはUIを経由してAuth Tabに渡す。画面回転で取りこぼさないようChannelで一度だけ配送する
-    private val authorizeRequestChannel = Channel<String>(Channel.BUFFERED)
-    val authorizeRequests: Flow<String> = authorizeRequestChannel.receiveAsFlow()
-
-    // 連携が完了したことを一度だけ通知する。ホーム画面への遷移は呼び出し側が行う
-    private val authenticatedChannel = Channel<Unit>(Channel.BUFFERED)
-    val authenticated: Flow<Unit> = authenticatedChannel.receiveAsFlow()
-
     /** 認可URLを発行してAuth Tabの起動を要求する。 */
     fun connect() {
         viewModelScope.launch {
             uiState.update { it.copy(isLoading = true, error = null) }
 
             startTodoistAuthUseCase.execute()
-                .onSuccess { authorizeUrl -> authorizeRequestChannel.send(authorizeUrl) }
-                .onFailure { uiState.update { state -> state.copy(isLoading = false, error = AuthError.UNKNOWN) } }
+                .onSuccess { authorizeUrl -> uiState.update { it.copy(authorizeUrl = authorizeUrl) } }
+                .onFailure { uiState.update { it.copy(isLoading = false, error = AuthError.UNKNOWN) } }
         }
     }
 
@@ -63,14 +59,21 @@ class AuthViewModel @Inject constructor(
     private fun completeAuth(redirectUri: String) {
         viewModelScope.launch {
             completeTodoistAuthUseCase.execute(redirectUri)
-                .onSuccess {
-                    uiState.update { AuthUiState() }
-                    authenticatedChannel.send(Unit)
-                }
+                .onSuccess { uiState.update { AuthUiState(isAuthenticated = true) } }
                 .onFailure { cause ->
                     uiState.update { it.copy(isLoading = false, error = cause.toAuthError()) }
                 }
         }
+    }
+
+    /** 認可URLをAuth Tabへ渡し終えた。消さないと再購読のたびにAuth Tabが開く。 */
+    fun consumeAuthorizeUrl() {
+        uiState.update { it.copy(authorizeUrl = null) }
+    }
+
+    /** 連携完了を画面が処理し終えた。 */
+    fun consumeAuthenticated() {
+        uiState.update { it.copy(isAuthenticated = false) }
     }
 
     fun consumeError() {
@@ -86,7 +89,12 @@ class AuthViewModel @Inject constructor(
     }
 }
 
-data class AuthUiState(val isLoading: Boolean = false, val error: AuthError? = null)
+data class AuthUiState(
+    val isLoading: Boolean = false,
+    val error: AuthError? = null,
+    val authorizeUrl: String? = null,
+    val isAuthenticated: Boolean = false,
+)
 
 enum class AuthError {
     CANCELED,
