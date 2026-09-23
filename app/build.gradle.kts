@@ -196,7 +196,6 @@ dependencies {
     implementation(project(":feature:todo"))
     implementation(project(":feature:setting"))
     implementation(project(":feature:auth"))
-    implementation(libs.core.splashscreen)
     implementation(project(":data:todo"))
     implementation(project(":data:ticket"))
     implementation(project(":common:database"))
