@@ -52,7 +52,7 @@ maestro test maestro-tests/add-todo-flow.yaml
 
 | フロー | 検証内容 |
 |-------|---------|
-| `auth-gate-flow` | 未連携では認証画面から先へ進めず、連携するとホーム画面に入れる |
+| `login-flow` | 未連携では認証画面から先へ進めず、連携するとホーム画面に入れる |
 | `logout-flow` | 設定画面からログアウトすると認証画面へ戻る |
 
 ### Reward
