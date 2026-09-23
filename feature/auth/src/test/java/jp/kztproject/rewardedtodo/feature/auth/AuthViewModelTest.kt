@@ -9,8 +9,6 @@ import jp.kztproject.rewardedtodo.application.todo.StartTodoistAuthUseCase
 import jp.kztproject.rewardedtodo.domain.todo.TokenError
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.async
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
@@ -44,14 +42,24 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `連携を開始すると認可URLが発行される`() = runTest {
-        coEvery { mockStartTodoistAuthUseCase.execute() } returns
-            Result.success("https://todoist.com/oauth/authorize?state=s")
-        val request = async { viewModel.authorizeRequests.first() }
+    fun `連携を開始すると認可URLが状態に載る`() = runTest {
+        val authorizeUrl = "https://todoist.com/oauth/authorize?state=s"
+        coEvery { mockStartTodoistAuthUseCase.execute() } returns Result.success(authorizeUrl)
 
         viewModel.connect()
 
-        request.await() shouldBe "https://todoist.com/oauth/authorize?state=s"
+        viewModel.uiState.value.authorizeUrl shouldBe authorizeUrl
+    }
+
+    @Test
+    fun `認可URLを消費すると状態から消える`() = runTest {
+        coEvery { mockStartTodoistAuthUseCase.execute() } returns
+            Result.success("https://todoist.com/oauth/authorize?state=s")
+        viewModel.connect()
+
+        viewModel.consumeAuthorizeUrl()
+
+        viewModel.uiState.value.authorizeUrl shouldBe null
     }
 
     @Test
@@ -72,15 +80,24 @@ class AuthViewModelTest {
     }
 
     @Test
-    fun `認可が成功すると連携完了が通知される`() = runTest {
+    fun `認可が成功すると連携完了が状態に載る`() = runTest {
         coEvery { mockCompleteTodoistAuthUseCase.execute(any()) } returns Result.success(Unit)
-        val authenticated = async { viewModel.authenticated.first() }
 
         viewModel.onAuthTabResult(TodoistAuthTabResult.Succeeded("https://example.com/callback?code=c&state=s"))
 
-        authenticated.await()
         coVerify(exactly = 1) { mockCompleteTodoistAuthUseCase.execute(any()) }
+        viewModel.uiState.value.isAuthenticated shouldBe true
         viewModel.uiState.value.error shouldBe null
+    }
+
+    @Test
+    fun `連携完了を消費すると状態から消える`() = runTest {
+        coEvery { mockCompleteTodoistAuthUseCase.execute(any()) } returns Result.success(Unit)
+        viewModel.onAuthTabResult(TodoistAuthTabResult.Succeeded("https://example.com/callback"))
+
+        viewModel.consumeAuthenticated()
+
+        viewModel.uiState.value.isAuthenticated shouldBe false
     }
 
     @Test
