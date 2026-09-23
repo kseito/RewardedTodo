@@ -17,7 +17,7 @@ import org.junit.Before
 import org.junit.Test
 
 @ExperimentalCoroutinesApi
-class StartDestinationViewModelTest {
+class HomeViewModelTest {
 
     private val getTodoistCredentialUseCase = mockk<GetTodoistCredentialUseCase>()
 
@@ -36,7 +36,7 @@ class StartDestinationViewModelTest {
         coEvery { getTodoistCredentialUseCase.execute() } returns
             TodoistCredential(ApiToken.create("0123456789abcdef0123456789abcdef01234567"))
 
-        val viewModel = StartDestinationViewModel(getTodoistCredentialUseCase)
+        val viewModel = HomeViewModel(getTodoistCredentialUseCase)
 
         viewModel.startDestination.value shouldBe StartDestination.HOME
     }
@@ -45,7 +45,7 @@ class StartDestinationViewModelTest {
     fun `未連携なら認証画面から始める`() = runTest {
         coEvery { getTodoistCredentialUseCase.execute() } returns null
 
-        val viewModel = StartDestinationViewModel(getTodoistCredentialUseCase)
+        val viewModel = HomeViewModel(getTodoistCredentialUseCase)
 
         viewModel.startDestination.value shouldBe StartDestination.AUTH
     }
@@ -54,7 +54,7 @@ class StartDestinationViewModelTest {
     fun `読み取りに失敗しても判定は完了し認証画面から始める`() = runTest {
         coEvery { getTodoistCredentialUseCase.execute() } throws IllegalStateException()
 
-        val viewModel = StartDestinationViewModel(getTodoistCredentialUseCase)
+        val viewModel = HomeViewModel(getTodoistCredentialUseCase)
 
         viewModel.startDestination.value shouldBe StartDestination.AUTH
     }

@@ -29,7 +29,7 @@ class HomeActivity : ComponentActivity() {
     // ActivityResultLauncherの登録はSTARTED以降だと例外になるため、フィールド初期化時に生成する
     private val todoistAuthTabLauncher = createTodoistAuthTabLauncher(this)
 
-    private val startDestinationViewModel: StartDestinationViewModel by viewModels()
+    private val homeViewModel: HomeViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +41,7 @@ class HomeActivity : ComponentActivity() {
 
         setContent {
             // StateFlowの値を直接読むと再コンポーズが起きず、判定が終わっても画面が空のままになる
-            val startDestination by startDestinationViewModel.startDestination.collectAsState()
+            val startDestination by homeViewModel.startDestination.collectAsState()
             val destination = startDestination ?: return@setContent
 
             MaterialTheme(

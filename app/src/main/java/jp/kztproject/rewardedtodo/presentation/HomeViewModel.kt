@@ -11,14 +11,14 @@ import timber.log.Timber
 import javax.inject.Inject
 
 /**
- * 起動時にTodoist連携の有無を一度だけ判定し、最初に出す画面を決める。
+ * [HomeActivity]が持つ画面状態。
  *
+ * 起動時にTodoist連携の有無を一度だけ判定し、最初に出す画面を決める。
  * 判定が終わるまで[startDestination]はnullで、その間はスプラッシュを表示し続ける。
  * 判定後の連携状態の変化は画面側のコールバックで扱うため、ここでは監視しない。
  */
 @HiltViewModel
-class StartDestinationViewModel @Inject constructor(getTodoistCredentialUseCase: GetTodoistCredentialUseCase) :
-    ViewModel() {
+class HomeViewModel @Inject constructor(getTodoistCredentialUseCase: GetTodoistCredentialUseCase) : ViewModel() {
 
     val startDestination: StateFlow<StartDestination?>
         field = MutableStateFlow<StartDestination?>(null)
