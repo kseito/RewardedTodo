@@ -2,7 +2,7 @@
 
 | 項目 | 内容 |
 |------|------|
-| ステータス | Approved |
+| ステータス | Implemented |
 | 作成日 | 2026-09-23 |
 | ブランチ | feature/remove-todo-add-flow |
 | 関連Issue/PR | Issue: #938 / 前提PR: #934 (Todoist認証の必須化) |
@@ -58,12 +58,12 @@ Application / Data / DI レイヤーの変更はない。
 
 ## 6. 受け入れ条件 (Acceptance Criteria)
 
-- [ ] Todo一覧にFloatingActionButtonが表示されない
-- [ ] Todo一覧の項目をタップするとBottomSheetが開き、そのTodoのタイトルとチケット枚数が初期表示される
-- [ ] BottomSheetでタイトルとチケット枚数を変更してSaveすると、一覧に反映される
-- [ ] BottomSheetのDeleteで一覧から削除できる
-- [ ] Todo一覧が空のとき、Todoistでタスクを作るよう促す文言が表示される
-- [ ] `todoistId` を持たないTodoが新たに作られる経路がコード上に存在しない
+- [x] Todo一覧にFloatingActionButtonが表示されない
+- [x] Todo一覧の項目をタップするとBottomSheetが開き、そのTodoのタイトルとチケット枚数が初期表示される
+- [x] BottomSheetでタイトルとチケット枚数を変更してSaveすると、一覧に反映される
+- [x] BottomSheetのDeleteで一覧から削除できる
+- [x] Todo一覧が空のとき、Todoistでタスクを作るよう促す文言が表示される
+- [x] `todoistId` を持たないTodoが新たに作られる経路がコード上に存在しない
 
 ## 7. テスト方針
 
