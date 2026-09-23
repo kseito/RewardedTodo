@@ -4,7 +4,7 @@
     <string name="todo_reward">Reward</string>
     <string name="multiplication">x</string>
     <string name="error_message">Error occurred</string>
-    <string name="todo_empty_message">No tasks yet</string>
+    <string name="todo_empty_message">No tasks yet. Add tasks in Todoist and pull to refresh.</string>
     <string name="error_todoist_unauthorized">The Todoist connection has expired. Log out from Setting and connect again.</string>
     <string name="open_setting">Open Setting</string>
 </resources>
