@@ -53,7 +53,7 @@ Todoist認証を必須にし、未連携では何も操作できないように�
 
 ### 操作フロー
 
-1. アプリ起動 → クレデンシャルの有無を判定するまでスプラッシュを保持
+1. アプリ起動 → クレデンシャルの有無を判定するまで何も描画しない
 2. 未連携なら認証画面、連携済みならホーム画面
 3. 認証画面で「Todoistと連携して始める」→ Auth Tab → 認可 → トークン交換 → ローカルデータ削除 → ホーム画面
 4. 設定 → ログアウト → 確認ダイアログ → 認証画面
@@ -82,14 +82,14 @@ Todoist認証を必須にし、未連携では何も操作できないように�
 | Feature | feature/auth（新設） | `AuthRoute` / `AuthScreen` / `AuthViewModel`。`feature:setting` から `TodoistAuthTabLauncher` / `TodoistAuthTabResult` / `TodoistAuthError` を移設 |
 | Feature | feature/setting | 接続系を削除。`SettingViewModel` は `DisconnectTodoistUseCase` のみ。ログアウト確認ダイアログを追加 |
 | Feature | feature/todo | 失効時のSnackbarと「設定を開く」アクション |
-| App | app | `HomeActivity` で開始ルートを切り替え。SplashScreen導入。`MockTodoistAuthTabLauncher`（e2eビルドタイプのみ） |
+| App | app | `HomeActivity` で開始ルートを切り替え。`MockTodoistAuthTabLauncher`（e2eビルドタイプのみ） |
 | DI | app/di | `ClearLocalDataUseCase` / `IAccountCacheRepository` のバインド追加。`ITicketRepository` のバインドは実装のリネームだけなので変更なし |
 
 ### ゲートの実装方針
 
 - `HomeActivity` の backStack 開始ルートをクレデンシャルの有無で切り替える。Activityは増やさない
 - Activityスコープの ViewModel が `GetTodoistCredentialUseCase.execute()` を起動時に1回だけ呼ぶ
-- `androidx.core.splashscreen` を導入し、判定完了まで `setKeepOnScreenCondition` で保持する
+- 判定が終わるまで何も描画しない。Android 12+ が出すシステムのスプラッシュ（アプリアイコン）のあと、判定完了までの約0.4秒だけ空の画面になるが、誤った画面を見せるよりは軽微と判断して許容する
 - プロセス再生成時は `rememberNavBackStack` の復元を優先する
 - 認証成功・ログアウトは明示的なコールバックで通知し、`backStack.clear()` してから積み直す（Flowの継続観測はしない）
 
