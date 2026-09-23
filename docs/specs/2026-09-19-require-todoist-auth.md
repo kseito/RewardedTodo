@@ -91,7 +91,7 @@ Todoist認証を必須にし、未連携では何も操作できないように�
 - Activityスコープの ViewModel が `GetTodoistCredentialUseCase.execute()` を起動時に1回だけ呼ぶ
 - 判定が終わるまで何も描画しない。Android 12+ が出すシステムのスプラッシュ（アプリアイコン）のあと、判定完了までの約0.4秒だけ空の画面になるが、誤った画面を見せるよりは軽微と判断して許容する
 - プロセス再生成時は `rememberNavBackStack` の復元を優先する
-- 認証成功・ログアウトは明示的なコールバックで通知し、`backStack.clear()` してから積み直す（Flowの継続観測はしない）
+- 認証成功・ログアウトはViewModelのUI状態として公開し、画面が処理したら消費して戻す。受け取った画面側が `backStack.clear()` してから積み直す（Flowの継続観測はしない）
 
 ### ローカルデータ削除の方針
 
@@ -129,25 +129,25 @@ Todoist認証を必須にし、未連携では何も操作できないように�
 
 ## 6. 受け入れ条件 (Acceptance Criteria)
 
-- [ ] 未連携の状態でアプリを起動すると認証画面が表示され、Todo / Reward / 設定のいずれにも到達できない
-- [ ] 認証画面で連携を完了するとホーム画面へ遷移し、Todo一覧がTodoistの内容で同期される
-- [ ] 連携済みの状態でアプリを再起動すると認証画面を経由せずホーム画面が表示される
-- [ ] 起動直後にホーム画面が一瞬見えてから認証画面へ差し替わる、といったちらつきが起きない
-- [ ] 設定画面にはログアウトのみが表示され、接続ボタンと未接続表示は存在しない
-- [ ] ログアウトすると確認ダイアログが出て、確定すると認証画面へ戻る
-- [ ] ログアウト後に別アカウントで認証すると、前のアカウントのTodoとチケット残数が残っていない
-- [ ] ログアウト後に再認証してもReward一覧は残っている
-- [ ] 未連携状態でチケットを取得・消費する経路がコード上に存在しない（`LocalTicketRepository` が削除されている）
-- [ ] トークンが失効した状態でTodo一覧を更新すると、認証画面へ戻らずSnackbarが表示され、「設定を開く」で設定画面へ遷移できる
-- [ ] Todoタブでタスクを完了した直後にReward タブへ切り替えると、プルリフレッシュせずにチケット残数が増えている
+- [x] 未連携の状態でアプリを起動すると認証画面が表示され、Todo / Reward / 設定のいずれにも到達できない
+- [x] 認証画面で連携を完了するとホーム画面へ遷移し、Todo一覧がTodoistの内容で同期される
+- [x] 連携済みの状態でアプリを再起動すると認証画面を経由せずホーム画面が表示される
+- [x] 起動直後にホーム画面が一瞬見えてから認証画面へ差し替わる、といったちらつきが起きない
+- [x] 設定画面にはログアウトのみが表示され、接続ボタンと未接続表示は存在しない
+- [x] ログアウトすると確認ダイアログが出て、確定すると認証画面へ戻る
+- [x] ログアウト後に別アカウントで認証すると、前のアカウントのTodoとチケット残数が残っていない
+- [x] ログアウト後に再認証してもReward一覧は残っている
+- [x] 未連携状態でチケットを取得・消費する経路がコード上に存在しない（`LocalTicketRepository` が削除されている）
+- [x] トークンが失効した状態でTodo一覧を更新すると、認証画面へ戻らずSnackbarが表示され、「設定を開く」で設定画面へ遷移できる
+- [x] Todoタブでタスクを完了した直後にReward タブへ切り替えると、プルリフレッシュせずにチケット残数が増えている
 
 ## 7. テスト方針
 
 | 種別 | 対象 |
 |------|------|
-| ユニットテスト | 新規: `AuthViewModel`（認可URL発行 / Auth Tab結果の各分岐 / エラーマッピング）、`ClearLocalDataInteractor`（3種のデータが消えること、失敗しても例外を投げないこと）<br>更新: `CompleteTodoistAuthInteractorTest`（削除が呼ばれること）、`SettingViewModelTest`（ログアウトのみに縮小）、`TodoListViewModelTest`（失効時に `result` へ例外が載ること）<br>削除: `TicketRepositoryTest`, `LocalTicketRepositoryTest` |
+| ユニットテスト | 新規: `AuthViewModel`（認可URL発行 / Auth Tab結果の各分岐 / エラーマッピング / 状態の消費）、`ClearLocalDataInteractor`（3種のデータが消えること、失敗しても例外を投げないこと）、`HomeViewModel`（起動時の遷移先判定）、`TicketRepository`（HTTPエラーの変換）<br>更新: `CompleteTodoistAuthInteractorTest`（削除が保存より先に呼ばれること）、`SettingViewModelTest`（ログアウトのみに縮小）<br>削除: `LocalTicketRepositoryTest` |
 | Roborazzi | `AuthScreen` に `@Preview` を3つ追加（初期 / ローディング / エラー）。`SettingScreen` の未接続系Preview 2つを削除。`detekt-rules` の `NoPreviewNameRule` に従い `name` は付けない |
-| Maestro E2E | 新規: 認証ゲートが表示されることを検証するフロー1本<br>更新: 既存13フローに認証プロローグを追加し、Todo系・抽選系はフェイクが返すタスクを使う形へ書き換える（後述）<br>`maestro-e2e.yml` に `-PuseMockServer=true` でのビルドと `start-wiremock.sh` の実行を追加<br>チケット残数の再取得を直したら `subflows/earn-tickets.yaml` のプルリフレッシュを外す |
+| Maestro E2E | 新規: `login-flow`（認証ゲート）、`logout-flow`（ログアウト→認証画面）<br>更新: 既存フローに認証プロローグ（`subflows/authenticate.yaml`）を追加し、Todo系・抽選系はフェイクが返すタスクを使う形へ書き換える（後述）<br>削除: `setting-todoist-oauth-flow`（未連携で設定画面に入る前提が消えたため）<br>`maestro-e2e.yml` を `assembleE2e` / `installE2e` と `start-wiremock.sh` に変更 |
 
 アサーションはKotestのmatcher（`shouldBe` 等）に統一する。
 
@@ -201,8 +201,8 @@ PR #927 で用意したWireMockを別プロセスで起動する。スタブは�
 
 ## 8. 未決事項・リスク
 
-- `IAccountCacheRepository` の配置を `domain/reward` と想定しているが、`docs/module-dependency.md` の依存方向と突き合わせて実装時に調整する可能性がある
-- 「アプリ内でTodoを作る」導線は認証必須化後もUIとして残るが、そのTodoを完了してもチケットは得られない（サーバーがTodoist経由でしか加算しないため）。この導線自体を残すかは本変更の対象外とし、別途検討する
+- `IAccountCacheRepository` は `domain/reward` に置いた。`application:todo` は既に `domain:reward` へ依存しており、`docs/module-dependency.md` の依存方向に違反しない
+- 「アプリ内でTodoを作る」導線は認証必須化後もUIとして残るが、そのTodoを完了してもチケットは得られない（サーバーがTodoist経由でしか加算しないため）。本変更の対象外とし、#938 で扱う
 - ADRは作成しない。未連携フォールバックを持たない判断の根拠はPR説明文に残す
 
 ## 9. ドキュメント更新
