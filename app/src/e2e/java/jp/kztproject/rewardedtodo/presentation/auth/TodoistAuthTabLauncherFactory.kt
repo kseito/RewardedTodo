@@ -1,7 +1,7 @@
 package jp.kztproject.rewardedtodo.presentation.auth
 
 import androidx.activity.ComponentActivity
-import jp.kztproject.rewardedtodo.feature.setting.TodoistAuthTabLauncher
+import jp.kztproject.rewardedtodo.feature.auth.TodoistAuthTabLauncher
 
 /**
  * E2Eではブラウザを介さずに認可を完了させる。

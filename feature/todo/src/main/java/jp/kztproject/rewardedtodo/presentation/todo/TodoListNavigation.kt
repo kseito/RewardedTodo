@@ -7,8 +7,8 @@ import kotlinx.serialization.Serializable
 @Serializable
 data object TodoListRoute : NavKey
 
-fun EntryProviderScope<NavKey>.todoListScreen() {
+fun EntryProviderScope<NavKey>.todoListScreen(onOpenSetting: () -> Unit) {
     entry<TodoListRoute> {
-        TodoListScreenWithBottomSheet()
+        TodoListScreenWithBottomSheet(onOpenSetting = onOpenSetting)
     }
 }

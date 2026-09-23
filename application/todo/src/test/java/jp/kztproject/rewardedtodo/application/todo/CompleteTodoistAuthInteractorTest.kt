@@ -3,6 +3,7 @@ package jp.kztproject.rewardedtodo.application.todo
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 import io.mockk.coEvery
+import io.mockk.coVerifyOrder
 import io.mockk.coVerify
 import io.mockk.mockk
 import jp.kztproject.rewardedtodo.domain.todo.ApiToken
@@ -22,12 +23,30 @@ class CompleteTodoistAuthInteractorTest {
     private val authRepository = mockk<ITodoistAuthRepository>()
     private val authSessionStore = TodoistAuthSessionStore()
     private val credentialRepository = mockk<ITodoistCredentialRepository>(relaxed = true)
-    private val interactor =
-        CompleteTodoistAuthInteractor(authRepository, authSessionStore, credentialRepository)
+    private val clearLocalDataUseCase = mockk<ClearLocalDataUseCase>(relaxed = true)
+    private val interactor = CompleteTodoistAuthInteractor(
+        authRepository,
+        authSessionStore,
+        credentialRepository,
+        clearLocalDataUseCase,
+    )
 
     private val codeVerifier = CodeVerifier.generate()
     private val session = TodoistAuthSession(state = OAuthState.create("issued-state"), codeVerifier = codeVerifier)
     private val credential = TodoistCredential(ApiToken.create("access-token"))
+
+    @Test
+    fun `execute clears local data before saving the credential`() = runTest {
+        authSessionStore.save(session)
+        coEvery { authRepository.exchangeCodeForCredential(any(), any()) } returns Result.success(credential)
+
+        interactor.execute("https://example.com/callback?code=auth-code&state=issued-state")
+
+        coVerifyOrder {
+            clearLocalDataUseCase.execute()
+            credentialRepository.saveCredential(credential)
+        }
+    }
 
     @Test
     fun `execute exchanges the code and saves the credential`() = runTest {

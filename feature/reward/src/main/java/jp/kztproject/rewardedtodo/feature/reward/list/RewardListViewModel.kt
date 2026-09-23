@@ -88,6 +88,16 @@ class RewardListViewModel @Inject constructor(
     val isRefreshing: StateFlow<Boolean>
         field = MutableStateFlow(false)
 
+    /**
+     * 画面を表示したときにチケット残数を引き直す。
+     *
+     * サーバー経由の取得はワンショットで、Todoタブでタスクを完了しても自動では反映されない。
+     * ユーザーの操作ではないためインジケータは出さない。
+     */
+    fun refreshPointSilently() {
+        pointRefreshTrigger.tryEmit(Unit)
+    }
+
     // プルリフレッシュ。チケット（ポイント）を再取得する。
     // リワード一覧は Room の Flow を購読しており常に最新が流れてくるため、明示的な再取得は不要。
     // インジケータは rewardPoint パイプラインの emit / catch で解除される。

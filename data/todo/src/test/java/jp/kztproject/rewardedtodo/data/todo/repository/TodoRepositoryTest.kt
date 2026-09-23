@@ -17,7 +17,6 @@ import jp.kztproject.rewardedtodo.data.todoist.model.Task
 import jp.kztproject.rewardedtodo.data.todoist.model.Tasks
 import jp.kztproject.rewardedtodo.domain.todo.ApiToken
 import jp.kztproject.rewardedtodo.domain.todo.TodoistCredential
-import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoistCredentialRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
@@ -43,9 +42,8 @@ class TodoRepositoryTest {
     private val dao: TodoDao =
         DatabaseInitializer.init(applicationContext, AppDatabase::class.java, "todo").todoDao()
     private val api: TodoistApi = mockk()
-    private val credentialRepository: ITodoistCredentialRepository = mockk()
 
-    private val repository = TodoRepository(dao, api, credentialRepository)
+    private val repository = TodoRepository(dao, api)
 
     @Before
     fun setup() {
@@ -60,8 +58,6 @@ class TodoRepositoryTest {
 
     @Test
     fun takeInTasksFromTodoist() = runTest {
-        useTodoist(true)
-
         val tasks = Tasks(
             listOf(
                 Task("101", "test_content", false, Due(true)),
@@ -95,8 +91,6 @@ class TodoRepositoryTest {
 
     @Test
     fun takeInTasksWithNullDueFromTodoist() = runTest {
-        useTodoist(true)
-
         val tasks = Tasks(
             listOf(
                 Task("101", "test_content_with_due", false, Due(true)),
@@ -133,8 +127,6 @@ class TodoRepositoryTest {
 
     @Test
     fun ignoreTaskFromTodoist() = runTest {
-        useTodoist(true)
-
         withContext(Dispatchers.IO) {
             dao.insertOrUpdate(
                 TodoEntity(
@@ -191,14 +183,5 @@ class TodoRepositoryTest {
                 this.name shouldBe "test_content2"
             }
         }
-    }
-
-    private fun useTodoist(flag: Boolean) {
-        val credential = if (flag) {
-            TodoistCredential(ApiToken.create("0123456789abcdef0123456789abcdef01234567"))
-        } else {
-            null
-        }
-        coEvery { credentialRepository.getCredential() } returns credential
     }
 }

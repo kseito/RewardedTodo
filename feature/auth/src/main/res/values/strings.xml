@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="auth_app_name">RewardedTodo</string>
+    <string name="auth_description">This app turns your Todoist tasks into lottery tickets for your own rewards. Connect Todoist to get started.</string>
+    <string name="auth_connect_button">Connect to Todoist</string>
+
+    <!-- Error messages -->
+    <string name="error_auth_canceled">Authorization was canceled</string>
+    <string name="error_auth_verification_failed">Could not verify the redirect. Please try again.</string>
+    <string name="error_auth_state_mismatch">Authorization could not be verified. Please try again.</string>
+    <string name="error_auth_authorization_failed">Todoist declined the authorization</string>
+    <string name="error_auth_exchange_failed">Failed to obtain an access token</string>
+    <string name="error_auth_tab_unsupported">This device\'s browser does not support this sign-in method. Please update Chrome.</string>
+    <string name="error_auth_unknown">Failed to connect to Todoist</string>
+</resources>

@@ -4,6 +4,8 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import jp.kztproject.rewardedtodo.application.todo.ClearLocalDataInteractor
+import jp.kztproject.rewardedtodo.application.todo.ClearLocalDataUseCase
 import jp.kztproject.rewardedtodo.application.todo.CompleteTodoistAuthInteractor
 import jp.kztproject.rewardedtodo.application.todo.CompleteTodoistAuthUseCase
 import jp.kztproject.rewardedtodo.application.todo.DisconnectTodoistInteractor
@@ -30,6 +32,9 @@ interface UseCaseModule {
 
     @Binds
     fun bindCompleteTodoistAuthUseCase(interactor: CompleteTodoistAuthInteractor): CompleteTodoistAuthUseCase
+
+    @Binds
+    fun bindClearLocalDataUseCase(interactor: ClearLocalDataInteractor): ClearLocalDataUseCase
 
     // リフレッシュの並走でトークンが相互に無効化されないよう、実装側でMutexを持つ単一インスタンスを共有する
     @Binds

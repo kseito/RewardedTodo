@@ -1,0 +1,36 @@
+appId: jp.kztproject.rewardedtodo.debug
+tags:
+  - android
+  - rewardedtodo
+  - auth
+---
+# 未連携では認証画面から先へ進めず、連携するとホーム画面に入れる。
+- runScript: stubs/reset.js
+- clearState
+- launchApp
+
+# 起動直後は認証画面
+- extendedWaitUntil:
+    visible: "Connect to Todoist"
+    timeout: 180000
+
+# Todo / Reward / 設定のいずれにも到達できない
+- assertNotVisible: "Todo"
+- assertNotVisible: "Reward"
+- assertNotVisible:
+    text: "setting_button"
+
+# 連携するとホーム画面へ移る
+- tapOn: "Connect to Todoist"
+- extendedWaitUntil:
+    visible: "Reward"
+    timeout: 30000
+- assertVisible:
+    text: "setting_button"
+
+# 連携後に起動し直しても認証画面を経由しない
+- launchApp
+- extendedWaitUntil:
+    visible: "Reward"
+    timeout: 30000
+- assertNotVisible: "Connect to Todoist"

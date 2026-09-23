@@ -139,6 +139,11 @@ private fun RewardListScreen(
     val isSingleLottering by viewModel.isSingleLottering.collectAsStateWithLifecycle()
     val isBatchLottering by viewModel.isBatchLottering.collectAsStateWithLifecycle()
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+
+    // 他のタブでチケットを獲得していても反映されるよう、表示のたびに引き直す
+    LaunchedEffect(Unit) {
+        viewModel.refreshPointSilently()
+    }
     val isLottering = isSingleLottering || isBatchLottering
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }

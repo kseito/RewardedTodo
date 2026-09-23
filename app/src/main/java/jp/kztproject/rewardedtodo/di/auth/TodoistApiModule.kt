@@ -11,6 +11,7 @@ import jp.kztproject.rewardedtodo.BuildConfig
 import jp.kztproject.rewardedtodo.application.todo.GetValidAccessTokenUseCase
 import jp.kztproject.rewardedtodo.application.todo.RefreshTodoistTokenUseCase
 import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
+import jp.kztproject.rewardedtodo.domain.todo.exception.TodoistUnauthorizedException
 import kotlinx.coroutines.runBlocking
 import okhttp3.Authenticator
 import okhttp3.OkHttpClient
@@ -50,11 +51,13 @@ class TodoistApiModule {
                 }
             }
             .addInterceptor { chain ->
-                // 期限切れならここでリフレッシュされる。未連携ならヘッダを付けずに送る
+                // 期限切れならここでリフレッシュされる。取得できなければ送っても401になるだけなので、
+                // 呼び出し側が失効と判別できる例外にして打ち切る
                 val token = runBlocking { getValidAccessTokenUseCase.execute() }
-                val request = token
-                    ?.let { chain.request().newBuilder().header(AUTHORIZATION_HEADER, "Bearer ${it.value}").build() }
-                    ?: chain.request()
+                    ?: throw TodoistUnauthorizedException()
+                val request = chain.request().newBuilder()
+                    .header(AUTHORIZATION_HEADER, "Bearer ${token.value}")
+                    .build()
                 chain.proceed(request)
             }
             .authenticator(TodoistTokenAuthenticator(refreshTodoistTokenUseCase))

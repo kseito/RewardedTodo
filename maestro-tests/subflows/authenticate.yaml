@@ -1,15 +1,12 @@
 appId: jp.kztproject.rewardedtodo.debug
 ---
-# Todoist連携を済ませる。`e2e` ビルドタイプでビルドしたアプリでは、
-# 認可はブラウザを介さずMockTodoistAuthTabLauncherが即座に成功を返す。
-#
-# 連携の入口は認証必須化(#929)で設定画面から起動時の認証画面へ移る。
-# 各フローがこのサブフローを呼ぶ形にしてあるので、そのときはここだけを直せばよい。
-- tapOn:
-    text: "setting_button"
-- assertVisible: "Setting"
+# 起動時の認証画面でTodoist連携を済ませる。
+# `e2e` ビルドタイプでビルドしたアプリでは、認可はブラウザを介さず
+# MockTodoistAuthTabLauncherが即座に成功を返す。
+- extendedWaitUntil:
+    visible: "Connect to Todoist"
+    timeout: 180000
 - tapOn: "Connect to Todoist"
 - extendedWaitUntil:
-    visible: "Connected"
-    timeout: 15000
-- back
+    visible: "Reward"
+    timeout: 30000

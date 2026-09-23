@@ -1,126 +1,72 @@
 package jp.kztproject.rewardedtodo.data.ticket
 
-import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.PreferenceDataStoreFactory
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.edit
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import jp.kztproject.rewardedtodo.common.kvs.UserPreferencesKeys
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestScope
+import jp.kztproject.rewardedtodo.data.ticket.network.RewardServerApi
+import jp.kztproject.rewardedtodo.data.ticket.network.model.PointsInfoResponse
+import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
 import kotlinx.coroutines.test.runTest
-import org.junit.Before
-import org.junit.Rule
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Test
-import org.junit.rules.TemporaryFolder
+import retrofit2.HttpException
+import retrofit2.Response
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class TicketRepositoryTest {
 
-    @get:Rule
-    val tmpFolder: TemporaryFolder = TemporaryFolder.builder().assureDeletion().build()
+    private val api = mockk<RewardServerApi>()
+    private val userIdRepository = mockk<RewardUserIdRepository>(relaxed = true)
+    private val repository = TicketRepository(api, userIdRepository)
 
-    private val testScope = TestScope()
+    private fun httpException(code: Int) = HttpException(
+        Response.error<Unit>(code, "".toResponseBody("application/json".toMediaType())),
+    )
 
-    private lateinit var dataStore: DataStore<Preferences>
-    private lateinit var localRepository: LocalTicketRepository
-    private lateinit var networkRepository: NetworkTicketRepository
-    private lateinit var repository: TicketRepository
+    private val points = PointsInfoResponse(
+        userId = "user",
+        totalPoints = 10,
+        availablePoints = 7,
+        taskCount = 10,
+    )
 
-    @Before
-    fun setUp() {
-        dataStore = PreferenceDataStoreFactory.create(
-            scope = testScope,
-            produceFile = { tmpFolder.newFile("test_ticket_repository.preferences_pb") },
-        )
-        localRepository = mockk(relaxed = true)
-        networkRepository = mockk(relaxed = true)
-        repository = TicketRepository(localRepository, networkRepository, dataStore)
-    }
+    @Test
+    fun `残数不足の422はLackOfTicketsExceptionに変換される`() = runTest {
+        coEvery { userIdRepository.getUserId() } returns "user"
+        coEvery { api.consumePoints(any(), any(), any()) } throws httpException(422)
 
-    private suspend fun setToken(token: String?) {
-        dataStore.edit { settings ->
-            if (token == null) {
-                settings.remove(UserPreferencesKeys.TODOIST_ACCESS_TOKEN)
-            } else {
-                settings[UserPreferencesKeys.TODOIST_ACCESS_TOKEN] = token
-            }
-        }
+        shouldThrow<LackOfTicketsException> { repository.consumeTickets(3) }
     }
 
     @Test
-    fun `addTicket delegates to local when token is missing`() = testScope.runTest {
-        repository.addTicket(3)
+    fun `401で再登録して再送したあとの422もLackOfTicketsExceptionに変換される`() = runTest {
+        coEvery { userIdRepository.getUserId() } returnsMany listOf("stale-user", "fresh-user")
+        coEvery { api.consumePoints("stale-user", any(), any()) } throws httpException(401)
+        coEvery { api.consumePoints("fresh-user", any(), any()) } throws httpException(422)
 
-        coVerify(exactly = 1) { localRepository.addTicket(3) }
-        coVerify(exactly = 0) { networkRepository.addTicket(any()) }
+        shouldThrow<LackOfTicketsException> { repository.consumeTickets(3) }
+
+        coVerify(exactly = 1) { userIdRepository.clearUserId() }
     }
 
     @Test
-    fun `addTicket delegates to network when token is present`() = testScope.runTest {
-        setToken("dummy-token")
+    fun `401で再登録した再送が成功すればその結果を返す`() = runTest {
+        coEvery { userIdRepository.getUserId() } returnsMany listOf("stale-user", "fresh-user")
+        coEvery { api.consumePoints("stale-user", any(), any()) } throws httpException(401)
+        coEvery { api.consumePoints("fresh-user", any(), any()) } returns points
 
-        repository.addTicket(2)
+        repository.consumeTickets(3)
 
-        coVerify(exactly = 1) { networkRepository.addTicket(2) }
-        coVerify(exactly = 0) { localRepository.addTicket(any()) }
+        coVerify(exactly = 1) { api.consumePoints("fresh-user", any(), any()) }
     }
 
     @Test
-    fun `addTicket treats blank token as not connected`() = testScope.runTest {
-        setToken("   ")
+    fun `422以外のHTTPエラーはそのまま伝播する`() = runTest {
+        coEvery { userIdRepository.getUserId() } returns "user"
+        coEvery { api.consumePoints(any(), any(), any()) } throws httpException(500)
 
-        repository.addTicket(1)
-
-        coVerify(exactly = 1) { localRepository.addTicket(1) }
-        coVerify(exactly = 0) { networkRepository.addTicket(any()) }
-    }
-
-    @Test
-    fun `consumeTicket delegates by token presence`() = testScope.runTest {
-        repository.consumeTicket()
-        coVerify(exactly = 1) { localRepository.consumeTicket() }
-
-        setToken("dummy-token")
-        repository.consumeTicket()
-        coVerify(exactly = 1) { networkRepository.consumeTicket() }
-    }
-
-    @Test
-    fun `consumeTickets delegates by token presence`() = testScope.runTest {
-        repository.consumeTickets(5)
-        coVerify(exactly = 1) { localRepository.consumeTickets(5) }
-
-        setToken("dummy-token")
-        repository.consumeTickets(7)
-        coVerify(exactly = 1) { networkRepository.consumeTickets(7) }
-    }
-
-    @Test
-    fun `getNumberOfTicket returns local flow when not connected`() = testScope.runTest {
-        coEvery { localRepository.getNumberOfTicket() } returns flowOf(42)
-
-        val result = repository.getNumberOfTicket().first()
-
-        result shouldBe 42
-        coVerify(exactly = 1) { localRepository.getNumberOfTicket() }
-        coVerify(exactly = 0) { networkRepository.getNumberOfTicket() }
-    }
-
-    @Test
-    fun `getNumberOfTicket returns network flow when connected`() = testScope.runTest {
-        setToken("dummy-token")
-        coEvery { networkRepository.getNumberOfTicket() } returns flowOf(7)
-
-        val result = repository.getNumberOfTicket().first()
-
-        result shouldBe 7
-        coVerify(exactly = 1) { networkRepository.getNumberOfTicket() }
-        coVerify(exactly = 0) { localRepository.getNumberOfTicket() }
+        shouldThrow<HttpException> { repository.consumeTickets(3) }.code() shouldBe 500
     }
 }

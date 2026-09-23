@@ -48,6 +48,13 @@ maestro test maestro-tests/add-todo-flow.yaml
 | `complete-todo-flow` | Todoist由来のTodoを完了するとリストから消え、サーバーがチケットを加算する |
 | `delete-todo-flow` | Todoを削除できる |
 
+### 認証
+
+| フロー | 検証内容 |
+|-------|---------|
+| `login-flow` | 未連携では認証画面から先へ進めず、連携するとホーム画面に入れる |
+| `logout-flow` | 設定画面からログアウトすると認証画面へ戻る |
+
 ### Reward
 
 | フロー | 検証内容 |
@@ -66,15 +73,9 @@ maestro test maestro-tests/add-todo-flow.yaml
 | `delete-non-repeat-reward-flow` | 非リピート報酬は当選後にリストから消える |
 | `keep-repeat-reward-flow` | リピート報酬は当選後もリストに残る |
 
-### 設定（Setting）
-
-| フロー | 検証内容 |
-|-------|---------|
-| `setting-todoist-token-flow` | Todoist APIトークンの接続・解除ができる |
-
 ### 未カバー（意図的に対象外）
 
-- **Todoist同期（Pull-to-Refresh）**: 実際のTodoistアカウントとネットワークが必要なため対象外
+- **Auth Tabのブラウザ往復**: CIのエミュレータにChrome 137+が無く、`e2e` ビルドではブラウザを介さずに認可を完了させるため、実ブラウザでの認可は手動確認で担保する
 - **タブ切り替え**: 各フロー内でTodo⇔Reward間の遷移を暗黙的に検証済み
 
 ## フロー命名規約

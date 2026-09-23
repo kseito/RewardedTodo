@@ -1,0 +1,47 @@
+
+plugins {
+    alias(libs.plugins.rewardedtodo.android.library)
+    alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.serialization)
+}
+
+dependencies {
+    implementation(project(path = ":application:todo"))
+    implementation(project(path = ":domain:todo"))
+
+    implementation(libs.core.ktx)
+    implementation(libs.material)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.activity.compose)
+    implementation(libs.androidx.compose.foundation)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.compose.material.extended)
+    implementation(libs.androidx.compose.ui)
+    implementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.compose.livedata)
+    implementation(libs.constraintlayout.compose)
+    implementation(libs.hilt.navigation.compose)
+    implementation(libs.navigation3.runtime)
+    implementation(libs.kotlinx.serialization.core)
+
+    //Dagger
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.compiler)
+
+    // Showkase
+    debugImplementation(libs.showkase)
+    implementation(libs.showkase.annotation)
+    kspDebug(libs.showkase.processor)
+
+    testImplementation(libs.junit)
+    testImplementation(libs.androidx.test.core)
+    testImplementation(libs.coroutines.test)
+    testImplementation(libs.robolectric)
+    testImplementation(libs.kotest.assertions.core)
+    testImplementation(libs.mockk)
+}
+
+android {
+    namespace = "jp.kztproject.rewardedtodo.feature.auth"
+}
