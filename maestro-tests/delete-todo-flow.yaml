@@ -3,33 +3,22 @@ tags:
   - android
   - rewardedtodo
 ---
-- runScript: stubs/reset.js
+# Todoistから同期したTodoを詳細シートから削除すると一覧から消える。
+- runScript: stubs/one-todo.js
 - clearState
 - launchApp
 
 # Wait for the initial screen to finish rendering; cold start/JIT is slow on CI
 - runFlow: subflows/authenticate.yaml
 
-# First, add a task to delete
-- tapOn:
-    text: "Add"
-
-# Wait for bottom sheet to appear
-- assertVisible: "Title"
-
-# Enter task name
-- tapOn: "Title"
-- inputText: "Task to Delete"
-
-# Tap Save button
-- tapOn: "Save"
-
-# Verify the task is added to the list
-- assertVisible: "Task to Delete"
+# Todoistから同期されたタスクが一覧に出る
+- extendedWaitUntil:
+    visible: "Synced Task"
+    timeout: 15000
 
 # Tap on the task to open bottom sheet
 - tapOn:
-    text: "Task to Delete"
+    text: "Synced Task"
 
 # Wait for bottom sheet to appear
 - assertVisible: "Title"
@@ -38,4 +27,4 @@ tags:
 - tapOn: "Delete"
 
 # Verify the task is deleted from the list
-- assertNotVisible: "Task to Delete"
+- assertNotVisible: "Synced Task"

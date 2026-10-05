@@ -10,13 +10,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.SnackbarHost
@@ -26,8 +23,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.material3.ripple
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -59,18 +54,12 @@ import jp.kztproject.rewardedtodo.feature.todo.R
 fun TodoListScreenWithBottomSheet(onOpenSetting: () -> Unit, viewModel: TodoListViewModel = hiltViewModel()) {
     val sheetState = rememberModalBottomSheetState()
     var selectedTodo: Todo? by remember { mutableStateOf(null) }
-    var showBottomSheet by remember { mutableStateOf(false) }
 
     val onTodoItemClicked: (Todo) -> Unit = {
         selectedTodo = it
-        showBottomSheet = true
     }
     val onTodoUpdateSucceed: () -> Unit = {
-        showBottomSheet = false
-    }
-    val onTodoAddClicked: () -> Unit = {
         selectedTodo = null
-        showBottomSheet = true
     }
     val onTodoSaveSelected: (EditingTodo) -> Unit = {
         viewModel.updateTodo(it)
@@ -83,19 +72,19 @@ fun TodoListScreenWithBottomSheet(onOpenSetting: () -> Unit, viewModel: TodoList
         TodoListScreen(
             viewModel = viewModel,
             onTodoItemClicked = onTodoItemClicked,
-            onTodoAddClicked = onTodoAddClicked,
             onTodoUpdateSucceed = onTodoUpdateSucceed,
             onOpenSetting = onOpenSetting,
         )
 
-        TodoDetailBottomSheet(
-            showBottomSheet = showBottomSheet,
-            onDismissRequest = { showBottomSheet = false },
-            sheetState = sheetState,
-            todo = selectedTodo,
-            onTodoSaveSelected = onTodoSaveSelected,
-            onTodoDeleteSelected = onTodoDeleteSelected,
-        )
+        selectedTodo?.let { todo ->
+            TodoDetailBottomSheet(
+                onDismissRequest = { selectedTodo = null },
+                sheetState = sheetState,
+                todo = todo,
+                onTodoSaveSelected = onTodoSaveSelected,
+                onTodoDeleteSelected = onTodoDeleteSelected,
+            )
+        }
     }
 }
 
@@ -103,7 +92,6 @@ fun TodoListScreenWithBottomSheet(onOpenSetting: () -> Unit, viewModel: TodoList
 @Composable
 private fun TodoListScreen(
     viewModel: TodoListViewModel,
-    onTodoAddClicked: () -> Unit,
     onTodoItemClicked: (Todo) -> Unit,
     onTodoUpdateSucceed: () -> Unit,
     onOpenSetting: () -> Unit,
@@ -124,7 +112,6 @@ private fun TodoListScreen(
             onRefresh = { viewModel.refreshTodoList() },
             onTodoItemClicked = onTodoItemClicked,
             onTodoDone = { viewModel.completeTodo(it) },
-            onTodoAddClicked = onTodoAddClicked,
         )
 
         result?.let { outcome ->
@@ -178,7 +165,6 @@ private fun TodoListContent(
     onRefresh: () -> Unit,
     onTodoItemClicked: (Todo) -> Unit,
     onTodoDone: (Todo) -> Unit,
-    onTodoAddClicked: () -> Unit,
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -241,16 +227,6 @@ private fun TodoListContent(
                 }
             }
         }
-
-        FloatingActionButton(
-            onClick = onTodoAddClicked,
-            shape = RoundedCornerShape(8.dp),
-            modifier = Modifier
-                .padding(24.dp)
-                .align(Alignment.BottomEnd),
-        ) {
-            Icon(Icons.Rounded.Add, contentDescription = "Add")
-        }
     }
 }
 
@@ -264,7 +240,6 @@ fun TodoListContentLoadingPreview() {
         onRefresh = {},
         onTodoItemClicked = {},
         onTodoDone = {},
-        onTodoAddClicked = {},
     )
 }
 
@@ -278,7 +253,6 @@ fun TodoListContentEmptyPreview() {
         onRefresh = {},
         onTodoItemClicked = {},
         onTodoDone = {},
-        onTodoAddClicked = {},
     )
 }
 
@@ -295,7 +269,6 @@ fun TodoListContentWithDataPreview() {
         onRefresh = {},
         onTodoItemClicked = {},
         onTodoDone = {},
-        onTodoAddClicked = {},
     )
 }
 
@@ -312,7 +285,6 @@ fun TodoListContentErrorPreview() {
             onRefresh = {},
             onTodoItemClicked = {},
             onTodoDone = {},
-            onTodoAddClicked = {},
         )
         CommonAlertDialog(
             message = stringResource(id = R.string.error_message),

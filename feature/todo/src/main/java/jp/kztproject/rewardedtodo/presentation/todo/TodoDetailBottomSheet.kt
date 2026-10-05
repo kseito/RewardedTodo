@@ -30,49 +30,38 @@ import jp.kztproject.rewardedtodo.feature.todo.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TodoDetailBottomSheet(
-    showBottomSheet: Boolean,
     onDismissRequest: () -> Unit,
     sheetState: SheetState,
-    todo: Todo?,
+    todo: Todo,
     onTodoSaveSelected: (EditingTodo) -> Unit,
     onTodoDeleteSelected: (EditingTodo) -> Unit,
 ) {
-    if (showBottomSheet) {
-        ModalBottomSheet(
+    ModalBottomSheet(
+        onDismissRequest = onDismissRequest,
+        sheetState = sheetState,
+    ) {
+        TodoDetailBottomSheetContent(
+            todo = todo,
+            onTodoSaveSelected = onTodoSaveSelected,
+            onTodoDeleteSelected = onTodoDeleteSelected,
             onDismissRequest = onDismissRequest,
-            sheetState = sheetState,
-        ) {
-            TodoDetailBottomSheetContent(
-                todo = todo,
-                onTodoSaveSelected = onTodoSaveSelected,
-                onTodoDeleteSelected = onTodoDeleteSelected,
-                onDismissRequest = onDismissRequest,
-            )
-        }
+        )
     }
 }
 
 @Composable
 private fun TodoDetailBottomSheetContent(
-    todo: Todo?,
+    todo: Todo,
     onTodoSaveSelected: (EditingTodo) -> Unit, // TODO create new Domain
     onTodoDeleteSelected: (EditingTodo) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
-    var id: Long? by remember { mutableStateOf(null) }
-    var title: String by remember { mutableStateOf("") }
-    var numberOfTicket = remember { mutableStateOf(0) }
+    var title: String by remember { mutableStateOf(todo.name) }
+    val numberOfTicket = remember { mutableStateOf(todo.numberOfTicketsObtained) }
 
     LaunchedEffect(todo) {
-        if (todo != null) {
-            id = todo.id
-            title = todo.name
-            numberOfTicket.value = todo.numberOfTicketsObtained.toInt()
-        } else {
-            id = null
-            title = ""
-            numberOfTicket.value = 1
-        }
+        title = todo.name
+        numberOfTicket.value = todo.numberOfTicketsObtained
     }
 
     ConstraintLayout(
@@ -133,22 +122,12 @@ private fun TodoDetailBottomSheetContent(
         )
         Button(
             onClick = {
-                todo?.let {
-                    val editingTodo = EditingTodo.from(it)
-                        .copy(
-                            id = id,
-                            name = title,
-                            numberOfTicketsObtained = numberOfTicket.value,
-                        )
-                    onTodoSaveSelected(editingTodo)
-                } ?: run {
-                    val editingTodo = EditingTodo(
-                        id = id,
+                val editingTodo = EditingTodo.from(todo)
+                    .copy(
                         name = title,
                         numberOfTicketsObtained = numberOfTicket.value,
                     )
-                    onTodoSaveSelected(editingTodo)
-                }
+                onTodoSaveSelected(editingTodo)
                 onDismissRequest()
             },
             modifier = Modifier
@@ -159,34 +138,21 @@ private fun TodoDetailBottomSheetContent(
         ) {
             Text(text = "Save")
         }
-        todo?.let {
-            Button(
-                onClick = {
-                    val editingTodo = EditingTodo.from(todo)
-                    onTodoDeleteSelected(editingTodo)
-                    onDismissRequest()
+        Button(
+            onClick = {
+                val editingTodo = EditingTodo.from(todo)
+                onTodoDeleteSelected(editingTodo)
+                onDismissRequest()
+            },
+            modifier = Modifier
+                .constrainAs(deleteButton) {
+                    top.linkTo(ticketLabelText.bottom)
+                    start.linkTo(saveButton.end)
                 },
-                modifier = Modifier
-                    .constrainAs(deleteButton) {
-                        top.linkTo(ticketLabelText.bottom)
-                        start.linkTo(saveButton.end)
-                    },
-            ) {
-                Text(text = "Delete")
-            }
+        ) {
+            Text(text = "Delete")
         }
     }
-}
-
-@Preview
-@Composable
-fun TodoDetailBottomSheetContentPreview() {
-    TodoDetailBottomSheetContent(
-        todo = null,
-        onTodoSaveSelected = {},
-        onTodoDeleteSelected = {},
-        onDismissRequest = {},
-    )
 }
 
 @Preview
