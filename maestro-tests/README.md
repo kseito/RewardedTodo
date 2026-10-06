@@ -22,7 +22,7 @@ bash .github/scripts/start-wiremock.sh
 maestro test maestro-tests/
 
 # 単一フロー実行
-maestro test maestro-tests/add-todo-flow.yaml
+maestro test maestro-tests/edit-todo-flow.yaml
 ```
 
 各フローはTodoist連携済みを前提とする。`e2e` ビルドタイプでは認可がブラウザを介さず完了するため、`subflows/authenticate.yaml` を呼ぶだけで連携済みの状態を作れる。
@@ -42,11 +42,11 @@ maestro test maestro-tests/add-todo-flow.yaml
 
 | フロー | 検証内容 |
 |-------|---------|
-| `add-todo-flow` | Todoを追加できる |
-| `add-todo-with-multiple-tickets-flow` | チケット枚数を増やしてTodoを追加できる |
 | `edit-todo-flow` | 既存Todoのタイトルとチケット枚数を変更できる |
 | `complete-todo-flow` | Todoist由来のTodoを完了するとリストから消え、サーバーがチケットを加算する |
 | `delete-todo-flow` | Todoを削除できる |
+
+Todoの追加はTodoist側で行う前提のため、アプリ内に追加導線は無い。Todoを必要とするフローは `stubs/` でTodoistの応答を用意する。
 
 ### 認証
 
@@ -84,7 +84,7 @@ maestro test maestro-tests/add-todo-flow.yaml
 - `-flow` より前には、検証するユーザー操作またはシナリオを簡潔に表す名前を付ける
 - 通常フローの派生ケースは、対象フロー名の後ろに条件を追加する
 
-例: `add-todo-flow.yaml`、`batch-lottery-insufficient-tickets-flow.yaml`、`keep-repeat-reward-flow.yaml`
+例: `edit-todo-flow.yaml`、`batch-lottery-insufficient-tickets-flow.yaml`、`keep-repeat-reward-flow.yaml`
 
 ## テスト作成時の注意
 

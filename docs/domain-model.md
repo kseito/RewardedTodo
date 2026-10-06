@@ -47,10 +47,14 @@ domain/todo/EditingTodo.kt
 | フィールド | 型 | 説明 |
 |-----------|---|------|
 | `id` | `Long` | ローカルDB上の識別子 |
-| `todoistId` | `String?` | Todoistのタスクid（同期前はnull） |
+| `todoistId` | `String?` | Todoistのタスクid |
 | `name` | `String` | タスク名 |
 | `numberOfTicketsObtained` | `Int` | 完了時に獲得するチケット枚数（デフォルト: 1） |
 | `isRepeat` | `Boolean` | リピートタスクか |
+
+**生成元**
+- Todoの追加はTodoist側で行う。アプリ内に追加導線は無く、ローカルDBのTodoはすべてTodoist同期で生まれる
+- したがって `todoistId` は常に設定される（型はRoom Entityとの兼ね合いで `String?` のまま）
 
 **バリデーション**（EditingTodo.validate()）
 - 名前: 空文字不可、500文字以内
