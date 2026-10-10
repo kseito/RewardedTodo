@@ -1,0 +1,77 @@
+name: Claude Project Trigger
+
+# GitHub Projects (v2) のカンバン操作を Claude 自動実装のトリガーに変換する。
+# Projects v2 には Actions のイベントトリガーが存在せず、webhook も Organization 限定のため、
+# 定期ポーリングで「トリガー列に置かれた Issue」へ `claude-auto` ラベルを付与する方式を取る。
+# ラベルが付くと claude-auto-implement.yml が発火する。ラベル自体が処理済みマーカーを兼ねるため
+# 冪等（同じアイテムで二重発火しない）。
+#
+# 必要な準備:
+#   - プロジェクトの Status に「Claude」列を追加（列名は env.TRIGGER_COLUMN で変更可）
+#   - シークレット PROJECT_TRIGGER_TOKEN: 個人アクセストークン
+#     （user Projects の read + このリポジトリの Issues write が必要。
+#       GITHUB_TOKEN では user Project を読めず、またラベル付与しても後続 workflow が発火しない）
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch: {}
+
+env:
+  PROJECT_OWNER: kseito
+  PROJECT_NUMBER: "2"
+  TRIGGER_COLUMN: Claude
+  TRIGGER_LABEL: claude-auto
+
+jobs:
+  trigger:
+    name: Label issues in trigger column
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Add label to issues placed in trigger column
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_TRIGGER_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          issues=$(gh api graphql \
+            -F owner="$PROJECT_OWNER" -F number="$PROJECT_NUMBER" \
+            -f query='
+              query($owner: String!, $number: Int!) {
+                user(login: $owner) {
+                  projectV2(number: $number) {
+                    items(first: 100) {
+                      nodes {
+                        fieldValueByName(name: "Status") {
+                          ... on ProjectV2ItemFieldSingleSelectValue { name }
+                        }
+                        content {
+                          ... on Issue {
+                            number
+                            state
+                            repository { nameWithOwner }
+                            labels(first: 20) { nodes { name } }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }' \
+            --jq '
+              .data.user.projectV2.items.nodes[]
+              | select(.fieldValueByName.name == env.TRIGGER_COLUMN)
+              | .content
+              | select(.state == "OPEN")
+              | select(.repository.nameWithOwner == env.GH_REPO)
+              | select([.labels.nodes[].name] | index(env.TRIGGER_LABEL) | not)
+              | .number')
+
+          if [ -z "$issues" ]; then
+            echo "トリガー列（$TRIGGER_COLUMN）に未処理の Issue はありません"
+            exit 0
+          fi
+
+          for issue in $issues; do
+            echo "Issue #$issue に $TRIGGER_LABEL ラベルを付与"
+            gh issue edit "$issue" --add-label "$TRIGGER_LABEL"
+          done
