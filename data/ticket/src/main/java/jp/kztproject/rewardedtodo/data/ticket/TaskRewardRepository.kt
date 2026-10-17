@@ -3,7 +3,6 @@ package jp.kztproject.rewardedtodo.data.ticket
 import jp.kztproject.rewardedtodo.data.ticket.network.RewardServerApi
 import jp.kztproject.rewardedtodo.data.ticket.network.model.*
 import jp.kztproject.rewardedtodo.domain.todo.TaskRewardSetting
-import jp.kztproject.rewardedtodo.domain.todo.exception.TaskRewardConflictException
 import jp.kztproject.rewardedtodo.domain.todo.TodoistTaskId
 import jp.kztproject.rewardedtodo.domain.todo.repository.ITaskRewardRepository
 import retrofit2.HttpException
@@ -19,17 +18,13 @@ class TaskRewardRepository @Inject internal constructor(
 
     override suspend fun update(setting: TaskRewardSetting): TaskRewardSetting {
         require(setting.points in 1..100)
-        return try {
-            authenticated { user, token ->
-                api.updateTaskReward(
-                    user,
-                    setting.taskId.value,
-                    token,
-                    UpdateTaskRewardRequest(setting.points, setting.version),
-                ).toDomain()
-            }
-        } catch (e: HttpException) {
-            if (e.code() == 409) throw TaskRewardConflictException() else throw e
+        return authenticated { user, token ->
+            api.updateTaskReward(
+                user,
+                setting.taskId.value,
+                token,
+                UpdateTaskRewardRequest(setting.points),
+            ).toDomain()
         }
     }
 
@@ -57,5 +52,5 @@ class TaskRewardRepository @Inject internal constructor(
         block(users.getUserId(), "Bearer ${users.getToken()}")
     }
 
-    private fun TaskRewardResponse.toDomain() = TaskRewardSetting(TodoistTaskId(taskId), points, version)
+    private fun TaskRewardResponse.toDomain() = TaskRewardSetting(TodoistTaskId(taskId), points)
 }
