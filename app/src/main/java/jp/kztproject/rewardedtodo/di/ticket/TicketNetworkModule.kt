@@ -20,11 +20,18 @@ class TicketNetworkModule {
 
     @Provides
     @Singleton
-    fun provideRewardServerApi(): RewardServerApi {
+    fun provideRewardServerApi(
+        getValidAccessTokenUseCase: jp.kztproject.rewardedtodo.application.todo.GetValidAccessTokenUseCase,
+    ): RewardServerApi {
         val moshi = Moshi.Builder()
             .addLast(KotlinJsonAdapterFactory())
             .build()
         val client = OkHttpClient.Builder()
+            .addInterceptor { chain ->
+                val token = kotlinx.coroutines.runBlocking { getValidAccessTokenUseCase.execute() }
+                    ?: throw jp.kztproject.rewardedtodo.domain.todo.exception.TodoistUnauthorizedException()
+                chain.proceed(chain.request().newBuilder().header("Authorization", "Bearer ${token.value}").build())
+            }
             .apply {
                 if (BuildConfig.DEBUG) {
                     addInterceptor(
