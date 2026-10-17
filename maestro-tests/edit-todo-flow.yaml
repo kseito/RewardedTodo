@@ -3,55 +3,36 @@ tags:
   - android
   - rewardedtodo
 ---
-# Todoistから同期したTodoのタイトルとチケット枚数を編集できる。
+# Todo名は読み取り専用。獲得数をサーバーに保存し再起動後も反映する。
 - runScript: stubs/one-todo.js
 - clearState
 - launchApp
-
-# Wait for the initial screen to finish rendering; cold start/JIT is slow on CI
 - runFlow: subflows/authenticate.yaml
-
-# Todoistから同期されたタスクが一覧に出る
 - extendedWaitUntil:
     visible: "Synced Task"
     timeout: 15000
-
-# Tap on the task to open the detail bottom sheet
-- tapOn:
-    text: "Synced Task"
-
-# Wait for bottom sheet to appear (Save button only exists in the sheet)
+- tapOn: "Synced Task"
 - assertVisible: "Save"
-
-# Focus the title text field in the sheet and replace the text
-# (while the modal sheet is open, the list behind it is not accessible,
-#  so this uniquely matches the text field in the sheet)
-- tapOn:
-    text: "Synced Task"
-- eraseText
-- inputText: "Updated Task"
-- hideKeyboard
-
-# Increase the ticket count as well using NumberPicker
+- assertNotVisible: "Delete"
 - swipe:
     from:
       text: "ticket_number_picker"
     direction: UP
     duration: 500
-
-# Save the changes
 - tapOn: "Save"
-
-# Verify the updated task name is shown in the list
 - extendedWaitUntil:
-    visible: "Updated Task"
-    timeout: 5000
-
-# Verify the old task name is gone
-- assertNotVisible: "Synced Task"
-
-# Verify the updated ticket count (2 or more) is shown in the todo row
-# (the ticket count is rendered right below the todo title)
+    notVisible: "Save"
+    timeout: 10000
+- assertVisible: "Synced Task"
+- runScript: stubs/capture-saved-reward.js
 - assertVisible:
-    text: "[2-9]|\\d{2,}"
-    below: "Updated Task"
+    text: "${output.savedReward}"
+    below: "Synced Task"
+- stopApp
+- launchApp
+- extendedWaitUntil:
+    visible: "Synced Task"
+    timeout: 15000
+- assertVisible:
+    text: "${output.savedReward}"
+    below: "Synced Task"
