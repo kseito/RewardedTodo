@@ -18,6 +18,11 @@ import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoistCredentialRepos
 interface RepositoriesModule {
 
     @Binds
+    fun bindTaskRewardRepository(
+        repository: jp.kztproject.rewardedtodo.data.ticket.TaskRewardRepository,
+    ): jp.kztproject.rewardedtodo.domain.todo.repository.ITaskRewardRepository
+
+    @Binds
     fun bindTicketRepositoryModule(repository: TicketRepository): ITicketRepository
 
     @Binds
