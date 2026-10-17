@@ -23,7 +23,6 @@ class TodoRepositoryTest {
     private val api = mockk<TodoistApi>()
     private val settings = mockk<ITaskRewardRepository>()
     private val migration = mockk<LegacyTodoMigration>(relaxed = true)
-
     private val repository = TodoRepository(api, settings, migration)
     private val task = Task("abc", "Example", false, null)
 
@@ -65,7 +64,7 @@ class TodoRepositoryTest {
     fun `failed save preserves state and success uses server version`() = runTest {
         stubList()
         repository.sync()
-            val todo = repository.findAll().first().single()
+        val todo = repository.findAll().first().single()
         coEvery { settings.update(any()) } throws IllegalStateException("offline")
         shouldThrow<IllegalStateException> { repository.update(todo.copy(numberOfTicketsObtained = 7)) }
         repository.findAll().first().single() shouldBe todo
@@ -80,7 +79,7 @@ class TodoRepositoryTest {
     fun `failed completion retains task and successful completion suppresses repeated taps`() = runTest {
         stubList()
         repository.sync()
-            val todo = repository.findAll().first().single()
+        val todo = repository.findAll().first().single()
         coEvery { api.completeTask("abc") } returns Response.error(500, "failure".toResponseBody())
         shouldThrow<HttpException> { repository.complete(todo) }
         repository.findAll().first().single() shouldBe todo
