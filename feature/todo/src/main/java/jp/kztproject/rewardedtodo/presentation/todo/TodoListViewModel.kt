@@ -80,7 +80,7 @@ class TodoListViewModel @Inject constructor(
             flow {
                 if (isConnected) {
                     syncTodoList(isManualRefresh)
-                emitAll(getTodoListUseCase.execute())
+                    emitAll(getTodoListUseCase.execute())
                 } else {
                     emit(emptyList())
                 }
@@ -138,7 +138,7 @@ class TodoListViewModel @Inject constructor(
         if (isSaving.value || !completingTasks.add(todo.todoistId)) return
         viewModelScope.launch {
             try {
-            completeTodoUseCase.execute(todo)
+                completeTodoUseCase.execute(todo)
             } catch (e: CancellationException) {
                 throw e
             } catch (e: Exception) {
