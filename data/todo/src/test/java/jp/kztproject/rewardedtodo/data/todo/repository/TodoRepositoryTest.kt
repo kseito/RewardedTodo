@@ -28,7 +28,7 @@ class TodoRepositoryTest {
 
     private fun stubList() {
         coEvery { api.fetchTasks("today|overdue", null) } returns Tasks(listOf(task))
-        coEvery { settings.findAll() } returns listOf(TaskRewardSetting(TodoistTaskId("abc"), 3, 1))
+        coEvery { settings.findAll() } returns listOf(TaskRewardSetting(TodoistTaskId("abc"), 3))
     }
 
     @Test
@@ -38,7 +38,6 @@ class TodoRepositoryTest {
         coEvery { api.fetchTasks("today|overdue", "next") } returns Tasks(listOf(task.copy(id = "def")))
         repository.sync()
         repository.findAll().first().map { it.numberOfTicketsObtained } shouldBe listOf(3, 1)
-        repository.findAll().first().first().rewardVersion shouldBe 1
         coVerify(exactly = 1) { migration.migrate() }
     }
 
@@ -61,17 +60,16 @@ class TodoRepositoryTest {
     }
 
     @Test
-    fun `failed save preserves state and success uses server version`() = runTest {
+    fun `failed save preserves state and success uses server setting`() = runTest {
         stubList()
         repository.sync()
         val todo = repository.findAll().first().single()
         coEvery { settings.update(any()) } throws IllegalStateException("offline")
         shouldThrow<IllegalStateException> { repository.update(todo.copy(numberOfTicketsObtained = 7)) }
         repository.findAll().first().single() shouldBe todo
-        coEvery { settings.update(TaskRewardSetting(TodoistTaskId("abc"), 7, 1)) } returns
-            TaskRewardSetting(TodoistTaskId("abc"), 7, 2)
+        coEvery { settings.update(TaskRewardSetting(TodoistTaskId("abc"), 7)) } returns
+            TaskRewardSetting(TodoistTaskId("abc"), 7)
         repository.update(todo.copy(numberOfTicketsObtained = 7))
-        repository.findAll().first().single().rewardVersion shouldBe 2
         repository.findAll().first().single().numberOfTicketsObtained shouldBe 7
     }
 
