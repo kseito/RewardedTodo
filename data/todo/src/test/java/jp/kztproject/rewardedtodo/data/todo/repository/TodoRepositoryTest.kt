@@ -1,187 +1,102 @@
 package jp.kztproject.rewardedtodo.data.todo.repository
 
-import io.mockk.coEvery
-import io.mockk.mockk
-import io.mockk.unmockkAll
-import android.content.Context
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
-import androidx.test.core.app.ApplicationProvider
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.matchers.shouldBe
-import jp.kztproject.rewardedtodo.common.database.DatabaseInitializer
-import jp.kztproject.rewardedtodo.data.todo.AppDatabase
-import jp.kztproject.rewardedtodo.data.todo.TodoDao
-import jp.kztproject.rewardedtodo.data.todo.TodoEntity
+import io.mockk.coEvery
+import io.mockk.coVerify
+import io.mockk.mockk
+import jp.kztproject.rewardedtodo.data.todo.LegacyTodoMigration
 import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
-import jp.kztproject.rewardedtodo.data.todoist.model.Due
 import jp.kztproject.rewardedtodo.data.todoist.model.Task
 import jp.kztproject.rewardedtodo.data.todoist.model.Tasks
-import jp.kztproject.rewardedtodo.domain.todo.ApiToken
-import jp.kztproject.rewardedtodo.domain.todo.TodoistCredential
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import jp.kztproject.rewardedtodo.domain.todo.TaskRewardSetting
+import jp.kztproject.rewardedtodo.domain.todo.TodoistTaskId
+import jp.kztproject.rewardedtodo.domain.todo.repository.ITaskRewardRepository
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
-import kotlinx.coroutines.test.setMain
-import kotlinx.coroutines.withContext
-import org.junit.After
-import org.junit.Before
-import org.junit.Rule
+import okhttp3.ResponseBody.Companion.toResponseBody
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
+import retrofit2.HttpException
+import retrofit2.Response
 
-@ExperimentalCoroutinesApi
-@RunWith(RobolectricTestRunner::class)
 class TodoRepositoryTest {
+    private val api = mockk<TodoistApi>()
+    private val settings = mockk<ITaskRewardRepository>()
+    private val migration = mockk<LegacyTodoMigration>(relaxed = true)
 
-    @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
+    private val repository = TodoRepository(api, settings, migration)
+    private val task = Task("abc", "Example", false, null)
 
-    private val applicationContext = ApplicationProvider.getApplicationContext<Context>()
-    private val dao: TodoDao =
-        DatabaseInitializer.init(applicationContext, AppDatabase::class.java, "todo").todoDao()
-    private val api: TodoistApi = mockk()
-
-    private val repository = TodoRepository(dao, api)
-
-    @Before
-    fun setup() {
-        Dispatchers.setMain(Dispatchers.Unconfined)
-    }
-
-    @After
-    fun teardown() {
-        Dispatchers.resetMain()
-        unmockkAll()
+    private fun stubList() {
+        coEvery { api.fetchTasks("today|overdue", null) } returns Tasks(listOf(task))
+        coEvery { settings.findAll() } returns listOf(TaskRewardSetting(TodoistTaskId("abc"), 3, 1))
     }
 
     @Test
-    fun takeInTasksFromTodoist() = runTest {
-        val tasks = Tasks(
-            listOf(
-                Task("101", "test_content", false, Due(true)),
-                Task("102", "test_content", false, Due(true)),
-                Task("103", "test_content", false, Due(false)),
-            ),
-        )
-        coEvery { api.fetchTasks(any()) } returns tasks
-
-        withContext(Dispatchers.IO) {
-            repository.sync()
-            val actual = repository.findAll().first()
-            actual.size shouldBe 3
-            actual[0].run {
-                this.id shouldBe 1
-                this.todoistId shouldBe "101"
-                this.isRepeat shouldBe true
-            }
-            actual[1].run {
-                this.id shouldBe 2
-                this.todoistId shouldBe "102"
-                this.isRepeat shouldBe true
-            }
-            actual[2].run {
-                this.id shouldBe 3
-                this.todoistId shouldBe "103"
-                this.isRepeat shouldBe false
-            }
-        }
+    fun `joins all pages with server rewards and defaults only absent settings`() = runTest {
+        stubList()
+        coEvery { api.fetchTasks("today|overdue", null) } returns Tasks(listOf(task), "next")
+        coEvery { api.fetchTasks("today|overdue", "next") } returns Tasks(listOf(task.copy(id = "def")))
+        repository.sync()
+        repository.findAll().first().map { it.numberOfTicketsObtained } shouldBe listOf(3, 1)
+        repository.findAll().first().first().rewardVersion shouldBe 1
+        coVerify(exactly = 1) { migration.migrate() }
     }
 
     @Test
-    fun takeInTasksWithNullDueFromTodoist() = runTest {
-        val tasks = Tasks(
-            listOf(
-                Task("101", "test_content_with_due", false, Due(true)),
-                Task("102", "test_content_without_due", false, null),
-                Task("103", "test_content_with_non_recurring_due", false, Due(false)),
-            ),
-        )
-        coEvery { api.fetchTasks(any()) } returns tasks
-
-        withContext(Dispatchers.IO) {
-            repository.sync()
-            val actual = repository.findAll().first()
-            actual.size shouldBe 3
-            actual[0].run {
-                this.id shouldBe 1
-                this.todoistId shouldBe "101"
-                this.name shouldBe "test_content_with_due"
-                this.isRepeat shouldBe true
-            }
-            actual[1].run {
-                this.id shouldBe 2
-                this.todoistId shouldBe "102"
-                this.name shouldBe "test_content_without_due"
-                this.isRepeat shouldBe false
-            }
-            actual[2].run {
-                this.id shouldBe 3
-                this.todoistId shouldBe "103"
-                this.name shouldBe "test_content_with_non_recurring_due"
-                this.isRepeat shouldBe false
-            }
-        }
+    fun `failed settings fetch does not replace existing values with defaults`() = runTest {
+        stubList()
+        repository.sync()
+        coEvery { settings.findAll() } throws IllegalStateException("offline")
+        shouldThrow<IllegalStateException> { repository.sync() }
+        repository.findAll().first().single().numberOfTicketsObtained shouldBe 3
     }
 
     @Test
-    fun ignoreTaskFromTodoist() = runTest {
-        withContext(Dispatchers.IO) {
-            dao.insertOrUpdate(
-                TodoEntity(
-                    1,
-                    "101",
-                    "test_name1",
-                    1,
-                    isRepeat = true,
-                    isDone = false,
-                ),
-            )
-            dao.insertOrUpdate(
-                TodoEntity(
-                    2,
-                    "102",
-                    "test_name2",
-                    1,
-                    isRepeat = true,
-                    isDone = true,
-                ),
-            )
-            dao.insertOrUpdate(
-                TodoEntity(
-                    3,
-                    "103",
-                    "test_name3",
-                    1,
-                    isRepeat = true,
-                    isDone = false,
-                ),
-            )
-        }
-        val tasks = Tasks(
-            listOf(
-                Task("101", "test_content1", false, Due(true)),
-                Task("102", "test_content2", false, Due(true)),
-            ),
-        )
-        coEvery { api.fetchTasks(any()) } returns tasks
+    fun `failed migration prevents fetching and completing an uninitialized list`() = runTest {
+        stubList()
+        coEvery { migration.migrate() } throws IllegalStateException("offline")
+        shouldThrow<IllegalStateException> { repository.sync() }
+        repository.findAll().first() shouldBe emptyList()
+        coVerify(exactly = 0) { api.fetchTasks(any(), any()) }
+    }
 
-        withContext(Dispatchers.IO) {
-            repository.sync()
-            val actual = repository.findAll().first()
+    @Test
+    fun `failed save preserves state and success uses server version`() = runTest {
+        stubList()
+        repository.sync()
+            val todo = repository.findAll().first().single()
+        coEvery { settings.update(any()) } throws IllegalStateException("offline")
+        shouldThrow<IllegalStateException> { repository.update(todo.copy(numberOfTicketsObtained = 7)) }
+        repository.findAll().first().single() shouldBe todo
+        coEvery { settings.update(TaskRewardSetting(TodoistTaskId("abc"), 7, 1)) } returns
+            TaskRewardSetting(TodoistTaskId("abc"), 7, 2)
+        repository.update(todo.copy(numberOfTicketsObtained = 7))
+        repository.findAll().first().single().rewardVersion shouldBe 2
+        repository.findAll().first().single().numberOfTicketsObtained shouldBe 7
+    }
 
-            actual.size shouldBe 2
-            actual[0].run {
-                this.id shouldBe 1
-                this.todoistId shouldBe "101"
-                this.name shouldBe "test_content1"
-            }
-            actual[1].run {
-                this.id shouldBe 2
-                this.todoistId shouldBe "102"
-                this.name shouldBe "test_content2"
-            }
-        }
+    @Test
+    fun `failed completion retains task and successful completion suppresses repeated taps`() = runTest {
+        stubList()
+        repository.sync()
+            val todo = repository.findAll().first().single()
+        coEvery { api.completeTask("abc") } returns Response.error(500, "failure".toResponseBody())
+        shouldThrow<HttpException> { repository.complete(todo) }
+        repository.findAll().first().single() shouldBe todo
+        coEvery { api.completeTask("abc") } returns Response.success(Unit)
+        repository.complete(todo)
+        repository.complete(todo)
+        repository.findAll().first() shouldBe emptyList()
+        coVerify(exactly = 2) { api.completeTask("abc") }
+    }
+
+    @Test
+    fun `account reset clears memory and legacy database`() = runTest {
+        stubList()
+        repository.sync()
+        repository.deleteAll()
+        repository.findAll().first() shouldBe emptyList()
+        coVerify(exactly = 1) { migration.clear() }
     }
 }
