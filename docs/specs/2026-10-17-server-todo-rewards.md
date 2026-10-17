@@ -71,7 +71,7 @@ Webhook再送識別の根拠: https://developer.todoist.com/api/v1/ のWebhooks 
 
 ## 9. リリースTODO
 
-- [ ] サーバーのPRを作成し、テーブル定義・Webhookの冪等性・API契約をレビューする。
+- [x] サーバーのPRを作成し、テーブル定義・Webhookの冪等性・API契約をレビューする（[#3](https://github.com/kseito/RewardedTodoServer/pull/3)）。
 - [ ] 本番PostgreSQLをバックアップし、復元手順と対象時刻を記録する。
 - [ ] 使い捨てPostgreSQLで `TaskRewardTest` の並行更新テストを実行する。本番DBには接続しない。
 - [ ] サーバーを先行デプロイし、ヘルスチェックと既存の残高照会・消費APIを確認する。
