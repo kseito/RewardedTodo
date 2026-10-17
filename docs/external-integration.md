@@ -235,7 +235,7 @@ X-Todoist-Hmac-SHA256: {署名}
 
 設定の正本はReward Server。`GET /api/task-rewards/{userId}`、`PUT /api/task-rewards/{userId}/{taskId}`、初回移行用の `POST /api/task-rewards/{userId}/import` を使う。詳細なペイロードと移行方針は [計画書](specs/2026-10-17-server-todo-rewards.md) を参照。
 
-取得失敗と未設定を区別する。未設定のみ1枚、保存値は1〜100。PUTのversion不一致は409。保存成功まで画面を閉じない。Todo用Roomを廃止し、通常操作はメモリにのみ保持する。初回に旧DBから既存設定を移行し、成功後にTodo用DBを削除する。
+取得失敗と未設定を区別する。未設定のみ1枚、保存値は1〜100。後から保存された値で設定を上書きする。保存成功まで画面を閉じない。Todo用Roomを廃止し、通常操作はメモリにのみ保持する。初回に旧DBから既存設定を移行し、成功後にTodo用DBを削除する。
 
 ## Todoist未連携時のふるまい
 
