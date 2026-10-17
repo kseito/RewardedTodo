@@ -73,7 +73,7 @@ Webhook再送識別の根拠: https://developer.todoist.com/api/v1/ のWebhooks 
 
 - [x] サーバーのPRを作成し、テーブル定義・Webhookの冪等性・API契約をレビューする（[#3](https://github.com/kseito/RewardedTodoServer/pull/3)）。
 - [ ] 本番PostgreSQLをバックアップし、復元手順と対象時刻を記録する。
-- [ ] 使い捨てPostgreSQLで `TaskRewardTest` の並行更新テストを実行する。本番DBには接続しない。
+- [x] 使い捨てPostgreSQLで `TaskRewardTest` の並行更新テストを実行する。本番DBには接続しない（2026-10-17、成功）。
 - [ ] サーバーを先行デプロイし、ヘルスチェックと既存の残高照会・消費APIを確認する。
 - [ ] テスト用Todoで「3枚に保存 → 完了 → 3枚付与」を確認し、同じ `X-Todoist-Delivery-ID` の再送で二重付与されないことを確認する。
 - [ ] AndroidのPRを作成し、Room撤去・初回移行・保存失敗時の画面挙動をレビューする。
