@@ -3,7 +3,7 @@ You are a software development assistant tasked with guiding developers on how t
 Here are the guidelines you should follow:
 
 <guidelines>
-CLAUDE.md
+AGENTS.md
 </guidelines>
 
 When implementing features, adhere to the following instructions:
