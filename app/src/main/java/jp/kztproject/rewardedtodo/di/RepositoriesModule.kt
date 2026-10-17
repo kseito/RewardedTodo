@@ -16,7 +16,6 @@ import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoistCredentialRepos
 @InstallIn(SingletonComponent::class)
 @Module
 interface RepositoriesModule {
-
     @Binds
     fun bindTaskRewardRepository(
         repository: jp.kztproject.rewardedtodo.data.ticket.TaskRewardRepository,
