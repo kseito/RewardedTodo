@@ -46,23 +46,24 @@ domain/todo/EditingTodo.kt
 
 | フィールド | 型 | 説明 |
 |-----------|---|------|
-| `id` | `Long` | ローカルDB上の識別子 |
-| `todoistId` | `String?` | Todoistのタスクid |
+| `todoistId` | `String` | Todoistのタスクid |
+| `rewardVersion` | `Int` | サーバー設定の更新バージョン |
 | `name` | `String` | タスク名 |
 | `numberOfTicketsObtained` | `Int` | 完了時に獲得するチケット枚数（デフォルト: 1） |
 | `isRepeat` | `Boolean` | リピートタスクか |
 
 **生成元**
-- Todoの追加はTodoist側で行う。アプリ内に追加導線は無く、ローカルDBのTodoはすべてTodoist同期で生まれる
-- したがって `todoistId` は常に設定される（型はRoom Entityとの兼ね合いで `String?` のまま）
+- TodoはTodoistから取得する。ローカルTodoとTodo用Room DBは廃止。
+- 獲得枚数はサーバー設定と結合する。未設定は1。設定の読み書きには `ITaskRewardRepository` を使う。
+- タスク名はTodoistを正本とし、詳細画面では読み取り専用。
 
 **バリデーション**（EditingTodo.validate()）
 - 名前: 空文字不可、500文字以内
 - `numberOfTicketsObtained`: 1〜100の範囲
 
 **isRepeatの挙動**
-- `false`: 完了時にローカルDBから削除
-- `true`: 完了時に「完了済み」状態に変更（次の同期まで残る）
+- 繰り返しかどうかにかかわらず、完了API成功後はメモリ上の一覧から取り除く。
+- 次回取得時にはTodoistの状態に従う。獲得数設定は同じTodoistタスクIDで引き継ぐ。
 
 ---
 
@@ -141,7 +142,7 @@ sealed class TokenError {
 │  ・今日/期限切れタスクを提供                                   │
 │  ・タスク完了をWebhookでサーバーに通知                         │
 └──────────────────┬──────────────────────────────────────────┘
-                   │ sync (3-way)
+                   │ 取得 + 設定結合
                    ▼
 ┌──────────────────────────────┐
 │  Todo                        │
@@ -193,10 +194,7 @@ sealed class TokenError {
 
 ### 4. Todoist同期（FetchTodoListUseCase）
 
-3-way sync:
-- Todoistにあってローカルにある → 名前を更新
-- Todoistにあってローカルにない → 新規追加
-- ローカルにあってTodoistにない → `isRepeat=true` なら完了状態へ、`false` なら削除
+Todoistから対象タスクを全ページ取得し、Reward Serverの獲得枚数設定と結合してメモリに保持する。旧DBがある場合は先に設定を移行する。取得失敗時は既存メモリ状態を維持し、エラーを通知する。
 
 ---
 
@@ -204,4 +202,4 @@ sealed class TokenError {
 
 - `IPointRepository`: インターフェースのみ定義、実装なし（auth モジュール連携を予定）
 - `UsePointUseCase`: ユースケースのインターフェースのみ存在、Interactorは未実装
-- チケット加算のクライアント側実装 (`NetworkTicketRepository.addTicket()`) は空実装
+- チケット加算のクライアント側実装 (`TicketRepository.addTicket()`) は空実装
