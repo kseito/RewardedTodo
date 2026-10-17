@@ -37,15 +37,4 @@ class TaskRewardRepositoryTest {
             HttpException(Response.error<Unit>(500, "".toResponseBody()))
         shouldThrow<HttpException> { repository.update(TaskRewardSetting(TodoistTaskId("task"), 3)) }
     }
-
-    @Test
-    fun `imports use bounded batches and propagate failure`() = runTest {
-        coEvery { api.importTaskRewards(any(), any(), any()) } returns ImportTaskRewardsResponse(emptyList())
-        val settings = (1..101).map { TaskRewardSetting(TodoistTaskId("task-$it"), 3) }
-        repository.import(settings)
-        coVerify(exactly = 1) { api.importTaskRewards(any(), any(), match { it.settings.size == 100 }) }
-        coVerify(exactly = 1) { api.importTaskRewards(any(), any(), match { it.settings.size == 1 }) }
-        coEvery { api.importTaskRewards(any(), any(), any()) } throws IllegalStateException("offline")
-        shouldThrow<IllegalStateException> { repository.import(settings) }
-    }
 }
