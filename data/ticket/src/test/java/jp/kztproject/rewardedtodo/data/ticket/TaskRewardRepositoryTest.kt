@@ -7,7 +7,6 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import jp.kztproject.rewardedtodo.data.ticket.network.RewardServerApi
 import jp.kztproject.rewardedtodo.data.ticket.network.model.*
-import jp.kztproject.rewardedtodo.domain.todo.exception.TaskRewardConflictException
 import jp.kztproject.rewardedtodo.domain.todo.TaskRewardSetting
 import jp.kztproject.rewardedtodo.domain.todo.TodoistTaskId
 import kotlinx.coroutines.test.runTest
@@ -27,16 +26,16 @@ class TaskRewardRepositoryTest {
         coEvery { users.getToken() } returns "token"
         coEvery { api.getTaskRewards("user", "Bearer token") } throws
             HttpException(Response.error<Unit>(401, "".toResponseBody())) andThen
-            listOf(TaskRewardResponse("task", 3, 2))
-        repository.findAll() shouldBe listOf(TaskRewardSetting(TodoistTaskId("task"), 3, 2))
+            listOf(TaskRewardResponse("task", 3))
+        repository.findAll() shouldBe listOf(TaskRewardSetting(TodoistTaskId("task"), 3))
         coVerify(exactly = 1) { users.clearUserId() }
     }
 
     @Test
-    fun `conflict is distinct from network failure`() = runTest {
+    fun `update propagates network failure`() = runTest {
         coEvery { api.updateTaskReward(any(), any(), any(), any()) } throws
-            HttpException(Response.error<Unit>(409, "".toResponseBody()))
-        shouldThrow<TaskRewardConflictException> { repository.update(TaskRewardSetting(TodoistTaskId("task"), 3)) }
+            HttpException(Response.error<Unit>(500, "".toResponseBody()))
+        shouldThrow<HttpException> { repository.update(TaskRewardSetting(TodoistTaskId("task"), 3)) }
     }
 
     @Test
