@@ -7,4 +7,5 @@
     <string name="todo_empty_message">No tasks yet. Add tasks in Todoist and pull to refresh.</string>
     <string name="error_todoist_unauthorized">The Todoist connection has expired. Log out from Setting and connect again.</string>
     <string name="open_setting">Open Setting</string>
+    <string name="error_reward_conflict">This reward was changed elsewhere. Close this screen, pull to refresh, and edit again.</string>
 </resources>
