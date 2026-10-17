@@ -23,3 +23,17 @@ http.post(ADMIN + '/mappings', {
     },
   }),
 })
+
+// Echo the exact selected amount; a long swipe can move more than one step.
+http.post(ADMIN + '/mappings', {
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    request: { method: 'PUT', urlPath: '/reward/api/task-rewards/mock-user-id/synced-task' },
+    response: {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+      body: `{ "todoist_task_id": "synced-task", "points_per_completion": {{jsonPath request.body '$.points_per_completion'}}, "version": 1 }`,
+      transformers: ['response-template'],
+    },
+  }),
+})
