@@ -123,7 +123,8 @@ private fun TodoListScreen(
                     // 失効は設定画面へ誘導する必要があるため、他のエラーと扱いを分ける
                     if (cause !is TodoistUnauthorizedException) {
                         CommonAlertDialog(
-                            message = stringResource(id = if (cause is TaskRewardConflictException) {
+                            message = stringResource(
+                                id = if (cause is TaskRewardConflictException) {
                                     R.string.error_reward_conflict
                                 } else {
                                     R.string.error_message
