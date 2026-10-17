@@ -1,3 +1,5 @@
 package jp.kztproject.rewardedtodo.data.todoist.model
 
-data class Tasks(val results: List<Task>)
+import com.squareup.moshi.Json
+
+data class Tasks(val results: List<Task>, @Json(name = "next_cursor") val nextCursor: String? = null)
