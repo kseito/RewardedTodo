@@ -28,22 +28,6 @@ class TaskRewardRepository @Inject internal constructor(
         }
     }
 
-    override suspend fun import(settings: List<TaskRewardSetting>) {
-        settings.chunked(100).forEach { batch ->
-            authenticated { user, token ->
-                api.importTaskRewards(
-                    user,
-                    token,
-                    ImportTaskRewardsRequest(
-                        batch.map {
-                            ImportTaskReward(it.taskId.value, it.points)
-                        },
-                    ),
-                )
-            }
-        }
-    }
-
     private suspend fun <T> authenticated(block: suspend (String, String) -> T): T = try {
         block(users.getUserId(), "Bearer ${users.getToken()}")
     } catch (e: HttpException) {
