@@ -5,7 +5,6 @@ import io.kotest.matchers.shouldBe
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import jp.kztproject.rewardedtodo.data.todo.LegacyTodoMigration
 import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
 import jp.kztproject.rewardedtodo.data.todoist.model.Task
 import jp.kztproject.rewardedtodo.data.todoist.model.Tasks
@@ -22,8 +21,7 @@ import retrofit2.Response
 class TodoRepositoryTest {
     private val api = mockk<TodoistApi>()
     private val settings = mockk<ITaskRewardRepository>()
-    private val migration = mockk<LegacyTodoMigration>(relaxed = true)
-    private val repository = TodoRepository(api, settings, migration)
+    private val repository = TodoRepository(api, settings)
     private val task = Task("abc", "Example", false, null)
 
     private fun stubList() {
@@ -38,7 +36,6 @@ class TodoRepositoryTest {
         coEvery { api.fetchTasks("today|overdue", "next") } returns Tasks(listOf(task.copy(id = "def")))
         repository.sync()
         repository.findAll().first().map { it.numberOfTicketsObtained } shouldBe listOf(3, 1)
-        coVerify(exactly = 1) { migration.migrate() }
     }
 
     @Test
@@ -48,15 +45,6 @@ class TodoRepositoryTest {
         coEvery { settings.findAll() } throws IllegalStateException("offline")
         shouldThrow<IllegalStateException> { repository.sync() }
         repository.findAll().first().single().numberOfTicketsObtained shouldBe 3
-    }
-
-    @Test
-    fun `failed migration prevents fetching and completing an uninitialized list`() = runTest {
-        stubList()
-        coEvery { migration.migrate() } throws IllegalStateException("offline")
-        shouldThrow<IllegalStateException> { repository.sync() }
-        repository.findAll().first() shouldBe emptyList()
-        coVerify(exactly = 0) { api.fetchTasks(any(), any()) }
     }
 
     @Test
@@ -89,11 +77,10 @@ class TodoRepositoryTest {
     }
 
     @Test
-    fun `account reset clears memory and legacy database`() = runTest {
+    fun `account reset clears memory`() = runTest {
         stubList()
         repository.sync()
         repository.deleteAll()
         repository.findAll().first() shouldBe emptyList()
-        coVerify(exactly = 1) { migration.clear() }
     }
 }
