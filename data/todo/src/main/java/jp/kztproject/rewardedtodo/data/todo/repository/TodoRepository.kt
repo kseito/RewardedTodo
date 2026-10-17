@@ -42,19 +42,19 @@ class TodoRepository @Inject constructor(
         val rewards = settings.findAll().associateBy { it.taskId.value }
         todos.value = tasks.distinctBy { it.id }.map { task ->
             val reward = rewards[task.id]
-            Todo(task.id, task.content, reward?.points ?: 1, task.due?.recurring ?: false, reward?.version ?: 0)
+            Todo(task.id, task.content, reward?.points ?: 1, task.due?.recurring ?: false)
         }
     }
 
     override suspend fun update(todo: Todo) = mutex.withLock {
         val saved = settings.update(
-            TaskRewardSetting(TodoistTaskId(todo.todoistId), todo.numberOfTicketsObtained, todo.rewardVersion),
+            TaskRewardSetting(TodoistTaskId(todo.todoistId), todo.numberOfTicketsObtained),
         )
         todos.value = todos.value.map {
             if (it.todoistId ==
                 todo.todoistId
             ) {
-                it.copy(numberOfTicketsObtained = saved.points, rewardVersion = saved.version)
+                it.copy(numberOfTicketsObtained = saved.points)
             } else {
                 it
             }
