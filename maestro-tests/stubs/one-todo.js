@@ -32,7 +32,7 @@ http.post(ADMIN + '/mappings', {
     response: {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
-      body: `{ "todoist_task_id": "synced-task", "points_per_completion": {{jsonPath request.body '$.points_per_completion'}}, "version": 1 }`,
+      body: `{ "todoist_task_id": "synced-task", "points_per_completion": {{jsonPath request.body '$.points_per_completion'}} }`,
       transformers: ['response-template'],
     },
   }),
