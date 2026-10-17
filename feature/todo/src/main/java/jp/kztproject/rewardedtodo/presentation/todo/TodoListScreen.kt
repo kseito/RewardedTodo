@@ -46,6 +46,7 @@ import jp.kztproject.rewardedtodo.domain.todo.exception.TodoistUnauthorizedExcep
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.kztproject.rewardedtodo.common.ui.CommonAlertDialog
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
+import jp.kztproject.rewardedtodo.domain.todo.exception.TaskRewardConflictException
 import jp.kztproject.rewardedtodo.domain.todo.Todo
 import jp.kztproject.rewardedtodo.feature.todo.R
 
@@ -64,9 +65,7 @@ fun TodoListScreenWithBottomSheet(onOpenSetting: () -> Unit, viewModel: TodoList
     val onTodoSaveSelected: (EditingTodo) -> Unit = {
         viewModel.updateTodo(it)
     }
-    val onTodoDeleteSelected: (EditingTodo) -> Unit = {
-        viewModel.deleteTodo(it)
-    }
+    val isSaving by viewModel.isSaving.collectAsStateWithLifecycle()
 
     Box {
         TodoListScreen(
@@ -82,7 +81,7 @@ fun TodoListScreenWithBottomSheet(onOpenSetting: () -> Unit, viewModel: TodoList
                 sheetState = sheetState,
                 todo = todo,
                 onTodoSaveSelected = onTodoSaveSelected,
-                onTodoDeleteSelected = onTodoDeleteSelected,
+                isSaving = isSaving,
             )
         }
     }
@@ -124,7 +123,12 @@ private fun TodoListScreen(
                     // 失効は設定画面へ誘導する必要があるため、他のエラーと扱いを分ける
                     if (cause !is TodoistUnauthorizedException) {
                         CommonAlertDialog(
-                            message = stringResource(id = R.string.error_message),
+                            message = stringResource(id = if (cause is TaskRewardConflictException) {
+                                    R.string.error_reward_conflict
+                                } else {
+                                    R.string.error_message
+                                },
+                            ),
                             onOkClicked = {
                                 viewModel.clearResult()
                             },
@@ -207,7 +211,7 @@ private fun TodoListContent(
                         }
                         itemsIndexed(
                             items = todoList,
-                            key = { _, todo -> todo.id },
+                            key = { _, todo -> todo.todoistId },
                         ) { index, todo ->
                             TodoListItem(
                                 todo = todo,
@@ -261,8 +265,8 @@ fun TodoListContentEmptyPreview() {
 fun TodoListContentWithDataPreview() {
     TodoListContent(
         todoList = listOf(
-            Todo(1, "1001", "英語学習", 2, true),
-            Todo(2, "1002", "ランニング", 1, false),
+            Todo("1001", "英語学習", 2, true),
+            Todo("1002", "ランニング", 1, false),
         ),
         isInitialLoading = false,
         isRefreshing = false,
@@ -278,7 +282,7 @@ fun TodoListContentErrorPreview() {
     Box(modifier = Modifier.fillMaxSize()) {
         TodoListContent(
             todoList = listOf(
-                Todo(1, "1001", "英語学習", 2, true),
+                Todo("1001", "英語学習", 2, true),
             ),
             isInitialLoading = false,
             isRefreshing = false,
@@ -300,7 +304,6 @@ private fun TodoListItem(
     onTodoDone: (Todo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var isDone by remember { mutableStateOf(false) }
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -313,10 +316,9 @@ private fun TodoListItem(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(
-            checked = isDone,
+            checked = false,
             onCheckedChange = {
                 onTodoDone.invoke(todo)
-                isDone = it
             },
             modifier = Modifier
                 .padding(end = 16.dp)
@@ -354,7 +356,7 @@ private fun TodoListItem(
 @Composable
 fun TodoListItemPreview() {
     Surface {
-        val todo = Todo(1, "1", "Buy ingredients for dinner", 1, false)
+        val todo = Todo("1", "Buy ingredients for dinner", 1, false)
         TodoListItem(
             todo = todo,
             onItemClicked = {},
