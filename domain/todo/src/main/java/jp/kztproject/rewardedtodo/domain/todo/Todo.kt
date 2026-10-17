@@ -5,7 +5,6 @@ data class Todo(
     var name: String, // TODO divide model
     val numberOfTicketsObtained: Int,
     val isRepeat: Boolean,
-    val rewardVersion: Int = 0,
 ) {
     companion object {
         const val DEFAULT_NUMBER_OF_TICHKET = 1
