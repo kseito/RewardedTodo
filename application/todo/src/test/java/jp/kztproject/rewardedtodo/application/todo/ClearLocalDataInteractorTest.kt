@@ -1,5 +1,6 @@
 package jp.kztproject.rewardedtodo.application.todo
 
+import io.kotest.assertions.throwables.shouldThrow
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
@@ -23,19 +24,19 @@ class ClearLocalDataInteractorTest {
     }
 
     @Test
-    fun `Todoの削除に失敗してもキャッシュの削除は行われ例外は投げない`() = runTest {
+    fun `Todoの削除に失敗してもキャッシュの削除も行い失敗を通知する`() = runTest {
         coEvery { todoRepository.deleteAll() } throws IllegalStateException()
 
-        interactor.execute()
+        shouldThrow<IllegalStateException> { interactor.execute() }
 
         coVerify(exactly = 1) { accountCacheRepository.clear() }
     }
 
     @Test
-    fun `キャッシュの削除に失敗しても例外は投げない`() = runTest {
+    fun `キャッシュの削除に失敗した場合は失敗を通知する`() = runTest {
         coEvery { accountCacheRepository.clear() } throws IllegalStateException()
 
-        interactor.execute()
+        shouldThrow<IllegalStateException> { interactor.execute() }
 
         coVerify(exactly = 1) { todoRepository.deleteAll() }
     }
