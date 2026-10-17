@@ -46,7 +46,6 @@ import jp.kztproject.rewardedtodo.domain.todo.exception.TodoistUnauthorizedExcep
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.kztproject.rewardedtodo.common.ui.CommonAlertDialog
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
-import jp.kztproject.rewardedtodo.domain.todo.exception.TaskRewardConflictException
 import jp.kztproject.rewardedtodo.domain.todo.Todo
 import jp.kztproject.rewardedtodo.feature.todo.R
 
@@ -123,13 +122,7 @@ private fun TodoListScreen(
                     // 失効は設定画面へ誘導する必要があるため、他のエラーと扱いを分ける
                     if (cause !is TodoistUnauthorizedException) {
                         CommonAlertDialog(
-                            message = stringResource(
-                                id = if (cause is TaskRewardConflictException) {
-                                    R.string.error_reward_conflict
-                                } else {
-                                    R.string.error_message
-                                },
-                            ),
+                            message = stringResource(id = R.string.error_message),
                             onOkClicked = {
                                 viewModel.clearResult()
                             },
