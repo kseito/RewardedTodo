@@ -5,10 +5,9 @@ import com.squareup.moshi.Json
 data class TaskRewardResponse(
     @Json(name = "todoist_task_id") val taskId: String,
     @Json(name = "points_per_completion") val points: Int,
-    val version: Int,
 )
 
-data class UpdateTaskRewardRequest(@Json(name = "points_per_completion") val points: Int, val version: Int)
+data class UpdateTaskRewardRequest(@Json(name = "points_per_completion") val points: Int)
 data class ImportTaskReward(
     @Json(name = "todoist_task_id") val taskId: String,
     @Json(name = "points_per_completion") val points: Int,
