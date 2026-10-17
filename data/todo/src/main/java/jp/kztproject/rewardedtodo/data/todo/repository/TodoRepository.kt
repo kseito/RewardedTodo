@@ -1,6 +1,5 @@
 package jp.kztproject.rewardedtodo.data.todo.repository
 
-import jp.kztproject.rewardedtodo.data.todo.LegacyTodoMigration
 import jp.kztproject.rewardedtodo.data.todoist.TodoistApi
 import jp.kztproject.rewardedtodo.data.todoist.model.Task
 import jp.kztproject.rewardedtodo.domain.todo.Todo
@@ -21,7 +20,6 @@ import javax.inject.Singleton
 class TodoRepository @Inject constructor(
     private val todoistApi: TodoistApi,
     private val settings: ITaskRewardRepository,
-    private val migration: LegacyTodoMigration,
 ) : ITodoRepository {
     private val todos = MutableStateFlow<List<Todo>>(emptyList())
     private val mutex = Mutex()
@@ -29,7 +27,6 @@ class TodoRepository @Inject constructor(
     override fun findAll(): Flow<List<Todo>> = todos.asStateFlow()
 
     override suspend fun sync() = mutex.withLock {
-        migration.migrate()
         val tasks = mutableListOf<Task>()
         var cursor: String? = null
         val seen = mutableSetOf<String>()
@@ -70,6 +67,5 @@ class TodoRepository @Inject constructor(
 
     override suspend fun deleteAll() = mutex.withLock {
         todos.value = emptyList()
-        migration.clear()
     }
 }
