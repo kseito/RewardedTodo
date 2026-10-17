@@ -21,7 +21,6 @@ app/src/main/java/.../di/
 │   └── RewardDetailViewModelModule.kt ← 報酬詳細で使うUseCaseのバインド
 ├── todo/
 │   ├── TodoRepositoryModule.kt        ← ITodoRepository のバインド
-│   ├── TodoDatabaseModule.kt          ← Todo用 Room DB の提供
 │   └── TodoListFragmentModule.kt      ← Todo一覧で使うUseCaseのバインド
 ├── ticket/
 │   └── TicketNetworkModule.kt         ← RewardServerApi (Retrofit) の提供
@@ -58,7 +57,7 @@ RewardModule (@SingletonComponent) ※AggregatorModuleとは別系統
 | モジュール | 提供/バインドするもの |
 |-----------|-------------------|
 | `AppModule` | `DataStore<Preferences>`（SharedPreferences代替） |
-| `RepositoriesModule` | `ITicketRepository` → `NetworkTicketRepository` |
+| `RepositoriesModule` | `ITicketRepository` → `TicketRepository` |
 | `RepositoriesModule` | `IApiTokenRepository` → `ApiTokenRepository` |
 | `UseCaseModule` | APIトークン関連4UseCase（Save/Validate/Get/Delete） |
 | `RewardRepositoryModule` | `IRewardRepository` → `RewardRepository` |
@@ -117,3 +116,5 @@ RewardModule (@SingletonComponent) ※AggregatorModuleとは別系統
 5. 集約モジュール（`XxxModule`）を作成し、上記をまとめて `includes` に列挙
 
 詳細な手順は `docs/how-to-add-new-feature.md` を参照。
+
+Todo用RoomのDIは廃止。TodoRepositoryはSingletonのメモリ状態を持ち、ITaskRewardRepositoryはdata:ticketのTaskRewardRepositoryへバインドする。

@@ -6,8 +6,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ActivityRetainedComponent
 import jp.kztproject.rewardedtodo.application.reward.CompleteTodoInteractor
 import jp.kztproject.rewardedtodo.application.reward.CompleteTodoUseCase
-import jp.kztproject.rewardedtodo.application.reward.DeleteTodoInteractor
-import jp.kztproject.rewardedtodo.application.reward.DeleteTodoUseCase
 import jp.kztproject.rewardedtodo.application.reward.FetchTodoListInteractor
 import jp.kztproject.rewardedtodo.application.reward.FetchTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.GetTodoListInteractor
@@ -27,9 +25,6 @@ interface TodoListFragmentModule {
 
     @Binds
     fun bindUpdateTodoListUseCase(useCase: UpdateTodoInteractor): UpdateTodoUseCase
-
-    @Binds
-    fun bindDeleteTodoListUseCase(useCase: DeleteTodoInteractor): DeleteTodoUseCase
 
     @Binds
     fun bindCompleteTodoUseCase(useCase: CompleteTodoInteractor): CompleteTodoUseCase

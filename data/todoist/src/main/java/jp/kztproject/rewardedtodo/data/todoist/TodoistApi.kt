@@ -9,7 +9,7 @@ import retrofit2.http.Query
 
 interface TodoistApi {
     @GET("api/v1/tasks/filter")
-    suspend fun fetchTasks(@Query("query") filter: String): Tasks
+    suspend fun fetchTasks(@Query("query") filter: String, @Query("cursor") cursor: String? = null): Tasks
 
     @POST("api/v1/tasks/{todoist_id}/close")
     suspend fun completeTask(@Path("todoist_id") todoistId: String): Response<Unit>

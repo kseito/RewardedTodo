@@ -36,6 +36,7 @@ fun NumberPicker(
     state: MutableState<Int>,
     modifier: Modifier = Modifier,
     range: IntRange? = null,
+    enabled: Boolean = true,
     textStyle: TextStyle = LocalTextStyle.current,
     onStateChanged: (Int) -> Unit = {},
 ) {
@@ -66,6 +67,7 @@ fun NumberPicker(
             .semantics { contentDescription = "ticket_number_picker" }
             .draggable(
                 orientation = Orientation.Vertical,
+                enabled = enabled,
                 state = rememberDraggableState { deltaY ->
                     coroutineScope.launch {
                         animatedOffset.snapTo(animatedOffset.value + deltaY)

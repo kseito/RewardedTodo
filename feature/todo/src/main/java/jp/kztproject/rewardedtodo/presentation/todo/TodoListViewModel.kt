@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.kztproject.rewardedtodo.application.reward.CompleteTodoUseCase
-import jp.kztproject.rewardedtodo.application.reward.DeleteTodoUseCase
 import jp.kztproject.rewardedtodo.application.reward.FetchTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.GetTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
@@ -38,7 +37,6 @@ class TodoListViewModel @Inject constructor(
     private val getTodoListUseCase: GetTodoListUseCase,
     private val fetchTodoListUseCase: FetchTodoListUseCase,
     private val updateTodoUseCase: UpdateTodoUseCase,
-    private val deleteTodoUseCase: DeleteTodoUseCase,
     private val completeTodoUseCase: CompleteTodoUseCase,
     private val getTodoistCredentialUseCase: GetTodoistCredentialUseCase,
 ) : ViewModel() {
@@ -59,7 +57,7 @@ class TodoListViewModel @Inject constructor(
     // extraBufferCapacity=1 で購読中の tryEmit を確実にバッファする。
     private val refreshTrigger = MutableSharedFlow<Unit>(replay = 0, extraBufferCapacity = 1)
 
-    // 連携状態の変化を起点にネットワーク同期し、その後DBを継続観測する完全リアクティブな一覧。
+    // 連携状態の変化を起点にネットワーク同期し、その後メモリ内の一覧を継続観測する完全リアクティブな一覧。
     // アクセストークンは1時間ごとにリフレッシュされるため、値そのものではなく連携の有無だけを見る
     val todoList: StateFlow<List<Todo>> = getTodoistCredentialUseCase.executeAsFlow()
         .map { it != null }
@@ -73,15 +71,19 @@ class TodoListViewModel @Inject constructor(
             initialValue = emptyList(),
         )
 
-    // 初回ロード(onStart)と手動リフレッシュ(refreshTrigger)を契機に同期し、その後DBを観測する。
+    // 初回ロード(onStart)と手動リフレッシュ(refreshTrigger)を契機に同期し、その後メモリ内の一覧を観測する。
     // 初回ロードは false、手動プルリフレッシュは true として扱い、スピナーは手動時のみ表示する。
     private fun syncThenObserveTodoList(isConnected: Boolean): Flow<List<Todo>> = refreshTrigger
         .map { true }
         .onStart { emit(false) }
         .flatMapLatest { isManualRefresh ->
             flow {
-                if (isConnected) syncTodoList(isManualRefresh)
-                emitAll(getTodoListUseCase.execute())
+                if (isConnected) {
+                    syncTodoList(isManualRefresh)
+                    emitAll(getTodoListUseCase.execute())
+                } else {
+                    emit(emptyList())
+                }
             }
                 // 1サイクルの失敗で共有ストリームを終わらせない（次のリフレッシュで復帰可能にする）
                 .catch { reportError(it) }
@@ -111,28 +113,39 @@ class TodoListViewModel @Inject constructor(
         refreshTrigger.tryEmit(Unit)
     }
 
-    fun updateTodo(todo: EditingTodo) {
-        viewModelScope.launch {
-            val newResult = updateTodoUseCase.execute(todo)
-            result.update { newResult }
-        }
-    }
+    val isSaving: StateFlow<Boolean>
+        field = MutableStateFlow(false)
 
-    fun deleteTodo(todo: EditingTodo) {
+    private val completingTasks = mutableSetOf<String>()
+
+    fun updateTodo(todo: EditingTodo) {
+        if (isSaving.value) return
+        isSaving.update { true }
         viewModelScope.launch {
             try {
-                deleteTodoUseCase.execute(todo.toTodo())
-                result.update { Result.success(Unit) }
+                result.update { updateTodoUseCase.execute(todo) }
+            } catch (e: CancellationException) {
+                throw e
             } catch (e: Exception) {
-                Timber.e(e)
-                result.update { Result.failure(e) }
+                reportError(e)
+            } finally {
+                isSaving.update { false }
             }
         }
     }
 
     fun completeTodo(todo: Todo) {
+        if (isSaving.value || !completingTasks.add(todo.todoistId)) return
         viewModelScope.launch {
-            completeTodoUseCase.execute(todo)
+            try {
+                completeTodoUseCase.execute(todo)
+            } catch (e: CancellationException) {
+                throw e
+            } catch (e: Exception) {
+                reportError(e)
+            } finally {
+                completingTasks.remove(todo.todoistId)
+            }
         }
     }
 

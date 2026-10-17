@@ -1,8 +1,7 @@
 package jp.kztproject.rewardedtodo.domain.todo
 
 data class EditingTodo(
-    var id: Long,
-    val todoistId: String? = null,
+    val todoistId: String,
     var name: String = "",
     private var numberOfTicketsObtained: Int = 0,
     private var isRepeat: Boolean = false,
@@ -10,7 +9,6 @@ data class EditingTodo(
 
     companion object {
         fun from(todo: Todo): EditingTodo = EditingTodo(
-            todo.id,
             todo.todoistId,
             todo.name,
             todo.numberOfTicketsObtained,
@@ -19,7 +17,6 @@ data class EditingTodo(
     }
 
     fun toTodo(): Todo = Todo(
-        this.id,
         this.todoistId,
         this.name,
         this.numberOfTicketsObtained,

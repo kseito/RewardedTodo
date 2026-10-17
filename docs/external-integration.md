@@ -27,7 +27,7 @@ Reward Server は別リポジトリ **[kseito/RewardedTodoServer](https://github
 └─────────────────────┘             └──────────────────────────┘
 ```
 
-チケットの**加算はサーバーがWebhookで行い、アプリは一切加算しない**（`NetworkTicketRepository.addTicket()` は意図的な空実装）。
+チケットの**加算はサーバーがWebhookで行い、アプリは一切加算しない**（`TicketRepository.addTicket()` は意図的な空実装）。
 アプリからは残高の**照会と消費のみ**を行う。
 
 ---
@@ -118,9 +118,7 @@ baseUrl は `https://api.todoist.com`。認証は `Authorization: Bearer {access
 }
 ```
 
-`checked=true` のタスクは同期時に除外する。`due.is_recurring` を `Todo.isRepeat` に対応させ、
-繰り返しタスクはTodoistから消えても削除せず完了状態に倒す（3-way syncの詳細は
-[docs/domain-model.md](domain-model.md) を参照）。
+`checked=true` のタスクを除外し、next_cursorがある間は全ページを取得する。タスクを獲得数設定と結合してメモリに保持する。完了API成功後に一覧から除き、再取得時にはTodoistの現在の状態を表示する。
 
 ---
 
@@ -186,7 +184,7 @@ Reward Server は独自の認証基盤を持たず、**Todoistのアクセスト
 
 エラー時のボディは `{ "error": "..." }`。
 
-| ステータス | 意味 | `NetworkTicketRepository` の挙動 |
+| ステータス | 意味 | `TicketRepository` の挙動 |
 |---|---|---|
 | `401` | トークンのハッシュが `user_id` に紐づかない | キャッシュした `REWARD_USER_ID` を破棄して再解決し、**1度だけリトライ** |
 | `422` | 残高不足（`INSUFFICIENT_POINTS`） | `LackOfTicketsException` に変換して上位へ |
@@ -225,21 +223,20 @@ X-Todoist-Hmac-SHA256: {署名}
 |---|---|
 | `event_name` が `item:completed` 以外 | 何もしない |
 | `event_data.parent_id` が非null（サブタスク） | 加算しない |
-| 上記以外 | `total_points` と `available_points` に **1** 加算、`task_count` を1増やす |
+| 上記以外 | `total_points` と `available_points` にタスクの設定枚数（未設定は1）を加算、`task_count` を1増やす |
 
 加算と消費はいずれも履歴テーブルに記録される（`type` が `earn` / `spend`）。
 
-署名検証に失敗した場合を除き、Todoistへは常に即座に `200` を返す。
+完了イベントは `event_data.id` と `X-Todoist-Delivery-ID` が必須。配信IDを記録し、同じ通知を再加算しない。加算・履歴・配信記録をDBトランザクションで確定後に200を返す。処理失敗時は非200で再送を促す。
 
 ---
 
+## Todoごとの獲得数
+
+設定の正本はReward Server。`GET /api/task-rewards/{userId}` と `PUT /api/task-rewards/{userId}/{taskId}` を使う。詳細なペイロードと移行方針は [計画書](specs/2026-10-17-server-todo-rewards.md) を参照。
+
+取得失敗と未設定を区別する。未設定のみ1枚、保存値は1〜100。後から保存された値で設定を上書きする。保存成功まで画面を閉じない。Todo用Roomを廃止し、通常操作はメモリにのみ保持する。
+
 ## Todoist未連携時のふるまい
 
-`TicketRepository` はTodoistのアクセストークンの有無で委譲先を操作ごとに切り替える。
-
-| 状態 | 委譲先 | チケットの所在 |
-|---|---|---|
-| トークンなし（未連携） | `LocalTicketRepository` | ローカル（DataStore）。加算もアプリが行う |
-| トークンあり（連携済み） | `NetworkTicketRepository` | Reward Server。加算はWebhookが行う |
-
-未連携時は外部通信を一切行わない。`TodoRepository.sync()` もトークンが無ければ何もしない。
+認証画面から先へ進めず、Todo・チケットを扱わない。ローカルTodoやローカル残高への切り替えはない。

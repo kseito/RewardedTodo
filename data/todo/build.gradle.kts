@@ -19,11 +19,6 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
-    // Room
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
-
     // Retrofit
     implementation(libs.retrofit.core)
 
@@ -31,7 +26,6 @@ dependencies {
     implementation(libs.coroutines.core)
 
     implementation(project(":domain:todo"))
-    implementation(project(":common:database"))
     implementation(project(":common:kvs"))
     implementation(project(":data:todoist"))
 }

@@ -12,10 +12,14 @@ class ClearLocalDataInteractor @Inject constructor(
 
     // 片方の失敗でもう片方を飛ばさないよう、削除ごとに結果を受け止める
     override suspend fun execute() {
-        runCatching { todoRepository.deleteAll() }
+        val todoResult = runCatching { todoRepository.deleteAll() }
             .onFailure { Timber.e(it, "Failed to delete local todos") }
 
-        runCatching { accountCacheRepository.clear() }
+        val accountResult = runCatching { accountCacheRepository.clear() }
             .onFailure { Timber.e(it, "Failed to clear account cache") }
+
+        // Do not associate an undeleted legacy database with a different account.
+        todoResult.getOrThrow()
+        accountResult.getOrThrow()
     }
 }

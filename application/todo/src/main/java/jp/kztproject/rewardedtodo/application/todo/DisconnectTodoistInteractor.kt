@@ -6,10 +6,12 @@ import javax.inject.Inject
 class DisconnectTodoistInteractor @Inject constructor(
     private val authSessionStore: TodoistAuthSessionStore,
     private val credentialRepository: ITodoistCredentialRepository,
+    private val clearLocalDataUseCase: ClearLocalDataUseCase,
 ) : DisconnectTodoistUseCase {
 
     override suspend fun execute(): Result<Unit> = runCatching {
         credentialRepository.deleteCredential()
+        clearLocalDataUseCase.execute()
         authSessionStore.clear()
     }
 }
