@@ -26,13 +26,6 @@ interface RewardServerApi {
         @Body request: UpdateTaskRewardRequest,
     ): TaskRewardResponse
 
-    @POST("api/task-rewards/{userId}/import")
-    suspend fun importTaskRewards(
-        @Path("userId") userId: String,
-        @Header("Authorization") authorization: String,
-        @Body request: ImportTaskRewardsRequest,
-    ): ImportTaskRewardsResponse
-
     @GET("api/users/me")
     suspend fun resolveUserId(@Header("Authorization") authorization: String): UserMeResponse
 
