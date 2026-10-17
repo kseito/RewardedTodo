@@ -10,9 +10,9 @@ Todoistを唯一のタスク管理元とし、完了時の獲得枚数だけをR
 
 ## 2. データと契約
 - タスク名・完了・繰り返し: Todoist。アプリ詳細では名前を読み取り専用とし、獲得枚数のみ編集する。ローカルだけを削除する旧Delete操作を廃止する（Todoistタスクを誤って削除しない）。
-- 設定: `task_reward_settings(user_id, todoist_task_id, points_per_completion, version, updated_at)`。複合主キー、枚数1〜100。未登録は1、version=0。
+- 設定: `task_reward_settings(user_id, todoist_task_id, points_per_completion, updated_at)`。複合主キー、枚数1〜100。未登録は1。
 - `GET /api/task-rewards/{userId}`: 当該ユーザーの登録済み設定の一覧。
-- `PUT /api/task-rewards/{userId}/{taskId}`: `{points_per_completion, version}`。楽観ロックにより競合409。成功時に保存した設定を返す。同じversionと同じ枚数の再送は成功扱い。
+- `PUT /api/task-rewards/{userId}/{taskId}`: `{points_per_completion}`。成功時に保存した設定を返し、後から保存された値で上書きする。
 - `POST /api/task-rewards/{userId}/import`: `{settings:[{todoist_task_id,points_per_completion}]}`。未登録だけ作成。最大100件/回。既存設定は保持。Todoistでアクセス不能/削除済みタスクは移行対象外。認証/一時的な上流障害では移行失敗としDBを残す。
 - 全APIは既存Bearer認証を利用。PUT/importはTodoistへのアクセス権も検証する。
 - 加算: 署名検証済みの完了Webhookだけで行う。処理時点の設定値を採用。サブタスクは従来どおり対象外。
