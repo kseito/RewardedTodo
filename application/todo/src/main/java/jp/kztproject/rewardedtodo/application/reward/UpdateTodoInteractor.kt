@@ -4,19 +4,15 @@ import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoRepository
 import javax.inject.Inject
 
-class UpdateTodoInteractor @Inject constructor(
-        private val todoRepository: ITodoRepository
-) : UpdateTodoUseCase {
+class UpdateTodoInteractor @Inject constructor(private val todoRepository: ITodoRepository) : UpdateTodoUseCase {
 
-    override suspend fun execute(todo: EditingTodo): Result<Unit> {
-        return try {
-            todo.validate()
-            todoRepository.update(todo.toTodo())
-            Result.success(Unit)
-        } catch (e: kotlinx.coroutines.CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
+    override suspend fun execute(todo: EditingTodo): Result<Unit> = try {
+        todo.validate()
+        todoRepository.update(todo.toTodo())
+        Result.success(Unit)
+    } catch (e: kotlinx.coroutines.CancellationException) {
+        throw e
+    } catch (e: Exception) {
+        Result.failure(e)
     }
 }
