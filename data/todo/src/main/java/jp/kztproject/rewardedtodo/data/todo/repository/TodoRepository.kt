@@ -18,7 +18,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class TodoRepository @Inject constructor(private val todoistApi: TodoistApi,
+class TodoRepository @Inject constructor(
+    private val todoistApi: TodoistApi,
     private val settings: ITaskRewardRepository,
     private val migration: LegacyTodoMigration,
 ) : ITodoRepository {
@@ -34,8 +35,7 @@ class TodoRepository @Inject constructor(private val todoistApi: TodoistApi,
         val seen = mutableSetOf<String>()
         do {
             val page = todoistApi.fetchTasks("today|overdue", cursor)
-            tasks.addAll(page.results
-                .filter { !it.checked })
+            tasks.addAll(page.results.filter { !it.checked })
             cursor = page.nextCursor
             check(cursor == null || seen.add(cursor)) { "Repeated Todoist page cursor" }
         } while (cursor != null)
