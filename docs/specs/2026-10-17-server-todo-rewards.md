@@ -13,8 +13,7 @@ Todoistを唯一のタスク管理元とし、完了時の獲得枚数だけをR
 - 設定: `task_reward_settings(user_id, todoist_task_id, points_per_completion, updated_at)`。複合主キー、枚数1〜100。未登録は1。
 - `GET /api/task-rewards/{userId}`: 当該ユーザーの登録済み設定の一覧。
 - `PUT /api/task-rewards/{userId}/{taskId}`: `{points_per_completion}`。成功時に保存した設定を返し、後から保存された値で上書きする。
-- `POST /api/task-rewards/{userId}/import`: `{settings:[{todoist_task_id,points_per_completion}]}`。未登録だけ作成。最大100件/回。既存設定は保持。Todoistでアクセス不能/削除済みタスクは移行対象外。認証/一時的な上流障害では移行失敗としDBを残す。
-- 全APIは既存Bearer認証を利用。PUT/importはTodoistへのアクセス権も検証する。
+- 全APIは既存Bearer認証を利用。PUTはTodoistへのアクセス権も検証する。
 - 加算: 署名検証済みの完了Webhookだけで行う。処理時点の設定値を採用。サブタスクは従来どおり対象外。
 - `processed_task_completions` にユーザー、配信ID、タスクID、付与枚数を記録。同じ配信IDは再加算しない。タスクIDだけでは重複判定しない。
 - 設定取得失敗を未登録扱いにしない。保存成功前に画面を閉じない。競合時は再取得して再編集する。
