@@ -194,7 +194,7 @@ sealed class TokenError {
 
 ### 4. Todoist同期（FetchTodoListUseCase）
 
-Todoistから対象タスクを全ページ取得し、Reward Serverの獲得枚数設定と結合してメモリに保持する。旧DBがある場合は先に設定を移行する。取得失敗時は既存メモリ状態を維持し、エラーを通知する。
+Todoistから対象タスクを全ページ取得し、Reward Serverの獲得枚数設定と結合してメモリに保持する。旧Todo用Roomの設定は移行しない。取得失敗時は既存メモリ状態を維持し、エラーを通知する。
 
 ---
 
