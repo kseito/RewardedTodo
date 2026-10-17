@@ -13,6 +13,8 @@ class UpdateTodoInteractor @Inject constructor(
             todo.validate()
             todoRepository.update(todo.toTodo())
             Result.success(Unit)
+        } catch (e: kotlinx.coroutines.CancellationException) {
+            throw e
         } catch (e: Exception) {
             Result.failure(e)
         }
