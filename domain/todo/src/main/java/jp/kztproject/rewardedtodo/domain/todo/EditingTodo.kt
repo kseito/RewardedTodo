@@ -5,7 +5,6 @@ data class EditingTodo(
     var name: String = "",
     private var numberOfTicketsObtained: Int = 0,
     private var isRepeat: Boolean = false,
-    val rewardVersion: Int = 0,
 ) {
 
     companion object {
@@ -14,7 +13,6 @@ data class EditingTodo(
             todo.name,
             todo.numberOfTicketsObtained,
             todo.isRepeat,
-            todo.rewardVersion,
         )
     }
 
@@ -23,7 +21,6 @@ data class EditingTodo(
         this.name,
         this.numberOfTicketsObtained,
         this.isRepeat,
-        this.rewardVersion,
     )
 
     fun validate() {
