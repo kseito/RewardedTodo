@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation(project(":domain:reward"))
+    implementation(project(":domain:todo"))
     implementation(project(":common:kvs"))
 
     implementation(libs.kotlin.stdlib)

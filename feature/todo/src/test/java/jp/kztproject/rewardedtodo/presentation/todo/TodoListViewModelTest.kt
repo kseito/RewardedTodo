@@ -7,7 +7,6 @@ import io.mockk.coVerify
 import io.mockk.every
 import io.mockk.mockk
 import jp.kztproject.rewardedtodo.application.reward.CompleteTodoUseCase
-import jp.kztproject.rewardedtodo.application.reward.DeleteTodoUseCase
 import jp.kztproject.rewardedtodo.application.reward.FetchTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.GetTodoListUseCase
 import jp.kztproject.rewardedtodo.application.reward.UpdateTodoUseCase
@@ -45,7 +44,6 @@ class TodoListViewModelTest :
                     val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
                     val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
                     val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
-                    val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
                     val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
                     val getTodoistCredentialUseCase = mockk<GetTodoistCredentialUseCase>(relaxed = true)
                     val dummyCredential =
@@ -56,7 +54,6 @@ class TodoListViewModelTest :
                         getTodoListUseCase,
                         fetchTodoListUseCase,
                         updateTodoListUseCase,
-                        deleteTodoUseCase,
                         completeTodoUseCase,
                         getTodoistCredentialUseCase,
                     )
@@ -75,7 +72,6 @@ class TodoListViewModelTest :
                     val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
                     val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
                     val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
-                    val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
                     val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
                     val getTodoistCredentialUseCase = mockk<GetTodoistCredentialUseCase>(relaxed = true)
                     val dummyCredential =
@@ -86,7 +82,6 @@ class TodoListViewModelTest :
                         getTodoListUseCase,
                         fetchTodoListUseCase,
                         updateTodoListUseCase,
-                        deleteTodoUseCase,
                         completeTodoUseCase,
                         getTodoistCredentialUseCase,
                     )
@@ -108,7 +103,6 @@ class TodoListViewModelTest :
                     val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
                     val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
                     val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
-                    val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
                     val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
                     val getTodoistCredentialUseCase = mockk<GetTodoistCredentialUseCase>(relaxed = true)
                     val dummyCredential =
@@ -121,7 +115,6 @@ class TodoListViewModelTest :
                         getTodoListUseCase,
                         fetchTodoListUseCase,
                         updateTodoListUseCase,
-                        deleteTodoUseCase,
                         completeTodoUseCase,
                         getTodoistCredentialUseCase,
                     )
@@ -144,7 +137,6 @@ class TodoListViewModelTest :
                     val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
                     val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
                     val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
-                    val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
                     val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
                     val getTodoistCredentialUseCase = mockk<GetTodoistCredentialUseCase>(relaxed = true)
                     val dummyCredential =
@@ -162,7 +154,6 @@ class TodoListViewModelTest :
                         getTodoListUseCase,
                         fetchTodoListUseCase,
                         updateTodoListUseCase,
-                        deleteTodoUseCase,
                         completeTodoUseCase,
                         getTodoistCredentialUseCase,
                     )
@@ -190,7 +181,6 @@ class TodoListViewModelTest :
                     val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
                     val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
                     val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
-                    val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
                     val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
                     val getTodoistCredentialUseCase = mockk<GetTodoistCredentialUseCase>(relaxed = true)
                     val dummyCredential =
@@ -204,7 +194,6 @@ class TodoListViewModelTest :
                         getTodoListUseCase,
                         fetchTodoListUseCase,
                         updateTodoListUseCase,
-                        deleteTodoUseCase,
                         completeTodoUseCase,
                         getTodoistCredentialUseCase,
                     )
@@ -229,7 +218,6 @@ class TodoListViewModelTest :
                     val getTodoListUseCase = mockk<GetTodoListUseCase>(relaxed = true)
                     val fetchTodoListUseCase = mockk<FetchTodoListUseCase>(relaxed = true)
                     val updateTodoListUseCase = mockk<UpdateTodoUseCase>(relaxed = true)
-                    val deleteTodoUseCase = mockk<DeleteTodoUseCase>(relaxed = true)
                     val completeTodoUseCase = mockk<CompleteTodoUseCase>(relaxed = true)
                     val getTodoistCredentialUseCase = mockk<GetTodoistCredentialUseCase>(relaxed = true)
                     every { getTodoistCredentialUseCase.executeAsFlow() } returns flowOf(null)
@@ -239,7 +227,6 @@ class TodoListViewModelTest :
                         getTodoListUseCase,
                         fetchTodoListUseCase,
                         updateTodoListUseCase,
-                        deleteTodoUseCase,
                         completeTodoUseCase,
                         getTodoistCredentialUseCase,
                     )
@@ -249,6 +236,48 @@ class TodoListViewModelTest :
                     viewModel.isInitialLoading.value shouldBe false
                     coVerify(exactly = 0) { fetchTodoListUseCase.execute() }
                     job.cancel()
+                }
+            }
+        }
+
+        context("Remote mutations") {
+            should("keep a failed save visible and prevent concurrent saves") {
+                runTest(testDispatcher) {
+                    val get = mockk<GetTodoListUseCase>()
+                    val fetch = mockk<FetchTodoListUseCase>(relaxed = true)
+                    val update = mockk<UpdateTodoUseCase>()
+                    val complete = mockk<CompleteTodoUseCase>(relaxed = true)
+                    val auth = mockk<GetTodoistCredentialUseCase>()
+                    every { auth.executeAsFlow() } returns flowOf(null)
+                    val gate = CompletableDeferred<Result<Unit>>()
+                    coEvery { update.execute(any()) } coAnswers { gate.await() }
+                    val vm = TodoListViewModel(get, fetch, update, complete, auth)
+                    val todo = jp.kztproject.rewardedtodo.domain.todo.EditingTodo("task", "Example", 3)
+                    vm.updateTodo(todo)
+                    vm.updateTodo(todo)
+                    advanceUntilIdle()
+                    vm.isSaving.value shouldBe true
+                    coVerify(exactly = 1) { update.execute(todo) }
+                    gate.complete(Result.failure(IllegalStateException("offline")))
+                    advanceUntilIdle()
+                    vm.isSaving.value shouldBe false
+                    vm.result.value?.isFailure shouldBe true
+                }
+            }
+
+            should("report completion failures instead of crashing") {
+                runTest(testDispatcher) {
+                    val get = mockk<GetTodoListUseCase>()
+                    val fetch = mockk<FetchTodoListUseCase>(relaxed = true)
+                    val update = mockk<UpdateTodoUseCase>(relaxed = true)
+                    val complete = mockk<CompleteTodoUseCase>()
+                    val auth = mockk<GetTodoistCredentialUseCase>()
+                    every { auth.executeAsFlow() } returns flowOf(null)
+                    coEvery { complete.execute(any()) } throws IllegalStateException("offline")
+                    val vm = TodoListViewModel(get, fetch, update, complete, auth)
+                    vm.completeTodo(jp.kztproject.rewardedtodo.domain.todo.Todo("task", "Example", 3, false))
+                    advanceUntilIdle()
+                    vm.result.value?.isFailure shouldBe true
                 }
             }
         }

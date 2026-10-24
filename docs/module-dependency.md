@@ -14,8 +14,8 @@
 | `domain:reward` | 報酬エンティティ、リポジトリインターフェース |
 | `domain:todo` | Todoエンティティ、リポジトリインターフェース |
 | `data:reward` | 報酬リポジトリ実装（Room DB） |
-| `data:todo` | Todoリポジトリ実装（Room DB + Todoist API） |
-| `data:ticket` | チケット（ポイント）リポジトリ実装（DataStore + Reward Server API） |
+| `data:todo` | Todoリポジトリ実装（Todoist API + メモリ） |
+| `data:ticket` | チケット・Todo獲得枚数設定（Reward Server API） |
 | `data:todoist` | Todoist APIクライアント |
 | `common:kvs` | DataStore / 暗号化ストレージ共通基盤 |
 | `common:database` | Room DB共通基盤 |
@@ -43,11 +43,10 @@ app
 │
 ├── data:reward ─────────────── domain:reward
 ├── data:todo ───────────────── domain:todo
-│                  └────────── common:database
 │                  └────────── common:kvs
 │                  └────────── data:todoist ────────── domain:todo
 │
-├── data:ticket ─────────────── domain:reward
+├── data:ticket ─────────────── domain:reward / domain:todo
 │                  └────────── common:kvs
 │
 ├── application:reward ──────── domain:reward
@@ -83,5 +82,5 @@ app → 全モジュール (DIバインドのため)
 | モジュール | 主な利用者 |
 |-----------|----------|
 | `common:kvs` | `data:todo`, `data:ticket` — DataStore アクセス |
-| `common:database` | `data:todo` — Room DB 基盤 |
+| `common:database` | `data:reward` — Room DB 基盤 |
 | `common:ui` | `feature:reward`, `feature:todo` — 共通UIコンポーネント |

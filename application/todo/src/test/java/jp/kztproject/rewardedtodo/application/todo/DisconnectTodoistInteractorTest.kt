@@ -12,13 +12,15 @@ class DisconnectTodoistInteractorTest {
 
     private val authSessionStore = TodoistAuthSessionStore()
     private val credentialRepository = mockk<ITodoistCredentialRepository>(relaxed = true)
-    private val interactor = DisconnectTodoistInteractor(authSessionStore, credentialRepository)
+    private val clearLocalDataUseCase = mockk<ClearLocalDataUseCase>(relaxed = true)
+    private val interactor = DisconnectTodoistInteractor(authSessionStore, credentialRepository, clearLocalDataUseCase)
 
     @Test
     fun `execute deletes the credential and clears any pending session`() = runTest {
         interactor.execute().isSuccess shouldBe true
 
         coVerify { credentialRepository.deleteCredential() }
+        coVerify { clearLocalDataUseCase.execute() }
         authSessionStore.get() shouldBe null
     }
 

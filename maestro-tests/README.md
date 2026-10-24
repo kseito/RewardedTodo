@@ -44,7 +44,6 @@ maestro test maestro-tests/edit-todo-flow.yaml
 |-------|---------|
 | `edit-todo-flow` | 既存Todoのタイトルとチケット枚数を変更できる |
 | `complete-todo-flow` | Todoist由来のTodoを完了するとリストから消え、サーバーがチケットを加算する |
-| `delete-todo-flow` | Todoを削除できる |
 
 Todoの追加はTodoist側で行う前提のため、アプリ内に追加導線は無い。Todoを必要とするフローは `stubs/` でTodoistの応答を用意する。
 

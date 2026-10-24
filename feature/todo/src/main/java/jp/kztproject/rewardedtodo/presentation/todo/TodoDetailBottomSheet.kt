@@ -34,17 +34,16 @@ fun TodoDetailBottomSheet(
     sheetState: SheetState,
     todo: Todo,
     onTodoSaveSelected: (EditingTodo) -> Unit,
-    onTodoDeleteSelected: (EditingTodo) -> Unit,
+    isSaving: Boolean = false,
 ) {
     ModalBottomSheet(
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = { if (!isSaving) onDismissRequest() },
         sheetState = sheetState,
     ) {
         TodoDetailBottomSheetContent(
             todo = todo,
             onTodoSaveSelected = onTodoSaveSelected,
-            onTodoDeleteSelected = onTodoDeleteSelected,
-            onDismissRequest = onDismissRequest,
+            isSaving = isSaving,
         )
     }
 }
@@ -53,8 +52,7 @@ fun TodoDetailBottomSheet(
 private fun TodoDetailBottomSheetContent(
     todo: Todo,
     onTodoSaveSelected: (EditingTodo) -> Unit, // TODO create new Domain
-    onTodoDeleteSelected: (EditingTodo) -> Unit,
-    onDismissRequest: () -> Unit,
+    isSaving: Boolean = false,
 ) {
     var title: String by remember { mutableStateOf(todo.name) }
     val numberOfTicket = remember { mutableStateOf(todo.numberOfTicketsObtained) }
@@ -75,12 +73,12 @@ private fun TodoDetailBottomSheetContent(
             ticketLabelImage,
             ticketInput,
             saveButton,
-            deleteButton,
         ) = createRefs()
 
         OutlinedTextField(
             value = title,
-            onValueChange = { title = it },
+            onValueChange = {},
+            readOnly = true,
             label = {
                 Text(text = "Title")
             },
@@ -112,8 +110,9 @@ private fun TodoDetailBottomSheetContent(
         )
         NumberPicker(
             state = numberOfTicket,
-            onStateChanged = { numberOfTicket.value = it },
-            range = 0..100,
+            onStateChanged = { if (!isSaving) numberOfTicket.value = it },
+            range = 1..100,
+            enabled = !isSaving,
             modifier = Modifier
                 .constrainAs(ticketInput) {
                     top.linkTo(titleTextField.bottom)
@@ -121,6 +120,7 @@ private fun TodoDetailBottomSheetContent(
                 },
         )
         Button(
+            enabled = !isSaving,
             onClick = {
                 val editingTodo = EditingTodo.from(todo)
                     .copy(
@@ -128,7 +128,6 @@ private fun TodoDetailBottomSheetContent(
                         numberOfTicketsObtained = numberOfTicket.value,
                     )
                 onTodoSaveSelected(editingTodo)
-                onDismissRequest()
             },
             modifier = Modifier
                 .padding(end = 8.dp)
@@ -136,21 +135,7 @@ private fun TodoDetailBottomSheetContent(
                     top.linkTo(ticketLabelText.bottom)
                 },
         ) {
-            Text(text = "Save")
-        }
-        Button(
-            onClick = {
-                val editingTodo = EditingTodo.from(todo)
-                onTodoDeleteSelected(editingTodo)
-                onDismissRequest()
-            },
-            modifier = Modifier
-                .constrainAs(deleteButton) {
-                    top.linkTo(ticketLabelText.bottom)
-                    start.linkTo(saveButton.end)
-                },
-        ) {
-            Text(text = "Delete")
+            Text(text = if (isSaving) "Saving…" else "Save")
         }
     }
 }
@@ -160,15 +145,12 @@ private fun TodoDetailBottomSheetContent(
 fun TodoDetailBottomSheetContentEditingPreview() {
     TodoDetailBottomSheetContent(
         todo = Todo(
-            id = 1L,
             todoistId = "abc123",
             name = "英語学習",
             numberOfTicketsObtained = 3,
             isRepeat = false,
         ),
         onTodoSaveSelected = {},
-        onTodoDeleteSelected = {},
-        onDismissRequest = {},
     )
 }
 
@@ -177,14 +159,11 @@ fun TodoDetailBottomSheetContentEditingPreview() {
 fun TodoDetailBottomSheetContentRepeatPreview() {
     TodoDetailBottomSheetContent(
         todo = Todo(
-            id = 2L,
-            todoistId = null,
+            todoistId = "repeat-task",
             name = "ランニング",
             numberOfTicketsObtained = 1,
             isRepeat = true,
         ),
         onTodoSaveSelected = {},
-        onTodoDeleteSelected = {},
-        onDismissRequest = {},
     )
 }

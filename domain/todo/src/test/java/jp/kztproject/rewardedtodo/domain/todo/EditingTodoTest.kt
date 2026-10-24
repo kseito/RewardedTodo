@@ -6,37 +6,37 @@ class EditingTodoTest {
 
     @Test
     fun shouldBeValidWhenNameLengthIs1() {
-        val todo = EditingTodo(id = 1L, name = "test_todo", numberOfTicketsObtained = 1)
+        val todo = EditingTodo(todoistId = "task-1", name = "test_todo", numberOfTicketsObtained = 1)
         todo.validate()
     }
 
     @Test(expected = NameEmptyException::class)
     fun shouldNotBeValidWhenNameLengthIs0() {
-        val todo = EditingTodo(id = 1L, name = "")
+        val todo = EditingTodo(todoistId = "task-1", name = "")
         todo.validate()
     }
 
     @Test(expected = NameLengthTooLongException::class)
     fun shouldNotBeValidWhenNameLengthIs501() {
-        val todo = EditingTodo(id = 1L, name = "a".repeat(501))
+        val todo = EditingTodo(todoistId = "task-1", name = "a".repeat(501))
         todo.validate()
     }
 
     @Test
     fun shouldBeValidWhenNumberOfTicketsIs100() {
-        val todo = EditingTodo(id = 1L, name = "test_todo", numberOfTicketsObtained = 100)
+        val todo = EditingTodo(todoistId = "task-1", name = "test_todo", numberOfTicketsObtained = 100)
         todo.validate()
     }
 
     @Test(expected = InvalidNumberOfTicketsException::class)
     fun shouldNotBeValidWhenNumberOfTicketsIs0() {
-        val todo = EditingTodo(id = 1L, name = "test_todo", numberOfTicketsObtained = 0)
+        val todo = EditingTodo(todoistId = "task-1", name = "test_todo", numberOfTicketsObtained = 0)
         todo.validate()
     }
 
     @Test(expected = InvalidNumberOfTicketsException::class)
     fun shouldNotBeValidWhenNumberOfTicketsIs101() {
-        val todo = EditingTodo(id = 1L, name = "test_todo", numberOfTicketsObtained = 101)
+        val todo = EditingTodo(todoistId = "task-1", name = "test_todo", numberOfTicketsObtained = 101)
         todo.validate()
     }
 }
