@@ -13,6 +13,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
+import jp.kztproject.rewardedtodo.application.todo.GetValidAccessTokenUseCase
+import jp.kztproject.rewardedtodo.domain.todo.exception.TodoistUnauthorizedException
 
 @InstallIn(SingletonComponent::class)
 @Module
@@ -20,16 +22,14 @@ class TicketNetworkModule {
 
     @Provides
     @Singleton
-    fun provideRewardServerApi(
-        getValidAccessTokenUseCase: jp.kztproject.rewardedtodo.application.todo.GetValidAccessTokenUseCase,
-    ): RewardServerApi {
+    fun provideRewardServerApi(getValidAccessTokenUseCase: GetValidAccessTokenUseCase): RewardServerApi {
         val moshi = Moshi.Builder()
             .addLast(KotlinJsonAdapterFactory())
             .build()
         val client = OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val token = kotlinx.coroutines.runBlocking { getValidAccessTokenUseCase.execute() }
-                    ?: throw jp.kztproject.rewardedtodo.domain.todo.exception.TodoistUnauthorizedException()
+                    ?: throw TodoistUnauthorizedException()
                 chain.proceed(chain.request().newBuilder().header("Authorization", "Bearer ${token.value}").build())
             }
             .apply {

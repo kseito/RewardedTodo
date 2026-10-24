@@ -12,14 +12,14 @@ import jp.kztproject.rewardedtodo.domain.reward.repository.IAccountCacheReposito
 import jp.kztproject.rewardedtodo.domain.reward.repository.ITicketRepository
 import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoistAuthRepository
 import jp.kztproject.rewardedtodo.domain.todo.repository.ITodoistCredentialRepository
+import jp.kztproject.rewardedtodo.data.ticket.TaskRewardRepository
+import jp.kztproject.rewardedtodo.domain.todo.repository.ITaskRewardRepository
 
 @InstallIn(SingletonComponent::class)
 @Module
 interface RepositoriesModule {
     @Binds
-    fun bindTaskRewardRepository(
-        repository: jp.kztproject.rewardedtodo.data.ticket.TaskRewardRepository,
-    ): jp.kztproject.rewardedtodo.domain.todo.repository.ITaskRewardRepository
+    fun bindTaskRewardRepository(repository: TaskRewardRepository): ITaskRewardRepository
 
     @Binds
     fun bindTicketRepositoryModule(repository: TicketRepository): ITicketRepository
