@@ -1,19 +1,21 @@
 package jp.kztproject.rewardedtodo.presentation.todo
 
-import androidx.compose.foundation.Image
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.SnackbarHost
@@ -31,20 +33,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import jp.kztproject.rewardedtodo.domain.todo.exception.TodoistUnauthorizedException
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import jp.kztproject.rewardedtodo.common.ui.CommonAlertDialog
+import jp.kztproject.rewardedtodo.common.ui.theme.RewardedTodoScheme
 import jp.kztproject.rewardedtodo.domain.todo.EditingTodo
 import jp.kztproject.rewardedtodo.domain.todo.Todo
 import jp.kztproject.rewardedtodo.feature.todo.R
@@ -188,6 +190,11 @@ private fun TodoListContent(
                 ) {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
+                        contentPadding = androidx.compose.foundation.layout.PaddingValues(
+                            horizontal = 14.dp,
+                            vertical = 10.dp,
+                        ),
+                        verticalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
                         if (todoList.isEmpty()) {
                             item {
@@ -203,10 +210,10 @@ private fun TodoListContent(
                                 }
                             }
                         }
-                        itemsIndexed(
+                        items(
                             items = todoList,
-                            key = { _, todo -> todo.todoistId },
-                        ) { index, todo ->
+                            key = { todo -> todo.todoistId },
+                        ) { todo ->
                             TodoListItem(
                                 todo = todo,
                                 onItemClicked = {
@@ -217,9 +224,6 @@ private fun TodoListContent(
                                 },
                                 modifier = Modifier.animateItem(),
                             )
-                            if (index < todoList.lastIndex) {
-                                HorizontalDivider()
-                            }
                         }
                     }
                 }
@@ -254,20 +258,35 @@ fun TodoListContentEmptyPreview() {
     )
 }
 
-@Preview
+@Preview(name = "Todo list light")
 @Composable
 fun TodoListContentWithDataPreview() {
-    TodoListContent(
-        todoList = listOf(
-            Todo("1001", "英語学習", 2, true),
-            Todo("1002", "ランニング", 1, false),
-        ),
-        isInitialLoading = false,
-        isRefreshing = false,
-        onRefresh = {},
-        onTodoItemClicked = {},
-        onTodoDone = {},
-    )
+    TodoListContentWithDataThemedPreview(isDark = false)
+}
+
+@Preview(name = "Todo list dark")
+@Composable
+fun TodoListContentWithDataDarkPreview() {
+    TodoListContentWithDataThemedPreview(isDark = true)
+}
+
+@Composable
+private fun TodoListContentWithDataThemedPreview(isDark: Boolean) {
+    MaterialTheme(colorScheme = RewardedTodoScheme(isDark)) {
+        Surface(color = MaterialTheme.colorScheme.background) {
+            TodoListContent(
+                todoList = listOf(
+                    Todo("1001", "英語学習", 2, true),
+                    Todo("1002", "ランニング", 1, false),
+                ),
+                isInitialLoading = false,
+                isRefreshing = false,
+                onRefresh = {},
+                onTodoItemClicked = {},
+                onTodoDone = {},
+            )
+        }
+    }
 }
 
 @Preview
@@ -298,49 +317,60 @@ private fun TodoListItem(
     onTodoDone: (Todo) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .clickable(
-                interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(),
-                onClick = onItemClicked,
-            )
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically,
+    Surface(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(18.dp),
+        color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
     ) {
-        Checkbox(
-            checked = false,
-            onCheckedChange = {
-                onTodoDone.invoke(todo)
-            },
+        Row(
             modifier = Modifier
-                .padding(end = 16.dp)
-                .semantics { contentDescription = "todo_checkbox" },
-        )
-        Column(
-            modifier = Modifier.weight(1f),
+                .clickable(
+                    interactionSource = remember { MutableInteractionSource() },
+                    indication = ripple(),
+                    onClick = onItemClicked,
+                )
+                .padding(horizontal = 12.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
         ) {
+            Checkbox(
+                checked = false,
+                onCheckedChange = { onTodoDone(todo) },
+                colors = CheckboxDefaults.colors(
+                    checkedColor = MaterialTheme.colorScheme.tertiary,
+                    uncheckedColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                ),
+                modifier = Modifier.semantics { contentDescription = "todo_checkbox" },
+            )
             Text(
                 text = todo.name,
-                style = MaterialTheme.typography.headlineSmall,
-                color = MaterialTheme.colorScheme.onBackground,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface,
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(horizontal = 8.dp),
             )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
+            Surface(
+                shape = RoundedCornerShape(12.dp),
+                color = MaterialTheme.colorScheme.secondaryContainer,
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_ticket),
-                    contentDescription = null,
-                    contentScale = ContentScale.Fit,
-                    modifier = Modifier.size(36.dp),
-                )
-                Text(
-                    text = "${todo.numberOfTicketsObtained}",
-                    fontSize = 20.sp,
-                    color = MaterialTheme.colorScheme.onBackground,
-                    modifier = Modifier.padding(start = 16.dp),
-                )
+                Row(
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 6.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_ticket),
+                        contentDescription = null,
+                        tint = MaterialTheme.colorScheme.secondary,
+                        modifier = Modifier.size(18.dp),
+                    )
+                    Text(
+                        text = "+${todo.numberOfTicketsObtained}",
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSecondaryContainer,
+                    )
+                }
             }
         }
     }
