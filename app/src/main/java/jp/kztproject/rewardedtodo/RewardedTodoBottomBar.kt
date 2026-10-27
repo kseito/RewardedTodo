@@ -27,8 +27,8 @@ fun RewardedTodoBottomBar(
                 selected = destination == currentDestination,
                 onClick = { onNavigateToDestination(destination) },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = MaterialTheme.colorScheme.primary,
-                    selectedTextColor = MaterialTheme.colorScheme.primary,
+                    selectedIconColor = MaterialTheme.colorScheme.secondary,
+                    selectedTextColor = MaterialTheme.colorScheme.secondary,
                     indicatorColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.15f),
                     unselectedIconColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     unselectedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
