@@ -258,13 +258,13 @@ fun TodoListContentEmptyPreview() {
     )
 }
 
-@Preview(name = "Todo list light")
+@Preview
 @Composable
 fun TodoListContentWithDataPreview() {
     TodoListContentWithDataThemedPreview(isDark = false)
 }
 
-@Preview(name = "Todo list dark")
+@Preview
 @Composable
 fun TodoListContentWithDataDarkPreview() {
     TodoListContentWithDataThemedPreview(isDark = true)
