@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -15,6 +16,7 @@ import androidx.navigation3.ui.NavDisplay
 import jp.kztproject.rewardedtodo.RewardedTodoBottomBar
 import jp.kztproject.rewardedtodo.TopBar
 import jp.kztproject.rewardedtodo.TopLevelDestination
+import jp.kztproject.rewardedtodo.common.ui.theme.RewardedTodoScheme
 
 import jp.kztproject.rewardedtodo.feature.reward.RewardListRoute
 import jp.kztproject.rewardedtodo.feature.reward.rewardListScreen
@@ -59,6 +61,7 @@ private fun HomeScreenContent(
     content: @Composable (PaddingValues) -> Unit,
 ) {
     Scaffold(
+        containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopBar(
                 currentDestination.iconTextId,
@@ -101,33 +104,29 @@ private fun RewardedTodoApp(
 @Composable
 @Preview
 fun HomeScreenTodoTabPreview() {
-    HomeScreenContent(
-        currentDestination = TopLevelDestination.TODO,
-        topLevelDestinations = TopLevelDestination.entries,
-        onNavigateToDestination = {},
-        onClickSetting = {},
-    ) { padding ->
-        Box(
-            Modifier
-                .fillMaxSize()
-                .padding(padding),
-        )
-    }
+    HomeScreenThemedPreview(TopLevelDestination.TODO)
 }
 
 @Composable
 @Preview
 fun HomeScreenRewardTabPreview() {
-    HomeScreenContent(
-        currentDestination = TopLevelDestination.REWARD,
-        topLevelDestinations = TopLevelDestination.entries,
-        onNavigateToDestination = {},
-        onClickSetting = {},
-    ) { padding ->
-        Box(
-            Modifier
-                .fillMaxSize()
-                .padding(padding),
-        )
+    HomeScreenThemedPreview(TopLevelDestination.REWARD)
+}
+
+@Composable
+private fun HomeScreenThemedPreview(currentDestination: TopLevelDestination) {
+    MaterialTheme(colorScheme = RewardedTodoScheme(isDarkTheme = false)) {
+        HomeScreenContent(
+            currentDestination = currentDestination,
+            topLevelDestinations = TopLevelDestination.entries,
+            onNavigateToDestination = {},
+            onClickSetting = {},
+        ) { padding ->
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .padding(padding),
+            )
+        }
     }
 }

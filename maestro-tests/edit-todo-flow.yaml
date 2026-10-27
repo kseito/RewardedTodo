@@ -14,11 +14,7 @@ tags:
 - tapOn: "Synced Task"
 - assertVisible: "Save"
 - assertNotVisible: "Delete"
-- swipe:
-    from:
-      text: "ticket_number_picker"
-    direction: UP
-    duration: 500
+- tapOn: "Increase tickets by one"
 - tapOn: "Save"
 - extendedWaitUntil:
     notVisible: "Save"
@@ -26,13 +22,11 @@ tags:
 - assertVisible: "Synced Task"
 - runScript: stubs/capture-saved-reward.js
 - assertVisible:
-    text: "${output.savedReward}"
-    below: "Synced Task"
+    text: "+${output.savedReward}"
 - stopApp
 - launchApp
 - extendedWaitUntil:
     visible: "Synced Task"
     timeout: 15000
 - assertVisible:
-    text: "${output.savedReward}"
-    below: "Synced Task"
+    text: "+${output.savedReward}"
