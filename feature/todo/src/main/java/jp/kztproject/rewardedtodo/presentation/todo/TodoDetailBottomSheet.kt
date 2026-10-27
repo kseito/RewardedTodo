@@ -210,13 +210,13 @@ private fun TodoDetailBottomSheetContent(
     }
 }
 
-@Preview(name = "Todo detail light")
+@Preview
 @Composable
 fun TodoDetailBottomSheetContentEditingPreview() {
     TodoDetailBottomSheetContentEditingThemedPreview(isDark = false)
 }
 
-@Preview(name = "Todo detail dark")
+@Preview
 @Composable
 fun TodoDetailBottomSheetContentEditingDarkPreview() {
     TodoDetailBottomSheetContentEditingThemedPreview(isDark = true)
@@ -239,13 +239,13 @@ private fun TodoDetailBottomSheetContentEditingThemedPreview(isDark: Boolean) {
     }
 }
 
-@Preview(name = "Todo repeat detail light")
+@Preview
 @Composable
 fun TodoDetailBottomSheetContentRepeatPreview() {
     TodoDetailBottomSheetContentRepeatThemedPreview(isDark = false)
 }
 
-@Preview(name = "Todo repeat detail dark")
+@Preview
 @Composable
 fun TodoDetailBottomSheetContentRepeatDarkPreview() {
     TodoDetailBottomSheetContentRepeatThemedPreview(isDark = true)
