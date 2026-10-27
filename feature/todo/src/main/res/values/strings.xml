@@ -7,4 +7,11 @@
     <string name="todo_empty_message">No tasks yet. Add tasks in Todoist and pull to refresh.</string>
     <string name="error_todoist_unauthorized">The Todoist connection has expired. Log out from Setting and connect again.</string>
     <string name="open_setting">Open Setting</string>
+    <string name="todo_edit_title">Edit task</string>
+    <string name="todo_task_name">Task name</string>
+    <string name="todo_ticket_on_completion">Tickets earned on completion</string>
+    <string name="todo_decrease_tickets">Decrease tickets by one</string>
+    <string name="todo_increase_tickets">Increase tickets by one</string>
+    <string name="todo_save">Save</string>
+    <string name="todo_saving">Saving…</string>
 </resources>
