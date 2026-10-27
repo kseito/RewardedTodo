@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="todo_repeating">繰り返し</string>
+    <string name="todo_reward">報酬</string>
+    <string name="multiplication">×</string>
+    <string name="error_message">エラーが発生しました</string>
+    <string name="todo_empty_message">タスクはありません。Todoistでタスクを追加し、下に引いて更新してください。</string>
+    <string name="error_todoist_unauthorized">Todoistとの連携が切れました。設定からログアウトして再接続してください。</string>
+    <string name="open_setting">設定を開く</string>
+    <string name="todo_edit_title">タスクを編集</string>
+    <string name="todo_task_name">タスク名</string>
+    <string name="todo_ticket_on_completion">完了で獲得するチケット</string>
+    <string name="todo_decrease_tickets">チケットを1枚減らす</string>
+    <string name="todo_increase_tickets">チケットを1枚増やす</string>
+    <string name="todo_save">保存</string>
+    <string name="todo_saving">保存中…</string>
+</resources>
