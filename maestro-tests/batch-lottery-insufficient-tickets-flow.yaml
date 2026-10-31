@@ -53,8 +53,15 @@ tags:
 
 # Verify we start with 0 tickets
 - extendedWaitUntil:
-    visible: "0 tickets"
+    visible:
+      id: "ticket_count"
+      text: "0 tickets"
     timeout: 3000
+
+# The single-draw cost is always 1 ticket, but the balance is still zero.
+- assertNotVisible:
+    id: "ticket_count"
+    text: "1 ticket"
 
 # Try to perform 10-batch lottery without enough tickets
 - tapOn:
@@ -67,5 +74,7 @@ tags:
 
 # Verify we still have 0 tickets
 - extendedWaitUntil:
-    visible: "0 tickets"
+    visible:
+      id: "ticket_count"
+      text: "0 tickets"
     timeout: 3000
