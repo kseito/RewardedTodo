@@ -34,12 +34,16 @@ tags:
 - hideKeyboard
 
 # Enter chance of winning (100% guarantees a win)
-- tapOn: "Chance of Winning.*"
+- tapOn: 'Chance of Winning\(Unit %\)'
 - inputText: "100"
 - hideKeyboard
 
 # Tap Save button (Repeat is left unchecked => needRepeat = false)
+- hideKeyboard
 - tapOn: "Save"
+- extendedWaitUntil:
+    notVisible: "Reward Title"
+    timeout: 5000
 
 # Wait for bottom sheet to close
 - assertNotVisible:
@@ -54,7 +58,7 @@ tags:
 - runFlow: subflows/earn-tickets.yaml
 
 # Verify we have 1 ticket
-- assertVisible: "1 tickets"
+- assertVisible: "1 tickets?"
 
 # Run single lottery (guaranteed win at 100%)
 - tapOn:
