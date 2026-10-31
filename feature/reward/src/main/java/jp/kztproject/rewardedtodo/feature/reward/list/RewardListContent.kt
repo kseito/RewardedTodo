@@ -4,9 +4,12 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -94,13 +97,14 @@ internal fun RewardListContent(
                         )
                     }
                     Row(
+                        modifier = Modifier.height(IntrinsicSize.Min),
                         horizontalArrangement = Arrangement.spacedBy(10.dp),
                     ) {
                         Button(
                             onClick = onSingleLottery,
                             enabled = !isLottering,
                             shape = RoundedCornerShape(18.dp),
-                            modifier = Modifier.weight(1.4f).semantics {
+                            modifier = Modifier.weight(1f).fillMaxHeight().semantics {
                                 contentDescription =
                                     "single_lottery_button"
                             },
@@ -115,7 +119,7 @@ internal fun RewardListContent(
                             colors = ButtonDefaults.outlinedButtonColors(
                                 contentColor = MaterialTheme.colorScheme.secondary,
                             ),
-                            modifier = Modifier.weight(1f).semantics {
+                            modifier = Modifier.weight(1f).fillMaxHeight().semantics {
                                 contentDescription =
                                     "batch_lottery_button"
                             },
