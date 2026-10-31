@@ -57,7 +57,9 @@ tags:
 - runFlow: subflows/earn-tickets.yaml
 
 # Verify we have 1 ticket
-- assertVisible: "1 tickets?"
+- assertVisible:
+    id: "ticket_count"
+    text: "1 ticket"
 
 # Run single lottery (guaranteed win at 100%)
 - tapOn:
@@ -78,4 +80,6 @@ tags:
     timeout: 5000
 
 # Verify ticket was consumed (should be 0 tickets now)
-- assertVisible: "0 tickets"
+- assertVisible:
+    id: "ticket_count"
+    text: "0 tickets"
