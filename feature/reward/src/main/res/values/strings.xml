@@ -25,4 +25,28 @@
     <string name="menu_todoist">Todoist</string>
     <string name="section_other">Other</string>
     <string name="menu_logout">Logout</string>
+    <string name="reward_add_title">Add reward</string>
+    <string name="reward_edit_title">Edit reward</string>
+    <string name="reward_description_placeholder">Make a note about your reward…</string>
+    <string name="reward_probability">Chance of winning</string>
+    <string name="reward_keep_in_pool">Keep in pool after winning</string>
+    <string name="reward_repeat">Repeat reward</string>
+    <string name="reward_once">One time only</string>
+    <string name="reward_save">Save</string>
+    <string name="reward_delete">Delete</string>
+    <string name="reward_owned_tickets">Your tickets</string>
+    <string name="reward_draw">Draw a reward</string>
+    <string name="reward_draw_batch">10x</string>
+    <plurals name="reward_ticket_cost">
+        <item quantity="one">%d ticket</item>
+        <item quantity="other">%d tickets</item>
+    </plurals>
+    <string name="reward_lineup">Reward lineup</string>
+    <string name="reward_add">Add</string>
+    <string name="reward_empty">Add a reward to build your lineup.</string>
+    <string name="reward_drawing">Drawing…</string>
+    <plurals name="reward_ticket_balance">
+        <item quantity="one">%d ticket</item>
+        <item quantity="other">%d tickets</item>
+    </plurals>
 </resources>
