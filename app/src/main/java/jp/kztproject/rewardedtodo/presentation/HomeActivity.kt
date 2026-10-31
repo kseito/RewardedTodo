@@ -6,6 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.core.view.WindowInsetsControllerCompat
@@ -35,7 +36,7 @@ class HomeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         WindowInsetsControllerCompat(window, window.decorView).apply {
-            isAppearanceLightStatusBars = false
+            isAppearanceLightStatusBars = true
             isAppearanceLightNavigationBars = false
         }
 
@@ -44,14 +45,19 @@ class HomeActivity : ComponentActivity() {
             val startDestination by homeViewModel.startDestination.collectAsState()
             val destination = startDestination ?: return@setContent
 
+            val isDarkTheme = isSystemInDarkTheme()
             MaterialTheme(
-                colorScheme = RewardedTodoScheme(isDarkTheme = isSystemInDarkTheme()),
+                colorScheme = RewardedTodoScheme(isDarkTheme = isDarkTheme),
             ) {
                 val startRoute: NavKey = when (destination) {
                     StartDestination.AUTH -> AuthRoute
                     StartDestination.HOME -> HomeRoute
                 }
                 val backStack = rememberNavBackStack(startRoute)
+                SideEffect {
+                    WindowInsetsControllerCompat(window, window.decorView).isAppearanceLightStatusBars =
+                        backStack.lastOrNull() == HomeRoute || !isDarkTheme
+                }
 
                 // 認証画面とホーム画面は行き来させない。戻るボタンで逆戻りしないよう積み直す
                 fun replaceStackWith(route: NavKey) {
