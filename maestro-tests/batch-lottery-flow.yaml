@@ -79,12 +79,13 @@ tags:
 # Wait for tickets to be displayed
 - extendedWaitUntil:
     visible:
-      text: ".*tickets.*"
+      id: "ticket_count"
+      text: "12 tickets"
     timeout: 5000
 
 # Save ticket count before lottery
 - copyTextFrom:
-    text: "ticket_count"
+    id: "ticket_count"
 - evalScript: ${output.ticketsBefore = parseInt(maestro.copiedText)}
 
 # Test 10-batch lottery (assuming we have at least 10 tickets)
@@ -107,11 +108,12 @@ tags:
 # Wait for ticket count to update
 - extendedWaitUntil:
     visible:
-      text: ".*tickets.*"
+      id: "ticket_count"
+      text: "2 tickets"
     timeout: 3000
 
 # Save ticket count after lottery and verify it decreased
 - copyTextFrom:
-    text: "ticket_count"
+    id: "ticket_count"
 - evalScript: ${output.ticketsAfter = parseInt(maestro.copiedText)}
-- assertTrue: ${output.ticketsBefore > output.ticketsAfter}
+- assertTrue: ${output.ticketsBefore - output.ticketsAfter === 10}
