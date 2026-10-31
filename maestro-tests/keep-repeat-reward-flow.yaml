@@ -43,7 +43,6 @@ tags:
     text: "repeat_checkbox"
 
 # Tap Save button (Repeat is checked => needRepeat = true)
-- hideKeyboard
 - tapOn: "Save"
 - extendedWaitUntil:
     notVisible: "Reward Title"
