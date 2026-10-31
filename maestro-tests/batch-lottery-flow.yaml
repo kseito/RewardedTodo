@@ -31,11 +31,15 @@ tags:
 - inputText: "Prize A"
 
 # Enter chance of winning (50%)
-- tapOn: "Chance of Winning.*"
+- tapOn: 'Chance of Winning\(Unit %\)'
 - inputText: "50"
 
 # Tap Save button
+- hideKeyboard
 - tapOn: "Save"
+- extendedWaitUntil:
+    notVisible: "Reward Title"
+    timeout: 5000
 
 # Wait for the reward to appear in list
 - extendedWaitUntil:
@@ -55,10 +59,14 @@ tags:
 - tapOn: "Reward Description"
 - inputText: "Prize B"
 
-- tapOn: "Chance of Winning.*"
+- tapOn: 'Chance of Winning\(Unit %\)'
 - inputText: "30"
 
+- hideKeyboard
 - tapOn: "Save"
+- extendedWaitUntil:
+    notVisible: "Reward Title"
+    timeout: 5000
 
 # Wait for the reward to appear in list
 - extendedWaitUntil:
