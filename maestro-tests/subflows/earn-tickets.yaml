@@ -16,6 +16,11 @@ appId: jp.kztproject.rewardedtodo.debug
 - tapOn:
     text: "Reward"
 - extendedWaitUntil:
+    visible:
+      id: "ticket_count"
+    timeout: 15000
+- extendedWaitUntil:
     notVisible:
+      id: "ticket_count"
       text: "0 tickets"
     timeout: 15000
