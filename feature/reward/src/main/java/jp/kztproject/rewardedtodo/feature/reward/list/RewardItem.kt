@@ -67,7 +67,7 @@ internal fun RewardItem(reward: Reward, onRewardItemClick: (Reward) -> Unit) {
                     if (reward.needRepeat) {
                         Icon(
                             imageVector = Icons.Filled.Repeat,
-                            contentDescription = "Repeat",
+                            contentDescription = null,
                             modifier = Modifier.size(14.dp),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
