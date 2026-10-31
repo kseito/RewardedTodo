@@ -28,5 +28,7 @@ tags:
 - tapOn:
     text: "Reward"
 - extendedWaitUntil:
-    visible: "1 tickets"
+    visible:
+      id: "ticket_count"
+      text: "1 ticket"
     timeout: 10000

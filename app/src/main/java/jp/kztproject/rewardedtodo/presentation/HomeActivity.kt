@@ -35,7 +35,7 @@ class HomeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         WindowInsetsControllerCompat(window, window.decorView).apply {
-            isAppearanceLightStatusBars = false
+            isAppearanceLightStatusBars = true
             isAppearanceLightNavigationBars = false
         }
 

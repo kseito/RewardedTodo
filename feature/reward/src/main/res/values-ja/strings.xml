@@ -1,0 +1,44 @@
+<resources>
+    <string name="hint_title">ごほうびの名前</string>
+    <string name="hint_description">説明（任意）</string>
+    <string name="hint_probability">当選確率（%）</string>
+    <string name="reward_add_title">ごほうびを追加</string>
+    <string name="reward_edit_title">ごほうびを編集</string>
+    <string name="reward_description_placeholder">ごほうびの内容をメモ…</string>
+    <string name="reward_probability">当選確率</string>
+    <string name="reward_keep_in_pool">当選後もプールに残す</string>
+    <string name="reward_repeat">リピート</string>
+    <string name="reward_once">1回限り</string>
+    <string name="reward_save">保存</string>
+    <string name="reward_delete">削除</string>
+    <string name="reward_owned_tickets">所持チケット</string>
+    <string name="reward_draw">ガチャを引く</string>
+    <string name="reward_draw_batch">10連ガチャ</string>
+    <plurals name="reward_ticket_cost">
+        <item quantity="other">チケット %d枚</item>
+    </plurals>
+    <string name="reward_lineup">ごほうび一覧</string>
+    <string name="reward_add">追加</string>
+    <string name="reward_empty">ごほうびを追加して一覧を作りましょう。</string>
+    <string name="reward_drawing">ガチャ実行中…</string>
+    <plurals name="reward_ticket_balance">
+        <item quantity="other">%d枚</item>
+    </plurals>
+    <string name="won_reward">%sが当たりました</string>
+    <string name="missed_reward">はずれでした</string>
+    <string name="batch_lottery_title">%d連ガチャの結果</string>
+    <string name="batch_lottery_won">当選: %d</string>
+    <string name="batch_lottery_missed">はずれ: %d</string>
+    <string name="batch_lottery_button">%d連ガチャ</string>
+    <string name="hint_point">消費ポイント</string>
+    <string name="error_empty_title">ごほうびの名前を入力してください</string>
+    <string name="error_empty_point">ポイントを入力してください</string>
+    <string name="error_over_max_rewards">ごほうびは7件まで追加できます。</string>
+    <string name="error_unexpected">予期しないエラーが発生しました。</string>
+    <string name="error_empty_probability">当選確率を入力してください</string>
+    <string name="error_empty_tickets">チケットがありません</string>
+    <string name="section_association">連携</string>
+    <string name="menu_todoist">Todoist</string>
+    <string name="section_other">その他</string>
+    <string name="menu_logout">ログアウト</string>
+</resources>

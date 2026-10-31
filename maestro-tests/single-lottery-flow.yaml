@@ -31,11 +31,15 @@ tags:
 - inputText: "Test item for lottery"
 
 # Enter chance of winning
-- tapOn: "Chance of Winning.*"
+- tapOn: 'Chance of Winning\(Unit %\)'
 - inputText: "40"
 
 # Tap Save button
+- hideKeyboard
 - tapOn: "Save"
+- extendedWaitUntil:
+    notVisible: "Reward Title"
+    timeout: 5000
 
 # Wait for bottom sheet to close
 - assertNotVisible:
@@ -50,7 +54,9 @@ tags:
 - runFlow: subflows/earn-tickets.yaml
 
 # Verify we have 1 ticket
-- assertVisible: "1 tickets"
+- assertVisible:
+    id: "ticket_count"
+    text: "1 ticket"
 
 # Test single lottery
 # Tap the Done (checkmark) button for single lottery
@@ -67,4 +73,6 @@ tags:
 - tapOn: "OK"
 
 # Verify ticket was consumed (should be 0 tickets now)
-- assertVisible: "0 tickets"
+- assertVisible:
+    id: "ticket_count"
+    text: "0 tickets"

@@ -30,11 +30,15 @@ tags:
 - inputText: "This is a test reward"
 
 # Enter chance of winning
-- tapOn: "Chance of Winning.*"
+- tapOn: 'Chance of Winning\(Unit %\)'
 - inputText: "50"
 
 # Tap Save button
+- hideKeyboard
 - tapOn: "Save"
+- extendedWaitUntil:
+    notVisible: "Reward Title"
+    timeout: 5000
 
 # Wait for bottom sheet to close and list to update
 - extendedWaitUntil:

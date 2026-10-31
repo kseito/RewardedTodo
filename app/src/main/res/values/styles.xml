@@ -2,6 +2,8 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light">
+        <item name="android:statusBarColor">#FF7A3D</item>
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
 </resources>
