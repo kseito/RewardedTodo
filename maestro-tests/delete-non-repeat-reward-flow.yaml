@@ -39,7 +39,6 @@ tags:
 - hideKeyboard
 
 # Tap Save button (Repeat is left unchecked => needRepeat = false)
-- hideKeyboard
 - tapOn: "Save"
 - extendedWaitUntil:
     notVisible: "Reward Title"
