@@ -30,11 +30,15 @@ tags:
 - inputText: "Before editing"
 
 # Enter chance of winning
-- tapOn: "Chance of Winning.*"
+- tapOn: 'Chance of Winning\(Unit %\)'
 - inputText: "20"
 
 # Tap Save button
+- hideKeyboard
 - tapOn: "Save"
+- extendedWaitUntil:
+    notVisible: "Reward Title"
+    timeout: 5000
 
 # Wait for the reward to appear in the list
 - extendedWaitUntil:
@@ -51,16 +55,15 @@ tags:
 # Wait for bottom sheet to appear
 - assertVisible: "Reward Title"
 
-# Turn on the Repeat checkbox
+# Turn on the Repeat switch
 - tapOn:
     text: "repeat_checkbox"
 
 # Save the changes
 - tapOn: "Save"
-
-# Wait for bottom sheet to close
-- assertNotVisible:
-    text: "Reward Title"
+- extendedWaitUntil:
+    notVisible: "Reward Title"
+    timeout: 5000
 
 # Verify the reward now shows the Repeat icon in the list
 - extendedWaitUntil:
