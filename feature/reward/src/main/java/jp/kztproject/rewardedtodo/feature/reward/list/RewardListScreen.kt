@@ -2,21 +2,11 @@ package jp.kztproject.rewardedtodo.feature.reward.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarData
 import androidx.compose.material3.SnackbarDuration
@@ -26,9 +16,6 @@ import androidx.compose.material3.SnackbarVisuals
 import androidx.compose.material3.Text
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.material3.rememberModalBottomSheetState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Done
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -40,13 +27,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import jp.kztproject.rewardedtodo.application.reward.usecase.BatchLotteryUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardUseCase
@@ -76,7 +59,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RewardListScreenWithBottomSheet(viewModel: RewardListViewModel = hiltViewModel()) {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var selectedReward: Reward? by remember { mutableStateOf(null) }
     var showBottomSheet by remember { mutableStateOf(false) }
 
@@ -144,108 +127,32 @@ private fun RewardListScreen(
     LaunchedEffect(Unit) {
         viewModel.refreshPointSilently()
     }
-    val isLottering = isSingleLottering || isBatchLottering
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background),
-    ) {
-        Column(
+    Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
+        PullToRefreshBox(
+            isRefreshing = isRefreshing,
+            onRefresh = viewModel::refresh,
             modifier = Modifier.fillMaxSize(),
         ) {
-            Box(
-                modifier = Modifier.weight(1f),
-            ) {
-                PullToRefreshBox(
-                    isRefreshing = isRefreshing,
-                    onRefresh = viewModel::refresh,
-                    modifier = Modifier.fillMaxSize(),
-                ) {
-                    RewardList(
-                        rewards = rewards,
-                        onRewardItemClick = onRewardItemClick,
-                        modifier = Modifier.fillMaxSize(),
-                    )
-                }
-                SnackbarHost(
-                    hostState = snackbarHostState,
-                    snackbar = {
-                        ErrorSnackBar(it)
-                    },
-                )
-            }
-        }
-
-        Column(
-            modifier = Modifier.align(Alignment.BottomCenter),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            TicketLabel(
+            RewardListContent(
+                rewards = rewards,
                 ticket = ticket,
-                modifier = Modifier
-                    .padding(bottom = 8.dp),
+                isSingleLottering = isSingleLottering,
+                isBatchLottering = isBatchLottering,
+                onSingleLottery = viewModel::startLottery,
+                onBatchLottery = { viewModel.startBatchLottery() },
+                onRewardItemClick = onRewardItemClick,
+                onAddNewRewardClick = { viewModel.validateRewards(onAddNewRewardClick) },
             )
-
-            Row(
-                modifier = Modifier.padding(bottom = 24.dp),
-                horizontalArrangement = androidx.compose.foundation.layout.Arrangement.spacedBy(16.dp),
-            ) {
-                FloatingActionButton(
-                    onClick = {
-                        if (!isLottering) viewModel.startLottery()
-                    },
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.semantics { contentDescription = "single_lottery_button" },
-                ) {
-                    if (isSingleLottering) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            strokeWidth = 2.dp,
-                        )
-                    } else {
-                        Icon(Icons.Filled.Done, contentDescription = "Done")
-                    }
-                }
-
-                FloatingActionButton(
-                    onClick = {
-                        if (!isLottering) viewModel.startBatchLottery()
-                    },
-                    shape = RoundedCornerShape(8.dp),
-                    modifier = Modifier.semantics { contentDescription = "batch_lottery_button" },
-                ) {
-                    if (isBatchLottering) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            color = MaterialTheme.colorScheme.onPrimaryContainer,
-                            strokeWidth = 2.dp,
-                        )
-                    } else {
-                        Text(stringResource(id = R.string.batch_lottery_button, BatchLotteryResult.DEFAULT_COUNT))
-                    }
-                }
-            }
         }
-
-        FloatingActionButton(
-            onClick = {
-                viewModel.validateRewards {
-                    coroutineScope.launch {
-                        onAddNewRewardClick()
-                    }
-                }
-            },
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(24.dp),
-        ) {
-            Icon(Icons.Filled.Add, contentDescription = "Add")
-        }
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter),
+            snackbar = { ErrorSnackBar(it) },
+        )
     }
 
     val resultErrorMessage = result?.exceptionOrNull()
@@ -543,53 +450,4 @@ fun RewardListScreenErrorPreview() {
             },
         )
     }
-}
-
-@Composable
-private fun TicketLabel(ticket: Int?, modifier: Modifier = Modifier) {
-    Text(
-        text = "$ticket tickets",
-        modifier = modifier.semantics { contentDescription = "ticket_count" },
-        textAlign = TextAlign.Center,
-        fontSize = 18.sp,
-        color = MaterialTheme.colorScheme.onBackground,
-    )
-}
-
-@Composable
-private fun RewardList(rewards: List<Reward>?, onRewardItemClick: (Reward) -> Unit, modifier: Modifier = Modifier) {
-    LazyColumn(modifier = modifier) {
-        rewards?.let {
-            itemsIndexed(it) { index, reward ->
-                RewardItem(reward, onRewardItemClick)
-                if (index < rewards.lastIndex) {
-                    HorizontalDivider()
-                }
-            }
-        }
-    }
-}
-
-@Preview
-@Composable
-fun RewardListPreview() {
-    RewardList(
-        rewards = listOf(
-            Reward(
-                RewardId(1),
-                RewardName("PS5"),
-                Probability(1f),
-                RewardDescription("this is very rare"),
-                true,
-            ),
-            Reward(
-                RewardId(1),
-                RewardName("New Macbook Pro"),
-                Probability(1f),
-                RewardDescription("M1 Max is great"),
-                true,
-            ),
-        ),
-        onRewardItemClick = {},
-    )
 }
