@@ -45,8 +45,8 @@ tags:
     visible: "Reward to Edit"
     timeout: 5000
 
-# The reward has no Repeat icon yet
-- assertNotVisible: "Repeat"
+# The reward has no repeat label yet
+- assertNotVisible: "Repeat reward"
 
 # Tap on the reward to open the detail bottom sheet
 - tapOn:
@@ -65,8 +65,8 @@ tags:
     notVisible: "Reward Title"
     timeout: 5000
 
-# Verify the reward now shows the Repeat icon in the list
+# Verify the reward now shows the repeat label in the list
 - extendedWaitUntil:
-    visible: "Repeat"
+    visible: "Repeat reward"
     timeout: 5000
 - assertVisible: "Reward to Edit"
