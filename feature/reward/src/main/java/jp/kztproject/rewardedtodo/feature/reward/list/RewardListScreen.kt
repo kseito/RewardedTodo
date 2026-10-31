@@ -38,6 +38,7 @@ import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
 import jp.kztproject.rewardedtodo.common.ui.CommonAlertDialog
+import jp.kztproject.rewardedtodo.common.ui.theme.RewardedTodoScheme
 import jp.kztproject.rewardedtodo.common.ui.vibrate
 import jp.kztproject.rewardedtodo.common.ui.vibrateRichly
 import jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult
@@ -326,12 +327,14 @@ private val previewViewModel = RewardListViewModel(
 @Preview
 @Composable
 fun RewardListScreenPreview() {
-    RewardListScreen(
-        viewModel = previewViewModel,
-        onAddNewRewardClick = {},
-        onRewardItemClick = {},
-        onRewardSaveSucceeded = {},
-    )
+    MaterialTheme(colorScheme = RewardedTodoScheme(isDarkTheme = false)) {
+        RewardListScreen(
+            viewModel = previewViewModel,
+            onAddNewRewardClick = {},
+            onRewardItemClick = {},
+            onRewardSaveSucceeded = {},
+        )
+    }
 }
 
 private fun createLotteringPreviewViewModel(): RewardListViewModel = RewardListViewModel(
@@ -369,25 +372,29 @@ private fun createLotteringPreviewViewModel(): RewardListViewModel = RewardListV
 @Preview
 @Composable
 fun RewardListScreenSingleLotteringPreview() {
-    val viewModel = remember { createLotteringPreviewViewModel().apply { startLottery() } }
-    RewardListScreen(
-        viewModel = viewModel,
-        onAddNewRewardClick = {},
-        onRewardItemClick = {},
-        onRewardSaveSucceeded = {},
-    )
+    MaterialTheme(colorScheme = RewardedTodoScheme(isDarkTheme = false)) {
+        val viewModel = remember { createLotteringPreviewViewModel().apply { startLottery() } }
+        RewardListScreen(
+            viewModel = viewModel,
+            onAddNewRewardClick = {},
+            onRewardItemClick = {},
+            onRewardSaveSucceeded = {},
+        )
+    }
 }
 
 @Preview
 @Composable
 fun RewardListScreenBatchLotteringPreview() {
-    val viewModel = remember { createLotteringPreviewViewModel().apply { startBatchLottery() } }
-    RewardListScreen(
-        viewModel = viewModel,
-        onAddNewRewardClick = {},
-        onRewardItemClick = {},
-        onRewardSaveSucceeded = {},
-    )
+    MaterialTheme(colorScheme = RewardedTodoScheme(isDarkTheme = false)) {
+        val viewModel = remember { createLotteringPreviewViewModel().apply { startBatchLottery() } }
+        RewardListScreen(
+            viewModel = viewModel,
+            onAddNewRewardClick = {},
+            onRewardItemClick = {},
+            onRewardSaveSucceeded = {},
+        )
+    }
 }
 
 private val emptyPreviewViewModel = RewardListViewModel(
@@ -417,37 +424,41 @@ private val emptyPreviewViewModel = RewardListViewModel(
 @Preview
 @Composable
 fun RewardListScreenEmptyPreview() {
-    RewardListScreen(
-        viewModel = emptyPreviewViewModel,
-        onAddNewRewardClick = {},
-        onRewardItemClick = {},
-        onRewardSaveSucceeded = {},
-    )
+    MaterialTheme(colorScheme = RewardedTodoScheme(isDarkTheme = false)) {
+        RewardListScreen(
+            viewModel = emptyPreviewViewModel,
+            onAddNewRewardClick = {},
+            onRewardItemClick = {},
+            onRewardSaveSucceeded = {},
+        )
+    }
 }
 
 @Preview
 @Composable
 fun RewardListScreenErrorPreview() {
-    Box(modifier = Modifier.fillMaxSize()) {
-        RewardListScreen(
-            viewModel = previewViewModel,
-            onAddNewRewardClick = {},
-            onRewardItemClick = {},
-            onRewardSaveSucceeded = {},
-        )
-        ErrorSnackBar(
-            object : SnackbarData {
-                override val visuals = object : SnackbarVisuals {
-                    override val message = "抽選に失敗しました"
-                    override val actionLabel: String? = null
-                    override val withDismissAction = false
-                    override val duration = SnackbarDuration.Short
-                }
+    MaterialTheme(colorScheme = RewardedTodoScheme(isDarkTheme = false)) {
+        Box(modifier = Modifier.fillMaxSize()) {
+            RewardListScreen(
+                viewModel = previewViewModel,
+                onAddNewRewardClick = {},
+                onRewardItemClick = {},
+                onRewardSaveSucceeded = {},
+            )
+            ErrorSnackBar(
+                object : SnackbarData {
+                    override val visuals = object : SnackbarVisuals {
+                        override val message = "抽選に失敗しました"
+                        override val actionLabel: String? = null
+                        override val withDismissAction = false
+                        override val duration = SnackbarDuration.Short
+                    }
 
-                override fun dismiss() {}
+                    override fun dismiss() {}
 
-                override fun performAction() {}
-            },
-        )
+                    override fun performAction() {}
+                },
+            )
+        }
     }
 }
