@@ -61,7 +61,6 @@
     <string name="reward_cancel">Cancel</string>
     <string name="reward_pending">Check the previous lottery result before starting another draw.</string>
     <string name="reward_retry_lottery">Check lottery result</string>
-    <string name="reward_batch_rule">One-time rewards can win only once. After winning, their chance becomes a miss.</string>
     <string name="reward_error_conflict">The reward changed. Refresh and reopen it before editing.</string>
     <string name="reward_error_probability" formatted="false">Use at most two decimal places and a total probability of 100% or less.</string>
     <string name="reward_error_no_active">Add a reward before drawing.</string>
