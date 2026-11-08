@@ -1,20 +1,20 @@
 
 plugins {
     alias(libs.plugins.rewardedtodo.android.library)
-    alias(libs.plugins.ksp)
 }
 
 dependencies {
+    implementation(project(":common:rewardserver"))
 
     implementation(libs.kotlin.stdlib)
 
     //Dagger
     implementation(libs.hilt.android)
 
-    //Room
-    implementation(libs.room.runtime)
-    implementation(libs.room.ktx)
-    ksp(libs.room.compiler)
+    implementation(project(":common:kvs"))
+    implementation(libs.datastore.preferences)
+    implementation(libs.moshi)
+    implementation(libs.retrofit.moshi)
 
     //Retrofit
     implementation(libs.retrofit.core)
