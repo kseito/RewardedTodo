@@ -6,6 +6,10 @@ tags:
   - error
 ---
 - runScript: stubs/reset.js
+- runScript:
+    file: stubs/reward-server.js
+    env:
+      REWARD_CASE: insufficient
 - clearState
 - launchApp
 
