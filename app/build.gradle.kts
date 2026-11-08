@@ -185,6 +185,7 @@ dependencies {
     testImplementation(libs.coroutines.test)
     testImplementation(libs.kotest.assertions.core)
     testImplementation(libs.mockk)
+    testImplementation(libs.mockwebserver)
     testImplementation(libs.roborazzi)
     testImplementation(libs.roborazzi.compose)
     testImplementation(libs.roborazzi.rule)
