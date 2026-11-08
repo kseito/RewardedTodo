@@ -5,6 +5,10 @@ tags:
   - lottery
 ---
 - runScript: stubs/earn-one-ticket.js
+- runScript:
+    file: stubs/reward-server.js
+    env:
+      REWARD_CASE: repeat
 - clearState
 - launchApp
 
