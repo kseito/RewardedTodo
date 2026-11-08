@@ -137,6 +137,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":common:rewardserver"))
     implementation(libs.kotlin.stdlib)
 
     implementation(libs.activity.compose)
@@ -157,8 +158,6 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
 
     // Room
-    implementation(libs.room.runtime)
-    ksp(libs.room.compiler)
 
     // Dagger
     implementation(libs.hilt.android)
@@ -199,7 +198,6 @@ dependencies {
     implementation(project(":feature:auth"))
     implementation(project(":data:todo"))
     implementation(project(":data:ticket"))
-    implementation(project(":common:database"))
     implementation(project(":common:ui"))
     implementation(project(":domain:reward"))
     implementation(project(":data:reward"))
