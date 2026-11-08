@@ -30,10 +30,11 @@ domain/reward/Probability.kt
 | `probability` | `Probability` (inline: Float) | 当選確率 (0〜100) |
 | `description` | `RewardDescription` (inline: String?) | 説明文（任意） |
 | `needRepeat` | `Boolean` | 繰り返し取得可能か |
+| `version` | `Int` | 設定更新・削除の競合検知用 |
 
 **ビジネスルール**
 - `RewardCollection` で管理できる報酬数の上限は7つ
-- `probability` は抽選時にチケット枚数へ変換される（後述）
+- 設定はサーバーが正本。ローカル報酬DBは移行せず削除する
 
 ---
 
@@ -67,35 +68,15 @@ domain/todo/EditingTodo.kt
 
 ---
 
-### Ticket（チケット/ポイント）
+### 抽選と獲得報酬
 
-```
-domain/reward/Ticket.kt
-domain/reward/NumberOfTicket.kt
-domain/reward/RewardCollection.kt
-domain/reward/LotteryBox.kt
-```
+抽選はReward Serverが行う。1回でチケット1枚を消費し、消費・抽選履歴・獲得台帳を同一トランザクションで確定する。確率はサーバーでは0.01%単位の整数（合計10,000以下）、Androidの編集表示では百分率として扱う。
 
-抽選で使うポイントの概念。sealed classで当選/ハズレを表現する。
+`AcquiredReward` は獲得1回分の権利で、台帳ID、元の設定ID、獲得時の名前・説明、獲得日時、使用日時を持つ。使用日時がnullなら未使用。設定を編集・削除しても獲得内容は変えない。使用済みの記録も残す。
 
-```kotlin
-sealed class Ticket {
-    data class Prize(val rewardId: RewardId) : Ticket()  // 当選（どの報酬か紐づき）
-    object Miss : Ticket()                                // ハズレ
-}
-```
+繰り返し不可の設定は1回当たった時点で無効化し、一括抽選の残りではその確率をハズレにする。他の報酬の確率は変えない。有効設定は最大7件、台帳件数は無制限。
 
-**チケットプールの生成ロジック** (`RewardCollection.createTickets()`)
-- 総枚数は常に10,000枚（`Ticket.ISSUE_LIMIT`）
-- 各Rewardの `probability` を `(100 × probability).roundToInt()` でチケット枚数に変換
-- 余った枚数を `Ticket.Miss` で埋める
-
-例：Reward（確率50%）が1つの場合
-```
-Prize(reward1) × 5,000枚
-Miss           × 5,000枚
-合計            10,000枚
-```
+`LotteryOutcome` は回数・獲得報酬・ハズレ数。`ILotteryRepository` は抽選と保留要求のPOST再送を扱う。台帳一覧・使用は `IAcquiredRewardRepository` を使う。
 
 ---
 
@@ -134,57 +115,17 @@ sealed class TokenError {
 
 ---
 
-## エンティティ間の関係
-
-```
-┌─────────────────────────────────────────────────────────────┐
-│  Todoist (外部サービス)                                       │
-│  ・今日/期限切れタスクを提供                                   │
-│  ・タスク完了をWebhookでサーバーに通知                         │
-└──────────────────┬──────────────────────────────────────────┘
-                   │ 取得 + 設定結合
-                   ▼
-┌──────────────────────────────┐
-│  Todo                        │
-│  numberOfTicketsObtained: Int│──┐ 完了するとサーバーが
-└──────────────────────────────┘  │ チケットを加算
-                                  ▼
-                   ┌──────────────────────────────┐
-                   │  チケット残高 (Rewardサーバー) │
-                   │  consumeTicket() で1枚消費    │
-                   └──────────────┬───────────────┘
-                                  │ 消費後に抽選
-                                  ▼
-┌──────────────────────────────────────────────────┐
-│  RewardCollection                                │
-│  └── createTickets() でチケットプール生成          │
-│       ├── Prize(rewardId) × probability分         │
-│       └── Miss × 残り分                           │
-└──────────────────────────────────────────────────┘
-                   │
-                   ▼ ランダムドロー
-              ┌─────────┐
-              │ Ticket  │
-              ├─────────┤
-   当選 →     │ Prize   │ → Reward を返す
-   ハズレ →   │ Miss    │ → null を返す
-              └─────────┘
-```
-
----
-
 ## 主要なビジネスロジック
 
-### 1. 抽選（LotteryUseCase）
+### 1. 抽選
 
-1. チケット残高を1枚消費（不足時: `LackOfTicketsException`）
-2. `RewardCollection.createTickets()` でチケットプールを生成
-3. `LotteryBox.draw()` でランダムに1枚引く
-4. `Prize` なら対応する `Reward` を返す、`Miss` なら `null`
+Todoist完了Webhook → サーバーでチケット加算 → アプリから抽選要求 → サーバーで消費・抽選・獲得記録を確定 → アプリで結果表示。
 
-### 2. 一括抽選（BatchLotteryUseCase）
+AndroidのLotteryInteractorはサーバー結果を表示用に変換する。端末では乱数生成や当選判定をしない。通信失敗時はユーザー別に保持した要求IDでPOSTを再送する。
 
-デフォルト10回の抽選を実施し、`BatchLotteryResult(wonRewards, missCount)` にまとめて返す。
+### 2. 一括抽選
+
+UIでは10回。開始時の残高が足りなければ全体を拒否する。途中で全対象を獲得済みになった場合は残りをハズレとして実行する。繰り返し可は当選回数分の台帳行を追加する。
 
 ### 3. Todo完了（CompleteTodoUseCase）
 
