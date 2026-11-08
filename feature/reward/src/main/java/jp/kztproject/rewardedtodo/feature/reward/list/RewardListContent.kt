@@ -67,7 +67,6 @@ internal fun RewardListContent(
         contentPadding = PaddingValues(14.dp),
         verticalArrangement = Arrangement.spacedBy(11.dp),
     ) {
-        item { Text(stringResource(R.string.reward_batch_rule), style = MaterialTheme.typography.bodySmall) }
         item {
             Surface(
                 shape = RoundedCornerShape(24.dp),
