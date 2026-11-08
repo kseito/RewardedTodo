@@ -53,7 +53,6 @@
     <string name="reward_cancel">キャンセル</string>
     <string name="reward_pending">前回の抽選結果を確認してください。確認が完了するまで新しい抽選はできません。</string>
     <string name="reward_retry_lottery">抽選結果を確認</string>
-    <string name="reward_batch_rule">繰り返し不可のごほうびは1回だけ当選します。当選後、その確率はハズレになります。</string>
     <string name="reward_error_conflict">ごほうびの設定が変更されています。更新してから編集し直してください。</string>
     <string name="reward_error_probability" formatted="false">当選確率は小数第2位まで、合計100%以下で入力してください。</string>
     <string name="reward_error_no_active">抽選するごほうびを登録してください。</string>
