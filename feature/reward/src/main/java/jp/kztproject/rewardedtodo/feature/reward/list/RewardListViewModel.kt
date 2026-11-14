@@ -13,6 +13,9 @@ import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
 import jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult
 import jp.kztproject.rewardedtodo.domain.reward.Reward
 import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
+import jp.kztproject.rewardedtodo.domain.reward.AcquiredReward
+import jp.kztproject.rewardedtodo.application.reward.usecase.RecoverLotteryUseCase
+import kotlinx.coroutines.CancellationException
 import jp.kztproject.rewardedtodo.domain.reward.RewardInput
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
@@ -40,15 +43,26 @@ class RewardListViewModel @Inject constructor(
     private val getPointUseCase: GetPointUseCase,
     private val saveRewardUseCase: SaveRewardUseCase,
     private val deleteRewardUseCase: DeleteRewardUseCase,
+    private val recoverLotteryUseCase: RecoverLotteryUseCase,
 ) : ViewModel() {
 
-    val rewardList: StateFlow<List<Reward>> = flow {
-        getRewardsUseCase.executeAsFlow().collect { emit(it) }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = emptyList(),
-    )
+    private val rewardsState = MutableStateFlow<List<Reward>>(emptyList())
+    val rewardList: StateFlow<List<Reward>> = rewardsState
+    val isSaving = MutableStateFlow(false)
+    val hasPendingLottery = MutableStateFlow(false)
+    val isRecovering = MutableStateFlow(false)
+
+    private suspend fun reloadRewards(reportError: Boolean = true) {
+        try {
+            rewardsState.value = getRewardsUseCase.execute()
+        } catch (
+            e: CancellationException,
+        ) {
+            throw e
+        } catch (e: Exception) {
+            if (reportError) result.value = Result.failure(e)
+        }
+    }
 
     // ポイント再取得を駆動するトリガー。抽選後など、値の変化を能動的に反映したいときに発火する。
     // ネットワークモードの getNumberOfTicket() はワンショットFlowのため、購読しっぱなしでは
@@ -77,8 +91,8 @@ class RewardListViewModel @Inject constructor(
         )
     val result: StateFlow<Result<Unit>?>
         field = MutableStateFlow<Result<Unit>?>(null)
-    val obtainedReward: StateFlow<Result<Reward?>?>
-        field = MutableStateFlow<Result<Reward?>?>(null)
+    val obtainedReward: StateFlow<Result<AcquiredReward?>?>
+        field = MutableStateFlow<Result<AcquiredReward?>?>(null)
     val batchLotteryResult: StateFlow<Result<BatchLotteryResult>?>
         field = MutableStateFlow<Result<BatchLotteryResult>?>(null)
     val isSingleLottering: StateFlow<Boolean>
@@ -95,25 +109,63 @@ class RewardListViewModel @Inject constructor(
      * ユーザーの操作ではないためインジケータは出さない。
      */
     fun refreshPointSilently() {
-        pointRefreshTrigger.tryEmit(Unit)
+        refresh()
+        recoverLottery()
     }
 
-    // プルリフレッシュ。チケット（ポイント）を再取得する。
-    // リワード一覧は Room の Flow を購読しており常に最新が流れてくるため、明示的な再取得は不要。
-    // インジケータは rewardPoint パイプラインの emit / catch で解除される。
     fun refresh() {
         if (isRefreshing.value) return
         isRefreshing.value = true
-        pointRefreshTrigger.tryEmit(Unit)
+        viewModelScope.launch {
+            try {
+                reloadRewards()
+                pointRefreshTrigger.tryEmit(Unit)
+            } finally {
+                isRefreshing.value = false
+            }
+        }
+    }
+
+    fun recoverLottery() {
+        if (isRecovering.value || isSingleLottering.value || isBatchLottering.value) return
+        isRecovering.value = true
+        viewModelScope.launch {
+            try {
+                val recovered = recoverLotteryUseCase.execute()
+                hasPendingLottery.value = false
+                if (recovered != null) {
+                    if (recovered.count == 1) {
+                        obtainedReward.value = Result.success(recovered.wonRewards.singleOrNull())
+                    } else {
+                        batchLotteryResult.value =
+                            Result.success(BatchLotteryResult(recovered.wonRewards, recovered.missCount))
+                    }
+                    reloadRewards()
+                    pointRefreshTrigger.tryEmit(Unit)
+                }
+            } catch (
+                e: CancellationException,
+            ) {
+                throw e
+            } catch (
+                e: Exception,
+            ) {
+                hasPendingLottery.value = true
+                result.value = Result.failure(e)
+            } finally {
+                isRecovering.value = false
+            }
+        }
     }
 
     fun startLottery() {
-        if (isSingleLottering.value || isBatchLottering.value) return
+        if (isSingleLottering.value || isBatchLottering.value || isRecovering.value || hasPendingLottery.value) return
         isSingleLottering.value = true
         viewModelScope.launch {
             try {
-                val rewards = RewardCollection(rewardList.value)
-                obtainedReward.value = lotteryUseCase.execute(rewards)
+                obtainedReward.value = lotteryUseCase.execute()
+                hasPendingLottery.value = obtainedReward.value?.isFailure == true
+                reloadRewards()
                 pointRefreshTrigger.tryEmit(Unit)
             } finally {
                 isSingleLottering.value = false
@@ -126,12 +178,13 @@ class RewardListViewModel @Inject constructor(
     }
 
     fun startBatchLottery(count: Int = BatchLotteryResult.DEFAULT_COUNT) {
-        if (isSingleLottering.value || isBatchLottering.value) return
+        if (isSingleLottering.value || isBatchLottering.value || isRecovering.value || hasPendingLottery.value) return
         isBatchLottering.value = true
         viewModelScope.launch {
             try {
-                val rewards = RewardCollection(rewardList.value)
-                batchLotteryResult.value = batchLotteryUseCase.execute(rewards, count)
+                batchLotteryResult.value = batchLotteryUseCase.execute(count)
+                hasPendingLottery.value = batchLotteryResult.value?.isFailure == true
+                reloadRewards()
                 pointRefreshTrigger.tryEmit(Unit)
             } finally {
                 isBatchLottering.value = false
@@ -156,9 +209,21 @@ class RewardListViewModel @Inject constructor(
     }
 
     fun saveReward(reward: RewardInput) {
+        if (isSaving.value) return
+        isSaving.value = true
         viewModelScope.launch {
-            val newResult = saveRewardUseCase.execute(reward)
-            result.value = newResult
+            try {
+                result.value = saveRewardUseCase.execute(reward)
+                if (result.value?.isSuccess == true) reloadRewards(reportError = false)
+            } catch (
+                e: CancellationException,
+            ) {
+                throw e
+            } catch (e: Exception) {
+                result.value = Result.failure(e)
+            } finally {
+                isSaving.value = false
+            }
         }
     }
 
@@ -167,15 +232,22 @@ class RewardListViewModel @Inject constructor(
     }
 
     fun deleteReward(reward: Reward) {
-        // TODO show confirmation dialog
+        if (isSaving.value) return
+        isSaving.value = true
         viewModelScope.launch {
-            deleteRewardUseCase.execute(reward)
-            result.value = Result.success(Unit)
+            try {
+                deleteRewardUseCase.execute(reward)
+                result.value = Result.success(Unit)
+                reloadRewards(reportError = false)
+            } catch (
+                e: CancellationException,
+            ) {
+                throw e
+            } catch (e: Exception) {
+                result.value = Result.failure(e)
+            } finally {
+                isSaving.value = false
+            }
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        viewModelScope.cancel()
     }
 }

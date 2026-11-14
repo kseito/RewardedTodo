@@ -18,6 +18,8 @@ import jp.kztproject.rewardedtodo.TopBar
 import jp.kztproject.rewardedtodo.TopLevelDestination
 import jp.kztproject.rewardedtodo.common.ui.theme.RewardedTodoScheme
 
+import jp.kztproject.rewardedtodo.feature.reward.inventory.AcquiredRewardRoute
+import jp.kztproject.rewardedtodo.feature.reward.inventory.acquiredRewardScreen
 import jp.kztproject.rewardedtodo.feature.reward.RewardListRoute
 import jp.kztproject.rewardedtodo.feature.reward.rewardListScreen
 import jp.kztproject.rewardedtodo.presentation.todo.TodoListRoute
@@ -27,11 +29,12 @@ import jp.kztproject.rewardedtodo.presentation.todo.todoListScreen
 fun HomeScreen(onClickSetting: () -> Unit) {
     val navigationState = rememberNavigationState(
         startRoute = TodoListRoute,
-        topLevelRoutes = setOf(TodoListRoute, RewardListRoute),
+        topLevelRoutes = setOf(TodoListRoute, RewardListRoute, AcquiredRewardRoute),
     )
     val navigator = remember(navigationState) { Navigator(navigationState) }
     val topLevelDestinations = TopLevelDestination.entries
     val currentDestination = when (navigationState.topLevelRoute) {
+        AcquiredRewardRoute -> TopLevelDestination.ACQUIRED
         RewardListRoute -> TopLevelDestination.REWARD
         else -> TopLevelDestination.TODO
     }
@@ -39,6 +42,7 @@ fun HomeScreen(onClickSetting: () -> Unit) {
         when (it) {
             TopLevelDestination.TODO -> navigator.navigate(TodoListRoute)
             TopLevelDestination.REWARD -> navigator.navigate(RewardListRoute)
+            TopLevelDestination.ACQUIRED -> navigator.navigate(AcquiredRewardRoute)
         }
     }
 
@@ -64,7 +68,7 @@ private fun HomeScreenContent(
         containerColor = MaterialTheme.colorScheme.background,
         topBar = {
             TopBar(
-                currentDestination.iconTextId,
+                currentDestination.titleId,
                 onSettingClicked = onClickSetting,
             )
         },
@@ -94,6 +98,7 @@ private fun RewardedTodoApp(
                 entryProvider {
                     todoListScreen(onOpenSetting = onOpenSetting)
                     rewardListScreen()
+                    acquiredRewardScreen()
                 },
             ),
             onBack = { navigator.goBack() },

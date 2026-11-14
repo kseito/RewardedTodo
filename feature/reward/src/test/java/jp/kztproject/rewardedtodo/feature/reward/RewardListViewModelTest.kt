@@ -1,5 +1,6 @@
 package jp.kztproject.rewardedtodo.feature.reward
 
+import jp.kztproject.rewardedtodo.application.reward.usecase.RecoverLotteryUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import jp.kztproject.rewardedtodo.application.reward.usecase.BatchLotteryUseCase
@@ -45,8 +46,12 @@ class RewardListViewModelTest {
 
     private val mockDeleteRewardUseCase = mockk<DeleteRewardUseCase>()
 
+    private val mockRecover = mockk<RecoverLotteryUseCase>()
+
     @Before
     fun setup() {
+        coEvery { mockRecover.execute() } returns null
+        coEvery { mockGetRewardsUseCase.execute() } returns listOf(DummyCreator.createDummyReward())
         coEvery { mockGetRewardsUseCase.executeAsFlow() } returns flowOf(
             listOf(
                 DummyCreator.createDummyReward(),
@@ -62,6 +67,7 @@ class RewardListViewModelTest {
             mockGetPointUseCase,
             mockSaveRewardUseCase,
             mockDeleteRewardUseCase,
+            mockRecover,
         )
 
         Dispatchers.setMain(Dispatchers.Unconfined)
@@ -74,6 +80,7 @@ class RewardListViewModelTest {
 
     @Test
     fun testGetRewards() = runTest {
+        viewModel.refresh()
         val rewardList = viewModel.rewardList.first { it.isNotEmpty() }
         rewardList.size shouldBe 1
     }
@@ -92,7 +99,7 @@ class RewardListViewModelTest {
             flowOf(NumberOfTicket(10)),
             flowOf(NumberOfTicket(9)),
         )
-        coEvery { mockLotteryUseCase.execute(any()) } returns Result.success(null)
+        coEvery { mockLotteryUseCase.execute() } returns Result.success(null)
         viewModel = RewardListViewModel(
             mockLotteryUseCase,
             mockBatchLotteryUseCase,
@@ -100,6 +107,7 @@ class RewardListViewModelTest {
             mockGetPointUseCase,
             mockSaveRewardUseCase,
             mockDeleteRewardUseCase,
+            mockRecover,
         )
         val collector = backgroundScope.launch { viewModel.rewardPoint.collect {} }
         viewModel.rewardPoint.first { it == 10 } shouldBe 10
@@ -123,6 +131,7 @@ class RewardListViewModelTest {
             mockGetPointUseCase,
             mockSaveRewardUseCase,
             mockDeleteRewardUseCase,
+            mockRecover,
         )
         val collector = backgroundScope.launch { viewModel.rewardPoint.collect {} }
         viewModel.rewardPoint.first { it == 10 } shouldBe 10
@@ -147,6 +156,7 @@ class RewardListViewModelTest {
             mockGetPointUseCase,
             mockSaveRewardUseCase,
             mockDeleteRewardUseCase,
+            mockRecover,
         )
         val collector = backgroundScope.launch { viewModel.rewardPoint.collect {} }
         viewModel.rewardPoint.first { it == 10 } shouldBe 10

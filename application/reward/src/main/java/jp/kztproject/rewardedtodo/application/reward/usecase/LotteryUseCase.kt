@@ -1,9 +1,7 @@
 package jp.kztproject.rewardedtodo.application.reward.usecase
 
-import jp.kztproject.rewardedtodo.domain.reward.Reward
-import jp.kztproject.rewardedtodo.domain.reward.RewardCollection
-
+import jp.kztproject.rewardedtodo.domain.reward.AcquiredReward
 
 interface LotteryUseCase {
-    suspend fun execute(rewards: RewardCollection): Result<Reward?>
+    suspend fun execute(): Result<AcquiredReward?>
 }

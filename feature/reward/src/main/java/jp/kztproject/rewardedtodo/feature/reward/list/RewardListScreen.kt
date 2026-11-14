@@ -1,6 +1,11 @@
 package jp.kztproject.rewardedtodo.feature.reward.list
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.TextButton
+import jp.kztproject.rewardedtodo.application.reward.usecase.RecoverLotteryUseCase
+import jp.kztproject.rewardedtodo.domain.reward.AcquiredReward
+import jp.kztproject.rewardedtodo.domain.reward.LotteryOutcome
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -60,6 +65,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RewardListScreenWithBottomSheet(viewModel: RewardListViewModel = hiltViewModel()) {
+    val isSaving by viewModel.isSaving.collectAsStateWithLifecycle()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var selectedReward: Reward? by remember { mutableStateOf(null) }
     var showBottomSheet by remember { mutableStateOf(false) }
@@ -81,6 +87,7 @@ fun RewardListScreenWithBottomSheet(viewModel: RewardListViewModel = hiltViewMod
                 description = description,
                 probability = chanceOfWinning?.toFloatOrNull(),
                 needRepeat = repeat,
+                version = selectedReward?.version,
             )
             viewModel.saveReward(reward)
         }
@@ -98,7 +105,8 @@ fun RewardListScreenWithBottomSheet(viewModel: RewardListViewModel = hiltViewMod
 
         RewardDetailBottomSheet(
             showBottomSheet = showBottomSheet,
-            onDismissRequest = { showBottomSheet = false },
+            onDismissRequest = { if (!isSaving) showBottomSheet = false },
+            isSaving = isSaving,
             sheetState = sheetState,
             onRewardSaveSelected = onRewardSaveSelected,
             onRewardDeleteSelected = onRewardDeleteSelected,
@@ -122,6 +130,8 @@ private fun RewardListScreen(
     val batchLotteryResult by viewModel.batchLotteryResult.collectAsStateWithLifecycle()
     val isSingleLottering by viewModel.isSingleLottering.collectAsStateWithLifecycle()
     val isBatchLottering by viewModel.isBatchLottering.collectAsStateWithLifecycle()
+    val hasPending by viewModel.hasPendingLottery.collectAsStateWithLifecycle()
+    val isRecovering by viewModel.isRecovering.collectAsStateWithLifecycle()
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
 
     // 他のタブでチケットを獲得していても反映されるよう、表示のたびに引き直す
@@ -138,16 +148,24 @@ private fun RewardListScreen(
             onRefresh = viewModel::refresh,
             modifier = Modifier.fillMaxSize(),
         ) {
-            RewardListContent(
-                rewards = rewards,
-                ticket = ticket,
-                isSingleLottering = isSingleLottering,
-                isBatchLottering = isBatchLottering,
-                onSingleLottery = viewModel::startLottery,
-                onBatchLottery = { viewModel.startBatchLottery() },
-                onRewardItemClick = onRewardItemClick,
-                onAddNewRewardClick = { viewModel.validateRewards(onAddNewRewardClick) },
-            )
+            Column {
+                if (hasPending || isRecovering) {
+                    Text(stringResource(R.string.reward_pending), modifier = Modifier.padding(horizontal = 16.dp))
+                    TextButton(onClick = viewModel::recoverLottery, enabled = !isRecovering) {
+                        Text(stringResource(R.string.reward_retry_lottery))
+                    }
+                }
+                RewardListContent(
+                    rewards = rewards,
+                    ticket = ticket,
+                    isSingleLottering = isSingleLottering || hasPending || isRecovering,
+                    isBatchLottering = isBatchLottering,
+                    onSingleLottery = viewModel::startLottery,
+                    onBatchLottery = { viewModel.startBatchLottery() },
+                    onRewardItemClick = onRewardItemClick,
+                    onAddNewRewardClick = { viewModel.validateRewards(onAddNewRewardClick) },
+                )
+            }
         }
         SnackbarHost(
             hostState = snackbarHostState,
@@ -291,13 +309,10 @@ fun ErrorSnackBarPreview() {
 // Create preview ViewModel outside the composable function
 private val previewViewModel = RewardListViewModel(
     object : LotteryUseCase {
-        override suspend fun execute(rewards: RewardCollection): Result<Reward?> = Result.success(null)
+        override suspend fun execute(): Result<AcquiredReward?> = Result.success(null)
     },
     object : BatchLotteryUseCase {
-        override suspend fun execute(
-            rewards: RewardCollection,
-            count: Int,
-        ): Result<jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult> =
+        override suspend fun execute(count: Int): Result<jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult> =
             Result.success(jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult(emptyList(), count))
     },
     object : GetRewardsUseCase {
@@ -322,6 +337,9 @@ private val previewViewModel = RewardListViewModel(
     object : DeleteRewardUseCase {
         override suspend fun execute(reward: Reward) {}
     },
+    object : RecoverLotteryUseCase {
+        override suspend fun execute(): LotteryOutcome? = null
+    },
 )
 
 @Preview
@@ -339,11 +357,10 @@ fun RewardListScreenPreview() {
 
 private fun createLotteringPreviewViewModel(): RewardListViewModel = RewardListViewModel(
     object : LotteryUseCase {
-        override suspend fun execute(rewards: RewardCollection): Result<Reward?> = awaitCancellation()
+        override suspend fun execute(): Result<AcquiredReward?> = awaitCancellation()
     },
     object : BatchLotteryUseCase {
-        override suspend fun execute(rewards: RewardCollection, count: Int): Result<BatchLotteryResult> =
-            awaitCancellation()
+        override suspend fun execute(count: Int): Result<BatchLotteryResult> = awaitCancellation()
     },
     object : GetRewardsUseCase {
         private val reward = Reward(
@@ -366,6 +383,9 @@ private fun createLotteringPreviewViewModel(): RewardListViewModel = RewardListV
     },
     object : DeleteRewardUseCase {
         override suspend fun execute(reward: Reward) {}
+    },
+    object : RecoverLotteryUseCase {
+        override suspend fun execute(): LotteryOutcome? = null
     },
 )
 
@@ -399,10 +419,10 @@ fun RewardListScreenBatchLotteringPreview() {
 
 private val emptyPreviewViewModel = RewardListViewModel(
     object : LotteryUseCase {
-        override suspend fun execute(rewards: RewardCollection): Result<Reward?> = Result.success(null)
+        override suspend fun execute(): Result<AcquiredReward?> = Result.success(null)
     },
     object : BatchLotteryUseCase {
-        override suspend fun execute(rewards: RewardCollection, count: Int): Result<BatchLotteryResult> =
+        override suspend fun execute(count: Int): Result<BatchLotteryResult> =
             Result.success(BatchLotteryResult(emptyList(), count))
     },
     object : GetRewardsUseCase {
@@ -418,6 +438,9 @@ private val emptyPreviewViewModel = RewardListViewModel(
     },
     object : DeleteRewardUseCase {
         override suspend fun execute(reward: Reward) {}
+    },
+    object : RecoverLotteryUseCase {
+        override suspend fun execute(): LotteryOutcome? = null
     },
 )
 

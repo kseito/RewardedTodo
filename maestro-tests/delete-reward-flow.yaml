@@ -4,6 +4,10 @@ tags:
   - rewardedtodo
 ---
 - runScript: stubs/reset.js
+- runScript:
+    file: stubs/reward-server.js
+    env:
+      REWARD_CASE: delete
 - clearState
 - launchApp
 

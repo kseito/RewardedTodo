@@ -5,6 +5,10 @@ tags:
   - lottery
 ---
 - runScript: stubs/earn-ten-tickets.js
+- runScript:
+    file: stubs/reward-server.js
+    env:
+      REWARD_CASE: batch
 - clearState
 - launchApp
 

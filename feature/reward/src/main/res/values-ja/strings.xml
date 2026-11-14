@@ -41,4 +41,21 @@
     <string name="menu_todoist">Todoist</string>
     <string name="section_other">その他</string>
     <string name="menu_logout">ログアウト</string>
+    <string name="reward_unused">未使用</string>
+    <string name="reward_used">使用済み</string>
+    <string name="reward_refresh">更新</string>
+    <string name="reward_inventory_empty">該当するごほうびはありません</string>
+    <string name="reward_acquired_at">獲得日時: %1$s</string>
+    <string name="reward_used_at">使用日時: %1$s</string>
+    <string name="reward_use">使用済みにする</string>
+    <string name="reward_more">さらに表示</string>
+    <string name="reward_use_confirm">「%1$s」を使用済みにします。この操作は取り消せません。</string>
+    <string name="reward_cancel">キャンセル</string>
+    <string name="reward_pending">前回の抽選結果を確認してください。確認が完了するまで新しい抽選はできません。</string>
+    <string name="reward_retry_lottery">抽選結果を確認</string>
+    <string name="reward_error_conflict">ごほうびの設定が変更されています。更新してから編集し直してください。</string>
+    <string name="reward_error_probability" formatted="false">当選確率は小数第2位まで、合計100%以下で入力してください。</string>
+    <string name="reward_error_no_active">抽選するごほうびを登録してください。</string>
+    <string name="menu_acquired">獲得済み</string>
+    <string name="title_acquired_rewards">獲得した報酬</string>
 </resources>

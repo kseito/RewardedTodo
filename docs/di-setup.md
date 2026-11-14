@@ -14,16 +14,14 @@ app/src/main/java/.../di/
 ├── RepositoriesModule.kt       ← TicketRepository, ApiTokenRepository のバインド
 ├── UseCaseModule.kt            ← APIトークン関連UseCaseのバインド
 ├── reward/
-│   ├── RewardModule.kt                ← 報酬系の集約モジュール
 │   ├── RewardRepositoryModule.kt      ← IRewardRepository のバインド
-│   ├── RewardDatabaseModule.kt        ← Room DB + RewardDao の提供
 │   ├── RewardListViewModelModule.kt   ← 報酬一覧で使うUseCaseのバインド
 │   └── RewardDetailViewModelModule.kt ← 報酬詳細で使うUseCaseのバインド
 ├── todo/
 │   ├── TodoRepositoryModule.kt        ← ITodoRepository のバインド
 │   └── TodoListFragmentModule.kt      ← Todo一覧で使うUseCaseのバインド
 ├── ticket/
-│   └── TicketNetworkModule.kt         ← RewardServerApi (Retrofit) の提供
+│   └── TicketNetworkModule.kt         ← 共通Retrofit・RewardServerApi・RewardApiの提供
 └── auth/
     └── TodoistApiModule.kt            ← TodoistApi (Retrofit) の提供
 ```
@@ -38,13 +36,12 @@ AggregatorModule (@SingletonComponent)
 ├── RepositoriesModule
 └── UseCaseModule
 
-RewardModule (@SingletonComponent) ※AggregatorModuleとは別系統
-├── RewardRepositoryModule
-├── RewardListViewModelModule  (@FragmentComponent)
-└── RewardDetailViewModelModule (@FragmentComponent)
+RewardRepositoryModule (@SingletonComponent)
+RewardListViewModelModule (@ViewModelComponent)
+RewardDetailViewModelModule (@ViewModelComponent)
 ```
 
-> `RewardModule` は `AggregatorModule` に含まれていないが、Hiltが自動的にアプリ全体で認識する。
+報酬系モジュールはHiltが個別に検出する。異なるスコープのモジュールを集約しない。
 
 ---
 
@@ -61,7 +58,6 @@ RewardModule (@SingletonComponent) ※AggregatorModuleとは別系統
 | `RepositoriesModule` | `IApiTokenRepository` → `ApiTokenRepository` |
 | `UseCaseModule` | APIトークン関連4UseCase（Save/Validate/Get/Delete） |
 | `RewardRepositoryModule` | `IRewardRepository` → `RewardRepository` |
-| `RewardDatabaseModule` | `AppDatabase`（Room）, `RewardDao` |
 | `TicketNetworkModule` | `RewardServerApi`（Retrofit、Moshi、OkHttp） |
 | `TodoistApiModule` | `TodoistApi`（Retrofit + Bearerトークン自動挿入） |
 
@@ -72,7 +68,7 @@ RewardModule (@SingletonComponent) ※AggregatorModuleとは別系統
 
 | モジュール | バインドするUseCase |
 |-----------|-----------------|
-| `RewardListViewModelModule` | `LotteryUseCase`, `BatchLotteryUseCase`, `GetRewardsUseCase`, `GetPointUseCase` |
+| `RewardListViewModelModule` | `LotteryUseCase`, `BatchLotteryUseCase`, `RecoverLotteryUseCase`, `GetRewardsUseCase`, `GetPointUseCase`, 台帳取得・使用UseCase |
 | `RewardDetailViewModelModule` | `GetRewardUseCase`, `DeleteRewardUseCase`, `SaveRewardUseCase` |
 | `TodoListFragmentModule` | Todo関連UseCase |
 
@@ -118,3 +114,5 @@ RewardModule (@SingletonComponent) ※AggregatorModuleとは別系統
 詳細な手順は `docs/how-to-add-new-feature.md` を参照。
 
 Todo用RoomのDIは廃止。TodoRepositoryはSingletonのメモリ状態を持ち、ITaskRewardRepositoryはdata:ticketのTaskRewardRepositoryへバインドする。
+
+報酬RoomのDB/DAO/DIとcommon:databaseは廃止。RewardRepositoryModuleはIRewardRepository、ILotteryRepository、IAcquiredRewardRepositoryをAPI実装へバインドする。

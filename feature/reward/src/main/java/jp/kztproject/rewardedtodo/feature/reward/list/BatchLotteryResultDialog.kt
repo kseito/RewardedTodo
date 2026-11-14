@@ -13,7 +13,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult
 import jp.kztproject.rewardedtodo.domain.reward.Probability
-import jp.kztproject.rewardedtodo.domain.reward.Reward
+import jp.kztproject.rewardedtodo.domain.reward.AcquiredReward
 import jp.kztproject.rewardedtodo.domain.reward.RewardDescription
 import jp.kztproject.rewardedtodo.domain.reward.RewardId
 import jp.kztproject.rewardedtodo.domain.reward.RewardName
@@ -23,7 +23,7 @@ import jp.kztproject.rewardedtodo.presentation.reward.R
 fun BatchLotteryResultDialog(result: BatchLotteryResult, onDismiss: () -> Unit) {
     AlertDialog(
         title = {
-            Text(text = stringResource(id = R.string.batch_lottery_title, BatchLotteryResult.DEFAULT_COUNT))
+            Text(text = stringResource(id = R.string.batch_lottery_title, (result.wonRewards.size + result.missCount)))
         },
         text = {
             Column {
@@ -62,19 +62,21 @@ fun BatchLotteryResultDialog(result: BatchLotteryResult, onDismiss: () -> Unit) 
 @Preview
 @Composable
 fun BatchLotteryResultDialogPreview() {
-    val reward1 = Reward(
+    val reward1 = AcquiredReward(
+        AcquiredReward.Id("1"),
         RewardId(1),
         RewardName("PS5"),
-        Probability(1f),
         RewardDescription(""),
-        false,
+        "2026-11-07T10:00:00Z",
+        null,
     )
-    val reward2 = Reward(
+    val reward2 = AcquiredReward(
+        AcquiredReward.Id("2"),
         RewardId(2),
         RewardName("Switch"),
-        Probability(5f),
         RewardDescription(""),
-        false,
+        "2026-11-07T10:00:00Z",
+        null,
     )
     val result = BatchLotteryResult(
         wonRewards = listOf(reward1, reward2, reward2),
