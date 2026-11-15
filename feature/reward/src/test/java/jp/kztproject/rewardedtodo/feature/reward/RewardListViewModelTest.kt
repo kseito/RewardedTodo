@@ -1,5 +1,6 @@
 package jp.kztproject.rewardedtodo.feature.reward
 
+import jp.kztproject.rewardedtodo.application.reward.usecase.RecoverLotteryUseCase
 import io.mockk.coEvery
 import io.mockk.mockk
 import jp.kztproject.rewardedtodo.application.reward.usecase.BatchLotteryUseCase
@@ -9,6 +10,9 @@ import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
 import jp.kztproject.rewardedtodo.domain.reward.NumberOfTicket
+import jp.kztproject.rewardedtodo.domain.reward.exception.LackOfTicketsException
+import jp.kztproject.rewardedtodo.domain.reward.exception.RewardServerException
+import java.io.IOException
 import jp.kztproject.rewardedtodo.feature.reward.list.RewardListViewModel
 import jp.kztproject.rewardedtodo.test.reward.DummyCreator
 import kotlinx.coroutines.Dispatchers
@@ -45,8 +49,13 @@ class RewardListViewModelTest {
 
     private val mockDeleteRewardUseCase = mockk<DeleteRewardUseCase>()
 
+    private val mockRecover = mockk<RecoverLotteryUseCase>()
+
     @Before
     fun setup() {
+        coEvery { mockRecover.execute() } returns null
+        coEvery { mockRecover.hasPendingRequest() } returns false
+        coEvery { mockGetRewardsUseCase.execute() } returns listOf(DummyCreator.createDummyReward())
         coEvery { mockGetRewardsUseCase.executeAsFlow() } returns flowOf(
             listOf(
                 DummyCreator.createDummyReward(),
@@ -62,6 +71,7 @@ class RewardListViewModelTest {
             mockGetPointUseCase,
             mockSaveRewardUseCase,
             mockDeleteRewardUseCase,
+            mockRecover,
         )
 
         Dispatchers.setMain(Dispatchers.Unconfined)
@@ -74,6 +84,7 @@ class RewardListViewModelTest {
 
     @Test
     fun testGetRewards() = runTest {
+        viewModel.refresh()
         val rewardList = viewModel.rewardList.first { it.isNotEmpty() }
         rewardList.size shouldBe 1
     }
@@ -92,7 +103,7 @@ class RewardListViewModelTest {
             flowOf(NumberOfTicket(10)),
             flowOf(NumberOfTicket(9)),
         )
-        coEvery { mockLotteryUseCase.execute(any()) } returns Result.success(null)
+        coEvery { mockLotteryUseCase.execute() } returns Result.success(null)
         viewModel = RewardListViewModel(
             mockLotteryUseCase,
             mockBatchLotteryUseCase,
@@ -100,6 +111,7 @@ class RewardListViewModelTest {
             mockGetPointUseCase,
             mockSaveRewardUseCase,
             mockDeleteRewardUseCase,
+            mockRecover,
         )
         val collector = backgroundScope.launch { viewModel.rewardPoint.collect {} }
         viewModel.rewardPoint.first { it == 10 } shouldBe 10
@@ -123,6 +135,7 @@ class RewardListViewModelTest {
             mockGetPointUseCase,
             mockSaveRewardUseCase,
             mockDeleteRewardUseCase,
+            mockRecover,
         )
         val collector = backgroundScope.launch { viewModel.rewardPoint.collect {} }
         viewModel.rewardPoint.first { it == 10 } shouldBe 10
@@ -147,6 +160,7 @@ class RewardListViewModelTest {
             mockGetPointUseCase,
             mockSaveRewardUseCase,
             mockDeleteRewardUseCase,
+            mockRecover,
         )
         val collector = backgroundScope.launch { viewModel.rewardPoint.collect {} }
         viewModel.rewardPoint.first { it == 10 } shouldBe 10
@@ -156,5 +170,44 @@ class RewardListViewModelTest {
         viewModel.result.first { it != null }?.isFailure shouldBe true
         viewModel.isRefreshing.value shouldBe false
         collector.cancel()
+    }
+
+    @Test
+    fun `no rewards error does not block the next single draw`() = runTest {
+        val error = RewardServerException("NO_ACTIVE_REWARDS")
+        coEvery { mockLotteryUseCase.execute() } returnsMany listOf(Result.failure(error), Result.success(null))
+
+        viewModel.startLottery()
+        viewModel.obtainedReward.value?.exceptionOrNull() shouldBe error
+        viewModel.hasPendingLottery.value shouldBe false
+
+        viewModel.startLottery()
+        viewModel.obtainedReward.value?.isSuccess shouldBe true
+    }
+
+    @Test
+    fun `insufficient points does not leave a batch draw pending`() = runTest {
+        val error = LackOfTicketsException()
+        coEvery { mockBatchLotteryUseCase.execute(10) } returns Result.failure(error)
+
+        viewModel.startBatchLottery(10)
+
+        viewModel.batchLotteryResult.value?.exceptionOrNull() shouldBe error
+        viewModel.hasPendingLottery.value shouldBe false
+    }
+
+    @Test
+    fun `a saved request blocks new draws until a definitive recovery error clears it`() = runTest {
+        coEvery { mockLotteryUseCase.execute() } returns Result.failure(IOException("lost response"))
+        coEvery { mockRecover.hasPendingRequest() } returnsMany listOf(true, false)
+        val error = LackOfTicketsException()
+        coEvery { mockRecover.execute() } throws error
+
+        viewModel.startLottery()
+        viewModel.hasPendingLottery.value shouldBe true
+
+        viewModel.recoverLottery()
+        viewModel.result.value?.exceptionOrNull() shouldBe error
+        viewModel.hasPendingLottery.value shouldBe false
     }
 }

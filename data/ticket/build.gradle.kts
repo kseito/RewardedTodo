@@ -3,6 +3,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":common:rewardserver"))
     implementation(project(":domain:reward"))
     implementation(project(":domain:todo"))
     implementation(project(":common:kvs"))

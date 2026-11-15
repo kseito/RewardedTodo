@@ -5,7 +5,7 @@
 | 連携先 | 役割 | 実装モジュール |
 |---|---|---|
 | **Todoist** | Todoの取得・完了。OAuthによる認証 | `data:todoist`, `data:todo` |
-| **Reward Server** | チケット（ポイント）残高の管理 | `data:ticket` |
+| **Reward Server** | 残高・報酬設定・抽選・獲得台帳 | `data:ticket`, `data:reward`, `common:rewardserver` |
 
 Reward Server は別リポジトリ **[kseito/RewardedTodoServer](https://github.com/kseito/RewardedTodoServer)**（Kotlin + Ktor / PostgreSQL / Cloud Run、private）で実装されている。
 
@@ -28,7 +28,7 @@ Reward Server は別リポジトリ **[kseito/RewardedTodoServer](https://github
 ```
 
 チケットの**加算はサーバーがWebhookで行い、アプリは一切加算しない**（`TicketRepository.addTicket()` は意図的な空実装）。
-アプリからは残高の**照会と消費のみ**を行う。
+アプリは残高を照会し、抽選API経由で消費する。抽選結果はサーバーが決定・保存する。
 
 ---
 
@@ -164,14 +164,6 @@ Reward Server は独自の認証基盤を持たず、**Todoistのアクセスト
 
 アプリが使うのは `available_points` のみ（`getNumberOfTicket()` の戻り値）。
 
-#### `POST /api/points/{userId}/consume` — チケット消費
-
-```json
-{ "count": 1 }
-```
-
-レスポンスは消費後の `PointsInfo`（上と同じ形）。抽選1回で1枚、一括抽選ではまとめて消費する。
-
 #### `POST /webhook/todoist` — Todoistからのタスク完了通知
 
 **アプリは呼ばない。** Todoistがサーバーに直接送る。→ [チケット加算Webhookの仕様](#チケット加算webhookの仕様)
@@ -186,9 +178,8 @@ Reward Server は独自の認証基盤を持たず、**Todoistのアクセスト
 
 | ステータス | 意味 | `TicketRepository` の挙動 |
 |---|---|---|
-| `401` | トークンのハッシュが `user_id` に紐づかない | キャッシュした `REWARD_USER_ID` を破棄して再解決し、**1度だけリトライ** |
-| `422` | 残高不足（`INSUFFICIENT_POINTS`） | `LackOfTicketsException` に変換して上位へ |
-| `400` | `userId` 欠落、`count <= 0` | そのまま伝播 |
+| `401` | トークンのハッシュが `user_id` に紐づかない | OkHttpの `Authenticator` がユーザーIDを再解決し、同じIDなら元のリクエストを**1度だけ再送** |
+| `400` | `userId` 欠落 | そのまま伝播 |
 
 `401` のリトライは、サーバーを作り直してユーザーレコードが消えた場合などに、キャッシュ済み
 `user_id` のまま照会し続けて復帰できなくなるのを防ぐためのもの。
@@ -240,3 +231,7 @@ X-Todoist-Hmac-SHA256: {署名}
 ## Todoist未連携時のふるまい
 
 認証画面から先へ進めず、Todo・チケットを扱わない。ローカルTodoやローカル残高への切り替えはない。
+
+## 報酬設定・抽選・獲得台帳
+
+[API仕様](reward-inventory-api.md) を参照。抽選要求は送信前にユーザー別のrequest_idをDataStoreへ保持し、結果不明時は同じPOSTを再送する。専用の結果再取得GETはない。獲得台帳は設定変更・削除後も獲得時点の内容を保持する。

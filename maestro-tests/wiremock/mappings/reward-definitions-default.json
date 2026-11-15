@@ -1,0 +1,5 @@
+{
+  "priority": 10,
+  "request": {"method": "GET", "urlPathPattern": "/reward/api/rewards/[^/]+"},
+  "response": {"status": 200, "headers": {"Content-Type": "application/json"}, "jsonBody": []}
+}

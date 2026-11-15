@@ -57,6 +57,7 @@ fun RewardDetailBottomSheet(
     reward: Reward?,
     onRewardSaveSelected: (Int?, String, String, String, Boolean) -> Unit,
     onRewardDeleteSelected: (Reward) -> Unit,
+    isSaving: Boolean = false,
 ) {
     if (showBottomSheet) {
         ModalBottomSheet(
@@ -65,6 +66,7 @@ fun RewardDetailBottomSheet(
         ) {
             RewardDetailBottomSheetContent(
                 reward = reward,
+                isSaving = isSaving,
                 onRewardSaveSelected = onRewardSaveSelected,
                 onRewardDeleteSelected = onRewardDeleteSelected,
             )
@@ -77,6 +79,7 @@ internal fun RewardDetailBottomSheetContent(
     reward: Reward?,
     onRewardSaveSelected: (Int?, String, String, String, Boolean) -> Unit,
     onRewardDeleteSelected: (Reward) -> Unit,
+    isSaving: Boolean = false,
 ) {
     var title by remember(reward) { mutableStateOf(reward?.name?.value.orEmpty()) }
     var description by remember(reward) { mutableStateOf(reward?.description?.value.orEmpty()) }
@@ -183,6 +186,7 @@ internal fun RewardDetailBottomSheetContent(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
             Button(
+                enabled = !isSaving,
                 modifier = Modifier.weight(1f).height(52.dp),
                 shape = RoundedCornerShape(16.dp),
                 onClick = {
@@ -193,6 +197,7 @@ internal fun RewardDetailBottomSheetContent(
             }
             if (reward != null) {
                 OutlinedButton(
+                    enabled = !isSaving,
                     modifier = Modifier.height(52.dp),
                     shape = RoundedCornerShape(16.dp),
                     border = BorderStroke(1.dp, MaterialTheme.colorScheme.error.copy(alpha = 0.5f)),

@@ -7,7 +7,6 @@ const SCENARIO = 'earn-one-ticket'
 const TASK_ID = 'earn-ticket-task'
 const TASK_LIST = { method: 'GET', urlPath: '/todoist/api/v1/tasks/filter' }
 const POINTS = { method: 'GET', urlPathPattern: '/reward/api/points/[^/]+' }
-const CONSUME = { method: 'POST', urlPathPattern: '/reward/api/points/[^/]+/consume' }
 
 function post(path, payload) {
   http.post(ADMIN + path, {
@@ -74,13 +73,6 @@ stub({
 })
 
 // 抽選で消費すると 0 に減る
-stub({
-  scenarioName: SCENARIO,
-  requiredScenarioState: 'earned',
-  newScenarioState: 'spent',
-  request: CONSUME,
-  response: pointsBody(0),
-})
 stub({
   scenarioName: SCENARIO,
   requiredScenarioState: 'spent',

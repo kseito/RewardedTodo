@@ -1,0 +1,25 @@
+appId: jp.kztproject.rewardedtodo.debug
+tags: [android, rewardedtodo, inventory]
+---
+- runFlow: delete-non-repeat-reward-flow.yaml
+- tapOn: "Acquired"
+- assertVisible: "Acquired rewards"
+- assertVisible: "One Time Prize"
+- tapOn: "Mark as used"
+- assertVisible: "Mark “One Time Prize” as used.*"
+- tapOn: "Cancel"
+- assertVisible: "One Time Prize"
+- tapOn: "Mark as used"
+- tapOn:
+    text: "Mark as used"
+    index: 1
+- assertVisible: "No rewards to display"
+- tapOn: "Used"
+- assertVisible: "One Time Prize"
+- assertVisible: "Used:.*"
+- stopApp
+- launchApp
+- tapOn: "Acquired"
+- assertVisible: "Acquired rewards"
+- tapOn: "Used"
+- assertVisible: "One Time Prize"

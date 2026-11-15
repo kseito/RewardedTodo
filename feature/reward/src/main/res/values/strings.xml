@@ -49,4 +49,21 @@
         <item quantity="one">%d ticket</item>
         <item quantity="other">%d tickets</item>
     </plurals>
+    <string name="reward_unused">Unused</string>
+    <string name="reward_used">Used</string>
+    <string name="reward_refresh">Refresh</string>
+    <string name="reward_inventory_empty">No rewards to display</string>
+    <string name="reward_acquired_at">Acquired: %1$s</string>
+    <string name="reward_used_at">Used: %1$s</string>
+    <string name="reward_use">Mark as used</string>
+    <string name="reward_more">Load more</string>
+    <string name="reward_use_confirm">Mark “%1$s” as used? This cannot be undone.</string>
+    <string name="reward_cancel">Cancel</string>
+    <string name="reward_pending">Check the previous lottery result before starting another draw.</string>
+    <string name="reward_retry_lottery">Check lottery result</string>
+    <string name="reward_error_conflict">The reward changed. Refresh and reopen it before editing.</string>
+    <string name="reward_error_probability" formatted="false">Use at most two decimal places and a total probability of 100% or less.</string>
+    <string name="reward_error_no_active">Add a reward before drawing.</string>
+    <string name="menu_acquired">Acquired</string>
+    <string name="title_acquired_rewards">Acquired rewards</string>
 </resources>
