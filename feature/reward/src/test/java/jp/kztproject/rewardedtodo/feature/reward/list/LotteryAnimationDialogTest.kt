@@ -35,7 +35,7 @@ class LotteryAnimationDialogTest {
         composeRule.mainClock.advanceTimeBy(1000)
         count("Coffee") shouldBe 0
         capture("capsule")
-        composeRule.mainClock.advanceTimeBy(2000)
+        composeRule.mainClock.advanceTimeBy(3500)
         count("Coffee") shouldBe 1
         count("Done") shouldBe 1
     }
@@ -57,6 +57,42 @@ class LotteryAnimationDialogTest {
         count("Coffee") shouldBe 1
         composeRule.onNodeWithText("Done").performClick()
         dismissCount shouldBe 1
+    }
+
+    @Test
+    fun `skip during spinning immediately reveals the real result without dismissing`() {
+        composeRule.mainClock.autoAdvance = false
+        var dismissCount = 0
+        composeRule.setContent {
+            LotteryAnimationDialog(true, listOf("Coffee"), 0, false) { dismissCount++ }
+        }
+        composeRule.mainClock.advanceTimeBy(1600)
+        count("Coffee") shouldBe 0
+        composeRule.onNodeWithText("Skip animation").performClick()
+        composeRule.mainClock.advanceTimeBy(500)
+        count("Coffee") shouldBe 1
+        count("Done") shouldBe 1
+        dismissCount shouldBe 0
+    }
+
+    @Test
+    fun `skip while waiting survives recreation and reveals only when the result arrives`() {
+        composeRule.mainClock.autoAdvance = false
+        val ready = mutableStateOf(false)
+        val restoration = StateRestorationTester(composeRule)
+        restoration.setContent {
+            LotteryAnimationDialog(ready.value, if (ready.value) listOf("Coffee") else emptyList(), 0, false, {})
+        }
+        composeRule.onNodeWithText("Skip animation").performClick()
+        composeRule.mainClock.advanceTimeBy(32)
+        restoration.emulateSavedInstanceStateRestore()
+        composeRule.mainClock.advanceTimeBy(32)
+        count("Coffee") shouldBe 0
+        count("Preparing your draw…") shouldBe 1
+        composeRule.runOnIdle { ready.value = true }
+        composeRule.mainClock.advanceTimeBy(500)
+        count("Coffee") shouldBe 1
+        count("What is inside…?") shouldBe 0
     }
 
     @Test
