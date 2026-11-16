@@ -41,8 +41,8 @@ internal fun LotteryStage(
         val radius = size.minDimension * 0.235f
         val arrival = ease(progress.phase(0f, 0.12f))
         val spin = progress.phase(0.10f, 0.66f)
-        // Smoothstep gives zero velocity at both ends and four complete horizontal turns.
-        val yaw = (spin * spin * (3f - 2f * spin)) * 8f * PI.toFloat()
+        // Smoothstep gives zero velocity at both ends and ten complete horizontal turns.
+        val yaw = (spin * spin * (3f - 2f * spin)) * 20f * PI.toFloat()
         val speed = sin(spin * PI.toFloat()).coerceAtLeast(0f)
         val charge = progress.phase(0.23f, 0.68f)
         val opening = ease(progress.phase(0.69f, 0.88f))
@@ -82,33 +82,33 @@ internal fun LotteryStage(
                 }
             }
             // Sweeping ellipses are motion trails, rather than particles/confetti.
-            repeat(4) { index ->
+            repeat(6) { index ->
                 val orbit = radius * (1.35f + index * 0.14f)
                 drawArc(
                     brush = Brush.horizontalGradient(
                         listOf(
                             Color.Transparent,
-                            Ice.copy(alpha = speed * 0.5f),
+                            Ice.copy(alpha = speed * 0.65f),
                             WhiteGold.copy(
                                 alpha =
-                                speed * 0.85f,
+                                speed * 0.95f,
                             ),
                             Color.Transparent,
                         ),
                     ),
-                    startAngle = yaw * 180f / PI.toFloat() + index * 80f,
-                    sweepAngle = 145f,
+                    startAngle = yaw * 90f / PI.toFloat() + index * 65f,
+                    sweepAngle = 200f,
                     useCenter = false,
                     topLeft = center - Offset(orbit, radius * (0.30f + index * 0.09f)),
                     size = Size(orbit * 2f, radius * (0.60f + index * 0.18f)),
-                    style = Stroke(radius * (0.01f + index * 0.003f)),
+                    style = Stroke(radius * (0.014f + index * 0.004f)),
                 )
             }
             val lift = (1f - arrival) * radius * 0.9f + sin(progress * 7f) * radius * 0.035f
-            translate(top = lift) {
+            translate(left = sin(progress * 150f) * radius * 0.018f * speed, top = lift) {
                 scale(0.72f + arrival * 0.28f + charge * 0.06f, pivot = center) {
                     if (opening == 0f) {
-                        metallicSphere(center, radius, yaw, 1f)
+                        metallicSphere(center, radius, yaw, 1f, speed)
                     } else {
                         // Split left and right, exposing luminous inner rims.
                         shellHalf(center, radius, opening, true, fade)
@@ -196,7 +196,7 @@ private fun DrawScope.bloom(center: Offset, radius: Float, color: Color, opacity
     )
 }
 
-private fun DrawScope.metallicSphere(center: Offset, radius: Float, yaw: Float, opacity: Float) {
+private fun DrawScope.metallicSphere(center: Offset, radius: Float, yaw: Float, opacity: Float, motion: Float = 0f) {
     // Fixed world-space lighting preserves volume while the surface spins.
     drawCircle(
         Brush.radialGradient(
@@ -221,8 +221,30 @@ private fun DrawScope.metallicSphere(center: Offset, radius: Float, yaw: Float, 
                 val y = center.y + sin(latitude) * radius
                 if (step == 0) path.moveTo(x, y) else path.lineTo(x, y)
             }
-            drawPath(path, Color(0xFF70471D).copy(alpha = opacity * 0.5f), style = Stroke(radius * 0.022f))
-            drawPath(path, WhiteGold.copy(alpha = opacity * 0.42f), style = Stroke(radius * 0.007f))
+            drawPath(
+                path,
+                Color(0xFF70471D).copy(alpha = opacity * 0.5f * (1f - motion * 0.7f)),
+                style = Stroke(radius * 0.022f),
+            )
+            drawPath(
+                path,
+                WhiteGold.copy(alpha = opacity * 0.42f * (1f - motion * 0.7f)),
+                style = Stroke(radius * 0.007f),
+            )
+        }
+    }
+    if (motion > 0f) {
+        repeat(3) { index ->
+            val y = center.y + (index - 1) * radius * 0.36f
+            drawArc(
+                WhiteGold.copy(alpha = opacity * motion * 0.23f),
+                12f,
+                156f,
+                false,
+                Offset(center.x - radius * 0.92f, y - radius * 0.12f),
+                Size(radius * 1.84f, radius * 0.24f),
+                style = Stroke(radius * 0.045f),
+            )
         }
     }
     // The front emblem crosses the face, compresses at the edge, and disappears behind it.
