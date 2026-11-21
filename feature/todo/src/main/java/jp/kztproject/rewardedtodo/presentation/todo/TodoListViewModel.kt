@@ -116,7 +116,8 @@ class TodoListViewModel @Inject constructor(
     val isSaving: StateFlow<Boolean>
         field = MutableStateFlow(false)
 
-    private val completingTasks = mutableSetOf<String>()
+    val completingTodoId: StateFlow<String?>
+        field = MutableStateFlow(null)
 
     fun updateTodo(todo: EditingTodo) {
         if (isSaving.value) return
@@ -135,7 +136,8 @@ class TodoListViewModel @Inject constructor(
     }
 
     fun completeTodo(todo: Todo) {
-        if (isSaving.value || !completingTasks.add(todo.todoistId)) return
+        if (isSaving.value || completingTodoId.value != null) return
+        completingTodoId.update { todo.todoistId }
         viewModelScope.launch {
             try {
                 completeTodoUseCase.execute(todo)
@@ -144,7 +146,7 @@ class TodoListViewModel @Inject constructor(
             } catch (e: Exception) {
                 reportError(e)
             } finally {
-                completingTasks.remove(todo.todoistId)
+                completingTodoId.update { null }
             }
         }
     }
