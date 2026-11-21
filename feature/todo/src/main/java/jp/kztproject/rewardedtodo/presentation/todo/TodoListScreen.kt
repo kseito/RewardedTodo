@@ -100,6 +100,7 @@ private fun TodoListScreen(
     val result by viewModel.result.collectAsStateWithLifecycle()
     val refreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
     val isInitialLoading by viewModel.isInitialLoading.collectAsStateWithLifecycle()
+    val completingTodoId by viewModel.completingTodoId.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
 
     Box(
@@ -112,6 +113,7 @@ private fun TodoListScreen(
             onRefresh = { viewModel.refreshTodoList() },
             onTodoItemClicked = onTodoItemClicked,
             onTodoDone = { viewModel.completeTodo(it) },
+            completingTodoId = completingTodoId,
         )
 
         result?.let { outcome ->
@@ -165,6 +167,7 @@ private fun TodoListContent(
     onRefresh: () -> Unit,
     onTodoItemClicked: (Todo) -> Unit,
     onTodoDone: (Todo) -> Unit,
+    completingTodoId: String? = null,
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -216,6 +219,7 @@ private fun TodoListContent(
                         ) { todo ->
                             TodoListItem(
                                 todo = todo,
+                                isCompleting = todo.todoistId == completingTodoId,
                                 onItemClicked = {
                                     onTodoItemClicked(todo)
                                 },
@@ -313,6 +317,7 @@ fun TodoListContentErrorPreview() {
 @Composable
 private fun TodoListItem(
     todo: Todo,
+    isCompleting: Boolean = false,
     onItemClicked: () -> Unit,
     onTodoDone: (Todo) -> Unit,
     modifier: Modifier = Modifier,
@@ -334,10 +339,13 @@ private fun TodoListItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Checkbox(
-                checked = false,
-                onCheckedChange = { onTodoDone(todo) },
+                checked = isCompleting,
+                onCheckedChange = { checked ->
+                    if (checked) onTodoDone(todo)
+                },
                 colors = CheckboxDefaults.colors(
-                    checkedColor = MaterialTheme.colorScheme.tertiary,
+                    checkedColor = MaterialTheme.colorScheme.primary,
+                    checkmarkColor = MaterialTheme.colorScheme.onPrimary,
                     uncheckedColor = MaterialTheme.colorScheme.onSurfaceVariant,
                 ),
                 modifier = Modifier.semantics { contentDescription = "todo_checkbox" },
@@ -351,6 +359,7 @@ private fun TodoListItem(
                     .padding(horizontal = 8.dp),
             )
             Surface(
+                modifier = Modifier.clickable(onClick = onItemClicked),
                 shape = RoundedCornerShape(12.dp),
                 color = MaterialTheme.colorScheme.secondaryContainer,
             ) {
