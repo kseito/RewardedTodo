@@ -9,6 +9,7 @@ import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.ObserveLotteryAnimationEnabledUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
 import jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult
 import jp.kztproject.rewardedtodo.domain.reward.Reward
@@ -45,6 +46,7 @@ class RewardListViewModel @Inject constructor(
     private val saveRewardUseCase: SaveRewardUseCase,
     private val deleteRewardUseCase: DeleteRewardUseCase,
     private val recoverLotteryUseCase: RecoverLotteryUseCase,
+    observeLotteryAnimationEnabledUseCase: ObserveLotteryAnimationEnabledUseCase,
 ) : ViewModel() {
 
     private val rewardsState = MutableStateFlow<List<Reward>>(emptyList())
@@ -103,6 +105,11 @@ class RewardListViewModel @Inject constructor(
         field = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean>
         field = MutableStateFlow(false)
+    val isLotteryAnimationEnabled: StateFlow<Boolean> = observeLotteryAnimationEnabledUseCase.execute().stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5000),
+        initialValue = true,
+    )
 
     /**
      * 画面を表示したときにチケット残数を引き直す。

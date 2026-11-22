@@ -41,6 +41,7 @@ import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.ObserveLotteryAnimationEnabledUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
 import jp.kztproject.rewardedtodo.common.ui.theme.RewardedTodoScheme
 import jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult
@@ -130,6 +131,7 @@ private fun RewardListScreen(
     val hasPending by viewModel.hasPendingLottery.collectAsStateWithLifecycle()
     val isRecovering by viewModel.isRecovering.collectAsStateWithLifecycle()
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+    val isLotteryAnimationEnabled by viewModel.isLotteryAnimationEnabled.collectAsStateWithLifecycle()
 
     // 他のタブでチケットを獲得していても反映されるよう、表示のたびに引き直す
     LaunchedEffect(Unit) {
@@ -227,6 +229,7 @@ private fun RewardListScreen(
                 viewModel.resetObtainedReward()
                 viewModel.resetBatchLotteryResult()
             },
+            playAnimation = isLotteryAnimationEnabled,
         )
     }
     val lotteryError = obtainedReward?.exceptionOrNull() ?: batchLotteryResult?.exceptionOrNull()
@@ -309,6 +312,9 @@ private val previewViewModel = RewardListViewModel(
         override suspend fun hasPendingRequest(): Boolean = false
         override suspend fun execute(): LotteryOutcome? = null
     },
+    object : ObserveLotteryAnimationEnabledUseCase {
+        override fun execute(): Flow<Boolean> = flowOf(true)
+    },
 )
 
 @Preview
@@ -356,6 +362,9 @@ private fun createLotteringPreviewViewModel(): RewardListViewModel = RewardListV
     object : RecoverLotteryUseCase {
         override suspend fun hasPendingRequest(): Boolean = false
         override suspend fun execute(): LotteryOutcome? = null
+    },
+    object : ObserveLotteryAnimationEnabledUseCase {
+        override fun execute(): Flow<Boolean> = flowOf(true)
     },
 )
 
@@ -412,6 +421,9 @@ private val emptyPreviewViewModel = RewardListViewModel(
     object : RecoverLotteryUseCase {
         override suspend fun hasPendingRequest(): Boolean = false
         override suspend fun execute(): LotteryOutcome? = null
+    },
+    object : ObserveLotteryAnimationEnabledUseCase {
+        override fun execute(): Flow<Boolean> = flowOf(true)
     },
 )
 

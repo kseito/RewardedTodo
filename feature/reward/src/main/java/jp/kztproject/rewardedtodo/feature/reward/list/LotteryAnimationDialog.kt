@@ -64,6 +64,7 @@ fun LotteryAnimationDialog(
     missCount: Int,
     isBatch: Boolean,
     onDismiss: () -> Unit,
+    playAnimation: Boolean = true,
 ) {
     var revealed by rememberSaveable { mutableStateOf(false) }
     var skipped by rememberSaveable { mutableStateOf(false) }
@@ -73,11 +74,13 @@ fun LotteryAnimationDialog(
     val context = LocalContext.current
     val entries = rewardNames + List(missCount) { null }
 
-    LaunchedEffect(ready, skipped) {
+    LaunchedEffect(ready, skipped, playAnimation) {
         if (ready && !revealed) {
-            if (!skipped) progress.animateTo(1f, tween(3800, easing = LinearEasing))
+            if (playAnimation && !skipped) progress.animateTo(1f, tween(3800, easing = LinearEasing))
             revealed = true
-            if (rewardNames.isEmpty()) context.vibrate() else context.vibrateRichly()
+            if (playAnimation) {
+                if (rewardNames.isEmpty()) context.vibrate() else context.vibrateRichly()
+            }
         }
     }
     LaunchedEffect(revealed, skipped) {
@@ -108,9 +111,16 @@ fun LotteryAnimationDialog(
                 Brush.verticalGradient(listOf(LotteryNight, Color(0xFF243039), LotteryNight)),
             ),
         ) {
-            LotteryStage({
-                progress.value
-            }, revealed, rewardNames.isNotEmpty(), Modifier.fillMaxSize(), { celebration.value }, isBatch)
+            if (playAnimation) {
+                LotteryStage(
+                    { progress.value },
+                    revealed,
+                    rewardNames.isNotEmpty(),
+                    Modifier.fillMaxSize(),
+                    { celebration.value },
+                    isBatch,
+                )
+            }
             Column(
                 modifier = Modifier.fillMaxSize().padding(horizontal = 24.dp, vertical = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
