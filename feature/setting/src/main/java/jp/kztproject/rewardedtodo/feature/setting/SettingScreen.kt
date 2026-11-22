@@ -25,6 +25,7 @@ fun SettingScreen(onLoggedOut: () -> Unit, viewModel: SettingViewModel = hiltVie
 
     SettingScreenContent(
         uiState = uiState,
+        onLotteryAnimationEnabledChange = viewModel::setLotteryAnimationEnabled,
         onRequestLogout = { viewModel.requestLogout() },
         onConfirmLogout = { viewModel.logout() },
         onDismissLogout = { viewModel.dismissLogoutConfirmation() },
@@ -34,6 +35,7 @@ fun SettingScreen(onLoggedOut: () -> Unit, viewModel: SettingViewModel = hiltVie
 @Composable
 private fun SettingScreenContent(
     uiState: SettingUiState,
+    onLotteryAnimationEnabledChange: (Boolean) -> Unit,
     onRequestLogout: () -> Unit,
     onConfirmLogout: () -> Unit,
     onDismissLogout: () -> Unit,
@@ -49,6 +51,24 @@ private fun SettingScreenContent(
             text = stringResource(R.string.settings_title),
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.padding(bottom = 16.dp),
+        )
+
+        Text(
+            text = stringResource(R.string.lottery_section),
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(bottom = 8.dp),
+        )
+
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.lottery_animation)) },
+            supportingContent = { Text(stringResource(R.string.lottery_animation_description)) },
+            trailingContent = {
+                Switch(
+                    checked = uiState.isLotteryAnimationEnabled,
+                    onCheckedChange = onLotteryAnimationEnabledChange,
+                )
+            },
+            modifier = Modifier.fillMaxWidth(),
         )
 
         HorizontalDivider(Modifier.padding(vertical = 8.dp))
@@ -128,6 +148,7 @@ private fun LogoutConfirmationDialog(onConfirm: () -> Unit, onDismiss: () -> Uni
 fun SettingScreenPreview() {
     SettingScreenContent(
         uiState = SettingUiState(),
+        onLotteryAnimationEnabledChange = {},
         onRequestLogout = {},
         onConfirmLogout = {},
         onDismissLogout = {},
@@ -139,6 +160,7 @@ fun SettingScreenPreview() {
 fun SettingScreenLoggingOutPreview() {
     SettingScreenContent(
         uiState = SettingUiState(isLoading = true),
+        onLotteryAnimationEnabledChange = {},
         onRequestLogout = {},
         onConfirmLogout = {},
         onDismissLogout = {},
@@ -150,6 +172,7 @@ fun SettingScreenLoggingOutPreview() {
 fun SettingScreenLogoutConfirmationPreview() {
     SettingScreenContent(
         uiState = SettingUiState(isConfirmingLogout = true),
+        onLotteryAnimationEnabledChange = {},
         onRequestLogout = {},
         onConfirmLogout = {},
         onDismissLogout = {},
