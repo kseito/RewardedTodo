@@ -3,6 +3,7 @@ package jp.kztproject.rewardedtodo.common.kvs
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.booleanPreferencesKey
 
 object UserPreferencesKeys {
 
@@ -16,4 +17,7 @@ object UserPreferencesKeys {
 
     /** 端末に残っているチケット残数。連携アカウントの切り替え時に削除する。 */
     val NUMBER_OF_TICKET = intPreferencesKey("number_of_ticket")
+
+    /** 抽選結果を表示する前に演出を再生するかどうか。 */
+    val LOTTERY_ANIMATION_ENABLED = booleanPreferencesKey("lottery_animation_enabled")
 }
