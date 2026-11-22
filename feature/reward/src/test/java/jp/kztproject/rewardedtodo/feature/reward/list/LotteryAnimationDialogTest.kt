@@ -41,13 +41,34 @@ class LotteryAnimationDialogTest {
     }
 
     @Test
+    fun `disabled animation shows the result immediately`() {
+        composeRule.setContent {
+            LotteryAnimationDialog(
+                ready = true,
+                rewardNames = listOf("Coffee"),
+                missCount = 0,
+                isBatch = false,
+                onDismiss = {},
+                playAnimation = false,
+            )
+        }
+
+        count("Coffee") shouldBe 1
+        count("What is inside…?") shouldBe 0
+    }
+
+    @Test
     fun `skip during network wait waits for actual result and does not dismiss`() {
         val ready = mutableStateOf(false)
         var dismissCount = 0
         composeRule.setContent {
-            LotteryAnimationDialog(ready.value, if (ready.value) listOf("Coffee") else emptyList(), 0, false) {
-                dismissCount++
-            }
+            LotteryAnimationDialog(
+                ready = ready.value,
+                rewardNames = if (ready.value) listOf("Coffee") else emptyList(),
+                missCount = 0,
+                isBatch = false,
+                onDismiss = { dismissCount++ },
+            )
         }
         composeRule.onNodeWithText("Skip animation").performClick()
         count("Preparing your draw…") shouldBe 1
@@ -64,7 +85,13 @@ class LotteryAnimationDialogTest {
         composeRule.mainClock.autoAdvance = false
         var dismissCount = 0
         composeRule.setContent {
-            LotteryAnimationDialog(true, listOf("Coffee"), 0, false) { dismissCount++ }
+            LotteryAnimationDialog(
+                ready = true,
+                rewardNames = listOf("Coffee"),
+                missCount = 0,
+                isBatch = false,
+                onDismiss = { dismissCount++ },
+            )
         }
         composeRule.mainClock.advanceTimeBy(1600)
         count("Coffee") shouldBe 0
