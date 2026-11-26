@@ -27,11 +27,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -41,11 +41,9 @@ import jp.kztproject.rewardedtodo.application.reward.usecase.DeleteRewardUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetPointUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.ObserveLotteryAnimationEnabledUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.SaveRewardUseCase
-import jp.kztproject.rewardedtodo.common.ui.CommonAlertDialog
 import jp.kztproject.rewardedtodo.common.ui.theme.RewardedTodoScheme
-import jp.kztproject.rewardedtodo.common.ui.vibrate
-import jp.kztproject.rewardedtodo.common.ui.vibrateRichly
 import jp.kztproject.rewardedtodo.domain.reward.BatchLotteryResult
 import jp.kztproject.rewardedtodo.domain.reward.NumberOfTicket
 import jp.kztproject.rewardedtodo.domain.reward.Probability
@@ -133,6 +131,7 @@ private fun RewardListScreen(
     val hasPending by viewModel.hasPendingLottery.collectAsStateWithLifecycle()
     val isRecovering by viewModel.isRecovering.collectAsStateWithLifecycle()
     val isRefreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
+    val isLotteryAnimationEnabled by viewModel.isLotteryAnimationEnabled.collectAsStateWithLifecycle()
 
     // 他のタブでチケットを獲得していても反映されるよう、表示のたびに引き直す
     LaunchedEffect(Unit) {
@@ -140,7 +139,6 @@ private fun RewardListScreen(
     }
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
-    val context = LocalContext.current
 
     Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) {
         PullToRefreshBox(
@@ -197,77 +195,50 @@ private fun RewardListScreen(
             viewModel.clearResult()
         }
     }
-    obtainedReward?.let { it ->
-        if (it.isSuccess) {
-            val reward = it.getOrNull()
-            if (reward == null) {
-                LaunchedEffect(it) {
-                    context.vibrate()
-                }
-
-                CommonAlertDialog(
-                    message = stringResource(id = R.string.missed_reward),
-                    onOkClicked = {
-                        viewModel.resetObtainedReward()
-                    },
-                )
-            } else {
-                LaunchedEffect(it) {
-                    context.vibrateRichly()
-                }
-
-                CommonAlertDialog(
-                    message = stringResource(R.string.won_reward, reward.name.value),
-                    onOkClicked = {
-                        viewModel.resetObtainedReward()
-                    },
-                )
-            }
-        } else if (it.isFailure) {
-            it.exceptionOrNull()?.let { error ->
-                val errorMessageId = ErrorMessageClassifier(error).messageId
-                val errorMessage = stringResource(id = errorMessageId)
-                LaunchedEffect(error) {
-                    snackbarHostState.showSnackbar(
-                        message = errorMessage,
-                        actionLabel = null,
-                        duration = SnackbarDuration.Short,
-                    )
-                }
-            }
-        }
+    // A completed draw can be dismissed while the ViewModel is still refreshing its lists.
+    // Do not reopen the waiting dialog during that refresh (including after rotation).
+    var lotteryDismissed by rememberSaveable { mutableStateOf(false) }
+    val drawing = isSingleLottering || isBatchLottering
+    LaunchedEffect(drawing) {
+        if (!drawing) lotteryDismissed = false
     }
-    batchLotteryResult?.let {
-        if (it.isSuccess) {
-            val result = it.getOrNull()
-            result?.let { batchResult ->
-                LaunchedEffect(it) {
-                    if (batchResult.hasWon) {
-                        context.vibrateRichly()
-                    } else {
-                        context.vibrate()
-                    }
-                }
-
-                BatchLotteryResultDialog(
-                    result = batchResult,
-                    onDismiss = {
-                        viewModel.resetBatchLotteryResult()
-                    },
-                )
-            }
-        } else if (it.isFailure) {
-            it.exceptionOrNull()?.let { error ->
-                val errorMessageId = ErrorMessageClassifier(error).messageId
-                val errorMessage = stringResource(id = errorMessageId)
-                LaunchedEffect(error) {
-                    snackbarHostState.showSnackbar(
-                        message = errorMessage,
-                        actionLabel = null,
-                        duration = SnackbarDuration.Short,
-                    )
-                }
-            }
+    val singleSuccess = obtainedReward?.isSuccess == true
+    val batchSuccess = batchLotteryResult?.isSuccess == true
+    val waitingForDraw = drawing && obtainedReward?.isFailure != true && batchLotteryResult?.isFailure != true
+    if (!lotteryDismissed && (waitingForDraw || singleSuccess || batchSuccess)) {
+        val batch = isBatchLottering || batchSuccess
+        val singleReward = obtainedReward?.getOrNull()
+        val batchResult = batchLotteryResult?.getOrNull()
+        LotteryAnimationDialog(
+            ready = singleSuccess || batchSuccess,
+            rewardNames = if (batch) {
+                batchResult?.wonRewards.orEmpty().map { it.name.value }
+            } else {
+                listOfNotNull(singleReward?.name?.value)
+            },
+            missCount = if (batch) {
+                batchResult?.missCount ?: 0
+            } else if (singleReward == null) {
+                1
+            } else {
+                0
+            },
+            isBatch = batch,
+            onDismiss = {
+                lotteryDismissed = drawing
+                viewModel.resetObtainedReward()
+                viewModel.resetBatchLotteryResult()
+            },
+            playAnimation = isLotteryAnimationEnabled,
+        )
+    }
+    val lotteryError = obtainedReward?.exceptionOrNull() ?: batchLotteryResult?.exceptionOrNull()
+    val lotteryErrorMessage = lotteryError?.let { stringResource(ErrorMessageClassifier(it).messageId) }
+    LaunchedEffect(lotteryError, isSingleLottering, isBatchLottering) {
+        if (lotteryErrorMessage != null && !isSingleLottering && !isBatchLottering) {
+            viewModel.resetObtainedReward()
+            viewModel.resetBatchLotteryResult()
+            snackbarHostState.showSnackbar(lotteryErrorMessage)
         }
     }
 }
@@ -341,6 +312,9 @@ private val previewViewModel = RewardListViewModel(
         override suspend fun hasPendingRequest(): Boolean = false
         override suspend fun execute(): LotteryOutcome? = null
     },
+    object : ObserveLotteryAnimationEnabledUseCase {
+        override fun execute(): Flow<Boolean> = flowOf(true)
+    },
 )
 
 @Preview
@@ -388,6 +362,9 @@ private fun createLotteringPreviewViewModel(): RewardListViewModel = RewardListV
     object : RecoverLotteryUseCase {
         override suspend fun hasPendingRequest(): Boolean = false
         override suspend fun execute(): LotteryOutcome? = null
+    },
+    object : ObserveLotteryAnimationEnabledUseCase {
+        override fun execute(): Flow<Boolean> = flowOf(true)
     },
 )
 
@@ -444,6 +421,9 @@ private val emptyPreviewViewModel = RewardListViewModel(
     object : RecoverLotteryUseCase {
         override suspend fun hasPendingRequest(): Boolean = false
         override suspend fun execute(): LotteryOutcome? = null
+    },
+    object : ObserveLotteryAnimationEnabledUseCase {
+        override fun execute(): Flow<Boolean> = flowOf(true)
     },
 )
 

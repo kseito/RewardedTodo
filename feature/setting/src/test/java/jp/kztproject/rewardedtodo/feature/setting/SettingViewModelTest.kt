@@ -5,6 +5,9 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import jp.kztproject.rewardedtodo.application.todo.DisconnectTodoistUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.ObserveLotteryAnimationEnabledUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.SetLotteryAnimationEnabledUseCase
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
@@ -25,12 +28,21 @@ class SettingViewModelTest {
 
     private val mockDisconnectTodoistUseCase = mockk<DisconnectTodoistUseCase>(relaxed = true)
 
+    private val mockObserveLotteryAnimationEnabledUseCase = mockk<ObserveLotteryAnimationEnabledUseCase>()
+
+    private val mockSetLotteryAnimationEnabledUseCase = mockk<SetLotteryAnimationEnabledUseCase>(relaxed = true)
+
     private lateinit var viewModel: SettingViewModel
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
-        viewModel = SettingViewModel(mockDisconnectTodoistUseCase)
+        coEvery { mockObserveLotteryAnimationEnabledUseCase.execute() } returns flowOf(true)
+        viewModel = SettingViewModel(
+            mockDisconnectTodoistUseCase,
+            mockObserveLotteryAnimationEnabledUseCase,
+            mockSetLotteryAnimationEnabledUseCase,
+        )
     }
 
     @After
@@ -95,5 +107,12 @@ class SettingViewModelTest {
         viewModel.consumeError()
 
         viewModel.uiState.value.error shouldBe null
+    }
+
+    @Test
+    fun `抽選演出の設定変更を保存する`() = runTest {
+        viewModel.setLotteryAnimationEnabled(false)
+
+        coVerify(exactly = 1) { mockSetLotteryAnimationEnabledUseCase.execute(false) }
     }
 }

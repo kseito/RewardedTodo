@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import jp.kztproject.rewardedtodo.application.todo.DisconnectTodoistUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.ObserveLotteryAnimationEnabledUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.SetLotteryAnimationEnabledUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -15,11 +17,28 @@ import javax.inject.Inject
  * 理由は[jp.kztproject.rewardedtodo.feature.auth.AuthViewModel]と同じ。
  */
 @HiltViewModel
-class SettingViewModel @Inject constructor(private val disconnectTodoistUseCase: DisconnectTodoistUseCase) :
-    ViewModel() {
+class SettingViewModel @Inject constructor(
+    private val disconnectTodoistUseCase: DisconnectTodoistUseCase,
+    private val observeLotteryAnimationEnabledUseCase: ObserveLotteryAnimationEnabledUseCase,
+    private val setLotteryAnimationEnabledUseCase: SetLotteryAnimationEnabledUseCase,
+) : ViewModel() {
 
     val uiState: StateFlow<SettingUiState>
         field = MutableStateFlow(SettingUiState())
+
+    init {
+        viewModelScope.launch {
+            observeLotteryAnimationEnabledUseCase.execute().collect { enabled ->
+                uiState.update { it.copy(isLotteryAnimationEnabled = enabled) }
+            }
+        }
+    }
+
+    fun setLotteryAnimationEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            setLotteryAnimationEnabledUseCase.execute(enabled)
+        }
+    }
 
     fun requestLogout() {
         uiState.update { it.copy(isConfirmingLogout = true) }
@@ -51,6 +70,7 @@ class SettingViewModel @Inject constructor(private val disconnectTodoistUseCase:
 }
 
 data class SettingUiState(
+    val isLotteryAnimationEnabled: Boolean = true,
     val isConfirmingLogout: Boolean = false,
     val isLoading: Boolean = false,
     val isLoggedOut: Boolean = false,

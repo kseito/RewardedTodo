@@ -66,4 +66,16 @@
     <string name="reward_error_no_active">Add a reward before drawing.</string>
     <string name="menu_acquired">Acquired</string>
     <string name="title_acquired_rewards">Acquired rewards</string>
+    <string name="lottery_single_heading">REWARD CAPSULE</string>
+    <string name="lottery_batch_heading">REWARD CAPSULE × 10</string>
+    <string name="lottery_waiting">Preparing your draw…</string>
+    <string name="lottery_opening">What is inside…?</string>
+    <string name="lottery_try_again">Maybe next time!</string>
+    <string name="lottery_congratulations">Congratulations!</string>
+    <string name="lottery_summary">Won: %1$d · Missed: %2$d</string>
+    <string name="lottery_skip">Skip animation</string>
+    <string name="lottery_done">Done</string>
+    <string name="lottery_prize">YOU WON</string>
+    <string name="lottery_miss">MISS</string>
+    <string name="lottery_miss_message">No reward this time</string>
 </resources>

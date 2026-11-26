@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings_title">Setting</string>
+    <string name="lottery_section">Lottery</string>
+    <string name="lottery_animation">Lottery animation</string>
+    <string name="lottery_animation_description">Play an animation before showing lottery results.</string>
     <string name="account_section">Account</string>
 
     <string name="logout">Log out</string>

@@ -14,14 +14,28 @@ import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsInteracto
 import jp.kztproject.rewardedtodo.application.reward.usecase.GetRewardsUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryInteractor
 import jp.kztproject.rewardedtodo.application.reward.usecase.LotteryUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.ObserveLotteryAnimationEnabledInteractor
+import jp.kztproject.rewardedtodo.application.reward.usecase.ObserveLotteryAnimationEnabledUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.RecoverLotteryInteractor
 import jp.kztproject.rewardedtodo.application.reward.usecase.RecoverLotteryUseCase
 import jp.kztproject.rewardedtodo.application.reward.usecase.UseAcquiredRewardInteractor
 import jp.kztproject.rewardedtodo.application.reward.usecase.UseAcquiredRewardUseCase
+import jp.kztproject.rewardedtodo.application.reward.usecase.SetLotteryAnimationEnabledInteractor
+import jp.kztproject.rewardedtodo.application.reward.usecase.SetLotteryAnimationEnabledUseCase
 
 @InstallIn(ViewModelComponent::class)
 @Module
 interface RewardListViewModelModule {
+    @Binds
+    fun bindObserveLotteryAnimationEnabled(
+        interactor: ObserveLotteryAnimationEnabledInteractor,
+    ): ObserveLotteryAnimationEnabledUseCase
+
+    @Binds
+    fun bindSetLotteryAnimationEnabled(
+        interactor: SetLotteryAnimationEnabledInteractor,
+    ): SetLotteryAnimationEnabledUseCase
+
     @Binds fun bindRecoverLottery(interactor: RecoverLotteryInteractor): RecoverLotteryUseCase
 
     @Binds fun bindGetAcquiredRewards(interactor: GetAcquiredRewardsInteractor): GetAcquiredRewardsUseCase

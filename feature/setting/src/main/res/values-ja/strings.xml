@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="settings_title">設定</string>
+    <string name="lottery_section">抽選</string>
+    <string name="lottery_animation">抽選演出</string>
+    <string name="lottery_animation_description">抽選結果を表示する前に演出を再生します。</string>
     <string name="account_section">アカウント</string>
 
     <string name="logout">ログアウト</string>

@@ -1,7 +1,9 @@
 package jp.kztproject.rewardedtodo.di.reward
 
 import jp.kztproject.rewardedtodo.domain.reward.repository.ILotteryRepository
+import jp.kztproject.rewardedtodo.domain.reward.repository.ILotteryAnimationPreferenceRepository
 import jp.kztproject.rewardedtodo.domain.reward.repository.IAcquiredRewardRepository
+import jp.kztproject.rewardedtodo.data.reward.repository.LotteryAnimationPreferenceRepository
 import jp.kztproject.rewardedtodo.data.reward.repository.LotteryRepository
 import jp.kztproject.rewardedtodo.data.reward.repository.AcquiredRewardRepository
 import dagger.Binds
@@ -15,6 +17,11 @@ import jp.kztproject.rewardedtodo.data.reward.repository.RewardRepository
 @Module
 interface RewardRepositoryModule {
     @Binds fun bindLotteryRepository(repository: LotteryRepository): ILotteryRepository
+
+    @Binds
+    fun bindLotteryAnimationPreferenceRepository(
+        repository: LotteryAnimationPreferenceRepository,
+    ): ILotteryAnimationPreferenceRepository
 
     @Binds fun bindAcquiredRewardRepository(repository: AcquiredRewardRepository): IAcquiredRewardRepository
 

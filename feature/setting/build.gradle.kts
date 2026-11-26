@@ -7,6 +7,7 @@ plugins {
 }
 
 dependencies {
+    implementation(project(path = ":application:reward"))
     implementation(project(path = ":application:todo"))
     implementation(project(path = ":domain:todo"))
 
